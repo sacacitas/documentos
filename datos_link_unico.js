@@ -13,7 +13,6 @@ document.addEventListener('DOMContentLoaded', function() {
     // Get the 'referencia' parameter from the URL
     const urlParams = new URLSearchParams(window.location.search);
     const referencia = urlParams.get('r');
-    console.log('referencia',referencia)
     
     // URLs of your JSON files
     const jsonUrl1 = 'https://documentos.sacacitas.es/categorias_servicios.json';
