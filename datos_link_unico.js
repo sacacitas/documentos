@@ -15,8 +15,8 @@ document.addEventListener('DOMContentLoaded', function() {
     const referencia = urlParams.get('r');
     
     // URLs of your JSON files
-    const jsonUrl1 = 'https://raw.githubusercontent.com/sacacitas/landing-page/main/categorias_servicios.json';
-    const jsonUrl2 = 'https://raw.githubusercontent.com/sacacitas/landing-page/main/precios_citas.json';
+    const jsonUrl1 = 'https://documentos.sacacitas.es/categorias_servicios.json';
+    const jsonUrl2 = 'https://documentos.sacacitas.es/precios_citas.json';
     
     function loadJSON(url) {
         return fetch(url)
