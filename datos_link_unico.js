@@ -166,8 +166,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 document.getElementById('precio_cita_front').textContent = precio_cita_front.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
                 document.getElementById('coste_hora_buscando').textContent = coste_hora_buscando.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
                 // Check if 'retries_front' is less than 1000 or 'horas_busqueda_front' is less than 48
-                if (retries_front < 1000 || horas_busqueda_front < 48) {
-                    document.getElementById('coste_hora_buscando_texto_entero').textContent = 'Aún no hay datos';
+                if (retries_front < 250 || horas_busqueda_front < 48) {
+                    document.getElementById('coste_hora_buscando_texto_entero').textContent = 'No hay datos suficientes';
                 }
                 if (state_front == 'CANCELADO') {
                     document.getElementById('boton-cancelar-link-unico').style.display = 'none';
