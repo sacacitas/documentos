@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Get the 'referencia' parameter from the URL
     const urlParams = new URLSearchParams(window.location.search);
-    const referencia = urlParams.get('referencia');
+    const referencia = urlParams.get('r');
     
     // URLs of your JSON files
     const jsonUrl1 = 'https://raw.githubusercontent.com/sacacitas/landing-page/main/categorias_servicios.json';
