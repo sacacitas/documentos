@@ -189,7 +189,16 @@ document.addEventListener('DOMContentLoaded', function() {
                 //cambiar color al link
                 var linkElement = document.getElementById('backend-web-oficial').querySelector('a');
            		linkElement.style.color = '#2C64E3';
-  
+               
+                // Check if the value of 'state_front' is equal to "CANCELADO". Ocultar botón cancelar
+                if (stateFront === "CANCELADO") {
+                  // Hide the element with ID 'boton-cancelar-link-unico'
+                  var cancelButton = document.getElementById('boton-cancelar-link-unico');
+                  if (cancelButton) {
+                    cancelButton.style.display = 'none';
+                  }
+                }
+                
                 // Hide the element with ID 'cuadrado-pago-cita'
                 document.getElementById('cuadrado-pago-cita').style.display = 'none';
     
