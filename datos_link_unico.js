@@ -130,7 +130,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 var horas_busqueda_front = Math.floor((new Date() - date_added) / (24 * 60 * 1000));
                 
                 var coste_hora_buscando = (precio_cita_front / horas_busqueda_front);
-                var coste_busqueda = (precio_cita_front / retries_front);
     
                 // Function to format number with dots from 'horas_busqueda_front'
                 function formatNumberWithDots(number) {
@@ -164,11 +163,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 document.getElementById('caducidad_busqueda').textContent = `Dentro de ${timeValue} ${timeUnit}`;
                 document.getElementById('horas_busqueda_front').textContent = formatNumberWithDots(horas_busqueda_front) + ' h.';
                 document.getElementById('precio_cita_front').textContent = precio_cita_front.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-                document.getElementById('coste_hora_buscando').textContent = coste_hora_buscando.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 3 });
-                document.getElementById('coste_busqueda').textContent = coste_busqueda.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 3 });
+                document.getElementById('coste_hora_buscando').textContent = coste_hora_buscando.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
                 // Check if 'retries_front' is less than 1000 or 'horas_busqueda_front' is less than 48
                 if (retries_front < 1000 || horas_busqueda_front < 48) {
-                    document.getElementById('coste_busqueda_texto_entero').textContent = 'Aún no hay datos';
                     document.getElementById('coste_hora_buscando_texto_entero').textContent = 'Aún no hay datos';
                 }
 
@@ -180,6 +177,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 } else if (id_oficina_front.startsWith("gvarc")) {
                 backendWebOficialElement.innerHTML = '<a href="https://registrocivil.gva.es/es/cita-previa" target="_blank">https://registrocivil.gva.es/es/cita-previa</a>';
                 } else if (id_oficina_front.startsWith("gobext")) {
+                backendWebOficialElement.innerHTML = '<a href="https://sede.administracionespublicas.gob.es/pagina/index/directorio/icpplus" target="_blank">https://sede.administracionespublicas.gob.es/pagina/index/directorio/icpplus</a>';
+                } else if (id_oficina_front.startsWith("g7mad")) {
                 backendWebOficialElement.innerHTML = '<a href="https://gestiona7.madrid.org/CTAC_CITA/registro" target="_blank">https://gestiona7.madrid.org/CTAC_CITA/registro</a>';
                 } else if (id_oficina_front.startsWith("gencat")) {
                 backendWebOficialElement.innerHTML = '<a href="https://seujudicial.gencat.cat/ca/que_cal_fer/registre-civil/" target="_blank">https://seujudicial.gencat.cat/ca/que_cal_fer/registre-civil/</a>';
