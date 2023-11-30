@@ -5,14 +5,14 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Example values for administracion
     var administracionValues = [
-      { value: 'EX1', text: 'ExtranjerÃ­a' },
+      { value: 'EX1', text: 'Extranjería' },
       { value: 'RC1', text: 'Registro Civil' }
     ];
 
     // Add default placeholder option
     var defaultAdministracionOption = document.createElement('option');
     defaultAdministracionOption.value = ''; // Set the value to an empty string or a value that is not present in the array
-    defaultAdministracionOption.text = 'AdministraciÃ³n';
+    defaultAdministracionOption.text = 'Administración';
     defaultAdministracionOption.disabled = true;
     defaultAdministracionOption.selected = true; // Make this option selected by default
     administracionSelect.add(defaultAdministracionOption);
@@ -30,10 +30,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Example values for provincia
     var provinces = [
-      "Alava", "Albacete", "Alicante", "AlmerÃ­a", "Asturias", "Avila", "Badajoz", "Barcelona", "Burgos",
-      "CÃ¡ceres", "CÃ¡diz", "Cantabria", "CastellÃ³n", "Ceuta", "CiudadReal", "CÃ³rdoba", "LaCoruÃ±a", "Cuenca",
-      "Gerona", "Granada", "Guadalajara", "GuipÃºzcoa", "Huelva", "Huesca", "IslasBaleares", "JaÃ©n", "LeÃ³n",
-      "LÃ©rida", "Lugo", "Madrid", "MÃ¡laga", "Melilla", "Murcia", "Navarra", "Orense", "Palencia", "LasPalmas",
+      "Alava", "Albacete", "Alicante", "Almería", "Asturias", "Avila", "Badajoz", "Barcelona", "Burgos",
+      "Cáceres", "Cádiz", "Cantabria", "Castellón", "Ceuta", "CiudadReal", "Córdoba", "LaCoruña", "Cuenca",
+      "Gerona", "Granada", "Guadalajara", "Guipúzcoa", "Huelva", "Huesca", "IslasBaleares", "Jaén", "León",
+      "Lérida", "Lugo", "Madrid", "Málaga", "Melilla", "Murcia", "Navarra", "Orense", "Palencia", "LasPalmas",
       "Pontevedra", "LaRioja", "Salamanca", "Segovia", "Sevilla", "Soria", "Tarragona", "SantaCruzDeTenerife",
       "Teruel", "Toledo", "Valencia", "Valladolid", "Vizcaya", "Zamora", "Zaragoza"
     ];
@@ -57,5 +57,6 @@ document.addEventListener('DOMContentLoaded', function () {
       provinciaSelect.add(optionElement);
     });
   });
+
 
 
