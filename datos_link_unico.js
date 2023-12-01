@@ -196,7 +196,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 document.getElementById('cuadrado-pago-cita').style.display = 'none';
     
                 // Update opacity of 'main-content' from 0% to 100%
-                document.getElementById('main-content').style.opacity = '1';
+                //document.getElementById('main-content').style.opacity = '1';
+                document.getElementById('main-content').style.display = 'block';
     
                 // Hide the element with ID 'loading-content'
                 document.getElementById('loading-content').style.display = 'none';
