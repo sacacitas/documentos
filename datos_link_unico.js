@@ -68,6 +68,11 @@ document.addEventListener('DOMContentLoaded', function() {
             .then(response => {
                 if (!response.ok) {
                 throw new Error('Network response was not ok');
+                //Mostrar error si falla el servidor   
+                document.getElementById('error-message-parameter3').style.display = 'block';
+                //ocultar mensaje cargando si falla  
+                document.getElementById('cargando-datos-link-unico').style.display = 'none';    
+            
                 }
                 return response.json();
             })
@@ -206,18 +211,24 @@ document.addEventListener('DOMContentLoaded', function() {
             .catch(error => {
                 console.error('Error fetching data:', error);
                 // Handle errors and show an error message if needed
-                document.getElementById('error-message').style.display = 'block';
+                document.getElementById('error-message-parameter2').style.display = 'block';
 
                 //ocultar main content si no carga
                 document.getElementById('main-content1').style.display = 'none';
+
+                //mostrar que hay error
+                
             });
         } else {
             console.error('Referencia parameter is missing in the URL.');
             // Handle missing referencia parameter and show an error message if needed
             document.getElementById('error-message-parameter1').style.display = 'block';
 
-            //ocultar main content si no carga
+            //ocultar main content si falta referencia
             document.getElementById('main-content1').style.display = 'none';
+
+            //ocultar mensaje cargando si falla 
+            document.getElementById('cargando-datos-link-unico').style.display = 'none';
         }
         });
     });
