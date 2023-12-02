@@ -174,7 +174,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (retries_front < 250 || horas_busqueda_front < 48) {
                     document.getElementById('coste_hora_buscando_texto_entero').textContent = 'No hay datos suficientes';
                 }
-                if (state_front == 'buscando') {
+                if (state_front == 'BUSCANDO') {
                     document.getElementById('boton-cancelar-link-unico').style.display = 'block';
                 }    
                 //URL administracion dinamico 
@@ -200,11 +200,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 // Hide the element with ID 'cuadrado-pago-cita'
                 document.getElementById('cuadrado-pago-cita20').style.display = 'none';
     
-                // Update opacity of 'main-content' from 0% to 100%
-                //document.getElementById('main-content').style.opacity = '1';
+                // Si todo está OK mostar link unico
                 document.getElementById('main-content1').style.display = 'block';
     
-                // Hide the element with ID 'loading-content'
+                // Si todo OK ocultar página de carga
                 document.getElementById('loading-content1').style.display = 'none';
     
             })
@@ -212,11 +211,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 console.error('Error fetching data:', error);
                 // Handle errors and show an error message if needed
                 document.getElementById('error-message-parameter2').style.display = 'block';
-
-                //ocultar main content si no carga
-                document.getElementById('main-content1').style.display = 'none';
-                
-                //ocultar mensaje cargando si falla 
                 document.getElementById('cargando-datos-link-unico').style.display = 'none';
                 
             });
@@ -224,11 +218,6 @@ document.addEventListener('DOMContentLoaded', function() {
             console.error('Referencia parameter is missing in the URL.');
             // Handle missing referencia parameter and show an error message if needed
             document.getElementById('error-message-parameter1').style.display = 'block';
-
-            //ocultar main content si falta referencia
-            document.getElementById('main-content1').style.display = 'none';
-
-            //ocultar mensaje cargando si falla 
             document.getElementById('cargando-datos-link-unico').style.display = 'none';
         }
         });
