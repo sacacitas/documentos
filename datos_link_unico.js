@@ -215,8 +215,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
                 //ocultar main content si no carga
                 document.getElementById('main-content1').style.display = 'none';
-
-
+                
+                //ocultar mensaje cargando si falla 
+                document.getElementById('cargando-datos-link-unico').style.display = 'none';
                 
             });
         } else {
@@ -228,7 +229,7 @@ document.addEventListener('DOMContentLoaded', function() {
             document.getElementById('main-content1').style.display = 'none';
 
             //ocultar mensaje cargando si falla 
-            document.getElementById('cargando-datos-link-unico').style.display = 'none'
+            document.getElementById('cargando-datos-link-unico').style.display = 'none';
         }
         });
     });
