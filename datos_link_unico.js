@@ -67,12 +67,10 @@ document.addEventListener('DOMContentLoaded', function() {
             fetch(apiUrl)
             .then(response => {
                 if (!response.ok) {
-                throw new Error('Network response was not ok');
                 //Mostrar error si falla el servidor   
                 document.getElementById('error-message-parameter3').style.display = 'block';
-                //ocultar mensaje cargando si falla  
-                document.getElementById('cargando-datos-link-unico').style.display = 'none';    
-            
+                document.getElementById('cargando-datos-link-unico').style.display = 'none';   
+                throw new Error('Network response was not ok');
                 }
                 return response.json();
             })
@@ -203,7 +201,6 @@ document.addEventListener('DOMContentLoaded', function() {
     
                 // Si todo está OK mostar link unico
                 document.getElementById('main-content1').style.display = 'block';
-    
                 // Si todo OK ocultar página de carga
                 document.getElementById('loading-content1').style.display = 'none';
                 
