@@ -214,7 +214,7 @@ document.addEventListener('DOMContentLoaded', function() {
         } else {
             console.error('Referencia parameter is missing in the URL.');
             // Handle missing referencia parameter and show an error message if needed
-            document.getElementById('error-message').style.display = 'block';
+            document.getElementById('error-message-parameter1').style.display = 'block';
 
             //ocultar main content si no carga
             document.getElementById('main-content1').style.display = 'none';
