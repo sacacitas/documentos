@@ -174,7 +174,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (retries_front < 250 || horas_busqueda_front < 48) {
                     document.getElementById('coste_hora_buscando_texto_entero').textContent = 'No hay datos suficientes';
                 }
-                
+                if (state_front == 'BUSCANDO') {
+                    document.getElementById('error-message-parameter2').style.display = 'block';
+                }    
+
                 //URL administracion dinamico 
                 var backendWebOficialElement = document.getElementById('backend-web-oficial')
                 
@@ -204,11 +207,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 // Si todo OK ocultar página de carga
                 document.getElementById('loading-content1').style.display = 'none';
                 
-                console.log('state_front', state_front)
-                if (state_front == 'BUSCANDO') {
-                    document.getElementById('boton-cancelar-link-unico').style.display = 'block';
-                }    
-
     
             })
             .catch(error => {
