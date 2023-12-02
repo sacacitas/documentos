@@ -197,7 +197,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
                 // Update opacity of 'main-content' from 0% to 100%
                 //document.getElementById('main-content').style.opacity = '1';
-                document.getElementById('main-content').style.display = 'block';
+                //document.getElementById('main-content1').style.display = 'block';
     
                 // Hide the element with ID 'loading-content'
                 document.getElementById('loading-content1').style.display = 'none';
@@ -209,7 +209,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 document.getElementById('error-message').style.display = 'block';
 
                 //ocultar main content si no carga
-                document.getElementById('main-content').style.display = 'none';
+                document.getElementById('main-content1').style.display = 'none';
             });
         } else {
             console.error('Referencia parameter is missing in the URL.');
@@ -217,7 +217,7 @@ document.addEventListener('DOMContentLoaded', function() {
             document.getElementById('error-message').style.display = 'block';
 
             //ocultar main content si no carga
-            document.getElementById('main-content').style.display = 'none';
+            document.getElementById('main-content1').style.display = 'none';
         }
         });
     });
