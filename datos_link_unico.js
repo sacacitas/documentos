@@ -175,7 +175,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     document.getElementById('coste_hora_buscando_texto_entero').textContent = 'No hay datos suficientes';
                 }
                 if (state_front == 'Buscando') {
-                    document.getElementById('boton-cancelar-link-unico').style.display = 'block';
+                    document.getElementById('boton-cancelar-link-unico').style.display = 'none';
                 }    
                 //URL administracion dinamico 
                 var backendWebOficialElement = document.getElementById('backend-web-oficial')
