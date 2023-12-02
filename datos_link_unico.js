@@ -200,7 +200,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 document.getElementById('main-content').style.display = 'block';
     
                 // Hide the element with ID 'loading-content'
-                document.getElementById('loading-content1').style.display = 'none';
+                document.getElementById('loading-content1').style.display = 'none'
     
             })
             .catch(error => {
