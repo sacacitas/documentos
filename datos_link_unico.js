@@ -174,8 +174,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (retries_front < 250 || horas_busqueda_front < 48) {
                     document.getElementById('coste_hora_buscando_texto_entero').textContent = 'No hay datos suficientes';
                 }
-                if (state_front == 'CANCELADO') {
-                    document.getElementById('boton-cancelar-link-unico').style.display = 'none';
+                if (state_front == 'BUSCANDO') {
+                    document.getElementById('boton-cancelar-link-unico').style.display = 'block';
                 }    
                 //URL administracion dinamico 
                 var backendWebOficialElement = document.getElementById('backend-web-oficial')
