@@ -196,9 +196,14 @@ document.addEventListener('DOMContentLoaded', function() {
                 //cambiar color al link
                 var linkElement = document.getElementById('backend-web-oficial').querySelector('a');
            		linkElement.style.color = '#2C64E3';
-               
+
+                
                 // Hide the element with ID 'cuadrado-pago-cita'
-                document.getElementById('cuadrado-pago-cita20').style.display = 'none';
+                document.getElementById('cuadrado-pago-cita20------------').style.display = 'none'; 
+                //enviar id_publico al pulsar boton pagar
+                document.getElementById('id_unico_webhook').style.display = 'none';
+                document.getElementById('id_unico_webhook').setAttribute('value', referencia);
+
     
                 // Si todo está OK mostar link unico
                 document.getElementById('main-content1').style.display = 'block';
