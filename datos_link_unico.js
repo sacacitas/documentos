@@ -68,7 +68,7 @@ document.addEventListener('DOMContentLoaded', function() {
             .then(response => {
                 if (!response.ok) {
                 //Mostrar error si falla el servidor   
-                document.getElementById('error-message-parameter2').style.display = 'block'; 
+                document.getElementById('error-message-parameter3').style.display = 'block';
                 document.getElementById('cargando-datos-link-unico').style.display = 'none';   
                 throw new Error('Network response was not ok');
                 }
@@ -199,10 +199,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
                 
                 // Hide the element with ID 'cuadrado-pago-cita'
-                document.getElementById('cuadrado-pago-cita20------------').style.display = 'none'; 
+                document.getElementById('cuadrado-pago-cita20').style.display = 'none'; 
                 //enviar id_publico al pulsar boton pagar
-                document.getElementById('id_unico_webhook').style.display = 'none';
-                document.getElementById('id_unico_webhook').setAttribute('value', referencia);
+                //document.getElementById('id_unico_webhook').style.display = 'none';
+                //document.getElementById('id_unico_webhook').setAttribute('value', referencia);
 
     
                 // Si todo está OK mostar link unico
@@ -215,7 +215,7 @@ document.addEventListener('DOMContentLoaded', function() {
             .catch(error => {
                 console.error('Error fetching data:', error);
                 // Handle errors and show an error message if needed
-                document.getElementById('error-message-parameter3').style.display = 'block';
+                document.getElementById('error-message-parameter2').style.display = 'block';
                 document.getElementById('cargando-datos-link-unico').style.display = 'none';
                 
             });
