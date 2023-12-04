@@ -68,8 +68,7 @@ document.addEventListener('DOMContentLoaded', function() {
             .then(response => {
                 if (!response.ok) {
                 //Mostrar error si falla el servidor   
-                document.getElementById('error-message-parameter3').style.display = 'block';
-                document.getElementById('error-message-parameter2').style.display = 'none';    
+                document.getElementById('error-message-parameter3').style.display = 'block'; 
                 document.getElementById('cargando-datos-link-unico').style.display = 'none';   
                 throw new Error('Network response was not ok');
                 }
