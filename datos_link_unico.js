@@ -90,7 +90,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
                 // Fetching data from jsonUrl2 based on parentIdoficinaIdservicio
                 var precio_cita_front = jsonData2[parentIDofIdoficinaIdservicio] || 'ES_0_SINDATOS';
-                var precio_cita_front_euros = Math.(precio_cita_front * 100);
+                var precio_cita_front_euros = (precio_cita_front * 100);
     
                 // Convert UTC date to Spanish date format without time and with hyphen as separator
                 var limit_max_date = new Date(limit_max_front);
