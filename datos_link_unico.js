@@ -90,6 +90,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
                 // Fetching data from jsonUrl2 based on parentIdoficinaIdservicio
                 var precio_cita_front = jsonData2[parentIDofIdoficinaIdservicio] || 'ES_0_SINDATOS';
+                var precio_cita_front_euros = Math.(precio_cita_front * 100);
     
                 // Convert UTC date to Spanish date format without time and with hyphen as separator
                 var limit_max_date = new Date(limit_max_front);
@@ -133,7 +134,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 // Caluclar número de horas buscando
                 var horas_busqueda_front = Math.floor((new Date() - date_added) / (24 * 60 * 1000));
                 
-                var coste_hora_buscando = (precio_cita_front / horas_busqueda_front);
+                var coste_hora_buscando = (precio_cita_front_euros / horas_busqueda_front);
     
                 // Function to format number with dots from 'horas_busqueda_front'
                 function formatNumberWithDots(number) {
@@ -166,7 +167,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 document.getElementById('date_added_front').textContent = formattedDateAdded;
                 document.getElementById('caducidad_busqueda').textContent = `Dentro de ${timeValue} ${timeUnit}`;
                 document.getElementById('horas_busqueda_front').textContent = formatNumberWithDots(horas_busqueda_front) + ' h.';
-                document.getElementById('precio_cita_front').textContent = precio_cita_front.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                document.getElementById('precio_cita_front').textContent = precio_cita_front_euros.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
                 document.getElementById('coste_hora_buscando').textContent = coste_hora_buscando.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
                 // Check if 'retries_front' is less than 1000 or 'horas_busqueda_front' is less than 48
                 if (state_front == 'RESERVADO' || horas_busqueda_front < 48) {
