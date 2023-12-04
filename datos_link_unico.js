@@ -199,7 +199,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
                 
                 // Hide the element with ID 'cuadrado-pago-cita'
-                document.getElementById('cuadrado-pago-cita20').style.display = 'none'; 
+                //document.getElementById('cuadrado-pago-cita20').style.display = 'none'; 
                 //enviar id_publico al pulsar boton pagar
                 document.getElementById('id_unico_webhook').style.display = 'none';
                 document.getElementById('id_unico_webhook').setAttribute('value', referencia);
