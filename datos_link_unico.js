@@ -92,7 +92,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 var precio_cita_front = jsonData2[parentIDofIdoficinaIdservicio] || 'ES_0_SINDATOS';
                 var precio_cita_front_euros = (precio_cita_front / 100);
     
-                // Convert UTC date to Spanish date format without time and with hyphen as separator
+                // 
                 var limit_max_date = new Date(limit_max_front);
                 var date_added = new Date(date_added_front);
                 var last_checked = new Date(date_last_checked_front);
@@ -134,7 +134,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 var timeUnit = timeDiffHoras > 24 ? `días` : 'horas';
     
                 // Caluclar número de horas buscando
-                var horas_busqueda_front = Math.floor((new Date() - date_added) / (24 * 60 * 1000));
+                var horas_busqueda_front = Math.floor((new Intl.DateTimeFormat('es-ES', options) - date_added) / (24 * 60 * 1000));
                 
                 var coste_hora_buscando = (precio_cita_front_euros / horas_busqueda_front);
     
