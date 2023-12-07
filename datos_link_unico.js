@@ -87,6 +87,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 var retries_front = data.retries;
                 var cliente_id_obfuscado_front = data.cliente_id_obfuscado;
                 var limit_max_front = data.limit_max;
+                var fecha_caducidad_front = data.limit_max;
     
                 // Fetching data from jsonUrl2 based on parentIdoficinaIdservicio
                 var precio_cita_front = jsonData2[parentIDofIdoficinaIdservicio] || 'ES_0_SINDATOS';
@@ -96,6 +97,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 var limit_max_date = new Date(limit_max_front);
                 var date_added = new Date(date_added_front);
                 var last_checked = new Date(date_last_checked_front);
+                var fecha_caducidad_date = new Date(fecha_caducidad_front);
                 
     
                 var options = {
@@ -128,15 +130,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 var date_last_checked_front_utc = last_checked.toLocaleString('es-ES', hoursAndMinutesOptions);
     
                 // Calculate the number of days between date_added and limit_max_date
-                var timeDiffHoras = Math.floor((limit_max_date - date_added) / (24 * 60 * 1000));
-    
-                // Determine whether to use "días" or "hora"
-                const timeValue = timeDiffHoras > 24 ? Math.floor(timeDiffHoras / 60) : timeDiffHoras;
-                var timeUnit = timeDiffHoras > 24 ? `días` : 'horas';
+                var dias_caducidad_restantes = Math.floor((fecha_caducidad_date - new Date()) / (24 * 60 * 1000));
     
                 // Calcular número de horas buscando
                 var horas_busqueda_front = Math.floor((new Date() - date_added) / (60 * 60 * 1000));
                 
+                //Calcular coste horas buscando
                 var coste_hora_buscando = (precio_cita_front_euros / horas_busqueda_front);
     
                 // Function to format number with dots from 'horas_busqueda_front'
@@ -168,7 +167,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 document.getElementById('cliente_id_obfuscado_front').textContent = cliente_id_obfuscado_front;
                 document.getElementById('limit_max_front').textContent = formattedLimitMax;
                 document.getElementById('date_added_front').textContent = formattedDateAdded;
-                document.getElementById('caducidad_busqueda').textContent = `Dentro de ${timeValue} ${timeUnit}`;
+                document.getElementById('caducidad_busqueda').textContent = `Dentro de ${dias_caducidad_restantes} días`;
                 document.getElementById('horas_busqueda_front').textContent = horas_busqueda_front + ' h.';
                 document.getElementById('precio_cita_front').textContent = precio_cita_front_euros.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
                 document.getElementById('coste_hora_buscando').textContent = coste_hora_buscando.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
@@ -186,6 +185,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 } 
                 if (state_front == 'RESERVADO') {
                     document.getElementById('div-datos-cita-reservada').style.display = 'block';
+                }
+                if (state_front == 'BUSCANDO') {
+                    document.getElementById('div_caducidad_busqueda').style.display = 'block';
                 }
 
                 //URL administracion dinamico 
