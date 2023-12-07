@@ -87,7 +87,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 var retries_front = data.retries;
                 var cliente_id_obfuscado_front = data.cliente_id_obfuscado;
                 var limit_max_front = data.limit_max;
-                var fecha_caducidad_front = data.limit_max;
+                var fecha_caducidad_front = data.limit_caducidad;
                 var precio_eur_cent_front = data.precio_eur_cent;
     
                 // Fetching data from jsonUrl2 based on parentIdoficinaIdservicio
