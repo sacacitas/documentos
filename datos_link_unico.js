@@ -176,6 +176,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (state_front == 'BUSCANDO') {
                     document.getElementById('boton-cancelar-link-unico').style.display = 'block';
                 }    
+                if (state_front == 'RESERVADO') {
+                    document.getElementById('cuadrado-pago-cita20').style.display = 'block';
+                } 
+                if (state_front == 'RESERVADO') {
+                    document.getElementById('div-datos-cita-reservada').style.display = 'block';
+                }
 
                 //URL administracion dinamico 
                 var backendWebOficialElement = document.getElementById('backend-web-oficial')
