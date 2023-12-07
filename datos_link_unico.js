@@ -112,7 +112,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 var formattedLimitMax = limit_max_date.toLocaleDateString('es-ES', {
                 year: 'numeric',
                 month: 'numeric',
-                day: 'numeric'
+                day: 'numeric',
+                timeZone: DEFAULT_TIMEZONE // GMT+1    
                 }).replace(/,/g, '-');
                 
                 var hoursAndMinutesOptions = {
