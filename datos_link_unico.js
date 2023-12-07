@@ -130,7 +130,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 var date_last_checked_front_utc = last_checked.toLocaleString('es-ES', hoursAndMinutesOptions);
     
                 // Calculate the number of days between date_added and limit_max_date
-                var dias_caducidad_restantes = Math.floor((fecha_caducidad_date - new Date()) / (24 * 60 * 1000));
+                var dias_caducidad_restantes = Math.floor((fecha_caducidad_date - new Date()) / (24 * 60 * 60 * 1000));
     
                 // Calcular número de horas buscando
                 var horas_busqueda_front = Math.floor((new Date() - date_added) / (60 * 60 * 1000));
