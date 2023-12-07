@@ -134,8 +134,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 const timeValue = timeDiffHoras > 24 ? Math.floor(timeDiffHoras / 60) : timeDiffHoras;
                 var timeUnit = timeDiffHoras > 24 ? `días` : 'horas';
     
-                // Caluclar número de horas buscando
-                var horas_busqueda_front = Math.floor((new Date() - date_added) / (60 * 1000));
+                // Calcular número de horas buscando
+                var horas_busqueda_front = Math.floor((new Date() - date_added) / (60 * 60 * 1000));
                 
                 var coste_hora_buscando = (precio_cita_front_euros / horas_busqueda_front);
     
