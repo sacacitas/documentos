@@ -169,7 +169,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 document.getElementById('limit_max_front').textContent = formattedLimitMax;
                 document.getElementById('date_added_front').textContent = formattedDateAdded;
                 document.getElementById('caducidad_busqueda').textContent = `Dentro de ${timeValue} ${timeUnit}`;
-                document.getElementById('horas_busqueda_front').textContent = formatNumberWithDots(horas_busqueda_front) + ' h.';
+                document.getElementById('horas_busqueda_front').textContent = horas_busqueda_front + ' h.';
                 document.getElementById('precio_cita_front').textContent = precio_cita_front_euros.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
                 document.getElementById('coste_hora_buscando').textContent = coste_hora_buscando.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
                 
