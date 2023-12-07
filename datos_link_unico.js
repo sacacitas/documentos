@@ -110,8 +110,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 };
                 
                 //Formatear fechas a strings
-                var date_now_gmt1 = new Date().toLocaleString("es-ES", { timeZone: 'Europe/Madrid' });
-                var date_added_gmt1 = new Date().toLocaleString("es-ES", { timeZone: 'Europe/Madrid' });
                 var formattedDateAdded = date_added.toLocaleString('es-ES', options).replace(/,/g, ' -');
                 var formattedLimitMax = limit_max_date.toLocaleDateString('es-ES', {
                 year: 'numeric',
@@ -137,7 +135,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 var timeUnit = timeDiffHoras > 24 ? `días` : 'horas';
     
                 // Caluclar número de horas buscando
-                var horas_busqueda_front = Math.floor((date_now_gmt1 - date_added_gmt1) / (24 * 60 * 1000));
+                var horas_busqueda_front = Math.floor((new Date() - date_added) / (24 * 60 * 1000));
                 
                 var coste_hora_buscando = (precio_cita_front_euros / horas_busqueda_front);
     
