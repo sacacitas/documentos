@@ -108,10 +108,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 timeZoneName: 'short'
                 };
                 
-                //Fecha a zona horaria españa 
-                var date_added2 = date_added.toLocaleString('es-ES', options)
-                var limit_max_date2 = limit_max_date.toLocaleString('es-ES', options)
-                //Formatear fechas
+                //Formatear fechas a strings
                 var formattedDateAdded = date_added.toLocaleString('es-ES', options).replace(/,/g, ' -');
                 var formattedLimitMax = limit_max_date.toLocaleDateString('es-ES', {
                 year: 'numeric',
@@ -130,14 +127,14 @@ document.addEventListener('DOMContentLoaded', function() {
                 var date_last_checked_front_utc = last_checked.toLocaleString('es-ES', hoursAndMinutesOptions);
     
                 // Calculate the number of days between date_added and limit_max_date
-                var timeDiffHoras = Math.floor((limit_max_date2 - date_added2) / (24 * 60 * 1000));
+                var timeDiffHoras = Math.floor((limit_max_date - date_added) / (24 * 60 * 1000));
     
                 // Determine whether to use "días" or "hora"
                 const timeValue = timeDiffHoras > 24 ? Math.floor(timeDiffHoras / 60) : timeDiffHoras;
                 var timeUnit = timeDiffHoras > 24 ? `días` : 'horas';
     
                 // Caluclar número de horas buscando
-                var horas_busqueda_front = Math.floor((new Date() - date_added2) / (24 * 60 * 1000));
+                var horas_busqueda_front = Math.floor((new Date() - date_added) / (24 * 60 * 1000));
                 
                 var coste_hora_buscando = (precio_cita_front_euros / horas_busqueda_front);
     
