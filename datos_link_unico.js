@@ -135,7 +135,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 var timeUnit = timeDiffHoras > 24 ? `días` : 'horas';
     
                 // Caluclar número de horas buscando
-                var horas_busqueda_front = Math.floor((new Date('2023-12-07T14:59:03.732Z') - date_added) / (24 * 60 * 1000));
+                var horas_busqueda_front = Math.floor((new Date() - date_added) / (24 * 60 * 10));
                 
                 var coste_hora_buscando = (precio_cita_front_euros / horas_busqueda_front);
     
