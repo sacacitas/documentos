@@ -96,6 +96,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 var limit_max_date = new Date(limit_max_front);
                 var date_added = new Date(date_added_front);
                 var last_checked = new Date(date_last_checked_front);
+                
     
                 var options = {
                 year: 'numeric',
@@ -109,6 +110,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 };
                 
                 //Formatear fechas a strings
+                var date_today_es = new Date().toLocaleString("es-ES", options)
                 var formattedDateAdded = date_added.toLocaleString('es-ES', options).replace(/,/g, ' -');
                 var formattedLimitMax = limit_max_date.toLocaleDateString('es-ES', {
                 year: 'numeric',
@@ -134,7 +136,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 var timeUnit = timeDiffHoras > 24 ? `días` : 'horas';
     
                 // Caluclar número de horas buscando
-                var horas_busqueda_front = Math.floor((new Intl.DateTimeFormat('es-ES', options).format(currentDate)) - date_added) / (24 * 60 * 1000));
+                var horas_busqueda_front = Math.floor(((new Intl.DateTimeFormat('es-ES', options).format(currentDate)) - date_added) / (24 * 60 * 1000));
                 
                 var coste_hora_buscando = (precio_cita_front_euros / horas_busqueda_front);
     
