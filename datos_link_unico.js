@@ -104,7 +104,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 hour: '2-digit',
                 minute: '2-digit',
                 hour12: false, // Use 24-hour format
-                timeZone: DEFAULT_TIMEZONE, // CET/CEST
+                timeZone: DEFAULT_TIMEZONE, // HHHH
                 timeZoneName: 'short'
                 };
                 //Fecha añadido 
