@@ -88,10 +88,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 var cliente_id_obfuscado_front = data.cliente_id_obfuscado;
                 var limit_max_front = data.limit_max;
                 var fecha_caducidad_front = data.limit_max;
+                var precio_eur_cent_front = data.precio_eur_cent;
     
                 // Fetching data from jsonUrl2 based on parentIdoficinaIdservicio
                 var precio_cita_front = jsonData2[parentIDofIdoficinaIdservicio] || 'ES_0_SINDATOS';
                 var precio_cita_front_euros = (precio_cita_front / 100);
+                var precio_centimos_backend = (precio_eur_cent_front / 100);
     
                 // 
                 var limit_max_date = new Date(limit_max_front);
@@ -169,7 +171,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 document.getElementById('date_added_front').textContent = formattedDateAdded;
                 document.getElementById('caducidad_busqueda').textContent = `Dentro de ${dias_caducidad_restantes} días`;
                 document.getElementById('horas_busqueda_front').textContent = horas_busqueda_front + ' h.';
-                document.getElementById('precio_cita_front').textContent = precio_cita_front_euros.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                document.getElementById('precio_cita_front').textContent = precio_centimos_backend.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
                 document.getElementById('coste_hora_buscando').textContent = coste_hora_buscando.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
                 
                 
