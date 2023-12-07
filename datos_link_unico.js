@@ -169,8 +169,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 document.getElementById('horas_busqueda_front').textContent = formatNumberWithDots(horas_busqueda_front) + ' h.';
                 document.getElementById('precio_cita_front').textContent = precio_cita_front_euros.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
                 document.getElementById('coste_hora_buscando').textContent = coste_hora_buscando.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-                // Check if 'retries_front' is less than 1000 or 'horas_busqueda_front' is less than 48
-                if (state_front == 'RESERVADO' || horas_busqueda_front < 48) {
+                
+                
+                // Mostrar diferentes items dependiendo del estado
+                if (state_front == 'RESERVADO') {
                     document.getElementById('div-coste-hora-buscando').style.display = 'block';
                 }
                 if (state_front == 'BUSCANDO') {
