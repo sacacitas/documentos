@@ -13,10 +13,6 @@ document.addEventListener('DOMContentLoaded', function() {
     // Get the 'referencia' parameter from the URL
     const urlParams = new URLSearchParams(window.location.search);
     const referencia = urlParams.get('r');
-
-       
-    // Fetch JSON data asynchronously after the main content has loaded
-    Promise.all([loadJSON(jsonUrl1), loadJSON(jsonUrl2)])
     
         // Check if 'referencia' is present in the URL
         if (referencia) {
