@@ -94,7 +94,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 var precio_cita_front = jsonData2[parentIDofIdoficinaIdservicio] || 'ES_0_SINDATOS';
                 var precio_cita_front_euros = (precio_cita_front / 100);
                 var precio_cita_backend = (precio_eur_cent_front / 100);
-                var precio_cita_backend2 = precio_cita_backend;
+    
                  
     
                 // 
@@ -174,7 +174,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 document.getElementById('caducidad_busqueda').textContent = `Dentro de ${dias_caducidad_restantes} días`;
                 document.getElementById('horas_busqueda_front').textContent = horas_busqueda_front + ' h.';
                 document.getElementById('precio_cita_front').textContent = precio_cita_backend.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-                document.getElementById('precio_cita_hay_que_pagar').textContent = precio_cita_backend2.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 });               
+                document.getElementById('precio_cita_hay_que_pagar').textContent = precio_cita_backend.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 });               
                 document.getElementById('coste_hora_buscando').textContent = coste_hora_buscando.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
                 
                 
