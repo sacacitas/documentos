@@ -93,7 +93,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 // Fetching data from jsonUrl2 based on parentIdoficinaIdservicio
                 var precio_cita_front = jsonData2[parentIDofIdoficinaIdservicio] || 'ES_0_SINDATOS';
                 var precio_cita_front_euros = (precio_cita_front / 100);
-                const precio_centimos_backend = (precio_eur_cent_front / 100);
+                var precio_cita_backend = (precio_eur_cent_front / 100);
+                var precio_cita_backend2 = precio_cita_backend;
                  
     
                 // 
@@ -139,7 +140,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 var horas_busqueda_front = Math.floor((new Date() - date_added) / (60 * 60 * 1000));
                 
                 //Calcular coste horas buscando
-                var coste_hora_buscando = (precio_cita_front_euros / horas_busqueda_front);
+                var coste_hora_buscando = (precio_cita_backend / horas_busqueda_front);
     
                 // Function to format number with dots from 'horas_busqueda_front'
                 function formatNumberWithDots(number) {
@@ -172,8 +173,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 document.getElementById('date_added_front').textContent = formattedDateAdded;
                 document.getElementById('caducidad_busqueda').textContent = `Dentro de ${dias_caducidad_restantes} días`;
                 document.getElementById('horas_busqueda_front').textContent = horas_busqueda_front + ' h.';
-                document.getElementById('precio_cita_front').textContent = precio_centimos_backend.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-                document.getElementById('precio_cita_hay_que_pagar').textContent = precio_centimos_backend.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 });               
+                document.getElementById('precio_cita_front').textContent = precio_cita_backend.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                document.getElementById('precio_cita_hay_que_pagar').textContent = precio_cita_backend2.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 });               
                 document.getElementById('coste_hora_buscando').textContent = coste_hora_buscando.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
                 
                 
