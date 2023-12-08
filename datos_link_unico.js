@@ -14,47 +14,9 @@ document.addEventListener('DOMContentLoaded', function() {
     const urlParams = new URLSearchParams(window.location.search);
     const referencia = urlParams.get('r');
 
-    
-    // URLs of your JSON files
-    const jsonUrl1 = 'https://documentos.sacacitas.es/categorias_servicios.json';
-    const jsonUrl2 = 'https://documentos.sacacitas.es/precios_citas.json';
-    
-    function loadJSON(url) {
-        return fetch(url)
-        .then(response => {
-            if (!response.ok) {
-            throw new Error('Network response was not ok');
-            }
-            return response.json();
-        })
-        .catch(error => {
-            console.error('Error loading JSON:', error);
-            throw error;
-        });
-    }
-    
+       
     // Fetch JSON data asynchronously after the main content has loaded
     Promise.all([loadJSON(jsonUrl1), loadJSON(jsonUrl2)])
-        .then(dataArray => {
-        // Handle your JSON data here
-        const [jsonData1, jsonData2] = dataArray;
-    
-        // Buscar el oficina_servicio en el JSON 1
-        let parentIDofIdoficinaIdservicio = null;
-        let idoficina_idservicio = null;
-    
-        // Iterate through the JSON data loaded from jsonUrl1
-        for (const parentKey in jsonData1) {
-            const parentData = jsonData1[parentKey];
-            idoficina_idservicio = parentData.id_oficina + '_' + parentData.id_servicio;
-    
-            // Check if the parentIdoficinaIdservicio matches the idoficina_idservicio
-            if (idoficina_idservicio === idoficina_idservicio) {
-            // Set the variable to the parent key
-            parentIDofIdoficinaIdservicio = parentKey;
-            break; // Assuming idoficina_idservicio is unique, you can stop the iteration
-            }
-        }
     
         // Check if 'referencia' is present in the URL
         if (referencia) {
@@ -90,14 +52,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 var fecha_caducidad_front = data.limit_caducidad;
                 var precio_eur_cent_front = data.precio_eur_cent;
     
-                // Fetching data from jsonUrl2 based on parentIdoficinaIdservicio
-                var precio_cita_front = jsonData2[parentIDofIdoficinaIdservicio] || 'ES_0_SINDATOS';
-                var precio_cita_front_euros = (precio_cita_front / 100);
+                // Calcular precio en euros de cents
                 var precio_cita_backend = (precio_eur_cent_front / 100);
     
-                 
-    
-                // 
+                // Crear fechas
                 var limit_max_date = new Date(limit_max_front);
                 var date_added = new Date(date_added_front);
                 var last_checked = new Date(date_last_checked_front);
