@@ -90,6 +90,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 var limit_max_front = data.limit_max;
                 var fecha_caducidad_front = data.limit_caducidad;
                 var precio_eur_cent_front = data.precio_eur_cent;
+                var codigo_reserva_cita_front = data.referencia_reserva;
+                var fecha_cita_reservada_front = data.fecha_cita_reservada
+                
 
                 // Fetching data from jsonUrl2 based on parentIdoficinaIdservicio
                 var precio_cita_front = jsonData2[parentIDofIdoficinaIdservicio] || 'ES_0_SINDATOS';
@@ -103,6 +106,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 var date_added = new Date(date_added_front);
                 var last_checked = new Date(date_last_checked_front);
                 var fecha_caducidad_date = new Date(fecha_caducidad_front);
+                var fecha_cita_reservada = new Date(fecha_cita_reservada_front);
                 
     
                 var options = {
@@ -118,6 +122,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 
                 //Formatear fechas a strings
                 var formattedDateAdded = date_added.toLocaleString('es-ES', options).replace(/,/g, ' -');
+                var formattedDate_cita_reservada = fecha_cita_reservada.toLocaleString('es-ES', options).replace(/,/g, ' -');
                 var formattedLimitMax = limit_max_date.toLocaleDateString('es-ES', {
                 year: 'numeric',
                 month: 'numeric',
@@ -177,7 +182,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 document.getElementById('precio_cita_front').textContent = precio_cita_backend.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
                 document.getElementById('precio_cita_hay_que_pagar').textContent = precio_cita_backend.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 });               
                 document.getElementById('coste_hora_buscando').textContent = coste_hora_buscando.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                document.getElementById('codigo-reserva-cita-reservada').textContent = codigo_reserva_cita_front;
+                document.getElementById('fecha-cita-reservada').textContent = formattedDate_cita_reservada;
+
                 
+
                 
                 
                 // Mostrar diferentes items dependiendo del estado
@@ -195,6 +204,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
                 if (state_front == 'BUSCANDO') {
                     document.getElementById('div_caducidad_busqueda').style.display = 'block';
+                }
+                if (state_front == 'FINALIZADO') {
+                    document.getElementById('estado-pago-cita-reservada').textContent = 'Pagado';
                 }
 
                 //URL administracion dinamico 
@@ -218,8 +230,6 @@ document.addEventListener('DOMContentLoaded', function() {
            		linkElement.style.color = '#2C64E3';
 
                 
-                // Hide the element with ID 'cuadrado-pago-cita'
-                //document.getElementById('cuadrado-pago-cita20').style.display = 'none'; 
                 //enviar id_publico al pulsar boton pagar
                 document.getElementById('id_unico_webhook').style.display = 'none';
                 document.getElementById('id_unico_webhook').setAttribute('value', referencia);
