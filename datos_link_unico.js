@@ -143,7 +143,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 var dias_caducidad_restantes = Math.floor((fecha_caducidad_date - new Date()) / (24 * 60 * 60 * 1000));
     
                 // Calcular número de horas buscando
-                var horas_busqueda_front = Math.floor((new Date() - date_added) / (60 * 60 * 1000));
+                var horas_busqueda_front = Math.floor((last_checked - date_added) / (60 * 60 * 1000));
                 
                 //Calcular coste horas buscando
                 var coste_hora_buscando = (precio_cita_backend / horas_busqueda_front);
