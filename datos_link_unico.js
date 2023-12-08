@@ -176,7 +176,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 
                 
                 // Mostrar diferentes items dependiendo del estado
-                if (state_front == 'RESERVADO') {
+                if (state_front == 'RESERVADO' && horas_busqueda_front > 48) {
                     document.getElementById('div-coste-hora-buscando').style.display = 'block';
                 }
                 if (state_front == 'BUSCANDO') {
