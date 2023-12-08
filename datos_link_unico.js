@@ -193,6 +193,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (state_front == 'RESERVADO' && horas_busqueda_front > 48) {
                     document.getElementById('div-coste-hora-buscando').style.display = 'block';
                 }
+                if (horas_busqueda_front < 24) {
+                    document.getElementById('div-horas-buscando').style.display = 'none';
+                }
+                if (retries_front < 500) {
+                    document.getElementById('div-total-busquedas').style.display = 'none';
+                }                
                 if (state_front == 'BUSCANDO') {
                     document.getElementById('boton-cancelar-link-unico').style.display = 'block';
                 }    
@@ -208,6 +214,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (state_front == 'FINALIZADO') {
                     document.getElementById('estado-pago-cita-reservada').textContent = 'Pagado';
                 }
+                if (state_front == 'BUSCANDO') {
+                    document.getElementById('div-ultima-busqueda').style.display = 'block';
+                }                
 
                 //URL administracion dinamico 
                 var backendWebOficialElement = document.getElementById('backend-web-oficial')
