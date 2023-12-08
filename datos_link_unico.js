@@ -91,7 +91,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 var fecha_caducidad_front = data.limit_caducidad;
                 var precio_eur_cent_front = data.precio_eur_cent;
                 var codigo_reserva_cita_front = data.referencia_reserva;
-                var fecha_cita_reservada_front = data.fecha_cita_reservada
+                var fecha_cita_reservada_front = data.fecha_cita_reservada;
+                var fecha_limite_pago_front = data.fecha_limite_pago;
                 
 
                 // Fetching data from jsonUrl2 based on parentIdoficinaIdservicio
@@ -107,6 +108,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 var last_checked = new Date(date_last_checked_front);
                 var fecha_caducidad_date = new Date(fecha_caducidad_front);
                 var fecha_cita_reservada = new Date(fecha_cita_reservada_front);
+                var fecha_limite_pago = new Date(fecha_limite_pago_front);
                 
     
                 var options = {
@@ -123,6 +125,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 //Formatear fechas a strings
                 var formattedDateAdded = date_added.toLocaleString('es-ES', options).replace(/,/g, ' -');
                 var formattedDate_cita_reservada = fecha_cita_reservada.toLocaleString('es-ES', options).replace(/,/g, ' -');
+                var formattedDate_fecha_limite_pago = fecha_limite_pago.toLocaleString('es-ES', options).replace(/,/g, ' -');
                 var formattedLimitMax = limit_max_date.toLocaleDateString('es-ES', {
                 year: 'numeric',
                 month: 'numeric',
@@ -184,6 +187,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 document.getElementById('coste_hora_buscando').textContent = coste_hora_buscando.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
                 document.getElementById('codigo-reserva-cita-reservada').textContent = codigo_reserva_cita_front;
                 document.getElementById('fecha-cita-reservada').textContent = formattedDate_cita_reservada;
+                document.getElementById('boton-fecha-limite-pago').textContent = formattedDate_fecha_limite_pago;
 
                 
 
