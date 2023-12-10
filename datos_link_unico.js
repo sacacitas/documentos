@@ -109,13 +109,31 @@ document.addEventListener('DOMContentLoaded', function() {
                 var fecha_cita_reservada = new Date(fecha_cita_reservada_front);
                 var fecha_limite_pago = new Date(fecha_limite_pago_front);
 
-                // Comprobar si ha vencido el plazo para pagar
+                // Comprobar si ha vencido el plazo para pagar y cambiar el estado a no pagado
                 if (fecha_limite_pago_front) {
                     if (new Date() > fecha_limite_pago) {
                         var state_front = "NO PAGADO - Cita Cancelada";
                     }
                 }
-    
+
+                
+                //contar hacía atrás del tiempo que falta para pagar
+                const deadline = fecha_limite_pago.getTime();        
+                setInterval(() => {
+                    const now_time = new Date().getTime();
+                    const distance = deadline - now_time;
+            
+                    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                    
+                    document.querySelector('#js-timer-days').innerText = days;
+                    document.querySelector('#js-timer-hours').innerText = hours;
+                    document.querySelector('#js-timer-minutes').innerText = minutes;
+            
+                }, 1000);
+
+                
                 var options = {
                 year: 'numeric',
                 month: 'numeric',
