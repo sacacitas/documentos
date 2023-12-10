@@ -93,8 +93,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 var codigo_reserva_cita_front = data.referencia_reserva;
                 var fecha_cita_reservada_front = data.fecha_cita_reservada;
                 var fecha_limite_pago_front = data.fecha_limite_pago;
-                
-
+          
                 // Fetching data from jsonUrl2 based on parentIdoficinaIdservicio
                 var precio_cita_front = jsonData2[parentIDofIdoficinaIdservicio] || 'ES_0_SINDATOS';
                 var precio_cita_front_euros = (precio_cita_front / 100);
@@ -109,7 +108,13 @@ document.addEventListener('DOMContentLoaded', function() {
                 var fecha_caducidad_date = new Date(fecha_caducidad_front);
                 var fecha_cita_reservada = new Date(fecha_cita_reservada_front);
                 var fecha_limite_pago = new Date(fecha_limite_pago_front);
-                
+
+
+                //cambiar estado a no pagado si ya ha pasado la fecha límite de pago
+                if (fecha_limite_pago > new Date()) {
+                    var state_front = 'NO PAGADO - CITA CANCELADA';
+                }
+
     
                 var options = {
                 year: 'numeric',
