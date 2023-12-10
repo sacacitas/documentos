@@ -282,7 +282,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 document.getElementById('boton_confirmar_cancelar_busqueda').addEventListener('click', function() {
                   const apiUrl = 'https://panelaws.sacacitas.es/public/cola/resumen?public_id_front=${public_id_front}';
                   const requestOptions = {
-                    method: 'POST',
+                    method: 'PUT',
                     headers: {
                       'Content-Type': 'application/json',
                     },
@@ -308,7 +308,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 document.getElementById('boton-cancelar-cita-reservada').addEventListener('click', function() {
                   const apiUrl = 'https://hook.eu2.make.com/do8w7utervphwxlzzt9afkjixmqvtxl5?public_id_front=${public_id_front}';
                   const requestOptions = {
-                    method: 'PUT',
+                    method: 'POST',
                     headers: {
                       'Content-Type': 'application/json',
                     },
