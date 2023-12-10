@@ -303,6 +303,32 @@ document.addEventListener('DOMContentLoaded', function() {
                       console.error('Error:', error);
                     });
                 });
+
+                // Petición cancelar cita reservada
+                document.getElementById('boton-cancelar-cita-reservada').addEventListener('click', function() {
+                  const apiUrl = 'https://hook.eu2.make.com/do8w7utervphwxlzzt9afkjixmqvtxl5?public_id_front=${public_id_front}';
+                  const requestOptions = {
+                    method: 'PUT',
+                    headers: {
+                      'Content-Type': 'application/json',
+                    },
+                  };
+                    
+                  // Using the fetch API to send the HTTP request
+                  fetch(apiUrl, requestOptions)
+                    .then(response => {
+                      if (!response.ok) {
+                        throw new Error(`HTTP error! Status: ${response.status}`);
+                      }
+                      return response.json();
+                    })
+                    .then(data => {
+                      console.log('Response data:', data);
+                    })
+                    .catch(error => {
+                      console.error('Error:', error);
+                    });
+                });
                 
     
             })
