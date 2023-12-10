@@ -127,9 +127,9 @@ document.addEventListener('DOMContentLoaded', function() {
                     const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
                     const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
                     
-                    document.querySelector('#js-timer-days').innerText = days;
-                    document.querySelector('#js-timer-hours').innerText = hours;
-                    document.querySelector('#js-timer-minutes').innerText = minutes;
+                    document.getElementById('js-timer-days').innerText = days;
+                    document.getElementById('js-timer-hours').innerText = hours;
+                    document.getElementById('js-timer-minutes').innerText = minutes;
             
                 }, 1000);
 
