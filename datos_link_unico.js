@@ -306,14 +306,23 @@ document.addEventListener('DOMContentLoaded', function() {
 
                 // Petición cancelar cita reservada
                 document.getElementById('boton-cancelar-cita-reservada').addEventListener('click', function() {
-                  const apiUrl = 'https://hook.eu2.make.com/do8w7utervphwxlzzt9afkjixmqvtxl5?public_id_front=${public_id_front}';
+                  const apiUrl = 'https://hook.eu2.make.com/do8w7utervphwxlzzt9afkjixmqvtxl5';
+            
+                  // Include data in the request body
+                  const requestBody = {
+                    public_id_front: public_id_front,
+                    // Add any other data properties as needed
+                  };
+            
                   const requestOptions = {
-                    method: 'GET',
+                    method: 'POST', // or 'PUT', 'GET', etc.
                     headers: {
                       'Content-Type': 'application/json',
+                      // Add any other headers as needed
                     },
+                    body: JSON.stringify(requestBody),
                   };
-                    
+            
                   // Using the fetch API to send the HTTP request
                   fetch(apiUrl, requestOptions)
                     .then(response => {
@@ -323,9 +332,11 @@ document.addEventListener('DOMContentLoaded', function() {
                       return response.json();
                     })
                     .then(data => {
+                      // Handle the successful response data here
                       console.log('Response data:', data);
                     })
                     .catch(error => {
+                      // Handle errors here
                       console.error('Error:', error);
                     });
                 });
