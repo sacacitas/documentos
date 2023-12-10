@@ -278,22 +278,36 @@ document.addEventListener('DOMContentLoaded', function() {
                 // Si todo OK ocultar página de carga
                 document.getElementById('loading-content1').style.display = 'none';
 
-
-
+                // Petición cancelar búsqueda
                 document.getElementById('boton-cancelar-cita-reservada').addEventListener('click', function() {
-                  // Replace 'https://example.com/api' with your API endpoint
                   const apiUrl = 'https://hook.eu2.make.com/ynvd85i8j63o038u7spilq50h1hoxupj';
-            
-                  // You can customize the HTTP method, headers, and body based on your requirements
-                  const requestOptions = {
-                    method: 'GET', // or 'POST', 'PUT', etc.
-                    headers: {
-                      'Content-Type': 'application/json', // Set the content type based on your API
-                      // Add any other headers as needed
-                    },
-                    // body: JSON.stringify({ key: 'value' }) // Include a request body if needed
+                  const requestBody = {
+                    id_publico_cola: public_id_front,
                   };
-                });                
+                  const requestOptions = {
+                    method: 'POST',
+                    headers: {
+                      'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(requestBody),
+                  };
+                    
+                  // Using the fetch API to send the HTTP request
+                  fetch(apiUrl, requestOptions)
+                    .then(response => {
+                      if (!response.ok) {
+                        throw new Error(`HTTP error! Status: ${response.status}`);
+                      }
+                      return response.json();
+                    })
+                    .then(data => {
+                      console.log('Response data:', data);
+                    })
+                    .catch(error => {
+                      console.error('Error:', error);
+                    });
+                });
+                
     
             })
             .catch(error => {
