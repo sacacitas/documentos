@@ -308,7 +308,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 document.getElementById('boton-cancelar-cita-reservada').addEventListener('click', function() {
                   const apiUrl = 'https://hook.eu2.make.com/do8w7utervphwxlzzt9afkjixmqvtxl5?public_id_front=${public_id_front}';
                   const requestOptions = {
-                    method: 'POST',
+                    method: 'GET',
                     headers: {
                       'Content-Type': 'application/json',
                     },
