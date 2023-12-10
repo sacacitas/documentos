@@ -282,7 +282,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 document.getElementById('boton_confirmar_cancelar_busqueda').addEventListener('click', function() {
                   const apiUrl = 'https://panelaws.sacacitas.es/public/cola/resumen?public_id_front=${public_id_front}';
                   const requestOptions = {
-                    method: 'PUT',
+                    method: 'POST',
                     headers: {
                       'Content-Type': 'application/json',
                     },
