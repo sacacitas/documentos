@@ -111,9 +111,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
                 //cambiar estado a no pagado si ya ha pasado la fecha límite de pago
-                if (fecha_limite_pago < new Date()) {
+                if (fecha_limite_pago && fecha_limite_pago instanceof Date && fecha_limite_pago < new Date()) {
                     var state_front = 'NO PAGADO - CITA CANCELADA';
-                }
+                }               
 
     
                 var options = {
