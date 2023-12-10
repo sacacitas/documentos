@@ -280,16 +280,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
                 // Petición cancelar búsqueda
                 document.getElementById('boton-cancelar-cita-reservada').addEventListener('click', function() {
-                  const apiUrl = 'https://hook.eu2.make.com/ynvd85i8j63o038u7spilq50h1hoxupj';
-                  const requestBody = {
-                    id_publico_cola: public_id_front,
-                  };
+                  const apiUrl = 'https://hook.eu2.make.com/ynvd85i8j63o038u7spilq50h1hoxupj?public_id_front=${public_id_front}';
                   const requestOptions = {
-                    method: 'POST',
+                    method: 'PUT',
                     headers: {
                       'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify(requestBody),
                   };
                     
                   // Using the fetch API to send the HTTP request
