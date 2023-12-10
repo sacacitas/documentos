@@ -118,14 +118,14 @@ document.addEventListener('DOMContentLoaded', function() {
 
                 
                 //contar hacía atrás del tiempo que falta para pagar
-                const deadline = fecha_limite_pago.getTime();        
+                var deadline = fecha_limite_pago.getTime();        
                 setInterval(() => {
-                    const now_time = new Date().getTime();
-                    const distance = deadline - now_time;
+                    var now_time = new Date().getTime();
+                    var distance = deadline - now_time;
             
-                    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-                    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                    var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                    var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                    var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
                     
                     document.querySelector('#js-timer-days').innerText = days;
                     document.querySelector('#js-timer-hours').innerText = hours;
