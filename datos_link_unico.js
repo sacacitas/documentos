@@ -109,7 +109,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 var fecha_cita_reservada = new Date(fecha_cita_reservada_front);
                 var fecha_limite_pago = new Date(fecha_limite_pago_front);
 
-
+                // Comprobar si ha vencido el plazo para pagar
+                if (fecha_limite_pago_front) {
+                    if (new Date() > fecha_limite_pago) {
+                        var state_front = "NO PAGADO - Cita Cancelada";
+                    }
+                }
     
                 var options = {
                 year: 'numeric',
