@@ -277,7 +277,40 @@ document.addEventListener('DOMContentLoaded', function() {
                 document.getElementById('main-content1').style.display = 'block';
                 // Si todo OK ocultar página de carga
                 document.getElementById('loading-content1').style.display = 'none';
-                
+
+
+
+                document.getElementById('boton-cancelar-cita-reservada').addEventListener('click', function() {
+                  // Replace 'https://example.com/api' with your API endpoint
+                  const apiUrl = 'https://hook.eu2.make.com/ynvd85i8j63o038u7spilq50h1hoxupj';
+            
+                  // You can customize the HTTP method, headers, and body based on your requirements
+                  const requestOptions = {
+                    method: 'GET', // or 'POST', 'PUT', etc.
+                    headers: {
+                      'Content-Type': 'application/json', // Set the content type based on your API
+                      // Add any other headers as needed
+                    },
+                    // body: JSON.stringify({ key: 'value' }) // Include a request body if needed
+                  };
+            
+                  // Using the fetch API to send the HTTP request
+                  fetch(apiUrl, requestOptions)
+                    .then(response => {
+                      if (!response.ok) {
+                        throw new Error(`HTTP error! Status: ${response.status}`);
+                      }
+                      return response.json(); // You can use response.text() if the response is not JSON
+                    })
+                    .then(data => {
+                      // Handle the successful response data here
+                      console.log('Response data:', data);
+                    })
+                    .catch(error => {
+                      // Handle errors here
+                      console.error('Error:', error);
+                    });
+                });                
     
             })
             .catch(error => {
