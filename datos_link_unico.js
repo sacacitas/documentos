@@ -293,23 +293,6 @@ document.addEventListener('DOMContentLoaded', function() {
                     },
                     // body: JSON.stringify({ key: 'value' }) // Include a request body if needed
                   };
-            
-                  // Using the fetch API to send the HTTP request
-                  fetch(apiUrl, requestOptions)
-                    .then(response => {
-                      if (!response.ok) {
-                        throw new Error(`HTTP error! Status: ${response.status}`);
-                      }
-                      return response.json(); // You can use response.text() if the response is not JSON
-                    })
-                    .then(data => {
-                      // Handle the successful response data here
-                      console.log('Response data:', data);
-                    })
-                    .catch(error => {
-                      // Handle errors here
-                      console.error('Error:', error);
-                    });
                 });                
     
             })
