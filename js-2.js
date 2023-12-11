@@ -5,6 +5,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     var administracionSelect = document.getElementById('administracionSelect');
     var provinciaSelect = document.getElementById('provinciaSelect');
+    var oficinaSelect = document.getElementById('oficinaSelect');
     var citaPreviaSelect = document.getElementById('citaPreviaSelect');
     var segundaParteBuscador = document.getElementById('segunda-parte-buscador');
     var parteFinalBuscador = document.getElementById('parte-final-buscador');
@@ -27,9 +28,17 @@ document.addEventListener('DOMContentLoaded', function () {
       }
     }
 
+    
+    // Function to reset citaPreviaSelect when oficinaSelect changes
+    function resetCitaPrevia() {
+        citaPreviaSelect.value = ''; // Reset the value to an empty string
+    }
+
+    
     // Add event listeners to the selects
     administracionSelect.addEventListener('change', checkSelection);
     provinciaSelect.addEventListener('change', checkSelection);
+    oficinaSelect.addEventListener('change', resetCitaPrevia); // Use resetCitaPrevia function here
     citaPreviaSelect.addEventListener('change', checkCitaPreviaSelection);
   });
 
