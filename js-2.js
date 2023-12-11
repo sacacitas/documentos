@@ -5,7 +5,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
     var administracionSelect = document.getElementById('administracionSelect');
     var provinciaSelect = document.getElementById('provinciaSelect');
-    var oficinaSelect = document.getElementById('oficinaSelect');
     var citaPreviaSelect = document.getElementById('citaPreviaSelect');
     var segundaParteBuscador = document.getElementById('segunda-parte-buscador');
     var parteFinalBuscador = document.getElementById('parte-final-buscador');
