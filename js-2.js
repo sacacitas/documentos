@@ -27,18 +27,10 @@ document.addEventListener('DOMContentLoaded', function () {
         parteFinalBuscador.style.display = 'none'; // Hide parte-final-buscador
       }
     }
-
-    
-    // Function to reset citaPreviaSelect when oficinaSelect changes
-    function resetCitaPrevia() {
-        citaPreviaSelect.value = ''; // Reset the value to an empty string
-    }
-
-    
+ 
     // Add event listeners to the selects
     administracionSelect.addEventListener('change', checkSelection);
     provinciaSelect.addEventListener('change', checkSelection);
-    oficinaSelect.addEventListener('change', resetCitaPrevia); // Use resetCitaPrevia function here
     citaPreviaSelect.addEventListener('change', checkCitaPreviaSelection);
   });
 
