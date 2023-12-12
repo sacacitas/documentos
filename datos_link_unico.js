@@ -237,6 +237,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (state_front == 'RESERVADO') {
                     document.getElementById('div-datos-cita-reservada').style.display = 'block';
                 }
+                if (state_front == 'PAGADO') {
+                    document.getElementById('div-datos-cita-reservada').style.display = 'block';
+                }
+                if (state_front == 'PAGADO') {
+                    document.getElementById('estado-pago-cita-reservada').textContent = 'Pagado';
+                }
                 if (state_front == 'BUSCANDO') {
                     document.getElementById('div_caducidad_busqueda').style.display = 'block';
                 }
