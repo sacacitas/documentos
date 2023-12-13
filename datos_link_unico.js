@@ -249,7 +249,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     document.getElementById('div_caducidad_busqueda').style.display = 'block';
                 }
                 if (state_front == 'RESERVADO') {
-                    document.getElementById('estado-pago-cita-reservada').textContent = 'Cita reservada, pendiente de pagar';
+                    document.getElementById('boton_estado_busqueda').textContent = 'Cita reservada, pendiente de pagar';
                 }
                 if (state_front == 'BUSCANDO') {
                     document.getElementById('div-ultima-busqueda').style.display = 'block';
