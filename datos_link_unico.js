@@ -248,8 +248,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (state_front == 'BUSCANDO') {
                     document.getElementById('div_caducidad_busqueda').style.display = 'block';
                 }
-                if (state_front == 'FINALIZADO') {
-                    document.getElementById('estado-pago-cita-reservada').textContent = 'Pagado';
+                if (state_front == 'RESERVADO') {
+                    document.getElementById('estado-pago-cita-reservada').textContent = 'Cita reservada, pendiente de pagar';
                 }
                 if (state_front == 'BUSCANDO') {
                     document.getElementById('div-ultima-busqueda').style.display = 'block';
