@@ -237,12 +237,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (state_front == 'RESERVADO') {
                     document.getElementById('div-datos-cita-reservada').style.display = 'block';
                 }
-                if (state_front == 'RESERVADO') {
-                    document.getElementById('estado-pago-cita-reservada').textContent = 'Cita reservada, pendiente pago';
-                }     
-                if (state_front == 'BUSCANDO') {
-                    document.getElementById('estado-pago-cita-reservada').textContent = 'Buscando tu cita;
-                }   
                 if (state_front == 'PAGADO') {
                     document.getElementById('div-datos-cita-reservada').style.display = 'block';
                 }
