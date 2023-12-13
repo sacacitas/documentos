@@ -182,11 +182,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
     
                 // Reemplazar items de las variables por texto con ID's de la web
-                document.getElementById('public_id_front').textContent = public_id_front;
-                document.getElementById('public_id_front2').textContent = public_id_front;
-                document.getElementById('servicio_nombre_front').textContent = servicio_nombre_front;
-                document.getElementById('oficina_nombre_front').textContent = oficina_nombre_front;
-                document.getElementById('provincia_front').textContent = provincia_front;
+                estadoBusquedaElement.classList.toggle('boton_busqueda_verde', lowerCaseState === 'buscando');
+                estadoBusquedaElement.classList.toggle('boton_busqueda_azul', lowerCaseState === 'reservado');
+                estadoBusquedaElement.classList.toggle('boton_busqueda_naranja', lowerCaseState === 'expirado');
+                estadoBusquedaElement.classList.toggle('boton_busqueda_rojo', lowerCaseState === 'cancelado');
+     
     
                 // Botón 'Estado' búsqueda por colores
                 var estadoBusquedaElement = document.getElementById('boton_estado_busqueda');
@@ -237,6 +237,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (state_front == 'RESERVADO') {
                     document.getElementById('div-datos-cita-reservada').style.display = 'block';
                 }
+                if (state_front == 'RESERVADO') {
+                    document.getElementById('estado-pago-cita-reservada').textContent = 'Cita reservada, pendiente pago';
+                }                  
                 if (state_front == 'PAGADO') {
                     document.getElementById('div-datos-cita-reservada').style.display = 'block';
                 }
@@ -254,6 +257,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (state_front == 'PAGADO') {
                     document.getElementById('estado-pago-cita-reservada').textContent = 'Pagado';
                 }
+                if (state_front == 'BUSCANDO') {
+                    document.getElementById('estado-pago-cita-reservada').textContent = 'Buscando';
+                }                   
                 
 
 
