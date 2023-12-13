@@ -195,8 +195,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 // Apply class based on the state text
                 estadoBusquedaElement.classList.toggle('boton_busqueda_verde', lowerCaseState === 'buscando');
                 estadoBusquedaElement.classList.toggle('boton_busqueda_rojo', lowerCaseState === 'cancelado');
-                estadoBusquedaElement.classList.toggle('boton_busqueda_azul', lowerCaseState === 'reservado');
-                estadoBusquedaElement.classList.toggle('boton_busqueda_naranja', lowerCaseState === 'expirado');                
+                estadoBusquedaElement.classList.toggle('boton_busqueda_rojo', lowerCaseState === 'anulado');         
+                estadoBusquedaElement.classList.toggle('boton_busqueda_rojo', lowerCaseState === 'expirado');  
+                estadoBusquedaElement.classList.toggle('boton_busqueda_naranja', lowerCaseState === 'reservado');
+                estadoBusquedaElement.classList.toggle('boton_busqueda_azul', lowerCaseState === 'pagado');                
     
                 document.getElementById('state_front').textContent = state_front.charAt(0).toUpperCase() + state_front.substring(1).toLowerCase();
                 document.getElementById('boton_estado_busqueda').textContent = state_front.charAt(0).toUpperCase() + state_front.substring(1).toLowerCase();
@@ -249,18 +251,21 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (state_front == 'BUSCANDO') {
                     document.getElementById('div-ultima-busqueda').style.display = 'block';
                 }       
-
-                //erroes
-                if (state_front == 'FINALIZADO') {
-                    document.getElementById('estado-pago-cita-reservada').textContent = 'Pagado';
-                }
-                if (state_front == 'PAGADO') {
-                    document.getElementById('estado-pago-cita-reservada').textContent = 'Pagado';
-                }
-                if (state_front == 'BUSCANDO') {
-                    document.getElementById('estado-pago-cita-reservada').textContent = 'Buscando';
-                }                   
                 
+                //IF gifs del estado de búsqueda
+                if (state_front == 'BUSCANDO') {
+                    document.getElementById('gif-robot-buscando').style.display = 'block';
+                }   
+                if (state_front == 'BUSCANDO') {
+                    document.getElementById('gif-radar-buscando').style.display = 'block';
+                }   
+                if (state_front == 'RESERVADO') {
+                    document.getElementById('gif-verificado-reservado').style.display = 'block';
+                }   
+                if (state_front == 'RESERVADO') {
+                    document.getElementById('gif-pagar-reservado').style.display = 'block';
+                }                   
+
 
 
 
