@@ -253,7 +253,22 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
                 if (state_front == 'BUSCANDO') {
                     document.getElementById('div-ultima-busqueda').style.display = 'block';
-                }                
+                }   
+
+
+                //Poner gifs según el estado de búsqueda
+                if (state_front == 'BUSCANDO') {
+                    document.getElementById('gif-robot-buscando').style.display = 'block';
+                } 
+                if (state_front == 'BUSCANDO') {
+                    document.getElementById('gif-radar-buscando').style.display = 'block';
+                } 
+                if (state_front == 'RESERVADO') {
+                    document.getElementById('gif-verificado-reservado').style.display = 'block';
+                }         
+                if (state_front == 'RESERVADO') {
+                    document.getElementById('gif-pagar-reservado').style.display = 'block';
+                }                    
 
                 //URL administracion dinamico 
                 var backendWebOficialElement = document.getElementById('backend-web-oficial')
