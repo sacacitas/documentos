@@ -229,6 +229,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
                 if (state_front == 'RESERVADO' && retries_front > 500) {
                     document.getElementById('div-coste-hora-buscando').style.display = 'block';
+                }  
+                if (retries_front < 200) {
+                    document.getElementById('div-total-busquedas').style.display = 'none';
                 }                
                 if (state_front == 'BUSCANDO') {
                     document.getElementById('boton-cancelar-link-unico').style.display = 'block';
