@@ -293,8 +293,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 document.getElementById('id_unico_webhook').setAttribute('value', referencia);
 
     
-                // Si todo está OK mostar link unico
+                // Si todo está OK mostar link unico e info exrra
                 document.getElementById('main-content1').style.display = 'block';
+                document.getElementById('main-content-info-extra').style.display = 'block';
                 // Si todo OK ocultar página de carga
                 document.getElementById('loading-content1').style.display = 'none';
 
