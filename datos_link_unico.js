@@ -1,22 +1,12 @@
 document.addEventListener('DOMContentLoaded', function () {
-  // Function to extract parameter from URL
-  function getParameterByName(name, url) {
-    if (!url) url = window.location.href;
-    name = name.replace(/[\[\]]/g, '\\$&');
-    var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
-      results = regex.exec(url);
-    if (!results) return null;
-    if (!results[2]) return '';
-    return decodeURIComponent(results[2].replace(/\+/g, ' '));
-  }
 
   // Get the 'referencia' parameter from the URL
   const urlParams = new URLSearchParams(window.location.search);
   const referencia = urlParams.get('r');
 
   // URLs of your JSON files
-  const jsonUrl1 = 'https://documentos.sacacitas.es/categorias_servicios.json';
-  const jsonUrl2 = 'https://documentos.sacacitas.es/precios_citas.json';
+  const json_categorias = 'https://documentos.sacacitas.es/categorias_servicios.json';
+  const json_precios_citas = 'https://documentos.sacacitas.es/precios_citas.json';
 
   function loadJSON(url) {
     return fetch(url)
@@ -34,7 +24,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
   // Fetch JSON data asynchronously after the main content has loaded
-  Promise.all([loadJSON(jsonUrl1), loadJSON(jsonUrl2)])
+  Promise.all([loadJSON(json_categorias), loadJSON(json_precios_citas)])
 
     .then(dataArray => {
       // Handle your JSON data here
