@@ -189,6 +189,8 @@ document.addEventListener('DOMContentLoaded', function () {
             estadoBusquedaElement.classList.toggle('boton_busqueda_rojo', lowerCaseState === 'cancelado');
             estadoBusquedaElement.classList.toggle('boton_busqueda_azul', lowerCaseState === 'pagado');
             estadoBusquedaElement.classList.toggle('boton_busqueda_rojo', lowerCaseState === 'anulado');
+            estadoBusquedaElement.classList.toggle('boton_busqueda_rojo', lowerCaseState === 'no pagado - cita cancelada');            
+            
 
             document.getElementById('state_front').textContent = state_front.charAt(0).toUpperCase() + state_front.substring(1).toLowerCase();
             document.getElementById('boton_estado_busqueda').textContent = state_front.charAt(0).toUpperCase() + state_front.substring(1).toLowerCase();
