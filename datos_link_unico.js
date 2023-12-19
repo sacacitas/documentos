@@ -183,13 +183,13 @@ document.addEventListener('DOMContentLoaded', function () {
             var lowerCaseState = state_front.toLowerCase();
 
             // Apply class based on the state text
-            estadoBusquedaElement.classList.toggle('boton_busqueda_verde', lowerCaseState === 'buscando');
-            estadoBusquedaElement.classList.toggle('boton_busqueda_naranja', lowerCaseState === 'reservado');
-            estadoBusquedaElement.classList.toggle('boton_busqueda_rojo', lowerCaseState === 'expirado');
-            estadoBusquedaElement.classList.toggle('boton_busqueda_rojo', lowerCaseState === 'cancelado');
-            estadoBusquedaElement.classList.toggle('boton_busqueda_azul', lowerCaseState === 'pagado');
-            estadoBusquedaElement.classList.toggle('boton_busqueda_rojo', lowerCaseState === 'anulado');
-            estadoBusquedaElement.classList.toggle('boton_busqueda_rojo', lowerCaseState === 'no pagado - cita cancelada');            
+            estadoBusquedaElement.classList.toggle('boton_busqueda_verde', state_front === 'BUSCANDO');
+            estadoBusquedaElement.classList.toggle('boton_busqueda_naranja', state_front === 'RESERVADO');
+            estadoBusquedaElement.classList.toggle('boton_busqueda_rojo', state_front === 'EXPIRADO');
+            estadoBusquedaElement.classList.toggle('boton_busqueda_rojo', state_front === 'CANCELADO');
+            estadoBusquedaElement.classList.toggle('boton_busqueda_azul', state_front === 'PAGADO');
+            estadoBusquedaElement.classList.toggle('boton_busqueda_rojo', state_front === 'ANULADO');
+            estadoBusquedaElement.classList.toggle('boton_busqueda_rojo', state_front === 'no pagado - cita cancelada');            
             
 
             document.getElementById('state_front').textContent = state_front.charAt(0).toUpperCase() + state_front.substring(1).toLowerCase();
