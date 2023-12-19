@@ -176,23 +176,18 @@ document.addEventListener('DOMContentLoaded', function () {
 
             // Apply class based on the state text
             if (state_front == 'BUSCANDO') {
-              document.getElementById('boton_estado_busqueda').classList.toggle = 'boton_busqueda_verde';
+              document.getElementById('boton_estado_busqueda').classList.toggle('boton_busqueda_verde');
             }
             if (state_front == 'RESERVADO') {
-              document.getElementById('boton_estado_busqueda').classList.toggle = 'boton_busqueda_naranja';
+              document.getElementById('boton_estado_busqueda').classList.toggle('boton_busqueda_naranja');
             }
-            if (state_front == 'EXPIRADO') {
-              document.getElementById('boton_estado_busqueda').classList.toggle = 'boton_busqueda_rojo';
-            }
-            if (state_front == 'CANCELADO') {
-              document.getElementById('boton_estado_busqueda').classList.toggle = 'boton_busqueda_rojo';
+            if (state_front == 'EXPIRADO' || state_front == 'CANCELADO' || state_front == 'ANULADO') {
+              document.getElementById('boton_estado_busqueda').classList.toggle('boton_busqueda_rojo');
             }
             if (state_front == 'PAGADO') {
-              document.getElementById('boton_estado_busqueda').classList.toggle = 'boton_busqueda_azul';
+              document.getElementById('boton_estado_busqueda').classList.toggle('boton_busqueda_azul');
             }
-            if (state_front == 'ANULADO') {
-              document.getElementById('boton_estado_busqueda').classList.toggle = 'boton_busqueda_rojo';
-            }            
+         
             //estadoBusquedaElement.classList.toggle('boton_busqueda_verde', state_front === 'BUSCANDO');
             //estadoBusquedaElement.classList.toggle('boton_busqueda_naranja', state_front === 'RESERVADO');
             //estadoBusquedaElement.classList.toggle('boton_busqueda_rojo', state_front === 'EXPIRADO');
