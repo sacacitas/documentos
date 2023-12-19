@@ -99,13 +99,6 @@ document.addEventListener('DOMContentLoaded', function () {
             var fecha_cita_reservada = new Date(fecha_cita_reservada_front);
             var fecha_limite_pago = new Date(fecha_limite_pago_front);
 
-            // Comprobar si ha vencido el plazo para pagar y cambiar el estado a no pagado
-            if (fecha_limite_pago_front) {
-              if (new Date() > fecha_limite_pago) {
-                var state_front = "NO PAGADO - Cita Cancelada";
-              }
-            }
-
 
             //contar hacía atrás del tiempo que falta para pagar
             const deadline = fecha_limite_pago.getTime();
@@ -188,8 +181,7 @@ document.addEventListener('DOMContentLoaded', function () {
             estadoBusquedaElement.classList.toggle('boton_busqueda_rojo', state_front === 'EXPIRADO');
             estadoBusquedaElement.classList.toggle('boton_busqueda_rojo', state_front === 'CANCELADO');
             estadoBusquedaElement.classList.toggle('boton_busqueda_azul', state_front === 'PAGADO');
-            estadoBusquedaElement.classList.toggle('boton_busqueda_rojo', state_front === 'ANULADO');
-            estadoBusquedaElement.classList.toggle('boton_busqueda_rojo', state_front === 'no pagado - cita cancelada');            
+            estadoBusquedaElement.classList.toggle('boton_busqueda_rojo', state_front === 'ANULADO'); 
             
 
             document.getElementById('state_front').textContent = state_front.charAt(0).toUpperCase() + state_front.substring(1).toLowerCase();
