@@ -171,9 +171,6 @@ document.addEventListener('DOMContentLoaded', function () {
             document.getElementById('oficina_nombre_front').textContent = oficina_nombre_front;
             document.getElementById('provincia_front').textContent = provincia_front;
 
-            // Botón 'Estado' búsqueda por colores
-            //var estadoBusquedaElement = document.getElementById('boton_estado_busqueda');
-
             // Apply class based on the state text
             if (state_front == 'BUSCANDO') {
               document.getElementById('boton_estado_busqueda').classList.toggle('boton_busqueda_verde');
@@ -187,15 +184,8 @@ document.addEventListener('DOMContentLoaded', function () {
             if (state_front == 'PAGADO') {
               document.getElementById('boton_estado_busqueda').classList.toggle('boton_busqueda_azul');
             }
-         
-            //estadoBusquedaElement.classList.toggle('boton_busqueda_verde', state_front === 'BUSCANDO');
-            //estadoBusquedaElement.classList.toggle('boton_busqueda_naranja', state_front === 'RESERVADO');
-            //estadoBusquedaElement.classList.toggle('boton_busqueda_rojo', state_front === 'EXPIRADO');
-            //estadoBusquedaElement.classList.toggle('boton_busqueda_rojo', state_front === 'CANCELADO');
-            //estadoBusquedaElement.classList.toggle('boton_busqueda_azul', state_front === 'PAGADO');
-            //estadoBusquedaElement.classList.toggle('boton_busqueda_rojo', state_front === 'ANULADO'); 
             
-
+            //Cambiar textos del link único
             document.getElementById('state_front').textContent = state_front.charAt(0).toUpperCase() + state_front.substring(1).toLowerCase();
             document.getElementById('boton_estado_busqueda').textContent = state_front.charAt(0).toUpperCase() + state_front.substring(1).toLowerCase();
             document.getElementById('date_last_checked_front').textContent = date_last_checked_front_utc;
