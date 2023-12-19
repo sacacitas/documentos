@@ -173,7 +173,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
             // Botón 'Estado' búsqueda por colores
             var estadoBusquedaElement = document.getElementById('boton_estado_busqueda');
-            var lowerCaseState = state_front.toLowerCase();
 
             // Apply class based on the state text
             estadoBusquedaElement.classList.toggle('boton_busqueda_verde', state_front === 'BUSCANDO');
