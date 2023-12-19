@@ -127,7 +127,7 @@ document.addEventListener('DOMContentLoaded', function () {
               minute: '2-digit',
               hour12: false, // Use 24-hour format
               timeZone: DEFAULT_TIMEZONE, // Madrid
-              timeZoneName: 'long'
+              timeZoneName: 'short'
             };
 
             //Formatear fechas a strings
@@ -146,7 +146,7 @@ document.addEventListener('DOMContentLoaded', function () {
               minute: '2-digit',
               hour12: false, // Use 24-hour format
               timeZone: DEFAULT_TIMEZONE, // Madrid
-              timeZoneName: 'long'
+              timeZoneName: 'short'
             };
             var date_last_checked_front_utc = last_checked.toLocaleString('es-ES', hoursAndMinutesOptions);
 
