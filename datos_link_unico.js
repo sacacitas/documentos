@@ -172,15 +172,33 @@ document.addEventListener('DOMContentLoaded', function () {
             document.getElementById('provincia_front').textContent = provincia_front;
 
             // Botón 'Estado' búsqueda por colores
-            var estadoBusquedaElement = document.getElementById('boton_estado_busqueda');
+            //var estadoBusquedaElement = document.getElementById('boton_estado_busqueda');
 
             // Apply class based on the state text
-            estadoBusquedaElement.classList.toggle('boton_busqueda_verde', state_front === 'BUSCANDO');
-            estadoBusquedaElement.classList.toggle('boton_busqueda_naranja', state_front === 'RESERVADO');
+            if (state_front == 'BUSCANDO') {
+              document.getElementById('boton_estado_busqueda').classList.toggle = 'boton_busqueda_verde';
+            }
+            if (state_front == 'RESERVADO') {
+              document.getElementById('boton_estado_busqueda').classList.toggle = 'boton_busqueda_naranja';
+            }
+            if (state_front == 'EXPIRADO') {
+              document.getElementById('boton_estado_busqueda').classList.toggle = 'boton_busqueda_rojo';
+            }
+            if (state_front == 'CANCELADO') {
+              document.getElementById('boton_estado_busqueda').classList.toggle = 'boton_busqueda_rojo';
+            }
+            if (state_front == 'PAGADO') {
+              document.getElementById('boton_estado_busqueda').classList.toggle = 'boton_busqueda_azul';
+            }
+            if (state_front == 'ANULADO') {
+              document.getElementById('boton_estado_busqueda').classList.toggle = 'boton_busqueda_rojo';
+            }            
+            //estadoBusquedaElement.classList.toggle('boton_busqueda_verde', state_front === 'BUSCANDO');
+            //estadoBusquedaElement.classList.toggle('boton_busqueda_naranja', state_front === 'RESERVADO');
             //estadoBusquedaElement.classList.toggle('boton_busqueda_rojo', state_front === 'EXPIRADO');
             //estadoBusquedaElement.classList.toggle('boton_busqueda_rojo', state_front === 'CANCELADO');
-            estadoBusquedaElement.classList.toggle('boton_busqueda_azul', state_front === 'PAGADO');
-            estadoBusquedaElement.classList.toggle('boton_busqueda_rojo', state_front === 'ANULADO'); 
+            //estadoBusquedaElement.classList.toggle('boton_busqueda_azul', state_front === 'PAGADO');
+            //estadoBusquedaElement.classList.toggle('boton_busqueda_rojo', state_front === 'ANULADO'); 
             
 
             document.getElementById('state_front').textContent = state_front.charAt(0).toUpperCase() + state_front.substring(1).toLowerCase();
