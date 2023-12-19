@@ -177,8 +177,8 @@ document.addEventListener('DOMContentLoaded', function () {
             // Apply class based on the state text
             estadoBusquedaElement.classList.toggle('boton_busqueda_verde', state_front === 'BUSCANDO');
             estadoBusquedaElement.classList.toggle('boton_busqueda_naranja', state_front === 'RESERVADO');
-            estadoBusquedaElement.classList.toggle('boton_busqueda_rojo', state_front === 'EXPIRADO');
-            estadoBusquedaElement.classList.toggle('boton_busqueda_rojo', state_front === 'CANCELADO');
+            //estadoBusquedaElement.classList.toggle('boton_busqueda_rojo', state_front === 'EXPIRADO');
+            //estadoBusquedaElement.classList.toggle('boton_busqueda_rojo', state_front === 'CANCELADO');
             estadoBusquedaElement.classList.toggle('boton_busqueda_azul', state_front === 'PAGADO');
             estadoBusquedaElement.classList.toggle('boton_busqueda_rojo', state_front === 'ANULADO'); 
             
