@@ -245,6 +245,15 @@ document.addEventListener('DOMContentLoaded', function () {
             }
 
 
+            //Datos para empresa
+            checkbox_soy_empresa_link_unico.addEventListener('change', function() {
+              if (checkbox_soy_empresa_link_unico.checked) {
+                document.getElementById('div-soy-empresa-oculto').style.display = 'block';
+              } else {
+                document.getElementById('div-soy-empresa-oculto').style.display = 'hide';
+              }            
+            });
+
             //Poner gifs según el estado de búsqueda
             if (state_front == 'BUSCANDO') {
               document.getElementById('gif-radar-buscando').style.display = 'block';
