@@ -246,12 +246,16 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
             //Datos para empresa
-            checkbox_soy_empresa_link_unico.addEventListener('change', function() {
-              if (checkbox_soy_empresa_link_unico.checked) {
-                document.getElementById('div-soy-empresa-oculto').style.display = 'block';
+            var checkbox = document.querySelector("input[name=checkbox_soy_empresa_link_unico]");
+            
+            checkbox.addEventListener('change', function() {
+              var divToShowHide = document.getElementById('div-soy-empresa-oculto');
+            
+              if (this.checked) {
+                divToShowHide.style.display = 'block';
               } else {
-                document.getElementById('div-soy-empresa-oculto').style.display = 'none';
-              }            
+                divToShowHide.style.display = 'none';
+              }
             });
 
             //Poner gifs según el estado de búsqueda
