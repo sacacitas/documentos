@@ -250,7 +250,7 @@ document.addEventListener('DOMContentLoaded', function () {
               if (checkbox_soy_empresa_link_unico.checked) {
                 document.getElementById('div-soy-empresa-oculto').style.display = 'block';
               } else {
-                document.getElementById('div-soy-empresa-oculto').style.display = 'hide';
+                document.getElementById('div-soy-empresa-oculto').style.display = 'none';
               }            
             });
 
