@@ -246,7 +246,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
             //Datos para empresa
-            var checkbox = document.querySelector("input[name=checkbox_soy_empresa_link_unico]");
+            var checkbox = document.querySelector("input[name=field_checkbox_soy_empresa_link_unico]");
             
             checkbox.addEventListener('change', function() {
               var divToShowHide = document.getElementById('div-soy-empresa-oculto');
