@@ -258,7 +258,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 if ($(this).is(":checked")) {
                     displayElement.show();
                     if (razon_social === "") {
-                      alert("Escribe tu razón");
                       return false; // Prevents the form from submitting
                     }
                   
