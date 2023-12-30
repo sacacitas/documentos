@@ -256,10 +256,10 @@ document.addEventListener('DOMContentLoaded', function () {
         
                 // If this checkbox is checked, show the corresponding element
                 if ($(this).is(":checked")) {
-                    divToShowHide.style.display = 'block';
+                    displayElement.style.display = 'block';
                 } else {
                     // If this checkbox is unchecked, hide the corresponding element
-                    divToShowHide.style.display = 'none';
+                    displayElement.style.display = 'none';
                 }
             });
 
