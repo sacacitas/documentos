@@ -246,22 +246,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
             //Datos para empresa factura
-            var divToShowHide = document.getElementById('div-soy-empresa-oculto');
-            $("[ms-code-checkbox-input]").click(function() {
-                // Get the value of the 'ms-code-checkbox-input' attribute
-                var checkboxVal = $(this).attr('ms-code-checkbox-input');
-                
-                // Find the corresponding element with the 'ms-code-checkbox-display' attribute and same value
-                var displayElement = $("[ms-code-checkbox-display=" + checkboxVal + "]");
-        
-                // If this checkbox is checked, show the corresponding element
-                if ($(this).is(":checked")) {
-                    displayElement.style.display = 'block';
-                } else {
-                    // If this checkbox is unchecked, hide the corresponding element
-                    displayElement.style.display = 'none';
-                }
-            });
 
             //Poner gifs según el estado de búsqueda
             if (state_front == 'BUSCANDO') {
