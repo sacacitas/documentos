@@ -256,11 +256,7 @@ document.addEventListener('DOMContentLoaded', function () {
         
                 // If this checkbox is checked, show the corresponding element
                 if ($(this).is(":checked")) {
-                    displayElement.show();
-                    if (razon_social === "") {
-                      return false; // Prevents the form from submitting
-                    }
-                  
+                    displayElement.show(); 
                 } else {
                     // If this checkbox is unchecked, hide the corresponding element
                     displayElement.hide();
