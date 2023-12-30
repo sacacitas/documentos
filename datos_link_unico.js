@@ -246,6 +246,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
             //Datos para empresa factura
+            var razon_social = document.getElementById('nombre_razon_social_link_unico-2').value;
             $("[ms-code-checkbox-input]").click(function() {
                 // Get the value of the 'ms-code-checkbox-input' attribute
                 var checkboxVal = $(this).attr('ms-code-checkbox-input');
@@ -256,6 +257,11 @@ document.addEventListener('DOMContentLoaded', function () {
                 // If this checkbox is checked, show the corresponding element
                 if ($(this).is(":checked")) {
                     displayElement.show();
+                    if (razon_social === "") {
+                      alert("Escribe tu razón");
+                      return false; // Prevents the form from submitting
+                    }
+                  
                 } else {
                     // If this checkbox is unchecked, hide the corresponding element
                     displayElement.hide();
