@@ -2,7 +2,7 @@
 document.addEventListener('DOMContentLoaded', function () {
   // Hide segunda-parte-buscador and parte-final-buscador by default using jQuery
   //$('#segunda-parte-buscador, #parte-final-buscador').hide();
-  document.getElementById('segunda-parte-buscador').style.display = 'none';
+  //document.getElementById('segunda-parte-buscador').style.display = 'none';
   document.getElementById('parte-final-buscador').style.display = 'none';
 
   var administracionSelect = document.getElementById('administracionSelect');
