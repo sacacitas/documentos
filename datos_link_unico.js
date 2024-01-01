@@ -243,26 +243,38 @@ document.addEventListener('DOMContentLoaded', function () {
             if (state_front == 'BUSCANDO') {
               document.getElementById('div-ultima-busqueda').style.display = 'block';
             }
-
-
+    
             //Datos para empresa factura
             var razon_social = document.getElementById('nombre_razon_social_link_unico-2').value;
-            $("[ms-code-checkbox-input]").click(function() {
+            var datosEmpresaField = document.querySelector('[data-form-datos-empresa]');
+            
+            $("[ms-code-checkbox-input]").click(function () {
                 // Get the value of the 'ms-code-checkbox-input' attribute
                 var checkboxVal = $(this).attr('ms-code-checkbox-input');
-                
-                // Find the corresponding element with the 'ms-code-checkbox-display' attribute and same value
+            
+                // Find the corresponding element with the 'ms-code-checkbox-display' attribute and the same value
                 var displayElement = $("[ms-code-checkbox-display=" + checkboxVal + "]");
-        
+            
                 // If this checkbox is checked, show the corresponding element
                 if ($(this).is(":checked")) {
-                    displayElement.show(); 
+                    displayElement.show();
                 } else {
                     // If this checkbox is unchecked, hide the corresponding element
                     displayElement.hide();
                 }
             });
+            
+            // Form submission validation
+            $("#form-link-unico-pagar").submit(function (event) {
+                // Check if the datosEmpresaField is empty
+                if (datosEmpresaField.value.trim() === '') {
+                    // Prevent form submission
+                    event.preventDefault();
+                    alert('Datos Empresa cannot be empty. Please fill in the required field.');
+                }
+            });
 
+            
             //Poner gifs según el estado de búsqueda
             if (state_front == 'BUSCANDO') {
               document.getElementById('gif-radar-buscando').style.display = 'block';
