@@ -262,6 +262,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     //$("[data-form-datos-empresa]").setAttribute('required', true);
                     //$("[data-form-datos-empresa]").prop("required", true);
                     document.getElementById('nombre_razon_social_link_unico-2').setAttribute('required', true);
+                    document.getElementById('nombre_comercial_link_unico-2').setAttribute('required', true);
 
 
                 } else {
