@@ -15,6 +15,10 @@ document.addEventListener('DOMContentLoaded', function () {
   function checkSelection() {
     if (administracionSelect.value && provinciaSelect.value) {
       segundaParteBuscador.style.display = 'block'; // Show segunda-parte-buscador
+      document.getElementById('oficinaSelect-text').style.display = 'block';
+      document.getElementById('oficinaSelect').style.display = 'block';
+      document.getElementById('citaPreviaSelect-text').style.display = 'block';
+      document.getElementById('citaPreviaSelect').style.display = 'block';
     } else {
       segundaParteBuscador.style.display = 'none'; // Hide segunda-parte-buscador
     }
