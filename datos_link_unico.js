@@ -266,22 +266,12 @@ document.addEventListener('DOMContentLoaded', function () {
                     // If this checkbox is unchecked, hide the corresponding element
                     displayElement.hide();
                     // Set the 'required' attribute to false for the element with the attribute 'data-form-datos-empresa'
-                    $("[data-form-datos-empresa]").prop("required", false);
+                    //$("[data-form-datos-empresa]").prop("required", false);
+                    document.getElementById('nombre_razon_social_link_unico-2').removeAttribute('required');
                 }
             });
             
-            // Al hacer clic en el botón 'boton_pagar_link_unico', se completará el formulario
-            $('#boton_pagar_link_unico_form').click(function () {
-                // Comprueba si el checkbox está marcado
-                if ($("[ms-code-checkbox-input]").is(":checked")) {
-                    // Comprueba si los campos obligatorios están rellenos
-                    if (datosEmpresaField.value == "") {
-                        alert("Por favor, rellena los campos obligatorios.");
-                        return false;
-                    }
-                }
-            });
-            
+      
             //Poner gifs según el estado de búsqueda
             if (state_front == 'BUSCANDO') {
               document.getElementById('gif-radar-buscando').style.display = 'block';
