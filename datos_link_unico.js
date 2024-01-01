@@ -247,7 +247,7 @@ document.addEventListener('DOMContentLoaded', function () {
             //Datos para empresa factura
             var razon_social = document.getElementById('nombre_razon_social_link_unico-2').value;
             var datosEmpresaField = document.querySelector('[data-form-datos-empresa]');
-            
+
             $("[ms-code-checkbox-input]").click(function () {
                 // Get the value of the 'ms-code-checkbox-input' attribute
                 var checkboxVal = $(this).attr('ms-code-checkbox-input');
@@ -259,12 +259,12 @@ document.addEventListener('DOMContentLoaded', function () {
                 if ($(this).is(":checked")) {
                     displayElement.show();
                     // Rellena los campos del formulario con el atributo 'datosEmpresaField'
-                    ("[data-form-datos-empresa]").required = true;
+                    $("[data-form-datos-empresa]").required = true;
                 } else {
                     // If this checkbox is unchecked, hide the corresponding element
                     displayElement.hide();
                     // Borra los campos del formulario con el atributo 'datosEmpresaField'
-                    ("[data-form-datos-empresa]").required = false;
+                    $("[data-form-datos-empresa]").required = false;
                 }
             });
             
