@@ -258,22 +258,27 @@ document.addEventListener('DOMContentLoaded', function () {
                 // If this checkbox is checked, show the corresponding element
                 if ($(this).is(":checked")) {
                     displayElement.show();
+                    // Rellena los campos del formulario con el atributo 'datosEmpresaField'
+                    datosEmpresaField.required = true;
                 } else {
                     // If this checkbox is unchecked, hide the corresponding element
                     displayElement.hide();
+                    // Borra los campos del formulario con el atributo 'datosEmpresaField'
+                    datosEmpresaField.required = false;
                 }
             });
             
-            // Form submission validation
-            $("#form-link-unico-pagar").submit(function (event) {
-                // Check if the datosEmpresaField is empty
-                if (datosEmpresaField.value.trim() === '') {
-                    // Prevent form submission
-                    event.preventDefault();
-                    alert('Datos Empresa cannot be empty. Please fill in the required field.');
+            // Al hacer clic en el botón 'boton_pagar_link_unico', se completará el formulario
+            $("#boton_pagar_link_unico").click(function () {
+                // Comprueba si el checkbox está marcado
+                if ($("[ms-code-checkbox-input]").is(":checked")) {
+                    // Comprueba si los campos obligatorios están rellenos
+                    if (datosEmpresaField.value == "") {
+                        alert("Por favor, rellena los campos obligatorios.");
+                        return false;
+                    }
                 }
             });
-
             
             //Poner gifs según el estado de búsqueda
             if (state_front == 'BUSCANDO') {
