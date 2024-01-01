@@ -257,12 +257,12 @@ document.addEventListener('DOMContentLoaded', function () {
             
                 // If this checkbox is checked, show the corresponding element
                 if ($(this).is(":checked")) {
-                    displayElement.style.display = 'block';
+                    displayElement.show();
                     // Rellena los campos del formulario con el atributo 'datosEmpresaField'
                     datosEmpresaField.required = true;
                 } else {
                     // If this checkbox is unchecked, hide the corresponding element
-                    displayElement.style.display = 'none';
+                    displayElement.hide();
                     // Borra los campos del formulario con el atributo 'datosEmpresaField'
                     datosEmpresaField.required = false;
                 }
