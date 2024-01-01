@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', function () {
   document.getElementById('oficinaSelect-text').style.display = 'none';
   document.getElementById('oficinaSelect').style.display = 'none';
   document.getElementById('citaPreviaSelect-text').style.display = 'none';
-  document.getElementById('citaPreviaSelect').style.display = 'block';
+  document.getElementById('citaPreviaSelect').style.display = 'none';
 
   document.getElementById('parte-final-buscador').style.display = 'none';
 
