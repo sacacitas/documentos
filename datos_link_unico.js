@@ -247,7 +247,7 @@ document.addEventListener('DOMContentLoaded', function () {
             //Datos para empresa factura
             var razon_social = document.getElementById('nombre_razon_social_link_unico-2').value;
             var datosEmpresaField = document.querySelector('[data-form-datos-empresa]');
-
+            
             $("[ms-code-checkbox-input]").click(function () {
                 // Get the value of the 'ms-code-checkbox-input' attribute
                 var checkboxVal = $(this).attr('ms-code-checkbox-input');
@@ -258,18 +258,18 @@ document.addEventListener('DOMContentLoaded', function () {
                 // If this checkbox is checked, show the corresponding element
                 if ($(this).is(":checked")) {
                     displayElement.show();
-                    // Rellena los campos del formulario con el atributo 'datosEmpresaField'
-                    $("[data-form-datos-empresa]").required = true;
+                    // Set the 'required' attribute to true for the element with the attribute 'data-form-datos-empresa'
+                    $("[data-form-datos-empresa]").prop("required", true);
                 } else {
                     // If this checkbox is unchecked, hide the corresponding element
                     displayElement.hide();
-                    // Borra los campos del formulario con el atributo 'datosEmpresaField'
-                    $("[data-form-datos-empresa]").required = false;
+                    // Set the 'required' attribute to false for the element with the attribute 'data-form-datos-empresa'
+                    $("[data-form-datos-empresa]").prop("required", false);
                 }
             });
             
             // Al hacer clic en el botón 'boton_pagar_link_unico', se completará el formulario
-            $('boton_pagar_link_unico_form').click(function () {
+            $('#boton_pagar_link_unico_form').click(function () {
                 // Comprueba si el checkbox está marcado
                 if ($("[ms-code-checkbox-input]").is(":checked")) {
                     // Comprueba si los campos obligatorios están rellenos
