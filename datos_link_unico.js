@@ -262,6 +262,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     //$("[data-form-datos-empresa]").setAttribute('required', true);
                     //$("[data-form-datos-empresa]").prop("required", true);
                     document.getElementById('nombre_razon_social_link_unico-2').prop("required", true);
+                    document.getElementById('nombre_razon_social_link_unico-2').setAttribute('required', true);
 
                 } else {
                     // If this checkbox is unchecked, hide the corresponding element
@@ -270,8 +271,9 @@ document.addEventListener('DOMContentLoaded', function () {
                     $("[data-form-datos-empresa]").removeAttribute('required');
                 }
             });
+
             
-      
+   
             //Poner gifs según el estado de búsqueda
             if (state_front == 'BUSCANDO') {
               document.getElementById('gif-radar-buscando').style.display = 'block';
