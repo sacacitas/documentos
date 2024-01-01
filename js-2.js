@@ -1,8 +1,11 @@
 
 document.addEventListener('DOMContentLoaded', function () {
   // Hide segunda-parte-buscador and parte-final-buscador by default using jQuery
-  //$('#segunda-parte-buscador, #parte-final-buscador').hide();
-  //document.getElementById('segunda-parte-buscador').style.display = 'none';
+  document.getElementById('oficinaSelect-text').style.display = 'none';
+  document.getElementById('oficinaSelect').style.display = 'none';
+  document.getElementById('citaPreviaSelect-text').style.display = 'none';
+  document.getElementById('citaPreviaSelect').style.display = 'block';
+
   document.getElementById('parte-final-buscador').style.display = 'none';
 
   var administracionSelect = document.getElementById('administracionSelect');
