@@ -257,19 +257,19 @@ document.addEventListener('DOMContentLoaded', function () {
             
                 // If this checkbox is checked, show the corresponding element
                 if ($(this).is(":checked")) {
-                    displayElement.show();
+                    displayElement.style.display = 'block';
                     // Rellena los campos del formulario con el atributo 'datosEmpresaField'
                     datosEmpresaField.required = true;
                 } else {
                     // If this checkbox is unchecked, hide the corresponding element
-                    displayElement.hide();
+                    displayElement.style.display = 'none';
                     // Borra los campos del formulario con el atributo 'datosEmpresaField'
                     datosEmpresaField.required = false;
                 }
             });
             
             // Al hacer clic en el botón 'boton_pagar_link_unico', se completará el formulario
-            $("#boton_pagar_link_unico").click(function () {
+            $('boton_pagar_link_unico_form').click(function () {
                 // Comprueba si el checkbox está marcado
                 if ($("[ms-code-checkbox-input]").is(":checked")) {
                     // Comprueba si los campos obligatorios están rellenos
