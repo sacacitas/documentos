@@ -259,17 +259,29 @@ document.addEventListener('DOMContentLoaded', function () {
                 if ($(this).is(":checked")) {
                     displayElement.show();
                     // Set the 'required' attribute to true for the element with the attribute 'data-form-datos-empresa'
-                    $("[data-form-datos-empresa]").setAttribute('required', true);
                     //$("[data-form-datos-empresa]").setAttribute('required', true);
-                    //document.getElementById('nombre_razon_social_link_unico-2').setAttribute('required', true);
-                    //document.querySelector('.form-pago-empresa-link-unico').setAttribute('required', true);
-
-
+                    document.getElementById('tipo_empresa_link_unico').setAttribute('required', true);
+                    document.getElementById('nombre_razon_social_link_unico-2').setAttribute('required', true);
+                    document.getElementById('nombre_comercial_link_unico-2').setAttribute('required', true);
+                    document.getElementById('nif_cif_link_unico-2').setAttribute('required', true);
+                    document.getElementById('calle_link_unico-2').setAttribute('required', true);
+                    document.getElementById('codigo_postal__link_unico-2').setAttribute('required', true);
+                    document.getElementById('poblacion_link_unico').setAttribute('required', true);
+                    document.getElementById('provincia_link_unico-2').setAttribute('required', true);
+      
                 } else {
                     // If this checkbox is unchecked, hide the corresponding element
                     displayElement.hide();
                     // Set the 'required' attribute to false for the element with the attribute 'data-form-datos-empresa'
-                    $("[data-form-datos-empresa]").removeAttribute('required');
+                    document.getElementById('tipo_empresa_link_unico').removeAttribute('required');
+                    document.getElementById('nombre_razon_social_link_unico-2').removeAttribute('required');
+                    document.getElementById('nombre_comercial_link_unico-2').removeAttribute('required');
+                    document.getElementById('nif_cif_link_unico-2').removeAttribute('required');
+                    document.getElementById('calle_link_unico-2').removeAttribute('required');
+                    document.getElementById('codigo_postal__link_unico-2').removeAttribute('required');
+                    document.getElementById('poblacion_link_unico').removeAttribute('required');
+                    document.getElementById('provincia_link_unico-2').removeAttribute('required');
+                  
                 }
             });
 
