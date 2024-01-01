@@ -272,7 +272,18 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
             });
 
-            
+
+             // Al hacer clic en el botón 'boton_pagar_link_unico', se completará el formulario
+             $('#boton_pagar_link_unico_form').click(function () {
+                 // Comprueba si el checkbox está marcado
+                 if ($("[ms-code-checkbox-input]").is(":checked")) {
+                     // Comprueba si los campos obligatorios están rellenos
+                     if (datosEmpresaField.value == "") {
+                         alert("Por favor, rellena los campos obligatorios.");
+                         return false;
+                     }
+                 }
+             });            
    
             //Poner gifs según el estado de búsqueda
             if (state_front == 'BUSCANDO') {
