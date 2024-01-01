@@ -260,6 +260,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     displayElement.show();
                     // Set the 'required' attribute to true for the element with the attribute 'data-form-datos-empresa'
                     $("[data-form-datos-empresa]").setAttribute('required', true);
+                    document.getElementById('nombre_razon_social_link_unico-2').setAttribute('required', true);
 
                 } else {
                     // If this checkbox is unchecked, hide the corresponding element
