@@ -262,7 +262,6 @@ document.addEventListener('DOMContentLoaded', function () {
                     //$("[data-form-datos-empresa]").setAttribute('required', true);
                     document.getElementById('tipo_empresa_link_unico').setAttribute('required', true);
                     document.getElementById('nombre_razon_social_link_unico-2').setAttribute('required', true);
-                    document.getElementById('nombre_comercial_link_unico-2').setAttribute('required', true);
                     document.getElementById('nif_cif_link_unico-2').setAttribute('required', true);
                     document.getElementById('calle_link_unico-2').setAttribute('required', true);
                     document.getElementById('codigo_postal__link_unico-2').setAttribute('required', true);
@@ -275,7 +274,6 @@ document.addEventListener('DOMContentLoaded', function () {
                     // Set the 'required' attribute to false for the element with the attribute 'data-form-datos-empresa'
                     document.getElementById('tipo_empresa_link_unico').removeAttribute('required');
                     document.getElementById('nombre_razon_social_link_unico-2').removeAttribute('required');
-                    document.getElementById('nombre_comercial_link_unico-2').removeAttribute('required');
                     document.getElementById('nif_cif_link_unico-2').removeAttribute('required');
                     document.getElementById('calle_link_unico-2').removeAttribute('required');
                     document.getElementById('codigo_postal__link_unico-2').removeAttribute('required');
