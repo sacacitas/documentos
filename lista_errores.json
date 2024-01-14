@@ -1,3 +1,7 @@
 {
   "CITA_YA_RESERVADA": "No se puede buscar una cita debido a que ya existe una cita reservada con ese documento de identidad"
+},
+{
+  "NO_ANULADO_CITA_RESERVADA": "No se ha podido anular la cita ya reservada por alguna razón"
 }
+
