@@ -10,6 +10,18 @@ document.addEventListener('DOMContentLoaded', function () {
     var string_precio_buscador = document.getElementById('precio-total-buscador-landing')
   
   
+
+
+//Tipo de buscador
+    //Filtrar con oficina
+
+
+
+    //Buscar en toda la provincia
+
+
+
+//Primera parte del buscador -> Lista estática de administración y provincias     
     //Crear valores en el select de la Administración
     var values_select_administracion = [
       { value: 'EX1', text: 'Extranjería' },
@@ -88,7 +100,6 @@ document.addEventListener('DOMContentLoaded', function () {
       "Zaragoza": "Zaragoza"
     }
   
-  
     //Crear texto predeterminado en el select provincias
     var default_select_provincias = document.createElement('option');
     default_select_provincias.value = ''; // Set the value to an empty string or a value that is not present in the array
@@ -104,6 +115,35 @@ document.addEventListener('DOMContentLoaded', function () {
       optionElement_provincia.text = text_lista_provincias;
       select_provincia.add(optionElement_provincia);
     });
-        
+  
+//Segunda parte del buscador -> Lista dinámica de oficinas y servicios desde el backend
+    //JSON externos de lista oficina_servicios y sus categorías
+    const lista_oficina_servicios_json = 'https://documentos.sacacitas.es/categorias_servicios.json';
+    const precios_citas_categorias_json = 'https://documentos.sacacitas.es/precios_citas.json';
+
+    //Crear texto predeterminado en el select oficinas
+    var default_select_oficina = document.createElement('option');
+    default_select_oficina.value = ''; // Set the value to an empty string or a value that is not present in the array
+    default_select_oficina.text = 'Escoge una oficina';
+    default_select_oficina.disabled = true;
+    default_select_oficina.selected = true; // Make this option selected by default
+    select_oficina.add(default_select_oficina);
+      
+
+
+
+
+
+
+
+    //Crear texto predeterminado en el select citas previas
+    var default_select_servicio = document.createElement('option');
+    default_select_servicio.value = ''; // Set the value to an empty string or a value that is not present in the array
+    default_select_servicio.text = 'Escoge tus citas previas';
+    default_select_servicio.disabled = true;
+    default_select_servicio.selected = true; // Make this option selected by default
+    select_servicio.add(default_select_servicio);
+      
+
   
   });
