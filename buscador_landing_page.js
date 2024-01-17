@@ -31,7 +31,5 @@ document.addEventListener('DOMContentLoaded', function () {
     optionElement.text = option.text;
     select_administracion.add(optionElement);
   });
-  
 
-  
-  )};
+});
