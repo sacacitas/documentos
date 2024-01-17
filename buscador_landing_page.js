@@ -98,10 +98,10 @@ document.addEventListener('DOMContentLoaded', function () {
     select_provincia.add(default_select_provincias);
   
     // Populate select provincias con la lista de provincias
-    Object.entries(lista_provincias_espana).forEach(([frontend_provincia_string, backend_provincia_id]) => {
+    Object.entries(lista_provincias_espana).forEach(([text_lista_provincias, backend_provincia_id]) => {
       var optionElement_provincia = document.createElement('option');
-      optionElement_provincia.value = api_key_call;
-      optionElement_provincia.text = user_text;
+      optionElement_provincia.value = backend_provincia_id;
+      optionElement_provincia.text = text_lista_provincias;
       select_provincia.add(optionElement_provincia);
     });
         
