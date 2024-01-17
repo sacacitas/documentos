@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
   //Crear valores en el select de la Administración
-  var select_administracion = [
+  var values_select_administracion = [
     { value: 'EX1', text: 'Extranjería' },
     { value: 'RC1', text: 'Registro Civil' }
   ];
@@ -23,6 +23,14 @@ document.addEventListener('DOMContentLoaded', function () {
   default_select_administracion.disabled = true;
   default_select_administracion.selected = true; // Make this option selected by default
   select_administracion.add(default_select_administracion);
+
+  // Populate select administración
+  values_select_administracion.forEach(option => {
+    var optionElement = document.createElement('option');
+    optionElement.value = option.value;
+    optionElement.text = option.text;
+    select_administracion.add(optionElement);
+  });
   
 
   
