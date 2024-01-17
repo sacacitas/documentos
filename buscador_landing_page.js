@@ -26,10 +26,10 @@ document.addEventListener('DOMContentLoaded', function () {
   
     // Populate select administración
     values_select_administracion.forEach(option => {
-      var optionElement = document.createElement('option');
-      optionElement.value = option.value;
-      optionElement.text = option.text;
-      select_administracion.add(optionElement);
+      var optionElement_administracion = document.createElement('option');
+      optionElement_administracion.value = option.value;
+      optionElement_administracion.text = option.text;
+      select_administracion.add(optionElement_administracion);
     });
 
     //Crear valores en el select de la Provincia
@@ -99,10 +99,10 @@ document.addEventListener('DOMContentLoaded', function () {
   
     // Populate select provincias con la lista de provincias
     Object.entries(lista_provincias_espana).forEach(([frontend_provincia_string, backend_provincia_id]) => {
-      var optionElement = document.createElement('option');
-      optionElement.value = api_key_call;
-      optionElement.text = user_text;
-      select_provincia.add(optionElement);
+      var optionElement_provincia = document.createElement('option');
+      optionElement_provincia.value = api_key_call;
+      optionElement_provincia.text = user_text;
+      select_provincia.add(optionElement_provincia);
     });
         
   
