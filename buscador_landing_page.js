@@ -14,7 +14,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
 //Tipo de buscador
     //Filtrar con oficina
-
+    document.getElementById('radio-buscar-con-oficina').checked = true;
+    
 
 
     //Buscar en toda la provincia
