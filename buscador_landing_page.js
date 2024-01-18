@@ -29,7 +29,7 @@ document.addEventListener('DOMContentLoaded', function () {
             getElementById('box-buscar-con-oficina').classList.add('selected-radio-buscador')
         } else {
             // Apply CSS conditions for 'Other Option' selected
-            getElementById('box-buscar-con-oficina').classList.remove('box-buscar-en-provincia')
+            getElementById('box-buscar-en-provincia').classList.remove('selected-radio-buscador')
         }
     }
     //Cambios IF radio búsqueda por provincia
