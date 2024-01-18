@@ -13,38 +13,42 @@ document.addEventListener('DOMContentLoaded', function () {
   
 
 //Textos predeterminados
-    //Crear texto predeterminado en el select ADM
-    var default_select_administracion = document.createElement('option');
-    default_select_administracion.value = ''; // Set the value to an empty string or a value that is not present in the array
-    default_select_administracion.text = 'Selecciona una Administración';
-    default_select_administracion.disabled = true;
-    default_select_administracion.selected = true; // Make this option selected by default
-    select_administracion.add(default_select_administracion);
+    // Crear texto predeterminado en el select ADM
+    var default_select_administracion = $('<option>', {
+      value: '',
+      text: 'Selecciona una Administración',
+      disabled: true,
+      selected: true
+    });
+    $('#select_administracion').append(default_select_administracion);
 
-    //Crear texto predeterminado en el select provincias
-    var default_select_provincias = document.createElement('option');
-    default_select_provincias.value = ''; // Set the value to an empty string or a value that is not present in the array
-    default_select_provincias.text = '¿Para qué provincia?';
-    default_select_provincias.disabled = true;
-    default_select_provincias.selected = true; // Make this option selected by default
-    select_provincia.add(default_select_provincias);
+    // Crear texto predeterminado en el select provincias
+    var default_select_provincias = $('<option>', {
+      value: '',
+      text: '¿Para qué provincia?',
+      disabled: true,
+      selected: true
+    });
+    $('#select_provincia').append(default_select_provincias);
 
-    //Crear texto predeterminado en el select oficinas
-    var default_select_oficina = document.createElement('option');
-    default_select_oficina.value = ''; // Set the value to an empty string or a value that is not present in the array
-    default_select_oficina.text = 'Escoge una oficina';
-    default_select_oficina.disabled = true;
-    default_select_oficina.selected = true; // Make this option selected by default
-    select_oficina.add(default_select_oficina);
+    // Crear texto predeterminado en el select oficinas
+    var default_select_oficina = $('<option>', {
+      value: '',
+      text: 'Escoge una oficina',
+      disabled: true,
+      selected: true
+    });
+    $('#select_oficina').append(default_select_oficina);
 
-    //Crear texto predeterminado en el select citas previas
-    var default_select_servicio = document.createElement('option');
-    default_select_servicio.value = ''; // Set the value to an empty string or a value that is not present in the array
-    default_select_servicio.text = 'Escoge tus citas previas';
-    default_select_servicio.disabled = true;
-    default_select_servicio.selected = true; // Make this option selected by default
-    select_servicio.add(default_select_servicio);
-     
+    // Crear texto predeterminado en el select citas previas
+    var default_select_servicio = $('<option>', {
+      value: '',
+      text: 'Escoge tus citas previas',
+      disabled: true,
+      selected: true
+    });
+    $('#select_servicio').append(default_select_servicio);
+      
 
 
 
