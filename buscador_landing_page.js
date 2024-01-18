@@ -12,16 +12,17 @@ document.addEventListener('DOMContentLoaded', function () {
   
 
 
-//Tipo de buscador
+//Tipo de buscador (si buscar con ofiicna o toda la provincia) -> Únicamente estilos y funcionalidades. 
+//La parte de crear valores está en la segunda parte
     //Preselect del radio con oficina
     document.getElementById('radio-buscar-con-oficina').checked = true;
-    //document.getElementById('box-buscar-con-oficina').classList.add('selected-radio-buscador')
+    document.getElementById('box-buscar-con-oficina').classList.add('selected-radio-buscador')
 
     //Variables de los radios
     var radio_buscador_con_oficina = document.getElementById('radio-buscar-con-oficina')
     var radio_buscador_por_provincia = document.getElementById('radio-buscar-en-provincia')
 
-    
+    //Que haga acciones CSS al seleccionar uno u otro 
     //Cambios IF radio búsqueda con oficina
     function RadioOficinaSelected() {
         if (radio_buscador_con_oficina.checked) {
@@ -39,8 +40,6 @@ document.addEventListener('DOMContentLoaded', function () {
         } 
         
     }
-
-
     //Event listeners de los radios
     radio_buscador_con_oficina.addEventListener('change', RadioOficinaSelected);
     radio_buscador_por_provincia.addEventListener('change', RadioProvinciaSelected);
