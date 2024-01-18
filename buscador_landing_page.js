@@ -1,12 +1,13 @@
 document.addEventListener('DOMContentLoaded', function () {
   
     //Variables de los IDs selects de la landing
-    var select_administracion = document.getElementById('select-buscador-administracion')
-    var select_provincia = document.getElementById('select-buscador-provincia')
-    var select_oficina = document.getElementById('select-buscador-oficina')
-    var select_servicio = document.getElementById('select-buscador-servicio')
+    //(Se usa JQuery para poder usar el .on('change') y que se actualice el select)
+    var select_administracion = $('#select-buscador-administracion');
+    var select_provincia = $('#select-buscador-provincia')
+    var select_oficina = $('#select-buscador-oficina')
+    var select_servicio = $('#select-buscador-servicio')
   
-    //Variables IDs de info secundaria
+    //Variables IDs de info secundariaa
     var string_precio_buscador = document.getElementById('precio-total-buscador-landing')
   
   
@@ -259,9 +260,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
     //Event listeners de los selects
-    select_administracion.addEventListener('change', fetchJsonAndPopulateOficina);
-    select_provincia.addEventListener('change', fetchJsonAndPopulateOficina);
-    select_oficina.addEventListener('change', updateCitaPrevia);
+    select_administracion.on('change', fetchJsonAndPopulateOficina);
+    select_provincia.on('change', fetchJsonAndPopulateOficina);
+    select_oficina.on('change', updateCitaPrevia);
   
 
 
