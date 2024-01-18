@@ -35,6 +35,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 
+    //Event listeners de los radios
+    radio_buscador_con_oficina.addEventListener('change', RadioOficinaSelected);
+
+
+
 
     //Filtrar con oficina
     
