@@ -11,9 +11,46 @@ document.addEventListener('DOMContentLoaded', function () {
   
   
 
+//Textos predeterminados
+    //Crear texto predeterminado en el select ADM
+    var default_select_administracion = document.createElement('option');
+    default_select_administracion.value = ''; // Set the value to an empty string or a value that is not present in the array
+    default_select_administracion.text = 'Selecciona una Administración';
+    default_select_administracion.disabled = true;
+    default_select_administracion.selected = true; // Make this option selected by default
+    select_administracion.add(default_select_administracion);
+
+    //Crear texto predeterminado en el select provincias
+    var default_select_provincias = document.createElement('option');
+    default_select_provincias.value = ''; // Set the value to an empty string or a value that is not present in the array
+    default_select_provincias.text = '¿Para qué provincia?';
+    default_select_provincias.disabled = true;
+    default_select_provincias.selected = true; // Make this option selected by default
+    select_provincia.add(default_select_provincias);
+
+    //Crear texto predeterminado en el select oficinas
+    var default_select_oficina = document.createElement('option');
+    default_select_oficina.value = ''; // Set the value to an empty string or a value that is not present in the array
+    default_select_oficina.text = 'Escoge una oficina';
+    default_select_oficina.disabled = true;
+    default_select_oficina.selected = true; // Make this option selected by default
+    select_oficina.add(default_select_oficina);
+
+    //Crear texto predeterminado en el select citas previas
+    var default_select_servicio = document.createElement('option');
+    default_select_servicio.value = ''; // Set the value to an empty string or a value that is not present in the array
+    default_select_servicio.text = 'Escoge tus citas previas';
+    default_select_servicio.disabled = true;
+    default_select_servicio.selected = true; // Make this option selected by default
+    select_servicio.add(default_select_servicio);
+     
+     
+     
+
+
 
 //Tipo de buscador (si buscar con ofiicna o toda la provincia) -> Únicamente estilos y funcionalidades. 
-//La parte de crear valores está en la segunda parte
+//(La parte de crear valores está en la segunda parte)
     //Preselect del radio con oficina
     document.getElementById('radio-buscar-con-oficina').checked = true;
     document.getElementById('box-buscar-con-oficina').classList.add('selected-radio-buscador')
@@ -22,8 +59,8 @@ document.addEventListener('DOMContentLoaded', function () {
     var radio_buscador_con_oficina = document.getElementById('radio-buscar-con-oficina')
     var radio_buscador_por_provincia = document.getElementById('radio-buscar-en-provincia')
 
-    //Que haga acciones CSS al seleccionar uno u otro 
-    //Cambios IF radio búsqueda con oficina. CSS y mostrar Select Oficina
+    //Que haga acciones CSS al seleccionar uno radio u otro 
+    //Buscar con Oficina
     function RadioOficinaSelected() {
         if (radio_buscador_con_oficina.checked) {
             // Apply CSS conditions for 'Con Oficina' selected
@@ -32,7 +69,7 @@ document.addEventListener('DOMContentLoaded', function () {
             document.getElementById('div-select-oficinas-buscador').style.display = 'flex';
         } 
     }
-    //Cambios IF radio búsqueda por provincia. CSS y ocultrar Select Oficina
+    //Buscar por toda la provincia
     function RadioProvinciaSelected() {
         if (radio_buscador_por_provincia.checked) {
             // Apply CSS conditions for 'Con Oficina' selected
@@ -49,13 +86,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 
-    //Filtrar con oficina
-    
-
-
-    //Buscar en toda la provincia
-
-
 
 //Primera parte del buscador -> Lista estática de administración y provincias     
     //Crear valores en el select de la Administración
@@ -64,13 +94,6 @@ document.addEventListener('DOMContentLoaded', function () {
       { value: 'RC1', text: 'Registro Civil' }
     ];
   
-    //Crear texto predeterminado en el select ADM
-    var default_select_administracion = document.createElement('option');
-    default_select_administracion.value = ''; // Set the value to an empty string or a value that is not present in the array
-    default_select_administracion.text = 'Selecciona una Administración';
-    default_select_administracion.disabled = true;
-    default_select_administracion.selected = true; // Make this option selected by default
-    select_administracion.add(default_select_administracion);
   
     // Populate select administración
     values_select_administracion.forEach(option => {
@@ -136,14 +159,7 @@ document.addEventListener('DOMContentLoaded', function () {
       "Zaragoza": "Zaragoza"
     }
   
-    //Crear texto predeterminado en el select provincias
-    var default_select_provincias = document.createElement('option');
-    default_select_provincias.value = ''; // Set the value to an empty string or a value that is not present in the array
-    default_select_provincias.text = '¿Para qué provincia?';
-    default_select_provincias.disabled = true;
-    default_select_provincias.selected = true; // Make this option selected by default
-    select_provincia.add(default_select_provincias);
-  
+ 
     // Populate select provincias con la lista de provincias
     Object.entries(lista_provincias_espana).forEach(([text_lista_provincias, backend_provincia_id]) => {
       var optionElement_provincia = document.createElement('option');
@@ -152,34 +168,83 @@ document.addEventListener('DOMContentLoaded', function () {
       select_provincia.add(optionElement_provincia);
     });
   
+
+
+
 //Segunda parte del buscador -> Lista dinámica de oficinas y servicios desde el backend
     //Importar JSON externos de lista oficina_servicios y sus precios por categorías
     const lista_oficina_servicios_json = 'https://documentos.sacacitas.es/categorias_servicios.json';
     const precios_citas_categorias_json = 'https://documentos.sacacitas.es/precios_citas.json';
 
-    //Crear texto predeterminado en el select oficinas
-    var default_select_oficina = document.createElement('option');
-    default_select_oficina.value = ''; // Set the value to an empty string or a value that is not present in the array
-    default_select_oficina.text = 'Escoge una oficina';
-    default_select_oficina.disabled = true;
-    default_select_oficina.selected = true; // Make this option selected by default
-    select_oficina.add(default_select_oficina);
-      
+    //Variables backend
+    var apiBaseUrl = 'https://panelaws.sacacitas.es/public/oficina/';
+
+
+
+     
 
 
 
 
 
+    //Cuando se selecciona administración y la provincia, se descarga el JSON de oficinas y servicios
+    function xxxxx() {
+
+    }
+
+     
 
 
-    //Crear texto predeterminado en el select citas previas
-    var default_select_servicio = document.createElement('option');
-    default_select_servicio.value = ''; // Set the value to an empty string or a value that is not present in the array
-    default_select_servicio.text = 'Escoge tus citas previas';
-    default_select_servicio.disabled = true;
-    default_select_servicio.selected = true; // Make this option selected by default
-    select_servicio.add(default_select_servicio);
-      
+
+
+//Mostrar datos en función del tipo de buscador
+    //Descargar JSOn de oficinas y servicios del backend según lo seleccionado en ADM y provincia
+    function fetchBackendOficina_Servicios() {
+      var selectedAdministracion = select_administracion.val();
+      var selectedProvincia = select_provincia.val();
+
+      //Comprobar si Adm, provincia y bsucador por oficina está seleccionado
+      if (selectedAdministracion && selectedProvincia && radio_buscador_con_oficina.checked) {
+        // Build the API URL with the selected provincia
+        var apiUrl = apiBaseUrl + selectedProvincia;
+
+        // Make the API call
+        fetch(apiUrl)
+          .then(response => response.json())
+          .then(responseData => {
+            data = responseData; // Set the data variable with the response
+            // Populate oficina select options with default text
+            select_oficina.html('').append(defaultOficinaOption);
+
+            // Filter data based on selectedAdministracion
+            var filteredData = data.filter(item => {
+              if (selectedAdministracion === 'EX1') {
+                // Show names where id_oficina starts with "gobext"
+                return item.id_oficina.toLowerCase().includes('gobext');
+              } else if (selectedAdministracion === 'RC1') {
+                // Show names where id_oficina does not start with "gobext"
+                return !item.id_oficina.toLowerCase().includes('gobext');
+              }
+              return false;
+            });
+
+            // Populate oficina select options with external data
+            filteredData.forEach(item => {
+              var optionElement = $('<option></option>').prop('value', item.nombre).text(item.nombre);
+              select_oficina.append(optionElement);
+            });
+
+            // Trigger change event to refresh the select (if needed)
+            select_oficina.trigger('change');
+          })
+          .catch(error => console.error('Error fetching data:', error));
+      } else {
+        // Clear data and reset options for 'js-oficina' and 'js-cita-previa' selects
+        data = null;
+        select_oficina.html('').append(defaultOficinaOption);
+        select_servicio.html('').append(defaultCitaPreviaOption);
+      }
+    }
 
   
   });
