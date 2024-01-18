@@ -250,8 +250,7 @@ $(document).ready(function () {
 
     // Check if oficina is selected
     if (selectedOficina) {
-      // Clear existing options and set default option for 'js-cita-previa' select
-      select_servicio.html('').append(defaultCitaPreviaOption);
+
 
       // Find the selected oficina in the external data
       var selectedOficinaData = data.find(item => item.nombre === selectedOficina);
