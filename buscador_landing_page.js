@@ -259,9 +259,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
     //Event listeners de los selects
-    select_administracion.on('change', fetchJsonAndPopulateOficina);
-    select_provincia.on('change', fetchJsonAndPopulateOficina);
-    select_oficina.on('change', updateCitaPrevia);
+    select_administracion.addEventListener('change', fetchJsonAndPopulateOficina);
+    select_provincia.addEventListener('change', fetchJsonAndPopulateOficina);
+    select_oficina.addEventListener('change', updateCitaPrevia);
   
 
 
