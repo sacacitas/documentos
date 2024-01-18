@@ -245,7 +245,11 @@ $(document).ready(function () {
 
 
   //Activar multiselect para el select de Servicios
-  $('select_servicio').multiselect('enable');
+
+  // In your Javascript (external .js resource or <script> tag)
+  $('select_servicio').ready(function() {
+    $('.js-example-basic-single').select2();
+  });  
 
   //Crear valores y populate select servicios
   function updateCitaPrevia() {
