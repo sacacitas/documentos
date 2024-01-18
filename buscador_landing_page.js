@@ -23,20 +23,22 @@ document.addEventListener('DOMContentLoaded', function () {
     var radio_buscador_por_provincia = document.getElementById('radio-buscar-en-provincia')
 
     //Que haga acciones CSS al seleccionar uno u otro 
-    //Cambios IF radio búsqueda con oficina
+    //Cambios IF radio búsqueda con oficina. CSS y mostrar Select Oficina
     function RadioOficinaSelected() {
         if (radio_buscador_con_oficina.checked) {
             // Apply CSS conditions for 'Con Oficina' selected
             document.getElementById('box-buscar-con-oficina').classList.add('selected-radio-buscador')
             document.getElementById('box-buscar-en-provincia').classList.remove('selected-radio-buscador')
+            document.getElementById('div-select-oficinas-buscador').style.display = 'block';
         } 
     }
-    //Cambios IF radio búsqueda por provincia
+    //Cambios IF radio búsqueda por provincia. CSS y ocultrar Select Oficina
     function RadioProvinciaSelected() {
         if (radio_buscador_por_provincia.checked) {
             // Apply CSS conditions for 'Con Oficina' selected
             document.getElementById('box-buscar-en-provincia').classList.add('selected-radio-buscador')
             document.getElementById('box-buscar-con-oficina').classList.remove('selected-radio-buscador')
+            document.getElementById('div-select-oficinas-buscador').style.display = 'none';
         } 
         
     }
@@ -151,7 +153,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   
 //Segunda parte del buscador -> Lista dinámica de oficinas y servicios desde el backend
-    //JSON externos de lista oficina_servicios y sus categorías
+    //Importar JSON externos de lista oficina_servicios y sus precios por categorías
     const lista_oficina_servicios_json = 'https://documentos.sacacitas.es/categorias_servicios.json';
     const precios_citas_categorias_json = 'https://documentos.sacacitas.es/precios_citas.json';
 
