@@ -13,8 +13,30 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 //Tipo de buscador
-    //Filtrar con oficina
+    //Preselect del radio con oficina
     document.getElementById('radio-buscar-con-oficina').checked = true;
+
+    //Variables de los radios
+    var radio_buscador_con_oficina = document.getElementById('radio-buscar-con-oficina')
+    var radio_buscador_por_provincia = document.getElementById('radio-buscar-en-provincia')
+
+    
+    //Cambios IF radio búsqueda con oficina
+    function RadioOficinaSelected() {
+        if (radio_buscador_con_oficina.checked) {
+            // Apply CSS conditions for 'Con Oficina' selected
+            getElementById('box-buscar-con-oficina').classList.add('selected-radio-buscador')
+        } else {
+            // Apply CSS conditions for 'Other Option' selected
+            getElementById('box-buscar-con-oficina').classList.remove('box-buscar-en-provincia')
+        }
+    }
+    //Cambios IF radio búsqueda por provincia
+
+
+
+
+    //Filtrar con oficina
     
 
 
