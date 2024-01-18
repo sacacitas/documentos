@@ -33,11 +33,20 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
     //Cambios IF radio búsqueda por provincia
-
+    function RadioProvinciaSelected() {
+        if (radio_buscador_por_provincia.checked) {
+            // Apply CSS conditions for 'Con Oficina' selected
+            getElementById('box-buscar-en-provincia').classList.add('selected-radio-buscador')
+        } else {
+            // Apply CSS conditions for 'Other Option' selected
+            getElementById('box-buscar-con-oficina').classList.remove('selected-radio-buscador')
+        }
+    }
 
 
     //Event listeners de los radios
     radio_buscador_con_oficina.addEventListener('change', RadioOficinaSelected);
+    radio_buscador_por_provincia.addEventListener('change', RadioProvinciaSelected);
 
 
 
