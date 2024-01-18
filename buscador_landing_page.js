@@ -248,7 +248,7 @@ $(document).ready(function () {
 
   // In your Javascript (external .js resource or <script> tag)
   $(document).ready(function() {
-    $('select_servicio').select2();
+    $('.js-example').select2();
   });  
 
   //Crear valores y populate select servicios
