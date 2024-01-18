@@ -155,9 +155,6 @@ $(document).ready(function () {
       select_provincia.append(optionElement_provincia);
   });
 
-  // Event listeners de los radios
-  radio_buscador_con_oficina.on('change', RadioOficinaSelected);
-  radio_buscador_por_provincia.on('change', RadioProvinciaSelected);
 
 // 2. SEGUNDA PARTE BUSCADOR -> Lista dinámica de oficinas y servicios desde el backend
   // Importar JSON externos de lista oficina_servicios y sus precios por categorías
@@ -168,7 +165,30 @@ $(document).ready(function () {
   var apiBaseUrl = 'https://panelaws.sacacitas.es/public/oficina/';
 
 
+  // Event listeners de los selects
+  select_administracion.on('change', fetchJsonAndPopulateOficina);
+  select_provincia.on('change', fetchJsonAndPopulateOficina);
+  select_oficina.on('change', updateCitaPrevia);
 
+
+
+  // Resetear cosas cuando administracion o provincia se cambia
+  function fetchJsonAndPopulateOficina() {
+    // Reset the selection in 'js-oficina' select to default
+    oficinaSelect.val(defaultOficinaOption.val());
+
+    // Reset the selection in 'js-cita-previa' select to default
+    citaPreviaSelect.val(defaultCitaPreviaOption.val());
+
+    // Clear existing options for 'js-cita-previa' select
+    citaPreviaSelect.html('').append(defaultCitaPreviaOption);
+
+    // Call the fetchData function
+    fetchData();
+  }
+
+
+  
   //Crear valores y populate select oficina
   // Hacer API call al backend para descargar el JSON de oficinas y servicios según la provincia seleccionada y filtrar por administración
   function fetchJsonAndPopulateOficina() {
@@ -223,10 +243,7 @@ $(document).ready(function () {
       }
   }
 
-
-
   //Crear valores y populate select servicios
-
   function updateCitaPrevia() {
     var selectedOficina = select_oficina.val();
     var selectedCitaPrevia = select_servicio.val();
@@ -251,14 +268,11 @@ $(document).ready(function () {
         });
 
         // Trigger change event to refresh the select (if needed)
-        citaPreviaSelect.trigger('change');
+        select_servicio.trigger('change');
       }
     }
   }
 
 
-  // Event listeners de los selects
-  select_administracion.on('change', fetchJsonAndPopulateOficina);
-  select_provincia.on('change', fetchJsonAndPopulateOficina);
-  select_oficina.on('change', updateCitaPrevia);
+
 });
