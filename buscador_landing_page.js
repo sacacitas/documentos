@@ -3,51 +3,51 @@ document.addEventListener('DOMContentLoaded', function () {
     //Variables de los IDs selects de la landing
     //(Se usa JQuery para poder usar el .on('change') y que se actualice el select)
     var select_administracion = $('#select-buscador-administracion');
-    var select_provincia = $('#select-buscador-provincia')
-    var select_oficina = $('#select-buscador-oficina')
-    var select_servicio = $('#select-buscador-servicio')
+    var select_provincia = $('#select-buscador-provincia');
+    var select_oficina = $('#select-buscador-oficina');
+    var select_servicio = $('#select-buscador-servicio');
   
     //Variables IDs de info secundariaa
     var string_precio_buscador = document.getElementById('precio-total-buscador-landing')
   
   
 
-//Textos predeterminados
-    // Crear texto predeterminado en el select ADM
+//Textos predeterminados en los selects
+    // Crear texto predeterminado en ADM
     var default_select_administracion = $('<option>', {
       value: '',
       text: 'Selecciona una Administración',
       disabled: true,
       selected: true
     });
-    $('#select_administracion').append(default_select_administracion);
+    select_administracion.append(default_select_administracion);
 
-    // Crear texto predeterminado en el select provincias
+    // Crear texto predeterminado en provincias
     var default_select_provincias = $('<option>', {
       value: '',
       text: '¿Para qué provincia?',
       disabled: true,
       selected: true
     });
-    $('#select_provincia').append(default_select_provincias);
+    select_provincia.append(default_select_provincias);
 
-    // Crear texto predeterminado en el select oficinas
+    // Crear texto predeterminado en oficinas
     var default_select_oficina = $('<option>', {
       value: '',
       text: 'Escoge una oficina',
       disabled: true,
       selected: true
     });
-    $('#select_oficina').append(default_select_oficina);
+    select_oficina.append(default_select_oficina);
 
-    // Crear texto predeterminado en el select citas previas
+    // Crear texto predeterminado en citas previas
     var default_select_servicio = $('<option>', {
       value: '',
       text: 'Escoge tus citas previas',
       disabled: true,
       selected: true
     });
-    $('#select_servicio').append(default_select_servicio);
+    select_servicio.append(default_select_servicio);
       
 
 
