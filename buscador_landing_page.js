@@ -243,6 +243,10 @@ $(document).ready(function () {
       }
   }
 
+
+  //Activar multiselect para el select de Servicios
+  $('select_servicio').multiselect('enable');
+
   //Crear valores y populate select servicios
   function updateCitaPrevia() {
     var selectedOficina = select_oficina.val();
