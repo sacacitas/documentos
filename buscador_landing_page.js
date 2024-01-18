@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', function () {
 //Tipo de buscador
     //Preselect del radio con oficina
     document.getElementById('radio-buscar-con-oficina').checked = true;
-    document.getElementById('box-buscar-con-oficina').classList.add('selected-radio-buscador')
+    //document.getElementById('box-buscar-con-oficina').classList.add('selected-radio-buscador')
 
     //Variables de los radios
     var radio_buscador_con_oficina = document.getElementById('radio-buscar-con-oficina')
