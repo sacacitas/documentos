@@ -29,7 +29,7 @@ document.addEventListener('DOMContentLoaded', function () {
             document.getElementById('box-buscar-con-oficina').classList.add('selected-radio-buscador')
         } else {
             // Apply CSS conditions for 'Other Option' selected
-            document.getElementById('box-buscar-en-provincia').classList.remove('selected-radio-buscador')
+            document.getElementById('box-buscar-en-provincia').removeClass('selected-radio-buscador')
         }
     }
     //Cambios IF radio búsqueda por provincia
@@ -39,7 +39,7 @@ document.addEventListener('DOMContentLoaded', function () {
             document.getElementById('box-buscar-en-provincia').classList.add('selected-radio-buscador')
         } else {
             // Apply CSS conditions for 'Other Option' selected
-            document.getElementById('box-buscar-con-oficina').classList.remove('selected-radio-buscador')
+            document.getElementById('box-buscar-con-oficina').removeClass('selected-radio-buscador')
         }
     }
 
