@@ -207,7 +207,7 @@ document.addEventListener('DOMContentLoaded', function () {
       var selectedProvincia = select_provincia.val();
 
       //Comprobar si Adm, provincia y bsucador por oficina está seleccionado
-      if (selectedAdministracion && selectedProvincia && radio_buscador_con_oficina.checked) {
+      if (selectedAdministracion && selectedProvincia) {
         // Build the API URL with the selected provincia
         var apiUrl = apiBaseUrl + selectedProvincia;
 
