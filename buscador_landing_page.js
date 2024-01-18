@@ -29,7 +29,7 @@ document.addEventListener('DOMContentLoaded', function () {
             // Apply CSS conditions for 'Con Oficina' selected
             document.getElementById('box-buscar-con-oficina').classList.add('selected-radio-buscador')
             document.getElementById('box-buscar-en-provincia').classList.remove('selected-radio-buscador')
-            document.getElementById('div-select-oficinas-buscador').style.display = 'block';
+            document.getElementById('div-select-oficinas-buscador').style.display = 'flex';
         } 
     }
     //Cambios IF radio búsqueda por provincia. CSS y ocultrar Select Oficina
