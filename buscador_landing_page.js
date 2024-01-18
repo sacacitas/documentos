@@ -44,8 +44,13 @@ document.addEventListener('DOMContentLoaded', function () {
     default_select_servicio.selected = true; // Make this option selected by default
     select_servicio.add(default_select_servicio);
      
-     
-     
+
+
+
+  
+
+
+
 
 
 
@@ -79,15 +84,12 @@ document.addEventListener('DOMContentLoaded', function () {
         } 
         
     }
-    //Event listeners de los radios
-    radio_buscador_con_oficina.addEventListener('change', RadioOficinaSelected);
-    radio_buscador_por_provincia.addEventListener('change', RadioProvinciaSelected);
 
 
 
 
 
-//Primera parte del buscador -> Lista estática de administración y provincias     
+//1. PRIMERA PARTE BUSCADOR -> Lista estática de administración y provincias     
     //Crear valores en el select de la Administración
     var values_select_administracion = [
       { value: 'EX1', text: 'Extranjería' },
@@ -169,9 +171,13 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   
 
+    //Event listeners de los radios
+    radio_buscador_con_oficina.addEventListener('change', RadioOficinaSelected);
+    radio_buscador_por_provincia.addEventListener('change', RadioProvinciaSelected);
+       
 
 
-//Segunda parte del buscador -> Lista dinámica de oficinas y servicios desde el backend
+//2. SEGUNDA PARTE BUSCADOR -> Lista dinámica de oficinas y servicios desde el backend
     //Importar JSON externos de lista oficina_servicios y sus precios por categorías
     const lista_oficina_servicios_json = 'https://documentos.sacacitas.es/categorias_servicios.json';
     const precios_citas_categorias_json = 'https://documentos.sacacitas.es/precios_citas.json';
@@ -183,10 +189,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
      
 
-
-
-
-
     //Cuando se selecciona administración y la provincia, se descarga el JSON de oficinas y servicios
     function xxxxx() {
 
@@ -197,9 +199,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 
-//Mostrar datos en función del tipo de buscador
-    //Descargar JSOn de oficinas y servicios del backend según lo seleccionado en ADM y provincia
-    function fetchBackendOficina_Servicios() {
+//Mostrar datos en función del tipo de buscador radio seleccionado
+    //Búsqueda con oficina. 
+    //Hacer API call al backend para descargar el JSOn de oficinas y servicios según la provincia seleccionada y filtrar por administración
+    function fetchJsonAndPopulateOficina() {
       var selectedAdministracion = select_administracion.val();
       var selectedProvincia = select_provincia.val();
 
@@ -208,15 +211,15 @@ document.addEventListener('DOMContentLoaded', function () {
         // Build the API URL with the selected provincia
         var apiUrl = apiBaseUrl + selectedProvincia;
 
-        // Make the API call
+        //API call para descargar el JSON de oficinas y servicios del backend
         fetch(apiUrl)
           .then(response => response.json())
           .then(responseData => {
             data = responseData; // Set the data variable with the response
-            // Populate oficina select options with default text
+            // Populate oficina select con los textos importados del json
             select_oficina.html('').append(defaultOficinaOption);
 
-            // Filter data based on selectedAdministracion
+            //Mostrar en el select oficinas dependiento de la administración seleccionada
             var filteredData = data.filter(item => {
               if (selectedAdministracion === 'EX1') {
                 // Show names where id_oficina starts with "gobext"
@@ -246,5 +249,22 @@ document.addEventListener('DOMContentLoaded', function () {
       }
     }
 
+
+    //Llamar a la función de descarga de JSON de oficinas y servicios del backend caundo se selecciona AD
+
+
+
+
+
+
+
+    //Event listeners de los selects
+    select_administracion.on('change', fetchJsonAndPopulateOficina);
+    select_provincia.on('change', fetchJsonAndPopulateOficina);
+    select_oficina.on('change', updateCitaPrevia);
   
+
+
+
+
   });
