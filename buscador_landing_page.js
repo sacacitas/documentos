@@ -328,7 +328,7 @@ $(document).ready(function () {
             // Apply styles to the text content inside the checkout item
             checkoutItem.find('.item-text').css({
                 'font-size': '16px',
-                'color': '#333',
+                'color': '#333'
             });
 
             // Apply styles to the left column (wide-column)
@@ -339,6 +339,7 @@ $(document).ready(function () {
             // Apply styles to the right column (narrow-column)
             checkoutItem.find('.narrow-column').css({
                 'flex': '15%', // Adjust the percentage as needed
+                'min-width': '20px'
             });
 
 
@@ -346,7 +347,7 @@ $(document).ready(function () {
             checkoutItem.find('.delete-item').css({
                 'background-color': '#fff',
                 'border': 'none',
-                'cursor': 'pointer',
+                'cursor': 'pointer'
             });
 
             // Add a delete button
