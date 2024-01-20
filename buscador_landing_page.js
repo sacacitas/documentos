@@ -360,6 +360,9 @@ $(document).ready(function () {
             deleteButton.on('click', function () {
                 // Remove the item when the delete button is clicked
                 checkoutItem.remove();
+                if (checkoutContainer.children('.checkout-item').length <= maxCheckoutItems) {
+                    select_servicio.prop('disabled', false);
+                }                
             });
 
             // Append the checkout item to the checkout container
@@ -368,8 +371,6 @@ $(document).ready(function () {
             // Check if the maximum number of items is reached and disable the select if needed
             if (checkoutContainer.children('.checkout-item').length >= maxCheckoutItems) {
                 select_servicio.prop('disabled', true);
-            } else {
-                select_servicio.prop('disabled', false);
             }
         }
 
