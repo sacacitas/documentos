@@ -360,7 +360,7 @@ $(document).ready(function () {
             deleteButton.on('click', function () {
                 // Remove the item when the delete button is clicked
                 checkoutItem.remove();
-                if (checkoutContainer.children('.checkout-item').length <= maxCheckoutItems) {
+                if (checkoutContainer.children('.checkout-item').length < maxCheckoutItems) {
                     select_servicio.prop('disabled', false);
                 }                
             });
