@@ -319,6 +319,8 @@ $(document).ready(function () {
                 'border': '1px solid #99a4af',
                 'border-radius': '5px',
                 'background-color': '#fff',
+                'padding': '0', 
+                'margin': '0',
                 'display': 'flex',
                 //'justify-content': 'space-between',
                 'align-items': 'center',
