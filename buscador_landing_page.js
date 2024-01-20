@@ -342,7 +342,7 @@ $(document).ready(function () {
             // Apply styles to the right column (narrow-column)
             checkoutItem.find('.narrow-column').css({
                 'flex': '15%',
-                'padding': '0px 5px 0px 5px' // Adjust the percentage as needed
+                'margin': '0px 5px 0px 5px' // Adjust the percentage as needed
             });
 
 
