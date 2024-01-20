@@ -315,12 +315,12 @@ $(document).ready(function () {
 
             // Apply styles directly in JavaScript
             checkoutItem.css({
-                'padding': '5px',
+                //'padding': '5px',
                 'border': '1px solid #99a4af',
                 'border-radius': '5px',
                 'background-color': '#fff',
                 'display': 'flex',
-                'justify-content': 'space-between',
+                //'justify-content': 'space-between',
                 'align-items': 'center',
                 'box-shadow': '0px 3px 5px 0px rgba(0, 0, 0, .2)'
             });
