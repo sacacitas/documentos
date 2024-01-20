@@ -305,9 +305,12 @@ $(document).ready(function () {
         if (selectedProvincia && selectedOficina && selectedServicio) {
             // Create a new div with a personalized HTML structure for the checkout item
             var checkoutItem = $('<div class="checkout-item">' +
-                '<span class="item-text">' + selectedProvincia + ' - ' + selectedOficina + '</span>' + 
-                '<span class="item-text">' + selectedServicio + '</span>' +
-                '<button class="delete-item"><img src="https://uploads-ssl.webflow.com/652f00909568ce58c099d55f/652f00919568ce58c099d689_Exit.svg" alt="Eliminar style="width: 20px; height: 20px;"></button>' +
+                '<div class="column wide-column">' +
+                '   <span class="item-text">' + selectedProvincia + ' - ' + selectedOficina + ' - ' + selectedServicio + '</span>' +
+                '</div>' +
+                '<div class="column narrow-column">' +
+                '   <button class="delete-item"><img src="path/to/your/image.png" alt="Delete" style="width: 20px; height: 20px;"></button>' +
+                '</div>' +
                 '</div>');
 
             // Apply styles directly in JavaScript
@@ -328,6 +331,17 @@ $(document).ready(function () {
                 'color': '#333',
                 'margin-right': '10px'
             });
+
+            // Apply styles to the left column (wide-column)
+            checkoutItem.find('.wide-column').css({
+                'flex': '75%' // Adjust the percentage as needed
+            });
+
+            // Apply styles to the right column (narrow-column)
+            checkoutItem.find('.narrow-column').css({
+                'flex': '25%' // Adjust the percentage as needed
+            });
+
 
             // Apply styles to the delete button
             checkoutItem.find('.delete-item').css({
