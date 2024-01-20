@@ -319,7 +319,7 @@ $(document).ready(function () {
                 'border': '1px solid #99a4af',
                 'border-radius': '5px',
                 'background-color': '#fff',
-                'padding': '0', 
+                'padding': '10px 0px 10px 0px',
                 'margin': '0',
                 'display': 'flex',
                 //'justify-content': 'space-between',
