@@ -337,10 +337,6 @@ $(document).ready(function () {
                 'cursor': 'pointer'
             });
 
-            // Set the text content of the delete button
-            deleteButton.text('X'); // Change 'Delete' to your desired text
-
-
             // Add a delete button
             var deleteButton = checkoutItem.find('.delete-item');
             deleteButton.on('click', function () {
