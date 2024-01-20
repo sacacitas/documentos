@@ -291,10 +291,10 @@ $(document).ready(function () {
 
 
 
-    // Checkout area
+    //Sección de citas previas seleccionadas bloque derecho
     var checkoutContainer = $('#bloque-items-citas');
-    var maxCheckoutItems = 15; // Maximum items allowed in the checkout
-    // Event listener for select_servicio
+    var maxCheckoutItems = 15; //Items máximos que se pueden añadir
+    //Event listener del select de servicios
     select_servicio.on('change', function () {
         // Get the selected values
         var selectedProvincia = select_provincia.val();
@@ -314,33 +314,33 @@ $(document).ready(function () {
                 '</div>' +
                 '</div>');
 
-            // Apply styles directly in JavaScript
+            //Box de la cita seleccionada
             checkoutItem.css({
                 //'padding': '5px',
                 'border': '1px solid #99a4af',
                 'border-radius': '5px',
                 'background-color': '#fff',
                 'padding': '10px 0px 10px 0px',
-                'margin': '0',
+                'margin': '5px 0px 5px 0px',
                 'display': 'flex',
                 //'justify-content': 'space-between',
                 'align-items': 'center',
                 'box-shadow': '0px 3px 5px 0px rgba(0, 0, 0, .2)'
             });
 
-            // Apply styles to the text content inside the checkout item
+            //Items dentro del box de la cita seleccionada
             checkoutItem.find('.item-text').css({
                 'font-size': '16px',
                 'color': '#333'
             });
 
-            // Apply styles to the left column (wide-column)
+            //Columna izquierda del grid de la cita seleccionada
             checkoutItem.find('.wide-column').css({
                 'flex': '85%', // Adjust the percentage as needed
                 'padding': '0px 5px 0px 5px' 
             });
 
-            // Apply styles to the right column (narrow-column)
+            //Columna derecha del grid de la cita seleccionada
             checkoutItem.find('.narrow-column').css({
                 'flex': '15%',
                 'margin': '0px 5px 0px 5px',
@@ -348,14 +348,14 @@ $(document).ready(function () {
             });
 
 
-            // Apply styles to the delete button
+            //Botón de borrar cita seleccionada
             checkoutItem.find('.delete-item').css({
                 'background-color': '#fff',
                 'border': 'none',
                 'cursor': 'pointer'
             });
 
-            // Add a delete button
+            //Función para borrar cita seleccionada
             var deleteButton = checkoutItem.find('.delete-item');
             deleteButton.on('click', function () {
                 // Remove the item when the delete button is clicked
@@ -371,7 +371,7 @@ $(document).ready(function () {
             }
         }
 
-        // Reset the select after adding the item to checkout
+        //Resetear select de servicios cuando se añade una cita
         select_servicio.val(null).trigger('change');
     });
 
