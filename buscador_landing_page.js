@@ -305,7 +305,7 @@ $(document).ready(function () {
         // Check if all values are selected
         if (selectedProvincia && selectedOficina && selectedServicio) {
             // Create a new div to represent the selected service
-            var checkoutItem = $('<div class="cita-seleccionada-buscador></div>');
+            var checkoutItem = $('<div class="checkout-item"></div>');
             checkoutItem.text(selectedProvincia + ' - ' + selectedOficina + ' - ' + selectedServicio);
 
             // Add a delete button
