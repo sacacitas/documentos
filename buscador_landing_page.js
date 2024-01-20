@@ -371,6 +371,9 @@ $(document).ready(function () {
 
     
 
+    // Add the CSS rule dynamically to the head section
+    var cssRule = '#bloque-items-citas > div { margin: 0; }';
+    $('<style>').text(cssRule).appendTo('head');
 
 
 
