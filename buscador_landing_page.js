@@ -306,7 +306,7 @@ $(document).ready(function () {
             // Create a new div with a personalized HTML structure for the checkout item
             var checkoutItem = $('<div class="checkout-item">' +
                 '<div class="column wide-column">' +
-                '   <span class="item-text">' + selectedProvincia + ' - ' + selectedOficina + ' - ' + selectedServicio + '</span>' +
+                '   <span class="item-text">' + selectedProvincia + ' | ' + selectedOficina + ' | ' + selectedServicio + '</span>' +
                 '</div>' +
                 '<div class="column narrow-column">' +
                 '   <button class="delete-item"><img src="https://uploads-ssl.webflow.com/652f00909568ce58c099d55f/652f00919568ce58c099d689_Exit.svg" alt="Delete" style="width: 20px; height: 20px; margin-left: auto;"></button>' +
