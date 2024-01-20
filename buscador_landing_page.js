@@ -294,7 +294,6 @@ $(document).ready(function () {
     // Checkout area
     var checkoutContainer = $('#bloque-items-citas');
     var maxCheckoutItems = 15; // Maximum items allowed in the checkout
-
     // Event listener for select_servicio
     select_servicio.on('change', function () {
         // Get the selected values
@@ -304,22 +303,45 @@ $(document).ready(function () {
 
         // Check if all values are selected
         if (selectedProvincia && selectedOficina && selectedServicio) {
-            // Create a new div to represent the selected service
+            // Create a new div with a personalized HTML structure for the checkout item
             var checkoutItem = $('<div class="checkout-item">' +
-            '<span class="item-text">' + selectedProvincia + ' - ' + selectedOficina + ' - ' + selectedServicio + '</span>' +
-            '<button class="delete-item">Delete</button>' +
-            '</div>');
-            //checkoutItem.text(selectedProvincia + ' - ' + selectedOficina + ' - ' + selectedServicio);
+                '<span class="item-text">' + selectedProvincia + ' - ' + selectedOficina + ' - ' + selectedServicio + '</span>' +
+                '<button class="delete-item">Delete</button>' +
+                '</div>');
+
+            // Apply styles directly in JavaScript
+            checkoutItem.css({
+                'margin-bottom': '10px',
+                'padding': '8px',
+                'border': '1px solid #ddd',
+                'background-color': '#f9f9f9',
+                'display': 'flex',
+                'justify-content': 'space-between',
+                'align-items': 'center'
+            });
+
+            // Apply styles to the text content inside the checkout item
+            checkoutItem.find('.item-text').css({
+                'font-size': '16px',
+                'color': '#333',
+                'margin-right': '10px'
+            });
+
+            // Apply styles to the delete button
+            checkoutItem.find('.delete-item').css({
+                'background-color': '#dc3545',
+                'color': '#fff',
+                'border': 'none',
+                'padding': '5px 10px',
+                'cursor': 'pointer'
+            });
 
             // Add a delete button
-            var deleteButton = $('<button class="delete-item">Delete</button>');
+            var deleteButton = checkoutItem.find('.delete-item');
             deleteButton.on('click', function () {
                 // Remove the item when the delete button is clicked
                 checkoutItem.remove();
             });
-
-            // Append the delete button to the checkout item
-            checkoutItem.append(deleteButton);
 
             // Append the checkout item to the checkout container
             checkoutContainer.append(checkoutItem);
@@ -334,17 +356,13 @@ $(document).ready(function () {
         select_servicio.val(null).trigger('change');
     });
 
+    
 
 
 
 
 
 
-
-
-
-
-
-  
+    
   });
   
