@@ -339,7 +339,9 @@ $(document).ready(function () {
 
             // Apply styles to the right column (narrow-column)
             checkoutItem.find('.narrow-column').css({
-                'flex': '25%' // Adjust the percentage as needed
+                'flex': '25%', // Adjust the percentage as needed
+                'display': 'flex',
+                'justify-content': 'flex-end' // Align delete button to the right
             });
 
 
