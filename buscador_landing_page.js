@@ -348,7 +348,8 @@ $(document).ready(function () {
                 'background-color': '#f9f9f9',
                 'border': 'none',
                 'padding': '5px 10px',
-                'cursor': 'pointer'
+                'cursor': 'pointer',
+                'align-items': 'right'
             });
 
             // Add a delete button
