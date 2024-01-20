@@ -322,6 +322,7 @@ $(document).ready(function () {
                 'background-color': '#fff',
                 'display': 'flex',
                 'justify-content': 'space-between',
+                'align-items': 'center',
                 'box-shadow': '0px 3px 5px 0px rgba(0, 0, 0, .2)'
             });
 
