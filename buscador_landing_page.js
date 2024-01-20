@@ -322,7 +322,8 @@ $(document).ready(function () {
                 'background-color': '#fff',
                 'display': 'flex',
                 'justify-content': 'space-between',
-                'align-items': 'center'
+                'align-items': 'center',
+                'box-shadow': '2px 5px 0px 1px rgba(0, 0, 0, .2)'
             });
 
             // Apply styles to the text content inside the checkout item
@@ -341,7 +342,7 @@ $(document).ready(function () {
             checkoutItem.find('.narrow-column').css({
                 'flex': '25%', // Adjust the percentage as needed
                 'display': 'flex',
-                'justify-content': 'flex-end' // Align delete button to the right
+                'justify-content': 'flex-end' // Align the button to the right
             });
 
 
