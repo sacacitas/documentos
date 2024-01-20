@@ -335,12 +335,14 @@ $(document).ready(function () {
 
             // Apply styles to the left column (wide-column)
             checkoutItem.find('.wide-column').css({
-                'flex': '85%' // Adjust the percentage as needed
+                'flex': '85%', // Adjust the percentage as needed
+                'padding': '0px 5px 0px 5px' 
             });
 
             // Apply styles to the right column (narrow-column)
             checkoutItem.find('.narrow-column').css({
-                'flex': '15%', // Adjust the percentage as needed
+                'flex': '15%',
+                'padding': '0px 5px 0px 5px' // Adjust the percentage as needed
             });
 
 
@@ -370,14 +372,6 @@ $(document).ready(function () {
         // Reset the select after adding the item to checkout
         select_servicio.val(null).trigger('change');
     });
-
-    
-
-    // Add the CSS rule dynamically to the head section
-    var cssRule = '#bloque-items-citas > div { margin: 0; }';
-    $('<style>').text(cssRule).appendTo('head');
-
-
 
 
 
