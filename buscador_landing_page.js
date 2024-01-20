@@ -309,7 +309,7 @@ $(document).ready(function () {
                 '   <span class="item-text">' + selectedProvincia + ' - ' + selectedOficina + ' - ' + selectedServicio + '</span>' +
                 '</div>' +
                 '<div class="column narrow-column">' +
-                '   <button class="delete-item"><img src="https://uploads-ssl.webflow.com/652f00909568ce58c099d55f/652f00919568ce58c099d689_Exit.svg" alt="Delete" style="width: 25px; height: 25px; margin-left: auto;"></button>' +
+                '   <button class="delete-item"><img src="https://uploads-ssl.webflow.com/652f00909568ce58c099d55f/652f00919568ce58c099d689_Exit.svg" alt="Delete" style="width: 20px; height: 20px; margin-left: auto;"></button>' +
                 '</div>' +
                 '</div>');
 
