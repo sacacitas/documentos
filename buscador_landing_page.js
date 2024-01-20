@@ -312,10 +312,11 @@ $(document).ready(function () {
 
             // Apply styles directly in JavaScript
             checkoutItem.css({
-                'margin-bottom': '10px',
-                'padding': '8px',
-                'border': '1px solid #ddd',
-                'background-color': '#f9f9f9',
+                'margin-bottom': '5px',
+                'padding': '5px',
+                'border': '1px solid #99a4af',
+                'border-radius': '5px',
+                'background-color': '#fff',
                 'display': 'flex',
                 'justify-content': 'space-between',
                 'align-items': 'center'
