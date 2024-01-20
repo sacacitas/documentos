@@ -329,7 +329,6 @@ $(document).ready(function () {
             checkoutItem.find('.item-text').css({
                 'font-size': '16px',
                 'color': '#333',
-                'margin-right': '10px'
             });
 
             // Apply styles to the left column (wide-column)
