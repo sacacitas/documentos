@@ -368,6 +368,8 @@ $(document).ready(function () {
             // Check if the maximum number of items is reached and disable the select if needed
             if (checkoutContainer.children('.checkout-item').length >= maxCheckoutItems) {
                 select_servicio.prop('disabled', true);
+            } else {
+                select_servicio.prop('disabled', false);
             }
         }
 
