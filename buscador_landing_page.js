@@ -305,8 +305,9 @@ $(document).ready(function () {
         if (selectedProvincia && selectedOficina && selectedServicio) {
             // Create a new div with a personalized HTML structure for the checkout item
             var checkoutItem = $('<div class="checkout-item">' +
-                '<span class="item-text">' + selectedProvincia + ' - ' + selectedOficina + ' - ' + selectedServicio + '</span>' +
-                '<button class="delete-item">Delete</button>' +
+                '<span class="item-text">' + selectedProvincia + ' - ' + selectedOficina + '</span>' + 
+                '<span class="item-text">' + selectedServicio + '</span>' +
+                '<button class="delete-item"><img src="https://uploads-ssl.webflow.com/652f00909568ce58c099d55f/652f00919568ce58c099d689_Exit.svg" alt="Eliminar"></button>' +
                 '</div>');
 
             // Apply styles directly in JavaScript
@@ -336,6 +337,10 @@ $(document).ready(function () {
                 'cursor': 'pointer'
             });
 
+            // Set the text content of the delete button
+            deleteButton.text('X'); // Change 'Delete' to your desired text
+
+
             // Add a delete button
             var deleteButton = checkoutItem.find('.delete-item');
             deleteButton.on('click', function () {
@@ -363,6 +368,6 @@ $(document).ready(function () {
 
 
 
-    
+
   });
   
