@@ -322,8 +322,8 @@ $(document).ready(function () {
                 'background-color': '#fff',
                 'display': 'flex',
                 'justify-content': 'space-between',
-                'align-items': 'center',
-                'box-shadow': '2px 5px 0px 1px rgba(0, 0, 0, .2)'
+                'align-items': 'stretch',
+                'box-shadow': '2px 5px 4px 0px rgba(0, 0, 0, .2)'
             });
 
             // Apply styles to the text content inside the checkout item
@@ -335,12 +335,12 @@ $(document).ready(function () {
 
             // Apply styles to the left column (wide-column)
             checkoutItem.find('.wide-column').css({
-                'flex': '75%' // Adjust the percentage as needed
+                'flex': '85%' // Adjust the percentage as needed
             });
 
             // Apply styles to the right column (narrow-column)
             checkoutItem.find('.narrow-column').css({
-                'flex': '25%', // Adjust the percentage as needed
+                'flex': '15%', // Adjust the percentage as needed
                 'display': 'flex',
                 'justify-content': 'flex-end' // Align the button to the right
             });
