@@ -315,7 +315,6 @@ $(document).ready(function () {
 
             // Apply styles directly in JavaScript
             checkoutItem.css({
-                'margin-bottom': '5px',
                 'padding': '5px',
                 'border': '1px solid #99a4af',
                 'border-radius': '5px',
@@ -346,9 +345,8 @@ $(document).ready(function () {
 
             // Apply styles to the delete button
             checkoutItem.find('.delete-item').css({
-                'background-color': '#f9f9f9',
+                'background-color': '#fff',
                 'border': 'none',
-                'padding': '5px 10px',
                 'cursor': 'pointer',
             });
 
