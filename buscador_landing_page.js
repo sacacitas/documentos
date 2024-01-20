@@ -307,7 +307,7 @@ $(document).ready(function () {
             var checkoutItem = $('<div class="checkout-item">' +
                 '<div>' + '<span class="item-text">' + selectedProvincia + ' - ' + selectedOficina + '</span>' + 
                 '<span class="item-text">' + selectedServicio + '</span>' + '</div>' +
-                '<button class="delete-item"><img src="https://uploads-ssl.webflow.com/652f00909568ce58c099d55f/652f00919568ce58c099d689_Exit.svg" alt="Eliminar"></button>' +
+                '<button class="delete-item"><img src="https://uploads-ssl.webflow.com/652f00909568ce58c099d55f/652f00919568ce58c099d689_Exit.svg" alt="Eliminar style="width: 20px; height: 20px;"></button>' +
                 '</div>');
 
             // Apply styles directly in JavaScript
