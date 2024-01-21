@@ -222,8 +222,7 @@ $(document).ready(function () {
             // Reset the values of the three selects when 'Con Oficina' is selected
             select_servicio.val('').empty().append(default_select_servicio).trigger('change');
 
-            console.log(select_administracion.val());
-            console.log(select_provincia.val());
+
 
             // Check if select_administracion and select_provincia are selected
             if (select_administracion.val() && select_provincia.val()) {
@@ -232,6 +231,9 @@ $(document).ready(function () {
 
             }
         }
+
+        console.log(select_administracion.val());
+        console.log(select_provincia.val());
     });
 
     // Event listener for the 'radio_buscador_por_provincia' element
