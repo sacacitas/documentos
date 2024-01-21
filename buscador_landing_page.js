@@ -231,7 +231,8 @@ $(document).ready(function () {
     function fetchJsonAndPopulateOficina() {
         var selectedAdministracion = select_administracion.val();
         var selectedProvincia = select_provincia.val();
-  
+        
+
         // Comprobar si Adm, provincia y bsucador por oficina está seleccionado
         if (selectedAdministracion && selectedProvincia) {
             // Build the API URL with the selected provincia
@@ -275,8 +276,8 @@ $(document).ready(function () {
         } else {
             // Clear data and reset options for 'js-oficina' and 'js-cita-previa' selects
             data = null;
-            select_oficina.html('').append(default_select_oficina);
-            select_servicio.html('').append(default_select_servicio);
+            select_oficina.val('').empty().append(default_select_oficina).trigger('change');
+            select_servicio.val('').empty().append(default_select_servicio).trigger('change');
         }
     }
   
