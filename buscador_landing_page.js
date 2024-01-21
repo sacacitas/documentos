@@ -210,9 +210,6 @@ $(document).ready(function () {
     //Cuando se cambie oficina, resetear cita previa
     select_oficina.on('change', function () {
 
-        citaPreviaSelect.val(default_select_servicio.val());
-        citaPreviaSelect.html('').append(default_select_servicio);
-
         updateCitaPrevia();
     });
 
@@ -313,7 +310,11 @@ $(document).ready(function () {
       var selectedOficina = select_oficina.val();
       var selectedAdministracion = select_administracion.val();
         var selectedProvincia = select_provincia.val();
-      //var selectedCitaPrevia = select_servicio.val();
+        var citaPreviaSelect = select_servicio.val();
+
+
+
+      citaPreviaSelect.html('').append(default_select_servicio);
   
       // Check if oficina is selected
       if (selectedOficina && selectedAdministracion && selectedProvincia && radio_buscador_con_oficina) {
