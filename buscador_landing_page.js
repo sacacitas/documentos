@@ -199,7 +199,7 @@ $(document).ready(function () {
         select_servicio.val('').empty().append(default_select_servicio).trigger('change');
     });
 
-    //Cuando se cambie administración, resetear provincia, oficina y cita previa
+    //Cuando se cambie oficina, resetear cita previa
     select_oficina.on('change', function () {
         // Reset the values of the other three selects
         select_servicio.val('').empty().append(default_select_servicio).trigger('change');
@@ -307,7 +307,7 @@ $(document).ready(function () {
       //var selectedCitaPrevia = select_servicio.val();
   
       // Check if oficina is selected
-      if (selectedOficina) {
+      if (selectedOficina && selectedAdministracion && selectedProvincia) {
   
         // Find the selected oficina in the external data
         var selectedOficinaData = data.find(item => item.nombre === selectedOficina);
