@@ -245,7 +245,8 @@ $(document).ready(function () {
     function fetchJsonAndPopulateOficina() {
         var selectedAdministracion = select_administracion.val();
         var selectedProvincia = select_provincia.val();
-        
+        console.log(selectedAdministracion);
+        console.log(selectedProvincia);
 
         // Show loading message in select_oficina
         select_oficina.html('').append($('<option>', {
@@ -291,7 +292,7 @@ $(document).ready(function () {
                     });
   
                     // Set default value and trigger change event
-                    //select_oficina.val(default_select_oficina.val()).trigger('change');
+                    select_oficina.val(default_select_oficina.val()).trigger('change');
 
                     
                 },
