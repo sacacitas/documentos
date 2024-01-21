@@ -305,40 +305,46 @@ $(document).ready(function () {
     }
   
 
-    //Crear valores y populate select servicios en el bloque izquierdo
     function updateCitaPrevia() {
         var selectedOficina = select_oficina.val();
         var selectedAdministracion = select_administracion.val();
         var selectedProvincia = select_provincia.val();
-        var citaPreviaSelect = select_servicio.val();
-
-
-
-      //citaPreviaSelect.html('').append(default_select_servicio);
-  
-      // Check if oficina is selected
-      if (selectedOficina && selectedAdministracion && selectedProvincia && radio_buscador_con_oficina) {
-  
-        // Find the selected oficina in the external data
-        var selectedOficinaData = data.find(item => item.nombre === selectedOficina);
-  
-        // Check if data is found and servicios is an array 
-        if (selectedOficinaData && Array.isArray(selectedOficinaData.servicios)) {
-          // Populate citaPrevia select options with services from selected oficina
-          selectedOficinaData.servicios.forEach(servicio => {
-            // Check if servicio has the required properties
-            if (servicio && servicio.id_servicio && servicio.nombre) {
-              var optionElement = $('<option></option>').prop('value', servicio.nombre).text(servicio.nombre);
-              select_servicio.append(optionElement);
+    
+        // Clear existing options in select_servicio
+        select_servicio.empty();
+    
+        // Check if oficina is selected
+        if (selectedOficina && selectedAdministracion && selectedProvincia && radio_buscador_con_oficina) {
+      
+            // Find the selected oficina in the external data
+            var selectedOficinaData = data.find(item => item.nombre === selectedOficina);
+      
+            // Check if data is found and servicios is an array 
+            if (selectedOficinaData && Array.isArray(selectedOficinaData.servicios)) {
+                // Add a default option if needed
+                // var defaultOption = $('<option>', {
+                //     value: '',
+                //     text: 'Select a service',
+                //     disabled: true,
+                //     selected: true
+                // });
+                // select_servicio.append(defaultOption);
+    
+                // Populate citaPrevia select options with services from selected oficina
+                selectedOficinaData.servicios.forEach(servicio => {
+                    // Check if servicio has the required properties
+                    if (servicio && servicio.id_servicio && servicio.nombre) {
+                        var optionElement = $('<option></option>').prop('value', servicio.nombre).text(servicio.nombre);
+                        select_servicio.append(optionElement);
+                    }
+                });
+      
+                // Trigger change event to refresh the select (if needed)
+                select_servicio.trigger('change');
             }
-          });
-  
-          // Trigger change event to refresh the select (if needed)
-          select_servicio.trigger('change');
-        }
-      } 
+        } 
     }
-  
+    
   
 
 
