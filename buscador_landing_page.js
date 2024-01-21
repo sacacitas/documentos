@@ -49,13 +49,6 @@ $(document).ready(function () {
 
 
 
-
-
-
-
-
-
-
 // Tipo de buscador (si buscar con oficina o toda la provincia) -> Únicamente estilos y funcionalidades.
     // (La parte de crear valores está en la segunda parte)
   
@@ -88,7 +81,9 @@ $(document).ready(function () {
     }
   
     // Event listeners de los radios
-
+    radio_buscador_con_oficina.on('change', RadioOficinaSelected);
+    radio_buscador_por_provincia.on('change', RadioProvinciaSelected);
+  
 
 
 
@@ -171,39 +166,6 @@ $(document).ready(function () {
     });
   
 
-    // Event listener for the 'radio_buscador_con_oficina' element
-    radio_buscador_con_oficina.on('change', function () {
-        if (radio_buscador_con_oficina.prop('checked')) {
-            // Reset the values of the three selects when 'Con Oficina' is selected
-            select_servicio.val('').empty().append(default_select_servicio).trigger('change');
-
-
-
-            // Check if select_administracion and select_provincia are selected
-            if (select_administracion.val() && select_provincia.val()) {
-                fetchJsonAndPopulateOficina();
-                console.log('fetchJsonAndPopulateOficina');
-
-            }
-        }
-
-        console.log(select_administracion.val());
-        console.log(select_provincia.val());
-
-        RadioOficinaSelected();
-    });
-
-    // Event listener for the 'radio_buscador_por_provincia' element
-    radio_buscador_por_provincia.on('change', function () {
-        if (radio_buscador_por_provincia.prop('checked')) {
-            // Reset the values of the three selects when 'Con Oficina' is selected
-            select_oficina.val('').empty().append(default_select_oficina).trigger('change');
-            select_servicio.val('').empty().append(default_select_servicio).trigger('change');
-
-        }
-
-        RadioProvinciaSelected();
-    });
 
 
 
@@ -254,8 +216,37 @@ $(document).ready(function () {
     });
 
 
+    // Event listener for the 'radio_buscador_con_oficina' element
+    radio_buscador_con_oficina.on('change', function () {
+        if (radio_buscador_con_oficina.prop('checked')) {
+            // Reset the values of the three selects when 'Con Oficina' is selected
+            select_servicio.val('').empty().append(default_select_servicio).trigger('change');
 
 
+
+            // Check if select_administracion and select_provincia are selected
+            if (select_administracion.val() && select_provincia.val()) {
+                fetchJsonAndPopulateOficina();
+                console.log('fetchJsonAndPopulateOficina');
+
+            }
+        }
+
+        console.log(select_administracion.val());
+        console.log(select_provincia.val());
+    });
+
+    // Event listener for the 'radio_buscador_por_provincia' element
+    radio_buscador_por_provincia.on('change', function () {
+        if (radio_buscador_por_provincia.prop('checked')) {
+            // Reset the values of the three selects when 'Con Oficina' is selected
+            select_oficina.val('').empty().append(default_select_oficina).trigger('change');
+            select_servicio.val('').empty().append(default_select_servicio).trigger('change');
+
+        }
+    });
+
+ 
     
 
 
