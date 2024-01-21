@@ -266,8 +266,10 @@ $(document).ready(function () {
                         select_oficina.append(optionElement);
                     });
   
-                    // Trigger change event to refresh the select (if needed)
-                    select_oficina.trigger('change');
+                    // Set default value and trigger change event
+                    select_oficina.val(default_select_oficina.val()).trigger('change');
+
+                    
                 },
                 error: function (error) {
                     console.error('Error fetching data:', error);
@@ -276,8 +278,8 @@ $(document).ready(function () {
         } else {
             // Clear data and reset options for 'js-oficina' and 'js-cita-previa' selects
             data = null;
-            select_oficina.val(null).trigger('change');
-
+            select_oficina.html('').append(default_select_oficina);
+            select_servicio.html('').append(default_select_servicio);
         }
     }
   
