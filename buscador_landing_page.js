@@ -303,35 +303,58 @@ $(document).ready(function () {
 
     //Crear valores y populate select servicios en el bloque izquierdo
     function updateCitaPrevia() {
-      var selectedOficina = select_oficina.val();
-      var selectedAdministracion = select_administracion.val();
+        var selectedOficina = select_oficina.val();
+        var selectedAdministracion = select_administracion.val();
         var selectedProvincia = select_provincia.val();
-      //var selectedCitaPrevia = select_servicio.val();
-  
-      // Check if oficina is selected
-      if (selectedOficina && selectedAdministracion && selectedProvincia && radio_buscador_con_oficina.prop('checked')) {
-  
-        // Find the selected oficina in the external data
-        var selectedOficinaData = data.find(item => item.nombre === selectedOficina);
-  
-        // Check if data is found and servicios is an array 
-        if (selectedOficinaData && Array.isArray(selectedOficinaData.servicios)) {
-          // Populate citaPrevia select options with services from selected oficina
-          selectedOficinaData.servicios.forEach(servicio => {
-            // Check if servicio has the required properties
-            if (servicio && servicio.id_servicio && servicio.nombre) {
-              var optionElement = $('<option></option>').prop('value', servicio.nombre).text(servicio.nombre);
-              select_servicio.append(optionElement);
+
+        // Check if oficina is selected
+        if (selectedOficina && selectedAdministracion && selectedProvincia && radio_buscador_con_oficina) {
+            // Find the selected oficina in the external data
+            var selectedOficinaData = data.find(item => item.nombre === selectedOficina);
+
+            // Check if data is found and servicios is an array 
+            if (selectedOficinaData && Array.isArray(selectedOficinaData.servicios)) {
+                // Populate citaPrevia select options with services from selected oficina
+                selectedOficinaData.servicios.forEach(servicio => {
+                    // Check if servicio has the required properties
+                    if (servicio && servicio.id_servicio && servicio.nombre) {
+                        var optionElement = $('<option></option>').prop('value', servicio.nombre).text(servicio.nombre);
+                        select_servicio.append(optionElement);
+                    }
+                });
+
+                // Trigger change event to refresh the select (if needed)
+                select_servicio.trigger('change');
             }
-          });
-  
-          // Trigger change event to refresh the select (if needed)
-          select_servicio.trigger('change');
         }
-      }
+
+        // Check if 'radio_buscador_por_provincia' is selected
+        if (selectedAdministracion && selectedProvincia && radio_buscador_por_provincia.prop('checked')) {
+            // Clear existing options
+            select_servicio.empty();
+
+            // Find the selected oficina in the external data
+            var selectedOficinaData = data.find(item => item.nombre === selectedOficina);
+
+            // Check if data is found and servicios is an array 
+            if (selectedOficinaData && Array.isArray(selectedOficinaData.servicios)) {
+                // Populate citaPrevia select options with services from selected oficina
+                selectedOficinaData.servicios.forEach(servicio => {
+                    // Check if servicio has the required properties
+                    if (servicio && servicio.id_servicio && servicio.nombre) {
+                        // Concatenate selectedOficina with servicio.nombre and append to select_servicio
+                        var optionElement = $('<option></option>').prop('value', servicio.nombre).text(selectedOficina + ' | ' + servicio.nombre);
+                        select_servicio.append(optionElement);
+                    }
+                });
+
+                // Trigger change event to refresh the select (if needed)
+                select_servicio.trigger('change');
+            }
+        }
     }
-  
-  
+
+    
 
 
 
