@@ -169,6 +169,8 @@ $(document).ready(function () {
     select_administracion.on('change', fetchJsonAndPopulateOficina);
     select_provincia.on('change', fetchJsonAndPopulateOficina);
     select_oficina.on('change', updateCitaPrevia);
+    select_provincia.on('change', updateCitaPrevia);
+    select_administracion.on('change', updateCitaPrevia);
   
   
   
