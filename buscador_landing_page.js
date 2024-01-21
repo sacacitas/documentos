@@ -220,6 +220,8 @@ $(document).ready(function () {
             // Reset the values of the three selects when 'Con Oficina' is selected
             select_oficina.val('').empty().append(default_select_oficina).trigger('change');
             select_servicio.val('').empty().append(default_select_servicio).trigger('change');
+
+            fetchJsonAndPopulateOficina();
             
         }
     });
