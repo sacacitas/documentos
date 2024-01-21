@@ -233,6 +233,16 @@ $(document).ready(function () {
         var selectedProvincia = select_provincia.val();
         
 
+        // Show loading message in select_oficina
+        select_oficina.html('').append($('<option>', {
+            value: '',
+            text: 'Cargando...',
+            disabled: true,
+            selected: true
+        }));
+
+
+
         // Comprobar si Adm, provincia y bsucador por oficina está seleccionado
         if (selectedAdministracion && selectedProvincia) {
             // Build the API URL with the selected provincia
