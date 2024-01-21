@@ -168,7 +168,6 @@ $(document).ready(function () {
     // Event listeners de los selects
     select_administracion.on('change', fetchJsonAndPopulateOficina);
     select_provincia.on('change', fetchJsonAndPopulateOficina);
-    select_servicio.on('change', updateCitaPrevia);
     select_oficina.on('change', updateCitaPrevia);
     select_provincia.on('change', updateCitaPrevia);
     select_administracion.on('change', updateCitaPrevia);
