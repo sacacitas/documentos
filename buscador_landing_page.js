@@ -185,80 +185,6 @@ $(document).ready(function () {
     //select_administracion.on('change', updateCitaPrevia);
    
 
-    // Descargar JSON de oficinas cuando se cambia provincia o administración
-    function fetchJsonAndPopulateOficina() {
-        // Your existing implementation
-        // ...
-    }
-
-    // Reset values and update cita previa function
-    function resetValuesAndUpdateCitaPrevia() {
-        // Reset the values of the other three selects
-        select_oficina.val('').empty().append(default_select_oficina);
-        select_servicio.val('').empty().append(default_select_servicio);
-        updateCitaPrevia();
-    }
-
-    // Event listener for the 'radio_buscador_con_oficina' element
-    radio_buscador_con_oficina.on('change', function () {
-        if (radio_buscador_con_oficina.prop('checked')) {
-            // Reset the values of the three selects when 'Con Oficina' is selected
-            resetValuesAndUpdateCitaPrevia();
-            // Fetch and populate oficinas
-            fetchJsonAndPopulateOficina();
-        }
-    });
-
-    // Event listener for the 'radio_buscador_por_provincia' element
-    radio_buscador_por_provincia.on('change', function () {
-        if (radio_buscador_por_provincia.prop('checked')) {
-            // Reset the values of the three selects when 'Por Provincia' is selected
-            resetValuesAndUpdateCitaPrevia();
-        }
-    });
-
-    // Common event listener for both select_administracion and select_provincia
-    var commonChangeListener = function () {
-        // Reset the values of the other three selects
-        resetValuesAndUpdateCitaPrevia();
-    };
-
-    // Attach the common change listener to select_administracion and select_provincia
-    select_administracion.on('change', commonChangeListener);
-    select_provincia.on('change', commonChangeListener);
-
-    // Event listener for the 'change' event on select_oficina
-    select_oficina.on('change', function () {
-        // Update cita previa when oficina changes
-        updateCitaPrevia();
-    });
-
-    // Event listener for the 'change' event on select_servicio
-    select_servicio.on('change', function () {
-        // Your existing implementation for updating cita previa based on selected servicio
-        // ...
-    });
-
-    // Additional code for the checkout section
-    // ...
-
-
-    radio_buscador_con_oficina.on('change', function () {
-        if (radio_buscador_con_oficina.prop('checked')) {
-            
-            console.log('Con oficina');
-
-
-        }
-    });
-
-    
-
-    radio_buscador_con_oficina.on('change', fetchJsonAndPopulateOficina);
-
- 
-    
-
 
     //Crear valores y populate select oficina
     // Hacer API call al backend para descargar el JSON de oficinas y servicios según la provincia seleccionada y filtrar por administración
@@ -331,6 +257,9 @@ $(document).ready(function () {
         }
     }
   
+
+
+
     //Crear valores y populate select servicio
     function updateCitaPrevia() {
         var selectedOficina = select_oficina.val();
@@ -373,6 +302,59 @@ $(document).ready(function () {
     }
     
   
+
+    // Reset values and update cita previa function
+    function resetValuesAndUpdateCitaPrevia() {
+        // Reset the values of the other three selects
+        select_oficina.val('').empty().append(default_select_oficina);
+        select_servicio.val('').empty().append(default_select_servicio);
+        updateCitaPrevia();
+    }
+
+    // Event listener for the 'radio_buscador_con_oficina' element
+    radio_buscador_con_oficina.on('change', function () {
+        if (radio_buscador_con_oficina.prop('checked')) {
+            // Reset the values of the three selects when 'Con Oficina' is selected
+            resetValuesAndUpdateCitaPrevia();
+            // Fetch and populate oficinas
+            fetchJsonAndPopulateOficina();
+        }
+    });
+
+    // Event listener for the 'radio_buscador_por_provincia' element
+    radio_buscador_por_provincia.on('change', function () {
+        if (radio_buscador_por_provincia.prop('checked')) {
+            // Reset the values of the three selects when 'Por Provincia' is selected
+            resetValuesAndUpdateCitaPrevia();
+        }
+    });
+
+    // Common event listener for both select_administracion and select_provincia
+    var commonChangeListener = function () {
+        // Reset the values of the other three selects
+        resetValuesAndUpdateCitaPrevia();
+    };
+
+    // Attach the common change listener to select_administracion and select_provincia
+    select_administracion.on('change', commonChangeListener);
+    select_provincia.on('change', commonChangeListener);
+
+    // Event listener for the 'change' event on select_oficina
+    select_oficina.on('change', function () {
+        // Update cita previa when oficina changes
+        updateCitaPrevia();
+    });
+
+    // Event listener for the 'change' event on select_servicio
+    select_servicio.on('change', function () {
+        // Your existing implementation for updating cita previa based on selected servicio
+        // ...
+    });
+
+
+    
+
+
 
 
 
