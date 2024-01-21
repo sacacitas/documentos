@@ -209,8 +209,9 @@ $(document).ready(function () {
 
     //Cuando se cambie oficina, resetear cita previa
     select_oficina.on('change', function () {
-        // Reset the values of the other three selects
-        //select_servicio.val('').empty().append(default_select_servicio).trigger('change');
+
+        citaPreviaSelect.val(default_select_servicio.val());
+        citaPreviaSelect.html('').append(default_select_servicio);
 
         updateCitaPrevia();
     });
