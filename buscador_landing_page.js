@@ -165,31 +165,21 @@ $(document).ready(function () {
     var apiBaseUrl = 'https://panelaws.sacacitas.es/public/oficina/';
   
   
-    // Event listeners de los selects
+    //Descargar JSON de oficinas cuando se cambia provincia o administración
     select_administracion.on('change', fetchJsonAndPopulateOficina);
     select_provincia.on('change', fetchJsonAndPopulateOficina);
+    //Resetear valor cita previa
     select_oficina.on('change', updateCitaPrevia);
     select_provincia.on('change', updateCitaPrevia);
     select_administracion.on('change', updateCitaPrevia);
+    //Cuando se cambie administración, resetear provincia, oficina y cita previa
+    select_administracion.on('change', function () {
+        // Reset the values of the other three selects
+        select_oficina.val('').trigger('change');
+        select_servicio.val('').trigger('change');
+    });
   
-  
-  
-    // Resetear cosas cuando administracion o provincia se cambia
-   // function fetchJsonAndPopulateOficina() {
-      // Reset the selection in 'js-oficina' select to default
-    //  oficinaSelect.val(defaultOficinaOption.val());
-  
-      // Reset the selection in 'js-cita-previa' select to default
-      //citaPreviaSelect.val(defaultCitaPreviaOption.val());
-  
-      // Clear existing options for 'js-cita-previa' select
-      //citaPreviaSelect.html('').append(defaultCitaPreviaOption);
-  
-      // Call the fetchData function
-   //   fetchData();
-   // }
-  
-  
+
     
     //Crear valores y populate select oficina
     // Hacer API call al backend para descargar el JSON de oficinas y servicios según la provincia seleccionada y filtrar por administración
