@@ -81,9 +81,7 @@ $(document).ready(function () {
     }
   
     // Event listeners de los radios
-    radio_buscador_con_oficina.on('change', RadioOficinaSelected);
-    radio_buscador_por_provincia.on('change', RadioProvinciaSelected);
-  
+
 
 
 
@@ -234,6 +232,8 @@ $(document).ready(function () {
 
         console.log(select_administracion.val());
         console.log(select_provincia.val());
+
+        RadioOficinaSelected();
     });
 
     // Event listener for the 'radio_buscador_por_provincia' element
@@ -244,9 +244,11 @@ $(document).ready(function () {
             select_servicio.val('').empty().append(default_select_servicio).trigger('change');
 
         }
+
+        RadioProvinciaSelected();
     });
 
- 
+
     
 
 
