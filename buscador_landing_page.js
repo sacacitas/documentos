@@ -220,7 +220,7 @@ $(document).ready(function () {
             // Reset the values of the three selects when 'Con Oficina' is selected
             select_servicio.val('').empty().append(default_select_servicio).trigger('change');
             select_oficina.val('').empty().append(default_select_oficina).trigger('change');
-            select_provincia.val('').empty().append(optionElement_provincia).trigger('change');
+            select_provincia.val('').empty().append(default_select_provincias).trigger('change');
 
         }
         
