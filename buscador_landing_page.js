@@ -184,20 +184,15 @@ $(document).ready(function () {
     //Descargar JSON de oficinas cuando se cambia provincia o administración
     select_administracion.on('change', fetchJsonAndPopulateOficina);
     select_provincia.on('change', fetchJsonAndPopulateOficina);
-    
-    //Resetear valor cita previa
-    select_oficina.on('change', updateCitaPrevia);
-    select_provincia.on('change', updateCitaPrevia);
-    select_administracion.on('change', updateCitaPrevia);
-    
-    //Cuando se cambie administración, resetear provincia, oficina y cita previa
+      
+    //Cuando se cambie administración, resetear oficina y cita previa
     select_administracion.on('change', function () {
         // Reset the values of the other three selects
         select_oficina.val('').empty().append(default_select_oficina).trigger('change');
         select_servicio.val('').empty().append(default_select_servicio).trigger('change');
     });
 
-    //Cuando se cambie administración, resetear provincia, oficina y cita previa
+    //Cuando se cambie provincia, resetear oficina y cita previa
     select_provincia.on('change', function () {
         // Reset the values of the other three selects
         select_oficina.val('').empty().append(default_select_oficina).trigger('change');
@@ -230,9 +225,14 @@ $(document).ready(function () {
         }
     });
   
-
-
+    //Resetear valor cita previa cuando se cambie oficina, provincia o administracióna
+    select_oficina.on('change', updateCitaPrevia);
+    select_provincia.on('change', updateCitaPrevia);
+    select_administracion.on('change', updateCitaPrevia);
     
+    
+
+
     //Crear valores y populate select oficina
     // Hacer API call al backend para descargar el JSON de oficinas y servicios según la provincia seleccionada y filtrar por administración
     function fetchJsonAndPopulateOficina() {
