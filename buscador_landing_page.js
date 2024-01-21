@@ -307,14 +307,14 @@ $(document).ready(function () {
 
     //Crear valores y populate select servicios en el bloque izquierdo
     function updateCitaPrevia() {
-      var selectedOficina = select_oficina.val();
-      var selectedAdministracion = select_administracion.val();
+        var selectedOficina = select_oficina.val();
+        var selectedAdministracion = select_administracion.val();
         var selectedProvincia = select_provincia.val();
         var citaPreviaSelect = select_servicio.val();
 
 
 
-      citaPreviaSelect.html('').append(default_select_servicio);
+      //citaPreviaSelect.html('').append(default_select_servicio);
   
       // Check if oficina is selected
       if (selectedOficina && selectedAdministracion && selectedProvincia && radio_buscador_con_oficina) {
