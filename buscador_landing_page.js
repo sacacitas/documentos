@@ -313,7 +313,7 @@ $(document).ready(function () {
         // Find the selected oficina in the external data
         var selectedOficinaData = data.find(item => item.nombre === selectedOficina);
 
-        select_servicio.html('');
+        select_servicio.val('').empty().append(default_select_servicio).trigger('change');
   
         // Check if data is found and servicios is an array 
         if (selectedOficinaData && Array.isArray(selectedOficinaData.servicios)) {
