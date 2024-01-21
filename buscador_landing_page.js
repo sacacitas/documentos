@@ -324,7 +324,7 @@ $(document).ready(function () {
           });
   
           // Trigger change event to refresh the select (if needed)
-          //select_servicio.trigger('change');
+          select_servicio.trigger('change');
         }
       }
     }
