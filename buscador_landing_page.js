@@ -220,9 +220,9 @@ $(document).ready(function () {
             // Reset the values of the three selects when 'Con Oficina' is selected
             select_servicio.val('').empty().append(default_select_servicio).trigger('change');
 
-            // Fetch and populate oficina data
-            fetchJsonAndPopulateOficina();
         }
+        // Fetch and populate oficina data
+        fetchJsonAndPopulateOficina();
     });
 
     // Event listener for the 'radio_buscador_por_provincia' element
