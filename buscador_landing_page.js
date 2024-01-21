@@ -248,7 +248,7 @@ $(document).ready(function () {
             selected: true
         }));
 
-
+        
 
         // Comprobar si Adm, provincia y bsucador por oficina está seleccionado
         if (selectedAdministracion && selectedProvincia) {
@@ -295,8 +295,8 @@ $(document).ready(function () {
         } else {
             // Clear data and reset options for 'js-oficina' and 'js-cita-previa' selects
             data = null;
-            select_oficina.html('').append(default_select_oficina);
-            select_servicio.html('').append(default_select_servicio);
+            //select_oficina.html('').append(default_select_oficina);
+            //select_servicio.html('').append(default_select_servicio);
         }
     }
   
@@ -312,6 +312,8 @@ $(document).ready(function () {
   
         // Find the selected oficina in the external data
         var selectedOficinaData = data.find(item => item.nombre === selectedOficina);
+
+        select_servicio.html('');
   
         // Check if data is found and servicios is an array 
         if (selectedOficinaData && Array.isArray(selectedOficinaData.servicios)) {
