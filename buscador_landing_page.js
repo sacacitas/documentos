@@ -181,24 +181,28 @@ $(document).ready(function () {
   
 
 
-    // Event listeners for changing Administracion or provincia
+    //Descargar JSON de oficinas cuando se cambia provincia o administración
+    select_administracion.on('change', fetchJsonAndPopulateOficina);
+    select_provincia.on('change', fetchJsonAndPopulateOficina);
+    
+    //Resetear valor cita previa
+    select_oficina.on('change', updateCitaPrevia);
+    select_provincia.on('change', updateCitaPrevia);
+    select_administracion.on('change', updateCitaPrevia);
+    
+    //Cuando se cambie administración, resetear provincia, oficina y cita previa
     select_administracion.on('change', function () {
         // Reset the values of the other three selects
         select_oficina.val('').empty().append(default_select_oficina).trigger('change');
         select_servicio.val('').empty().append(default_select_servicio).trigger('change');
     });
 
+    //Cuando se cambie administración, resetear provincia, oficina y cita previa
     select_provincia.on('change', function () {
         // Reset the values of the other three selects
         select_oficina.val('').empty().append(default_select_oficina).trigger('change');
         select_servicio.val('').empty().append(default_select_servicio).trigger('change');
     });
-
-    // Event listener for updating select_oficina
-    select_oficina.on('change', updateCitaPrevia);
-
-    // Event listener for updating select_servicio
-    select_servicio.on('change', updateCitaPrevia);
 
     // Event listener for the 'radio_buscador_con_oficina' element
     radio_buscador_con_oficina.on('change', function () {
@@ -206,9 +210,10 @@ $(document).ready(function () {
             // Reset the values of the three selects when 'Con Oficina' is selected
             select_oficina.val('').empty().append(default_select_oficina).trigger('change');
             select_servicio.val('').empty().append(default_select_servicio).trigger('change');
+            
         }
     });
-
+    
     // Event listener for the 'radio_buscador_por_provincia' element
     radio_buscador_por_provincia.on('change', function () {
         if (radio_buscador_por_provincia.prop('checked')) {
@@ -217,14 +222,7 @@ $(document).ready(function () {
             select_servicio.val('').empty().append(default_select_servicio).trigger('change');
         }
     });
-
-    // Event listener for changing Administracion or provincia
-    select_administracion.on('change', fetchJsonAndPopulateOficina);
-    select_provincia.on('change', fetchJsonAndPopulateOficina);
-
-
-
-
+  
 
 
     
@@ -278,8 +276,8 @@ $(document).ready(function () {
         } else {
             // Clear data and reset options for 'js-oficina' and 'js-cita-previa' selects
             data = null;
-            select_oficina.val('').empty().append(default_select_oficina).trigger('change');
-            select_servicio.val('').empty().append(default_select_servicio).trigger('change');
+            select_oficina.val(null).trigger('change');
+
         }
     }
   
