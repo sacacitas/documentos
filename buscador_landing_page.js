@@ -168,17 +168,26 @@ $(document).ready(function () {
     //Descargar JSON de oficinas cuando se cambia provincia o administración
     select_administracion.on('change', fetchJsonAndPopulateOficina);
     select_provincia.on('change', fetchJsonAndPopulateOficina);
+    
     //Resetear valor cita previa
     select_oficina.on('change', updateCitaPrevia);
     select_provincia.on('change', updateCitaPrevia);
     select_administracion.on('change', updateCitaPrevia);
+    
     //Cuando se cambie administración, resetear provincia, oficina y cita previa
     select_administracion.on('change', function () {
         // Reset the values of the other three selects
         select_oficina.val('').trigger('change');
         select_servicio.val('').trigger('change');
     });
-  
+
+    //Cuando se cambie administración, resetear provincia, oficina y cita previa
+    select_provincia.on('change', function () {
+        // Reset the values of the other three selects
+        select_oficina.val('').trigger('change');
+        select_servicio.val('').trigger('change');
+    });
+    
 
     
     //Crear valores y populate select oficina
