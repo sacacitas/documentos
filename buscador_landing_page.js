@@ -226,17 +226,6 @@ $(document).ready(function () {
     });
     
 
-    // Event listener for the 'radio_buscador_con_oficina' element
-    radio_buscador_con_oficina.on('change', function () {
-        if (radio_buscador_con_oficina.prop('checked')) {
-            // Reset the values of the three selects when 'Con Oficina' is selected
-            select_servicio.val('').empty().append(default_select_servicio).trigger('change');
-
-            // Fetch and populate oficina data
-            fetchJsonAndPopulateOficina();
-        }
-    });
-
 
     // Event listener for the 'radio_buscador_por_provincia' element
     radio_buscador_por_provincia.on('change', function () {
@@ -321,7 +310,7 @@ $(document).ready(function () {
         }
     }
   
-
+    //Crear valores y populate select servicio
     function updateCitaPrevia() {
         var selectedOficina = select_oficina.val();
         var selectedAdministracion = select_administracion.val();
