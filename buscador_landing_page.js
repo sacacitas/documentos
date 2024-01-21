@@ -179,7 +179,11 @@ $(document).ready(function () {
     var apiBaseUrl = 'https://panelaws.sacacitas.es/public/oficina/';
   
   
-
+    //Resetear valor cita previa cuando se cambie oficina, provincia o administracióna
+    select_oficina.on('change', updateCitaPrevia);
+    select_provincia.on('change', updateCitaPrevia);
+    select_administracion.on('change', updateCitaPrevia);
+   
 
     //Descargar JSON de oficinas cuando se cambia provincia o administración
     select_administracion.on('change', fetchJsonAndPopulateOficina);
@@ -225,11 +229,7 @@ $(document).ready(function () {
         }
     });
   
-    //Resetear valor cita previa cuando se cambie oficina, provincia o administracióna
-    select_oficina.on('change', updateCitaPrevia);
-    select_provincia.on('change', updateCitaPrevia);
-    select_administracion.on('change', updateCitaPrevia);
-    
+ 
     
 
 
