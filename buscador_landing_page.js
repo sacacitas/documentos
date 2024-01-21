@@ -232,8 +232,7 @@ $(document).ready(function () {
             select_oficina.val('').empty().append(default_select_oficina).trigger('change');
             select_servicio.val('').empty().append(default_select_servicio).trigger('change');
 
-            // Fetch and populate oficina data
-            fetchJsonAndPopulateOficina();
+
         }
     });
 
@@ -292,7 +291,7 @@ $(document).ready(function () {
                     });
   
                     // Set default value and trigger change event
-                    select_oficina.val(default_select_oficina.val()).trigger('change');
+                    //select_oficina.val(default_select_oficina.val()).trigger('change');
 
                     
                 },
