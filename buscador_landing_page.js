@@ -261,9 +261,12 @@ $(document).ready(function () {
         }));
 
         
-
+        console.log(selectedAdministracion);
+        console.log(selectedProvincia);
         // Comprobar si Adm, provincia y bsucador por oficina está seleccionado
         if (selectedAdministracion && selectedProvincia) {
+            console.log(selectedAdministracion);
+            console.log(selectedProvincia);
             // Build the API URL with the selected provincia
             var apiUrl = apiBaseUrl + selectedProvincia;
   
