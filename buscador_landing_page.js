@@ -219,9 +219,8 @@ $(document).ready(function () {
         if (radio_buscador_con_oficina.prop('checked')) {
             // Reset the values of the three selects when 'Con Oficina' is selected
             select_servicio.val('').empty().append(default_select_servicio).trigger('change');
-            
-            // Fetch and populate oficina data
-            fetchJsonAndPopulateOficina();
+            select_oficina.val('').empty().append(default_select_oficina).trigger('change');
+            select_provincia.val('').empty().append(optionElement_provincia).trigger('change');
 
         }
         
