@@ -309,7 +309,7 @@ $(document).ready(function () {
       //var selectedCitaPrevia = select_servicio.val();
   
       // Check if oficina is selected
-      if (selectedOficina && selectedAdministracion && selectedProvincia) {
+      if (selectedOficina && selectedAdministracion && selectedProvincia && radio_buscador_con_oficina.prop('checked')) {
   
         // Find the selected oficina in the external data
         var selectedOficinaData = data.find(item => item.nombre === selectedOficina);
