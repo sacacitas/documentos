@@ -80,7 +80,7 @@ $(document).ready(function () {
     radio_buscador_con_oficina.on('change', RadioOficinaSelected);
     radio_buscador_por_provincia.on('change', RadioProvinciaSelected);
   
-  // 1. PRIMERA PARTE BUSCADOR -> Lista estática de administración y provincias
+// 1. PRIMERA PARTE BUSCADOR -> Lista estática de administración y provincias
     // Crear valores en el select de la Administración
     var values_select_administracion = [
         { value: 'EX1', text: 'Extranjería' },
@@ -156,7 +156,7 @@ $(document).ready(function () {
     });
   
   
-  // 2. SEGUNDA PARTE BUSCADOR -> Lista dinámica de oficinas y servicios desde el backend
+// 2. SEGUNDA PARTE BUSCADOR -> Lista dinámica de oficinas y servicios desde el backend
     // Importar JSON externos de lista oficina_servicios y sus precios por categorías
     const lista_oficina_servicios_json = 'https://documentos.sacacitas.es/categorias_servicios.json';
     const precios_citas_categorias_json = 'https://documentos.sacacitas.es/precios_citas.json';
@@ -173,19 +173,19 @@ $(document).ready(function () {
   
   
     // Resetear cosas cuando administracion o provincia se cambia
-    function fetchJsonAndPopulateOficina() {
+   // function fetchJsonAndPopulateOficina() {
       // Reset the selection in 'js-oficina' select to default
-      oficinaSelect.val(defaultOficinaOption.val());
+    //  oficinaSelect.val(defaultOficinaOption.val());
   
       // Reset the selection in 'js-cita-previa' select to default
-      citaPreviaSelect.val(defaultCitaPreviaOption.val());
+      //citaPreviaSelect.val(defaultCitaPreviaOption.val());
   
       // Clear existing options for 'js-cita-previa' select
-      citaPreviaSelect.html('').append(defaultCitaPreviaOption);
+      //citaPreviaSelect.html('').append(defaultCitaPreviaOption);
   
       // Call the fetchData function
-      fetchData();
-    }
+   //   fetchData();
+   // }
   
   
     
@@ -245,7 +245,6 @@ $(document).ready(function () {
   
   
     //Activar multiselect para el select de Servicios
-  
     // In your Javascript (external .js resource or <script> tag)
     $(document).ready(function() {
       $('.js-example').select2();
