@@ -55,6 +55,7 @@ $(document).ready(function () {
     // Preselect del radio con oficina
     $('#radio-buscar-con-oficina').prop('checked', true);
     $('#box-buscar-con-oficina').addClass('selected-radio-buscador');
+    $('select-buscador-administracion').addClass('selected-radio-buscador');
   
     // Variables de los radios
     var radio_buscador_con_oficina = $('#radio-buscar-con-oficina');
