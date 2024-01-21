@@ -55,7 +55,6 @@ $(document).ready(function () {
     // Preselect del radio con oficina
     $('#radio-buscar-con-oficina').prop('checked', true);
     $('#box-buscar-con-oficina').addClass('selected-radio-buscador');
-    $('select-buscador-administracion').addClass('selected-radio-buscador');
   
     // Variables de los radios
     var radio_buscador_con_oficina = $('#radio-buscar-con-oficina');
@@ -221,12 +220,10 @@ $(document).ready(function () {
             // Reset the values of the three selects when 'Con Oficina' is selected
             select_servicio.val('').empty().append(default_select_servicio).trigger('change');
 
+            // Fetch and populate oficina data
             fetchJsonAndPopulateOficina();
-            
         }
     });
-    
-
 
     // Event listener for the 'radio_buscador_por_provincia' element
     radio_buscador_por_provincia.on('change', function () {
@@ -235,11 +232,11 @@ $(document).ready(function () {
             select_oficina.val('').empty().append(default_select_oficina).trigger('change');
             select_servicio.val('').empty().append(default_select_servicio).trigger('change');
 
-
+            // Fetch and populate oficina data
+            fetchJsonAndPopulateOficina();
         }
-
     });
-  
+
  
     
 
