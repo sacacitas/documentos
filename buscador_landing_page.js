@@ -204,6 +204,13 @@ $(document).ready(function () {
         select_servicio.val('').empty().append(default_select_servicio).trigger('change');
     });
 
+    //Cuando se cambie administración, resetear provincia, oficina y cita previa
+    select_oficina.on('change', function () {
+        // Reset the values of the other three selects
+        select_servicio.val('').empty().append(default_select_servicio).trigger('change');
+    });
+
+
     // Event listener for the 'radio_buscador_con_oficina' element
     radio_buscador_con_oficina.on('change', function () {
         if (radio_buscador_con_oficina.prop('checked')) {
