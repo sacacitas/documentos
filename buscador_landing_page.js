@@ -311,7 +311,7 @@ $(document).ready(function () {
         var selectedProvincia = select_provincia.val();
     
         // Clear existing options in select_servicio
-        select_servicio.empty().trigger('change');
+        select_servicio.empty();
     
         // Check if oficina is selected
         if (selectedOficina && selectedAdministracion && selectedProvincia && radio_buscador_con_oficina) {
