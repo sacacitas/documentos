@@ -222,12 +222,14 @@ $(document).ready(function () {
             // Reset the values of the three selects when 'Con Oficina' is selected
             select_servicio.val('').empty().append(default_select_servicio).trigger('change');
 
+            console.log(select_administracion.val());
+            console.log(select_provincia.val());
+
             // Check if select_administracion and select_provincia are selected
             if (select_administracion.val() && select_provincia.val()) {
                 fetchJsonAndPopulateOficina();
                 console.log('fetchJsonAndPopulateOficina');
-                console.log(select_administracion.val());
-                console.log(select_provincia.val());
+
             }
         }
     });
