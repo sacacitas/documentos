@@ -168,6 +168,7 @@ $(document).ready(function () {
     // Event listeners de los selects
     select_administracion.on('change', fetchJsonAndPopulateOficina);
     select_provincia.on('change', fetchJsonAndPopulateOficina);
+    select_servicio.on('change', updateCitaPrevia);
     select_oficina.on('change', updateCitaPrevia);
     select_provincia.on('change', updateCitaPrevia);
     select_administracion.on('change', updateCitaPrevia);
@@ -285,8 +286,7 @@ $(document).ready(function () {
 
 
 
-
-    //Sección de citas previas seleccionadas bloque derecho
+//3.Sección de citas previas seleccionadas bloque derecho
     var checkoutContainer = $('#bloque-items-citas');
     var maxCheckoutItems = 15; //Items máximos que se pueden añadir
     //Event listener del select de servicios
