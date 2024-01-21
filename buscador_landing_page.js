@@ -246,9 +246,6 @@ $(document).ready(function () {
             select_servicio.val('').empty().append(default_select_servicio).trigger('change');
 
 
-            // Fetch and populate oficina data
-            fetchJsonAndPopulateOficina();
-
         }
 
     });
@@ -334,7 +331,7 @@ $(document).ready(function () {
         select_servicio.empty().append(default_select_servicio);
     
         // Check if oficina is selected
-        if (selectedOficina && selectedAdministracion && selectedProvincia && radio_buscador_con_oficina) {
+        if (selectedOficina && selectedAdministracion && selectedProvincia && radio_buscador_con_oficina.prop('checked')) {
       
             // Find the selected oficina in the external data
             var selectedOficinaData = data.find(item => item.nombre === selectedOficina);
