@@ -45,6 +45,10 @@ $(document).ready(function () {
     });
     select_servicio.append(default_select_servicio);
   
+
+
+
+
 // Tipo de buscador (si buscar con oficina o toda la provincia) -> Únicamente estilos y funcionalidades.
     // (La parte de crear valores está en la segunda parte)
   
@@ -80,6 +84,12 @@ $(document).ready(function () {
     radio_buscador_con_oficina.on('change', RadioOficinaSelected);
     radio_buscador_por_provincia.on('change', RadioProvinciaSelected);
   
+
+
+
+
+
+
 // 1. PRIMERA PARTE BUSCADOR -> Lista estática de administración y provincias
     // Crear valores en el select de la Administración
     var values_select_administracion = [
@@ -155,6 +165,10 @@ $(document).ready(function () {
         select_provincia.append(optionElement_provincia);
     });
   
+
+
+
+
   
 // 2. SEGUNDA PARTE BUSCADOR -> Lista dinámica de oficinas y servicios desde el backend
     // Importar JSON externos de lista oficina_servicios y sus precios por categorías
@@ -165,6 +179,8 @@ $(document).ready(function () {
     var apiBaseUrl = 'https://panelaws.sacacitas.es/public/oficina/';
   
   
+
+
     //Descargar JSON de oficinas cuando se cambia provincia o administración
     select_administracion.on('change', fetchJsonAndPopulateOficina);
     select_provincia.on('change', fetchJsonAndPopulateOficina);
@@ -177,23 +193,24 @@ $(document).ready(function () {
     //Cuando se cambie administración, resetear provincia, oficina y cita previa
     select_administracion.on('change', function () {
         // Reset the values of the other three selects
-        select_oficina.val('').trigger('change');
-        select_servicio.val('').trigger('change');
+        select_oficina.val('').empty().trigger('change');
+        select_servicio.val('').empty().trigger('change');
     });
 
     //Cuando se cambie administración, resetear provincia, oficina y cita previa
     select_provincia.on('change', function () {
         // Reset the values of the other three selects
-        select_oficina.val('').trigger('change');
-        select_servicio.val('').trigger('change');
+        select_oficina.val('').empty().trigger('change');
+        select_servicio.val('').empty().trigger('change');
     });
 
     // Event listener for the 'radio_buscador_con_oficina' element
     radio_buscador_con_oficina.on('change', function () {
         if (radio_buscador_con_oficina.prop('checked')) {
             // Reset the values of the three selects when 'Con Oficina' is selected
-            select_oficina.val('').trigger('change');
-            select_servicio.val('').trigger('change');
+            select_oficina.val('').empty().trigger('change');
+            select_servicio.val('').empty().trigger('change');
+            
         }
     });
     
@@ -201,11 +218,13 @@ $(document).ready(function () {
     radio_buscador_por_provincia.on('change', function () {
         if (radio_buscador_por_provincia.prop('checked')) {
             // Reset the values of the three selects when 'Con Oficina' is selected
-            select_oficina.val('').trigger('change');
-            select_servicio.val('').trigger('change');
+            select_oficina.val('').empty().trigger('change');
+            select_servicio.val('').empty().trigger('change');
         }
     });
   
+
+
     
     //Crear valores y populate select oficina
     // Hacer API call al backend para descargar el JSON de oficinas y servicios según la provincia seleccionada y filtrar por administración
