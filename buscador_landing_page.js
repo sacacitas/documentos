@@ -243,76 +243,56 @@ $(document).ready(function () {
 
 
 
-        function fetchJsonAndPopulateOficina() {
-            var selectedAdministracion = select_administracion.val();
-            var selectedProvincia = select_provincia.val();
-        
-            // Show loading message in select_oficina
-            select_oficina.html('').append($('<option>', {
-                value: '',
-                text: 'Loading...',
-                disabled: true,
-                selected: true
-            }));
-        
-            // Check if Adm, provincia y bsucador por oficina está seleccionado
-            if (selectedAdministracion && selectedProvincia) {
-                var apiUrl = apiBaseUrl + selectedProvincia;
-        
-                $.ajax({
-                    url: apiUrl,
-                    method: 'GET',
-                    dataType: 'json',
-                    beforeSend: function () {
-                        // This function will be called before the request is sent
-                        // You can further customize the loading message here if needed
-                    },
-                    success: function (responseData) {
-                        data = responseData;
-                        select_oficina.html('').append(default_select_oficina);
-        
-                        var filteredData = data.filter(item => {
-                            if (selectedAdministracion === 'EX1') {
-                                return item.id_oficina.toLowerCase().includes('gobext');
-                            } else if (selectedAdministracion === 'RC1') {
-                                return !item.id_oficina.toLowerCase().includes('gobext');
-                            }
-                            return false;
-                        });
-        
-                        $.each(filteredData, function (index, item) {
-                            var optionElement = $('<option></option>').prop('value', item.nombre).text(item.nombre);
-                            select_oficina.append(optionElement);
-                        });
-        
-                        // Set default value and trigger change event
-                        select_oficina.val(default_select_oficina.val()).trigger('change');
-                    },
-                    error: function (error) {
-                        console.error('Error fetching data:', error);
-                        // Display an error message in the select_oficina on error
-                        select_oficina.html('').append($('<option>', {
-                            value: '',
-                            text: 'Error loading data',
-                            disabled: true,
-                            selected: true
-                        }));
-                    },
-                    complete: function () {
-                        // This function will be called regardless of success or error
-                        // You can further customize this if needed
-                    }
-                });
-            } else {
-                data = null;
-                select_oficina.html('').append(default_select_oficina);
-                select_servicio.html('').append(default_select_servicio);
-            }
+        // Comprobar si Adm, provincia y bsucador por oficina está seleccionado
+        if (selectedAdministracion && selectedProvincia) {
+            // Build the API URL with the selected provincia
+            var apiUrl = apiBaseUrl + selectedProvincia;
+  
+            // API call para descargar el JSON de oficinas y servicios del backend
+            $.ajax({
+                url: apiUrl,
+                method: 'GET',
+                dataType: 'json',
+                success: function (responseData) {
+                    data = responseData; // Set the data variable with the response
+                    // Populate oficina select con los textos importados del json
+                    select_oficina.html('').append(default_select_oficina);
+  
+                    // Mostrar en el select oficinas dependiendo de la administración seleccionada
+                    var filteredData = data.filter(item => {
+                        if (selectedAdministracion === 'EX1') {
+                            // Show names where id_oficina starts with "gobext"
+                            return item.id_oficina.toLowerCase().includes('gobext');
+                        } else if (selectedAdministracion === 'RC1') {
+                            // Show names where id_oficina does not start with "gobext"
+                            return !item.id_oficina.toLowerCase().includes('gobext');
+                        }
+                        return false;
+                    });
+  
+                    // Populate oficina select options with external data
+                    $.each(filteredData, function (index, item) {
+                        var optionElement = $('<option></option>').prop('value', item.nombre).text(item.nombre);
+                        select_oficina.append(optionElement);
+                    });
+  
+                    // Set default value and trigger change event
+                    select_oficina.val(default_select_oficina.val()).trigger('change');
+
+                    
+                },
+                error: function (error) {
+                    console.error('Error fetching data:', error);
+                }
+            });
+        } else {
+            // Clear data and reset options for 'js-oficina' and 'js-cita-previa' selects
+            data = null;
+            select_oficina.html('').append(default_select_oficina);
+            select_servicio.html('').append(default_select_servicio);
         }
-
-        
-
-        
+    }
+  
 
     //Crear valores y populate select servicios en el bloque izquierdo
     function updateCitaPrevia() {
