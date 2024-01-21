@@ -237,6 +237,17 @@ $(document).ready(function () {
     });
 
 
+    radio_buscador_con_oficina.on('change', function () {
+        if (radio_buscador_con_oficina.prop('checked')) {
+            
+            console.log('Con oficina');
+            console.log(radio_buscador_con_oficina.prop('checked'));
+            console.log(radio_buscador_por_provincia.prop('checked'));
+
+        }
+    });
+
+    
 
     radio_buscador_con_oficina.on('change', fetchJsonAndPopulateOficina);
 
