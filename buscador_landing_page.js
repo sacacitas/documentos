@@ -243,17 +243,11 @@ $(document).ready(function () {
         }
     }
   
-  
-    //Activar multiselect para el select de Servicios
-    // In your Javascript (external .js resource or <script> tag)
-    $(document).ready(function() {
-      $('.js-example').select2();
-    });  
-  
-    //Crear valores y populate select servicios
+
+    //Crear valores y populate select servicios en el bloque izquierdo
     function updateCitaPrevia() {
       var selectedOficina = select_oficina.val();
-      var selectedCitaPrevia = select_servicio.val();
+      //var selectedCitaPrevia = select_servicio.val();
   
       // Check if oficina is selected
       if (selectedOficina) {
