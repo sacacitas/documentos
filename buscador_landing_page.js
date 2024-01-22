@@ -4,6 +4,7 @@ $(document).ready(function () {
     var select_provincia = $('#select-buscador-provincia');
     var select_oficina = $('#select-buscador-oficina');
     var select_servicio = $('#select-buscador-servicio');
+    var numero_citas_contador = $('numero-citas-seleccionadas-buscador');
   
     // Variables IDs de info secundaria
     var string_precio_buscador = $('#precio-total-buscador-landing');
@@ -454,6 +455,22 @@ $(document).ready(function () {
     
 
 
+    // Counter for the number of select_servicio items selected
+    var numero_citas_contador = 0;
+
+    // Update and display the counter
+    function updateNumeroCitasCounter() {
+        $('#numero-citas-seleccionadas-buscador').text(numero_citas_contador);
+    }
+
+    // Event listener for the 'change' event on select_servicio
+    select_servicio.on('change', function () {
+        // Increment or decrement the counter based on the selection
+        numero_citas_contador = select_servicio.val() ? numero_citas_contador + 1 : Math.max(numero_citas_contador - 1, 0);
+
+        // Update and display the counter
+        updateNumeroCitasCounter();
+    });
 
 
 
