@@ -194,19 +194,23 @@ $(document).ready(function () {
         console.log(selectedAdministracion);
         console.log(selectedProvincia);
 
-        // Show loading message in select_oficina
-        select_oficina.html('').append($('<option>', {
-            value: '',
-            text: 'Cargando...',
-            disabled: true,
-            selected: true
-        }));
 
         
         console.log(selectedAdministracion);
         console.log(selectedProvincia);
         // Comprobar si Adm, provincia y bsucador por oficina está seleccionado
         if (selectedAdministracion && selectedProvincia) {
+            
+            
+            // Show loading message in select_oficina
+            select_oficina.html('').append($('<option>', {
+                value: '',
+                text: 'Cargando...',
+                disabled: true,
+                selected: true
+            }));
+                
+            
             console.log(selectedAdministracion);
             console.log(selectedProvincia);
             // Build the API URL with the selected provincia
