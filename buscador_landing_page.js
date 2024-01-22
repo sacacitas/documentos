@@ -307,68 +307,9 @@ $(document).ready(function () {
     
   
 
-    // Reset values and update cita previa function
-    function resetValuesAndUpdateCitaPrevia() {
-        // Reset the values of the other three selects
-        select_oficina.val('').empty().append(default_select_oficina);
-        select_servicio.val('').empty().append(default_select_servicio);
-        fetchJsonAndPopulateOficina();
-        updateCitaPrevia();
-    }
-
-    // Reset values and update cita previa function
-    function resetOficinaAndUpdateCitaPrevia() {
-        // Reset the values of the other three selects
-        select_servicio.val('').empty().append(default_select_servicio);
-        updateCitaPrevia();
-    }
 
 
-
-    // Event listener for the 'radio_buscador_con_oficina' element
-    radio_buscador_con_oficina.on('change', function () {
-        if (radio_buscador_con_oficina.prop('checked')) {
-            // Reset the values of the three selects when 'Con Oficina' is selected
-            resetValuesAndUpdateCitaPrevia();
-            // Fetch and populate oficinas
-            //fetchJsonAndPopulateOficina();
-        }
-    });
-
-    // Event listener for the 'radio_buscador_por_provincia' element
-    radio_buscador_por_provincia.on('change', function () {
-        if (radio_buscador_por_provincia.prop('checked')) {
-            // Reset the values of the three selects when 'Por Provincia' is selected
-            resetValuesAndUpdateCitaPrevia();
-        }
-    });
-
-
-    // Attach the common change listener to select_administracion and select_provincia
-    select_administracion.on('change', resetValuesAndUpdateCitaPrevia);
-    select_provincia.on('change', resetValuesAndUpdateCitaPrevia);
-
-    // Event listener for the 'change' event on select_oficina
-    select_oficina.on('change', function () {
-        // Update cita previa when oficina changes
-        resetOficinaAndUpdateCitaPrevia();
-    });
-
-
-    
-    
-
-
-
-
-
-
-
-
-
-
-
-//3.Sección de citas previas seleccionadas bloque derecho
+    //3.Sección de citas previas seleccionadas bloque derecho
     var checkoutContainer = $('#bloque-items-citas');
     var maxCheckoutItems = 15; //Items máximos que se pueden añadir
     //Event listener del select de servicios
@@ -454,6 +395,74 @@ $(document).ready(function () {
         //Resetear select de servicios cuando se añade una cita
         select_servicio.val(null).trigger('change');
     });
+
+
+
+
+
+
+
+    // Reset values and update cita previa function
+    function resetValuesAndUpdateCitaPrevia() {
+        // Reset the values of the other three selects
+        select_oficina.val('').empty().append(default_select_oficina);
+        select_servicio.val('').empty().append(default_select_servicio);
+        fetchJsonAndPopulateOficina();
+        updateCitaPrevia();
+    }
+
+    // Reset values and update cita previa function
+    function resetOficinaAndUpdateCitaPrevia() {
+        // Reset the values of the other three selects
+        select_servicio.val('').empty().append(default_select_servicio);
+        updateCitaPrevia();
+    }
+
+
+
+    // Event listener for the 'radio_buscador_con_oficina' element
+    radio_buscador_con_oficina.on('change', function () {
+        if (radio_buscador_con_oficina.prop('checked')) {
+            // Reset the values of the three selects when 'Con Oficina' is selected
+            resetValuesAndUpdateCitaPrevia();
+            // Fetch and populate oficinas
+            //fetchJsonAndPopulateOficina();
+        }
+    });
+
+    // Event listener for the 'radio_buscador_por_provincia' element
+    radio_buscador_por_provincia.on('change', function () {
+        if (radio_buscador_por_provincia.prop('checked')) {
+            // Reset the values of the three selects when 'Por Provincia' is selected
+            resetValuesAndUpdateCitaPrevia();
+        }
+    });
+
+
+    // Attach the common change listener to select_administracion and select_provincia
+    select_administracion.on('change', resetValuesAndUpdateCitaPrevia);
+    select_provincia.on('change', resetValuesAndUpdateCitaPrevia);
+
+    // Event listener for the 'change' event on select_oficina
+    select_oficina.on('change', function () {
+        // Update cita previa when oficina changes
+        resetOficinaAndUpdateCitaPrevia();
+    });
+
+
+    
+    
+
+
+
+
+
+
+
+
+
+
+
 
 
 
