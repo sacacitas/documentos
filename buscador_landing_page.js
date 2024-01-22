@@ -267,7 +267,7 @@ $(document).ready(function () {
         var selectedProvincia = select_provincia.val();
     
         // Clear existing options in select_servicio
-        //select_servicio.empty().append(default_select_servicio);
+        select_servicio.empty().append(default_select_servicio);
     
         // Check if oficina is selected
         if (selectedOficina && selectedAdministracion && selectedProvincia && radio_buscador_con_oficina.prop('checked')) {
@@ -311,6 +311,15 @@ $(document).ready(function () {
         updateCitaPrevia();
     }
 
+    // Reset values and update cita previa function
+    function resetOficinaAndUpdateCitaPrevia() {
+        // Reset the values of the other three selects
+        select_servicio.val('').empty().append(default_select_servicio);
+        updateCitaPrevia();
+    }
+
+
+
     // Event listener for the 'radio_buscador_con_oficina' element
     radio_buscador_con_oficina.on('change', function () {
         if (radio_buscador_con_oficina.prop('checked')) {
@@ -329,27 +338,22 @@ $(document).ready(function () {
         }
     });
 
-    // Common event listener for both select_administracion and select_provincia
-    var commonChangeListener = function () {
-        // Reset the values of the other three selects
-        resetValuesAndUpdateCitaPrevia();
-    };
 
     // Attach the common change listener to select_administracion and select_provincia
-    select_administracion.on('change', commonChangeListener);
-    select_provincia.on('change', commonChangeListener);
+    select_administracion.on('change', resetValuesAndUpdateCitaPrevia);
+    select_provincia.on('change', resetValuesAndUpdateCitaPrevia);
 
     // Event listener for the 'change' event on select_oficina
     select_oficina.on('change', function () {
         // Update cita previa when oficina changes
-        updateCitaPrevia();
+        resetOficinaAndUpdateCitaPrevia();
     });
 
     // Event listener for the 'change' event on select_servicio
-    select_servicio.on('change', function () {
+   // select_servicio.on('change', function () {
         // Your existing implementation for updating cita previa based on selected servicio
         // ...
-    });
+    //});
 
 
     
