@@ -179,12 +179,9 @@ $(document).ready(function () {
     // Variables backend
     var apiBaseUrl = 'https://panelaws.sacacitas.es/public/oficina/';
   
-  
-    //Resetear valor cita previa cuando se cambie oficina, provincia o administracióna
-    //select_oficina.on('change', updateCitaPrevia);
-    //select_provincia.on('change', updateCitaPrevia);
-    //select_administracion.on('change', updateCitaPrevia);
    
+    //Contador número de citas seleccionadas
+    var numero_citas_contador = 0;
 
 
     //Crear valores y populate select oficina
@@ -308,6 +305,11 @@ $(document).ready(function () {
     
   
 
+    //Cuando se activen uno de los dos triggers, se cambiará el texto con el valor
+    function updateNumeroCitasCounter() {
+        $('#numero-citas-seleccionadas-buscador').text(numero_citas_contador);
+    }
+
 
 
     //3.Sección de citas previas seleccionadas bloque derecho
@@ -374,14 +376,22 @@ $(document).ready(function () {
                 'cursor': 'pointer'
             });
 
-            //Función para borrar cita seleccionada
+            // Función para borrar cita seleccionada
             var deleteButton = checkoutItem.find('.delete-item');
             deleteButton.on('click', function () {
                 // Remove the item when the delete button is clicked
                 checkoutItem.remove();
+
+                // If the counter is greater than 0, decrement it
+                numero_citas_contador = select_servicio.val() ? numero_citas_contador - 1 : Math.max(numero_citas_contador - 1, 0);
+
+                // Update and display the counter
+                updateNumeroCitasCounter();
+
+                // Enable select_servicio if the maximum number of items is not reached
                 if (checkoutContainer.children('.checkout-item').length < maxCheckoutItems) {
                     select_servicio.prop('disabled', false);
-                }                
+                }
             });
 
             // Append the checkout item to the checkout container
@@ -455,18 +465,11 @@ $(document).ready(function () {
     
 
 
-    // Counter for the number of select_servicio items selected
-    var numero_citas_contador = 0;
-
-    // Update and display the counter
-    function updateNumeroCitasCounter() {
-        $('#numero-citas-seleccionadas-buscador').text(numero_citas_contador);
-    }
 
     // Event listener for the 'change' event on select_servicio
     select_servicio.on('change', function () {
         // Increment or decrement the counter based on the selection
-        numero_citas_contador = select_servicio.val() ? numero_citas_contador + 1 : Math.max(numero_citas_contador - 1, 0);
+        numero_citas_contador = select_servicio.val() ? numero_citas_contador -1 : Math.max(numero_citas_contador - 1, 0);
 
         // Update and display the counter
         updateNumeroCitasCounter();
