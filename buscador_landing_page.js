@@ -308,6 +308,7 @@ $(document).ready(function () {
         // Reset the values of the other three selects
         select_oficina.val('').empty().append(default_select_oficina);
         select_servicio.val('').empty().append(default_select_servicio);
+        fetchJsonAndPopulateOficina();
         updateCitaPrevia();
     }
 
@@ -326,7 +327,7 @@ $(document).ready(function () {
             // Reset the values of the three selects when 'Con Oficina' is selected
             resetValuesAndUpdateCitaPrevia();
             // Fetch and populate oficinas
-            fetchJsonAndPopulateOficina();
+            //fetchJsonAndPopulateOficina();
         }
     });
 
@@ -349,13 +350,8 @@ $(document).ready(function () {
         resetOficinaAndUpdateCitaPrevia();
     });
 
-    // Event listener for the 'change' event on select_servicio
-   // select_servicio.on('change', function () {
-        // Your existing implementation for updating cita previa based on selected servicio
-        // ...
-    //});
 
-
+    
     
 
 
