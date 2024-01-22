@@ -393,7 +393,7 @@ $(document).ready(function () {
         }
 
         //Resetear select de servicios cuando se añade una cita
-        select_servicio.val(null).trigger('change');
+        //select_servicio.val(null).trigger('change');
     });
 
 
