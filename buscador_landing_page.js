@@ -319,12 +319,7 @@ $(document).ready(function () {
     select_servicio.on('change', function () {
         
         
-        //Incrementar contador de citas seleccionadas
-        numero_citas_contador = select_servicio.val() ? numero_citas_contador +1 : Math.max(numero_citas_contador - 1, 0);
-
-        //Ejecutar función para actualizar el número de citas seleccionadas
-        updateNumeroCitasCounter();        
-        
+ 
         // Get the selected values
         var selectedProvincia = select_provincia.val();
         var selectedOficina = select_oficina.val();
@@ -332,6 +327,15 @@ $(document).ready(function () {
 
         // Check if all values are selected
         if (selectedProvincia && selectedOficina && selectedServicio) {
+            
+            
+            //Incrementar contador de citas seleccionadas
+            numero_citas_contador = select_servicio.val() ? numero_citas_contador +1 : Math.max(numero_citas_contador - 1, 0);
+
+            //Ejecutar función para actualizar el número de citas seleccionadas
+            updateNumeroCitasCounter();        
+                    
+            
             // Create a new div with a personalized HTML structure for the checkout item
             var checkoutItem = $('<div class="checkout-item">' +
                 '<div class="column wide-column">' +
