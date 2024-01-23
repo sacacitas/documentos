@@ -317,6 +317,14 @@ $(document).ready(function () {
     var maxCheckoutItems = 15; //Items máximos que se pueden añadir
     //Event listener del select de servicios
     select_servicio.on('change', function () {
+        
+        
+        //Incrementar contador de citas seleccionadas
+        numero_citas_contador = select_servicio.val() ? numero_citas_contador +1 : Math.max(numero_citas_contador - 1, 0);
+
+        //Ejecutar función para actualizar el número de citas seleccionadas
+        updateNumeroCitasCounter();        
+        
         // Get the selected values
         var selectedProvincia = select_provincia.val();
         var selectedOficina = select_oficina.val();
@@ -403,11 +411,7 @@ $(document).ready(function () {
             }
         }
 
-        // Increment or decrement the counter based on the selection
-        numero_citas_contador = select_servicio.val() ? numero_citas_contador +1 : Math.max(numero_citas_contador - 1, 0);
 
-        // Update and display the counter
-        updateNumeroCitasCounter();
         
     });
 
