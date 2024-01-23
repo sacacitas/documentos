@@ -466,18 +466,6 @@ $(document).ready(function () {
 
 
     
-    
-
-
-
-    // Event listener for the 'change' event on select_servicio
-    select_servicio.on('change', function () {
-
-    });
-
-
-
-
 
 
 
