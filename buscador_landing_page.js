@@ -469,7 +469,7 @@ $(document).ready(function () {
     // Event listener for the 'change' event on select_servicio
     select_servicio.on('change', function () {
         // Increment or decrement the counter based on the selection
-        numero_citas_contador = select_servicio.val() ? numero_citas_contador -1 : Math.max(numero_citas_contador - 1, 0);
+        numero_citas_contador = select_servicio.val() ? numero_citas_contador +1 : Math.max(numero_citas_contador - 1, 0);
 
         // Update and display the counter
         updateNumeroCitasCounter();
