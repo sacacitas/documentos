@@ -252,14 +252,6 @@ function fetchJsonAndPopulateOficina() {
     } else {
         // Clear data and reset options for 'js-oficina' and 'js-cita-previa' selects
         data = null;
-        // Display a default message in select_oficina
-        select_oficina.html('').append($('<option>', {
-            value: '',
-            text: 'Selecciona Administración y Provincia',
-            disabled: true,
-            selected: true
-        }));
-        //select_servicio.html('').append(default_select_servicio);
     }
 }
 
