@@ -184,81 +184,85 @@ $(document).ready(function () {
     var numero_citas_contador = 0;
 
 
-    //Crear valores y populate select oficina
-    // Hacer API call al backend para descargar el JSON de oficinas y servicios según la provincia seleccionada y filtrar por administración
-    function fetchJsonAndPopulateOficina() {
-        var selectedAdministracion = select_administracion.val();
-        var selectedProvincia = select_provincia.val();
-        console.log(selectedAdministracion);
-        console.log(selectedProvincia);
 
+    
+//Crear valores y populate select oficina
+// Hacer API call al backend para descargar el JSON de oficinas y servicios según la provincia seleccionada y filtrar por administración
+function fetchJsonAndPopulateOficina() {
+    var selectedAdministracion = select_administracion.val();
+    var selectedProvincia = select_provincia.val();
 
-        
-        console.log(selectedAdministracion);
-        console.log(selectedProvincia);
-        // Comprobar si Adm, provincia y bsucador por oficina está seleccionado
-        if (selectedAdministracion && selectedProvincia) {
-            
-            
-            // Show loading message in select_oficina
-            select_oficina.html('').append($('<option>', {
-                value: '',
-                text: 'Cargando...',
-                disabled: true,
-                selected: true
-            }));
-                
-            
-            console.log(selectedAdministracion);
-            console.log(selectedProvincia);
-            // Build the API URL with the selected provincia
-            var apiUrl = apiBaseUrl + selectedProvincia;
-  
-            // API call para descargar el JSON de oficinas y servicios del backend
-            $.ajax({
-                url: apiUrl,
-                method: 'GET',
-                dataType: 'json',
-                success: function (responseData) {
-                    data = responseData; // Set the data variable with the response
-                    // Populate oficina select con los textos importados del json
-                    select_oficina.html('').append(default_select_oficina);
-  
-                    // Mostrar en el select oficinas dependiendo de la administración seleccionada
-                    var filteredData = data.filter(item => {
-                        if (selectedAdministracion === 'EX1') {
-                            // Show names where id_oficina starts with "gobext"
-                            return item.id_oficina.toLowerCase().includes('gobext');
-                        } else if (selectedAdministracion === 'RC1') {
-                            // Show names where id_oficina does not start with "gobext"
-                            return !item.id_oficina.toLowerCase().includes('gobext');
-                        }
-                        return false;
-                    });
-  
+    // Comprobar si Adm, provincia y buscador por oficina está seleccionado
+    if (selectedAdministracion && selectedProvincia) {
+        // Show loading message in select_oficina
+        select_oficina.html('').append($('<option>', {
+            value: '',
+            text: 'Cargando...',
+            disabled: true,
+            selected: true
+        }));
+
+        // Build the API URL with the selected provincia
+        var apiUrl = apiBaseUrl + selectedProvincia;
+
+        // API call para descargar el JSON de oficinas y servicios del backend
+        $.ajax({
+            url: apiUrl,
+            method: 'GET',
+            dataType: 'json',
+            success: function (responseData) {
+                data = responseData; // Set the data variable with the response
+
+                // Mostrar en el select oficinas dependiendo de la administración seleccionada
+                var filteredData = data.filter(item => {
+                    if (selectedAdministracion === 'EX1') {
+                        // Show names where id_oficina starts with "gobext"
+                        return item.id_oficina.toLowerCase().includes('gobext');
+                    } else if (selectedAdministracion === 'RC1') {
+                        // Show names where id_oficina does not start with "gobext"
+                        return !item.id_oficina.toLowerCase().includes('gobext');
+                    }
+                    return false;
+                });
+
+                // Check if there are no oficinas
+                if (filteredData.length === 0) {
+                    // Display a default message in select_oficina
+                    select_oficina.html('').append($('<option>', {
+                        value: '',
+                        text: 'No hay oficinas disponibles',
+                        disabled: true,
+                        selected: true
+                    }));
+                } else {
                     // Populate oficina select options with external data
                     $.each(filteredData, function (index, item) {
                         var optionElement = $('<option></option>').prop('value', item.nombre).text(item.nombre);
                         select_oficina.append(optionElement);
                     });
-  
+
                     // Set default value and trigger change event
                     select_oficina.val(default_select_oficina.val()).trigger('change');
-
-                    
-                },
-                error: function (error) {
-                    console.error('Error fetching data:', error);
                 }
-            });
-        } else {
-            // Clear data and reset options for 'js-oficina' and 'js-cita-previa' selects
-            data = null;
-            //select_oficina.html('').append(default_select_oficina);
-            //select_servicio.html('').append(default_select_servicio);
-        }
+            },
+            error: function (error) {
+                console.error('Error fetching data:', error);
+            }
+        });
+    } else {
+        // Clear data and reset options for 'js-oficina' and 'js-cita-previa' selects
+        data = null;
+        // Display a default message in select_oficina
+        select_oficina.html('').append($('<option>', {
+            value: '',
+            text: 'Selecciona Administración y Provincia',
+            disabled: true,
+            selected: true
+        }));
+        //select_servicio.html('').append(default_select_servicio);
     }
-  
+}
+
 
 
 
