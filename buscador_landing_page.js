@@ -236,6 +236,24 @@ $(document).ready(function () {
                         return false;
                     });
   
+
+                    // Check if there are no oficinas
+                    if (filteredData.length === 0) {
+                        // Display a default message in select_oficina
+                        select_oficina.html('').append($('<option>', {
+                            value: '',
+                            text: 'No hay oficinas disponibles',
+                            disabled: true,
+                            selected: true
+                        }));
+                    } else {
+                        // Populate oficina select options with external data
+                        $.each(filteredData, function (index, item) {
+                            var optionElement = $('<option></option>').prop('value', item.nombre).text(item.nombre);
+                            select_oficina.append(optionElement);
+                        });
+
+
                     // Populate oficina select options with external data
                     $.each(filteredData, function (index, item) {
                         var optionElement = $('<option></option>').prop('value', item.nombre).text(item.nombre);
