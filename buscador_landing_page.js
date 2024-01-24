@@ -184,77 +184,81 @@ $(document).ready(function () {
     var numero_citas_contador = 0;
 
 
+    //Crear valores y populate select oficina
+    // Hacer API call al backend para descargar el JSON de oficinas y servicios según la provincia seleccionada y filtrar por administración
+    function fetchJsonAndPopulateOficina() {
+        var selectedAdministracion = select_administracion.val();
+        var selectedProvincia = select_provincia.val();
+        console.log(selectedAdministracion);
+        console.log(selectedProvincia);
 
-    
-//Crear valores y populate select oficina
-// Hacer API call al backend para descargar el JSON de oficinas y servicios según la provincia seleccionada y filtrar por administración
-function fetchJsonAndPopulateOficina() {
-    var selectedAdministracion = select_administracion.val();
-    var selectedProvincia = select_provincia.val();
 
-    // Comprobar si Adm, provincia y buscador por oficina está seleccionado
-    if (selectedAdministracion && selectedProvincia) {
-        // Show loading message in select_oficina
-        select_oficina.html('').append($('<option>', {
-            value: '',
-            text: 'Cargando...',
-            disabled: true,
-            selected: true
-        }));
-
-        // Build the API URL with the selected provincia
-        var apiUrl = apiBaseUrl + selectedProvincia;
-
-        // API call para descargar el JSON de oficinas y servicios del backend
-        $.ajax({
-            url: apiUrl,
-            method: 'GET',
-            dataType: 'json',
-            success: function (responseData) {
-                data = responseData; // Set the data variable with the response
-
-                // Mostrar en el select oficinas dependiendo de la administración seleccionada
-                var filteredData = data.filter(item => {
-                    if (selectedAdministracion === 'EX1') {
-                        // Show names where id_oficina starts with "gobext"
-                        return item.id_oficina.toLowerCase().includes('gobext');
-                    } else if (selectedAdministracion === 'RC1') {
-                        // Show names where id_oficina does not start with "gobext"
-                        return !item.id_oficina.toLowerCase().includes('gobext');
-                    }
-                    return false;
-                });
-
-                // Check if there are no oficinas
-                if (filteredData.length === 0) {
-                    // Display a default message in select_oficina
-                    select_oficina.html('').append($('<option>', {
-                        value: '',
-                        text: 'No hay oficinas disponibles',
-                        disabled: true,
-                        selected: true
-                    }));
-                } else {
+        
+        console.log(selectedAdministracion);
+        console.log(selectedProvincia);
+        // Comprobar si Adm, provincia y bsucador por oficina está seleccionado
+        if (selectedAdministracion && selectedProvincia) {
+            
+            
+            // Show loading message in select_oficina
+            select_oficina.html('').append($('<option>', {
+                value: '',
+                text: 'Cargando...',
+                disabled: true,
+                selected: true
+            }));
+                
+            
+            console.log(selectedAdministracion);
+            console.log(selectedProvincia);
+            // Build the API URL with the selected provincia
+            var apiUrl = apiBaseUrl + selectedProvincia;
+  
+            // API call para descargar el JSON de oficinas y servicios del backend
+            $.ajax({
+                url: apiUrl,
+                method: 'GET',
+                dataType: 'json',
+                success: function (responseData) {
+                    data = responseData; // Set the data variable with the response
+                    // Populate oficina select con los textos importados del json
+                    select_oficina.html('').append(default_select_oficina);
+  
+                    // Mostrar en el select oficinas dependiendo de la administración seleccionada
+                    var filteredData = data.filter(item => {
+                        if (selectedAdministracion === 'EX1') {
+                            // Show names where id_oficina starts with "gobext"
+                            return item.id_oficina.toLowerCase().includes('gobext');
+                        } else if (selectedAdministracion === 'RC1') {
+                            // Show names where id_oficina does not start with "gobext"
+                            return !item.id_oficina.toLowerCase().includes('gobext');
+                        }
+                        return false;
+                    });
+  
                     // Populate oficina select options with external data
                     $.each(filteredData, function (index, item) {
                         var optionElement = $('<option></option>').prop('value', item.nombre).text(item.nombre);
                         select_oficina.append(optionElement);
                     });
-
+  
                     // Set default value and trigger change event
                     select_oficina.val(default_select_oficina.val()).trigger('change');
-                }
-            },
-            error: function (error) {
-                console.error('Error fetching data:', error);
-            }
-        });
-    } else {
-        // Clear data and reset options for 'js-oficina' and 'js-cita-previa' selects
-        data = null;
-    }
-}
 
+                    
+                },
+                error: function (error) {
+                    console.error('Error fetching data:', error);
+                }
+            });
+        } else {
+            // Clear data and reset options for 'js-oficina' and 'js-cita-previa' selects
+            data = null;
+            //select_oficina.html('').append(default_select_oficina);
+            //select_servicio.html('').append(default_select_servicio);
+        }
+    }
+  
 
 
 
@@ -313,9 +317,6 @@ function fetchJsonAndPopulateOficina() {
     var maxCheckoutItems = 15; //Items máximos que se pueden añadir
     //Event listener del select de servicios
     select_servicio.on('change', function () {
-        
-        
- 
         // Get the selected values
         var selectedProvincia = select_provincia.val();
         var selectedOficina = select_oficina.val();
@@ -323,20 +324,11 @@ function fetchJsonAndPopulateOficina() {
 
         // Check if all values are selected
         if (selectedProvincia && selectedOficina && selectedServicio) {
-            
-            
-            //Incrementar contador de citas seleccionadas
-            numero_citas_contador = select_servicio.val() ? numero_citas_contador +1 : Math.max(numero_citas_contador - 1, 0);
-
-            //Ejecutar función para actualizar el número de citas seleccionadas
-            updateNumeroCitasCounter();        
-                    
-            
             // Create a new div with a personalized HTML structure for the checkout item
             var checkoutItem = $('<div class="checkout-item">' +
                 '<div class="column wide-column">' +
                 '   <span class="item-text">' + selectedProvincia + ' | ' + selectedOficina + '</span>' +
-                '   <span class="item-text" style="margin-top: 3px;">' + selectedServicio + '</span>' +
+                '   <span class="item-text">' + selectedServicio + '</span>' +
                 '</div>' +
                 '<div class="column narrow-column">' +
                 '   <button class="delete-item"><img src="https://uploads-ssl.webflow.com/652f00909568ce58c099d55f/652f00919568ce58c099d689_Exit.svg" alt="Delete" style="width: 20px; height: 20px; margin-left: auto;"></button>' +
@@ -411,8 +403,8 @@ function fetchJsonAndPopulateOficina() {
             }
         }
 
-
-        
+        //Resetear select de servicios cuando se añade una cita
+        //select_servicio.val(null).trigger('change');
     });
 
 
@@ -470,6 +462,22 @@ function fetchJsonAndPopulateOficina() {
 
 
     
+    
+
+
+
+    // Event listener for the 'change' event on select_servicio
+    select_servicio.on('change', function () {
+        // Increment or decrement the counter based on the selection
+        numero_citas_contador = select_servicio.val() ? numero_citas_contador +1 : Math.max(numero_citas_contador - 1, 0);
+
+        // Update and display the counter
+        updateNumeroCitasCounter();
+    });
+
+
+
+
 
 
 
