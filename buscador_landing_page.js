@@ -192,14 +192,8 @@ $(document).ready(function () {
         console.log(selectedAdministracion);
         console.log(selectedProvincia);
 
-
-        
-        console.log(selectedAdministracion);
-        console.log(selectedProvincia);
         // Comprobar si Adm, provincia y bsucador por oficina está seleccionado
         if (selectedAdministracion && selectedProvincia) {
-            
-            
             // Show loading message in select_oficina
             select_oficina.html('').append($('<option>', {
                 value: '',
@@ -207,13 +201,12 @@ $(document).ready(function () {
                 disabled: true,
                 selected: true
             }));
-                
-            
+
             console.log(selectedAdministracion);
             console.log(selectedProvincia);
             // Build the API URL with the selected provincia
             var apiUrl = apiBaseUrl + selectedProvincia;
-  
+
             // API call para descargar el JSON de oficinas y servicios del backend
             $.ajax({
                 url: apiUrl,
@@ -223,7 +216,7 @@ $(document).ready(function () {
                     data = responseData; // Set the data variable with the response
                     // Populate oficina select con los textos importados del json
                     select_oficina.html('').append(default_select_oficina);
-  
+
                     // Mostrar en el select oficinas dependiendo de la administración seleccionada
                     var filteredData = data.filter(item => {
                         if (selectedAdministracion === 'EX1') {
@@ -235,7 +228,6 @@ $(document).ready(function () {
                         }
                         return false;
                     });
-  
 
                     // Check if there are no oficinas
                     if (filteredData.length === 0) {
@@ -253,17 +245,9 @@ $(document).ready(function () {
                             select_oficina.append(optionElement);
                         });
 
-
-                    // Populate oficina select options with external data
-                    $.each(filteredData, function (index, item) {
-                        var optionElement = $('<option></option>').prop('value', item.nombre).text(item.nombre);
-                        select_oficina.append(optionElement);
-                    });
-  
-                    // Set default value and trigger change event
-                    select_oficina.val(default_select_oficina.val()).trigger('change');
-
-                    
+                        // Set default value and trigger change event
+                        select_oficina.val(default_select_oficina.val()).trigger('change');
+                    }
                 },
                 error: function (error) {
                     console.error('Error fetching data:', error);
@@ -275,8 +259,7 @@ $(document).ready(function () {
             //select_oficina.html('').append(default_select_oficina);
             //select_servicio.html('').append(default_select_servicio);
         }
-    }
-  
+    } // Missing closing parenthesis
 
 
 
