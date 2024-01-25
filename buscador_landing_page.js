@@ -404,6 +404,15 @@ $(document).ready(function () {
             }
         }
 
+
+
+
+
+        var numberOfItems = checkoutContainer.children('.checkout-item').length;
+        console.log(numberOfItems);
+    
+        
+
         //Resetear select de servicios cuando se añade una cita
         //select_servicio.val(null).trigger('change');
     });
@@ -482,7 +491,7 @@ $(document).ready(function () {
 
 
 
-
+  
 
 
 
