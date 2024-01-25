@@ -426,7 +426,7 @@ $(document).ready(function () {
     // Reset values and update cita previa function
     function resetOficinaAndUpdateCitaPrevia() {
         // Reset the values of the other three selects
-        select_servicio.val('').empty().append(default_select_servicio);
+        //select_servicio.val('').empty().append(default_select_servicio);
         updateCitaPrevia();
     }
 
