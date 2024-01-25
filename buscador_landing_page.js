@@ -313,6 +313,7 @@ $(document).ready(function () {
 
 
 
+
     //3.Sección de citas previas seleccionadas bloque derecho
     var checkoutContainer = $('#bloque-items-citas');
     var maxCheckoutItems = 15; //Items máximos que se pueden añadir
@@ -384,7 +385,7 @@ $(document).ready(function () {
                 checkoutItem.remove();
 
                 // If the counter is greater than 0, decrement it
-                numero_citas_contador = select_servicio.val() ? numero_citas_contador - 1 : Math.max(numero_citas_contador - 1, 0);
+                numero_citas_contador = checkoutContainer.children('.checkout-item').length;
 
                 // Update and display the counter
                 updateNumeroCitasCounter();
@@ -403,14 +404,6 @@ $(document).ready(function () {
                 select_servicio.prop('disabled', true);
             }
         }
-
-
-
-
-
-        var numberOfItems = checkoutContainer.children('.checkout-item').length;
-        console.log(numberOfItems);
-    
         
 
         //Resetear select de servicios cuando se añade una cita
@@ -478,11 +471,12 @@ $(document).ready(function () {
 
     // Event listener for the 'change' event on select_servicio
     select_servicio.on('change', function () {
-        // Increment or decrement the counter based on the selection
-        numero_citas_contador = select_servicio.val() ? numero_citas_contador +1 : Math.max(numero_citas_contador - 1, 0);
+        // If the counter is greater than 0, decrement it
+        numero_citas_contador = checkoutContainer.children('.checkout-item').length;
 
         // Update and display the counter
         updateNumeroCitasCounter();
+
     });
 
 
