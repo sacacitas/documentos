@@ -304,24 +304,21 @@ $(document).ready(function () {
         
         if (selectedAdministracion && selectedProvincia && radio_buscador_por_provincia.prop('checked')) {
 
-            // Mostrar en el select oficinas dependiendo de la administración seleccionada
-            var filteredOficinasData = data.filter(item => {
+            // Mostrar en el select servicios dependiendo de la administración seleccionada
+            var filteredServiciosData = data.filter(item => {
                 if (selectedAdministracion === 'EX1') {
-                    // Show names where id_oficina starts with "gobext"
-                    return servicio.id_oficina.toLowerCase().includes('gobext');
+                    // Show servicios where id_oficina starts with "gobext"
+                    return item.id_oficina.toLowerCase().includes('gobext');
                 } else if (selectedAdministracion === 'RC1') {
-                    // Show names where id_oficina does not start with "gobext"
-                    return !servicio.id_oficina.toLowerCase().includes('gobext');
+                    // Show servicios where id_oficina does not start with "gobext"
+                    return !item.id_oficina.toLowerCase().includes('gobext');
                 }
                 return false;
             });
-            
-            console.log(filteredOficinasData);
-
-
-            // Check if there are no oficinas
-            if (filteredOficinasData.length === 0) {
-                // Display a default message in select_oficina
+        
+            // Check if there are no servicios
+            if (filteredServiciosData.length === 0) {
+                // Display a default message in select_servicio
                 select_servicio.html('').append($('<option>', {
                     value: '',
                     text: 'No hay servicios disponibles',
@@ -329,17 +326,17 @@ $(document).ready(function () {
                     selected: true
                 }));
             } else {
-                // Populate oficina select options with external data
-                $.each(filteredOficinasData, function (index, item) {
+                // Populate servicio select options with external data
+                $.each(filteredServiciosData, function (index, item) {
                     var optionElement = $('<option></option>').prop('value', item.nombre).text(item.nombre);
                     select_servicio.append(optionElement);
                 });
-
+        
                 // Set default value and trigger change event
                 select_servicio.val(default_select_servicio.val()).trigger('change');
             }
-
         }
+        
     }
     
   
