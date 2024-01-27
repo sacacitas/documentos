@@ -256,8 +256,7 @@ $(document).ready(function () {
         } else {
             // Clear data and reset options for 'js-oficina' and 'js-cita-previa' selects
             data = null;
-            //select_oficina.html('').append(default_select_oficina);
-            //select_servicio.html('').append(default_select_servicio);
+
         }
     } // Missing closing parenthesis
 
@@ -301,7 +300,36 @@ $(document).ready(function () {
                 // Trigger change event to refresh the select (if needed)
                 select_servicio.trigger('change');
             }
-        } 
+        } if (selectedAdministracion && selectedProvincia && radio_buscador_por_provincia.prop('checked')) {
+            // Populate citaPrevia select options with servicios from selected provincia
+            // Check if data is found and servicios is an array 
+            if (data && Array.isArray(data)) {
+                // Add a default option if needed
+                // var defaultOption = $('<option>', {
+                //     value: '',
+                //     text: 'Select a service',
+                //     disabled: true,
+                //     selected: true
+                // });
+                // select_servicio.append(defaultOption);
+    
+                // Populate citaPrevia select options with services from selected provincia
+                data.forEach(item => {
+                    // Check if item has the required properties
+                    if (item && item.servicios && Array.isArray(item.servicios)) {
+                        item.servicios.forEach(servicio => {
+                            if (servicio && servicio.id_servicio && servicio.nombre) {
+                                var optionElement = $('<option></option>').prop('value', servicio.nombre).text(servicio.nombre);
+                                select_servicio.append(optionElement);
+                            }
+                        });
+                    }
+                });
+      
+                // Trigger change event to refresh the select (if needed)
+                select_servicio.trigger('change');
+            }
+        }
     }
     
   
