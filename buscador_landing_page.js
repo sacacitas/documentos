@@ -302,22 +302,23 @@ $(document).ready(function () {
             }
         } 
 
+
         if (selectedAdministracion && selectedProvincia && radio_buscador_por_provincia.prop('checked')) {
 
             // Filter data based on selectedAdministracion
-            var filteredServiciosData = data.filter(item => {
+            var filteredOficinasData = data.filter(item => {
                 if (selectedAdministracion === 'EX1') {
-                    // Show servicios where id_oficina starts with "gobext"
+                    // Show oficinas where id_oficina starts with "gobext"
                     return item.id_oficina.toLowerCase().includes('gobext');
                 } else if (selectedAdministracion === 'RC1') {
-                    // Show servicios where id_oficina does not start with "gobext"
+                    // Show oficinas where id_oficina does not start with "gobext"
                     return !item.id_oficina.toLowerCase().includes('gobext');
                 }
                 return false;
             });
-        
-            // Check if there are no servicios
-            if (filteredServiciosData.length === 0) {
+
+            // Check if there are no oficinas
+            if (filteredOficinasData.length === 0) {
                 // Display a default message in select_servicio
                 select_servicio.html('').append($('<option>', {
                     value: '',
@@ -326,17 +327,31 @@ $(document).ready(function () {
                     selected: true
                 }));
             } else {
-                // Populate servicio select options with external data
-                $.each(filteredServiciosData, function (index, item) {
-                    var optionElement = $('<option></option>').prop('value', item.nombre).text(item.nombre);
+                // Extract all servicios from filtered oficinas
+                var allServicios = [];
+                filteredOficinasData.forEach(oficina => {
+                    if (oficina && oficina.servicios && Array.isArray(oficina.servicios)) {
+                        allServicios = allServicios.concat(oficina.servicios);
+                    }
+                });
+
+                // Remove duplicate servicios based on id_servicio
+                var uniqueServicios = allServicios.filter((servicio, index, self) =>
+                    index === self.findIndex(s => s.id_servicio === servicio.id_servicio)
+                );
+
+                // Populate servicio select options with unique servicios
+                $.each(uniqueServicios, function (index, servicio) {
+                    var optionElement = $('<option></option>').prop('value', servicio.nombre).text(servicio.nombre);
                     select_servicio.append(optionElement);
                 });
-        
+
                 // Set default value and trigger change event
                 select_servicio.val(default_select_servicio.val()).trigger('change');
             }
         }
-        
+
+
         
     }
     
