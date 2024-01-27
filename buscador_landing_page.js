@@ -336,9 +336,9 @@ $(document).ready(function () {
                 });
 
                 // Remove duplicate servicios based on id_servicio
-                var uniqueServicios = allServicios.filter((servicio, index, self) =>
-                    index === self.findIndex(s => s.id_servicio === servicio.id_servicio)
-                );
+                //var uniqueServicios = allServicios.filter((servicio, index, self) =>
+                //    index === self.findIndex(s => s.id_servicio === servicio.id_servicio)
+                //);
 
                 // Populate servicio select options with unique servicios
                 $.each(uniqueServicios, function (index, servicio) {
