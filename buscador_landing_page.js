@@ -303,6 +303,9 @@ $(document).ready(function () {
         } 
 
 
+
+        // ...
+
         if (selectedAdministracion && selectedProvincia && radio_buscador_por_provincia.prop('checked')) {
 
             // Filter data based on selectedAdministracion
@@ -327,23 +330,16 @@ $(document).ready(function () {
                     selected: true
                 }));
             } else {
-                // Extract all servicios from filtered oficinas
-                var allServicios = [];
+                // Populate servicio select options with external data
                 filteredOficinasData.forEach(oficina => {
                     if (oficina && oficina.servicios && Array.isArray(oficina.servicios)) {
-                        allServicios = allServicios.concat(oficina.servicios);
+                        oficina.servicios.forEach(servicio => {
+                            if (servicio && servicio.nombre) {
+                                var optionElement = $('<option></option>').prop('value', servicio.nombre).text(servicio.nombre);
+                                select_servicio.append(optionElement);
+                            }
+                        });
                     }
-                });
-
-                // Remove duplicate servicios based on id_servicio
-                //var uniqueServicios = allServicios.filter((servicio, index, self) =>
-                //    index === self.findIndex(s => s.id_servicio === servicio.id_servicio)
-                //);
-
-                // Populate servicio select options with unique servicios
-                $.each(uniqueServicios, function (index, servicio) {
-                    var optionElement = $('<option></option>').prop('value', servicio.nombre).text(servicio.nombre);
-                    select_servicio.append(optionElement);
                 });
 
                 // Set default value and trigger change event
@@ -351,11 +347,8 @@ $(document).ready(function () {
             }
         }
 
+        // ...
 
-        
-    }
-    
-  
 
     //Cuando se activen uno de los dos triggers, se cambiará el texto con el valor
     function updateNumeroCitasCounter() {
