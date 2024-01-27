@@ -300,55 +300,55 @@ $(document).ready(function () {
                 // Trigger change event to refresh the select (if needed)
                 select_servicio.trigger('change');
             }
+            if (selectedAdministracion && selectedProvincia && radio_buscador_por_provincia.prop('checked')) {
+
+                // Filter data based on selectedAdministracion
+                var filteredOficinasData = data.filter(item => {
+                    if (selectedAdministracion === 'EX1') {
+                        // Show oficinas where id_oficina starts with "gobext"
+                        return item.id_oficina.toLowerCase().includes('gobext');
+                    } else if (selectedAdministracion === 'RC1') {
+                        // Show oficinas where id_oficina does not start with "gobext"
+                        return !item.id_oficina.toLowerCase().includes('gobext');
+                    }
+                    return false;
+                });
+            
+                // Check if there are no oficinas
+                if (filteredOficinasData.length === 0) {
+                    // Display a default message in select_servicio
+                    select_servicio.html('').append($('<option>', {
+                        value: '',
+                        text: 'No hay servicios disponibles',
+                        disabled: true,
+                        selected: true
+                    }));
+                } else {
+                    // Populate servicio select options with external data
+                    filteredOficinasData.forEach(oficina => {
+                        if (oficina && oficina.servicios && Array.isArray(oficina.servicios)) {
+                            oficina.servicios.forEach(servicio => {
+                                if (servicio && servicio.nombre) {
+                                    var optionElement = $('<option></option>').prop('value', servicio.nombre).text(servicio.nombre);
+                                    select_servicio.append(optionElement);
+                                }
+                            });
+                        }
+                    });
+            
+                    // Set default value and trigger change event
+                    select_servicio.val(default_select_servicio.val()).trigger('change');
+                }
+            }
+            
+
+
         } 
 
-
-
-        // ...
-
-        if (selectedAdministracion && selectedProvincia && radio_buscador_por_provincia.prop('checked')) {
-
-            // Filter data based on selectedAdministracion
-            var filteredOficinasData = data.filter(item => {
-                if (selectedAdministracion === 'EX1') {
-                    // Show oficinas where id_oficina starts with "gobext"
-                    return item.id_oficina.toLowerCase().includes('gobext');
-                } else if (selectedAdministracion === 'RC1') {
-                    // Show oficinas where id_oficina does not start with "gobext"
-                    return !item.id_oficina.toLowerCase().includes('gobext');
-                }
-                return false;
-            });
-
-            // Check if there are no oficinas
-            if (filteredOficinasData.length === 0) {
-                // Display a default message in select_servicio
-                select_servicio.html('').append($('<option>', {
-                    value: '',
-                    text: 'No hay servicios disponibles',
-                    disabled: true,
-                    selected: true
-                }));
-            } else {
-                // Populate servicio select options with external data
-                filteredOficinasData.forEach(oficina => {
-                    if (oficina && oficina.servicios && Array.isArray(oficina.servicios)) {
-                        oficina.servicios.forEach(servicio => {
-                            if (servicio && servicio.nombre) {
-                                var optionElement = $('<option></option>').prop('value', servicio.nombre).text(servicio.nombre);
-                                select_servicio.append(optionElement);
-                            }
-                        });
-                    }
-                });
-
-                // Set default value and trigger change event
-                select_servicio.val(default_select_servicio.val()).trigger('change');
-            }
-        }
-
-        // ...
-
+    
+    }
+    
+  
 
     //Cuando se activen uno de los dos triggers, se cambiará el texto con el valor
     function updateNumeroCitasCounter() {
