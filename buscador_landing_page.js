@@ -302,22 +302,23 @@ $(document).ready(function () {
             }
         } 
         
+
         if (selectedAdministracion && selectedProvincia && radio_buscador_por_provincia.prop('checked')) {
 
-            // Mostrar en el select servicios dependiendo de la administración seleccionada
-            var filteredServiciosData = data.filter(item => {
-                if (selectedAdministracion === 'EX1') {
-                    // Show servicios where id_oficina starts with "gobext"
-                    return item.id_oficina.toLowerCase().includes('gobext');
-                } else if (selectedAdministracion === 'RC1') {
-                    // Show servicios where id_oficina does not start with "gobext"
-                    return !item.id_oficina.toLowerCase().includes('gobext');
+            // Collect all servicios from all oficinas
+            var allServicios = [];
+            data.forEach(item => {
+                if (item.servicios && Array.isArray(item.servicios)) {
+                    item.servicios.forEach(servicio => {
+                        if (servicio && servicio.id_servicio && servicio.nombre) {
+                            allServicios.push(servicio);
+                        }
+                    });
                 }
-                return false;
             });
-        
+
             // Check if there are no servicios
-            if (filteredServiciosData.length === 0) {
+            if (allServicios.length === 0) {
                 // Display a default message in select_servicio
                 select_servicio.html('').append($('<option>', {
                     value: '',
@@ -326,12 +327,12 @@ $(document).ready(function () {
                     selected: true
                 }));
             } else {
-                // Populate servicio select options with external data
-                $.each(filteredServiciosData, function (index, item) {
-                    var optionElement = $('<option></option>').prop('value', item.nombre).text(item.nombre);
+                // Populate servicio select options with all servicios
+                $.each(allServicios, function (index, servicio) {
+                    var optionElement = $('<option></option>').prop('value', servicio.nombre).text(servicio.nombre);
                     select_servicio.append(optionElement);
                 });
-        
+
                 // Set default value and trigger change event
                 select_servicio.val(default_select_servicio.val()).trigger('change');
             }
