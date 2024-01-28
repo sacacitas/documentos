@@ -348,8 +348,9 @@ $(document).ready(function () {
 
                 // Populate servicio select options with external data
                 filteredServiciosData.forEach(servicio => {
-                    if (servicio && servicio.nombre) {
-                        var optionElement = $('<option></option>').prop('value', servicio.nombre).text(servicio.nombre);
+                    if (servicio && servicio.nombre && servicio.oficina) {
+                        var optionText = servicio.nombre + ' - ' + servicio.oficina;
+                        var optionElement = $('<option></option>').prop('value', servicio.nombre).text(optionText);
                         select_servicio.append(optionElement);
                     }
                 });
