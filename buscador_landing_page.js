@@ -348,7 +348,7 @@ $(document).ready(function () {
 
                 // Populate servicio select options with external data
                 filteredServiciosData.forEach(servicio => {
-                    if (servicio && servicio.nombre && servicio.oficina) {
+                    if (servicio && servicio.nombre && servicio.oficina && servicio.oficina.nombre) {
                         var optionText = servicio.nombre + ' - ' + servicio.oficina.nombre;
                         var optionElement = $('<option></option>').prop('value', servicio.nombre).text(optionText);
                         select_servicio.append(optionElement);
