@@ -343,6 +343,9 @@ $(document).ready(function () {
                     selected: true
                 }));
             } else {
+                // Sort the servicios array by name
+                filteredServiciosData.sort((a, b) => a.nombre.localeCompare(b.nombre));
+
                 // Populate servicio select options with external data
                 filteredServiciosData.forEach(servicio => {
                     if (servicio && servicio.nombre) {
