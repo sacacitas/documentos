@@ -362,7 +362,7 @@ $(document).ready(function () {
                         if (count > 1) {
                             totalDuplicateCount += count - 1;
                         }
-                        const countText = count > 1 ? `(${count})` : ''; // Include count for counts greater than 1
+                        const countText = count > 1 ? `(${count})` : ''; // Include count only if greater than 1
                         const optionText = `${servicio.nombre} ${countText}`;
                         var optionElement = $('<option></option>').prop('value', servicio.nombre).text(optionText);
                         select_servicio.append(optionElement);
