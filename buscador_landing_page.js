@@ -318,19 +318,38 @@ $(document).ready(function () {
         
             console.log('All Servicios:', allServicios);
                     
+            // Assuming 'allServicios' is your array of servicios and 'selectedAdministracion' is your selected administration code
+
             var filteredServiciosData = allServicios.filter((servicio) => {
                 if (servicio && servicio.id_oficina) {
+                    console.log("Entered the second IF statement.");
                     const idOficinaLowerCase = servicio.id_oficina.toLowerCase();
-            
+
                     if (selectedAdministracion === 'EX1') {
-                        return idOficinaLowerCase.includes('gobext');
+                        console.log("Selected Administracion: EX1");
+                        console.log("Filtered Servicios (Before):", filteredServiciosData);
+                        
+                        if (idOficinaLowerCase.includes('gobext')) {
+                            filteredServiciosData.push(servicio);
+                        }
+                        
+                        console.log("Filtered Servicios (After):", filteredServiciosData);
                     } else if (selectedAdministracion === 'RC1') {
-                        return !idOficinaLowerCase.includes('gobext');
+                        console.log("Selected Administracion: RC1");
+                        console.log("Filtered Servicios (Before):", filteredServiciosData);
+                        
+                        if (!idOficinaLowerCase.includes('gobext')) {
+                            filteredServiciosData.push(servicio);
+                        }
+                        
+                        console.log("Filtered Servicios (After):", filteredServiciosData);
                     }
                 }
-            
-                return false;
             });
+
+            // filteredServiciosData now contains the filtered servicios based on the selected administration
+            console.log("Final Filtered Servicios:", filteredServiciosData);
+
             
             // filteredServiciosData now contains the filtered servicios based on the selected administration
             console.log(filteredServiciosData);
