@@ -354,30 +354,31 @@ $(document).ready(function () {
                     }
                 });
 
+                // Create an array of sorted options
+                const sortedOptions = filteredServiciosData.map(servicio => {
+                    const count = servicioCounts[servicio.nombre];
+                    if (count > 1) {
+                        totalDuplicateCount += count - 1;
+                    }
+                    const countText = count > 1 ? `(${count})` : '';
+                    const optionText = count > 1 ? `${servicio.nombre} ${countText}` : servicio.nombre;
+                    return { value: servicio.nombre, text: optionText };
+                });
+
+                // Sort the options by name
+                sortedOptions.sort((a, b) => a.text.localeCompare(b.text));
+
                 // Populate servicio select options with external data, including counts
-                //select_servicio.html(''); // Clear existing options
-                filteredServiciosData.forEach(servicio => {
-                    if (servicio && servicio.nombre) {
-                        const count = servicioCounts[servicio.nombre];
-                        if (count > 1) {
-                            totalDuplicateCount += count - 1;
-                        }
-                        const optionText = count > 1 ? `${servicio.nombre} (${count})` : servicio.nombre;
-                        var optionElement = $('<option></option>').prop('value', servicio.nombre).text(optionText);
-                        // Check if the option already exists before appending
-                        if (select_servicio.find(`option[value="${servicio.nombre}"]`).length === 0) {
-                            select_servicio.append(optionElement);
-                        }
+                select_servicio.html(''); // Clear existing options
+                sortedOptions.forEach(option => {
+                    var optionElement = $('<option></option>').prop('value', option.value).text(option.text);
+                    // Check if the option already exists before appending
+                    if (select_servicio.find(`option[value="${option.value}"]`).length === 0) {
+                        select_servicio.append(optionElement);
                     }
                 });
 
-                // Log the total count of duplicates that were removed
-                console.log('Total duplicates removed:', totalDuplicateCount);
 
-                console.log('Populated Servicios:', filteredServiciosData);
-
-                // Set default value and trigger change event
-                //select_servicio.val(default_select_servicio.val()).trigger('change');
             }
 
         } else {
