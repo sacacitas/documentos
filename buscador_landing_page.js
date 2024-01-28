@@ -330,8 +330,7 @@ $(document).ready(function () {
             // 'allServicios' now contains the array of servicios based on the selected administration
             console.log('All Servicios:', allServicios);
 
-
-            var filteredServiciosData = [];
+            var filteredServiciosData = allServicios;
 
             // Check if there are no servicios
             if (filteredServiciosData.length === 0) {
@@ -351,12 +350,13 @@ $(document).ready(function () {
                         select_servicio.append(optionElement);
                     }
                 });
-        
+
                 console.log('Populated Servicios:', filteredServiciosData);
-        
+
                 // Set default value and trigger change event
                 select_servicio.val(default_select_servicio.val()).trigger('change');
             }
+
         } else {
             console.log('One of the conditions is not met.');
         }
