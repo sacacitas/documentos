@@ -355,7 +355,7 @@ $(document).ready(function () {
                 });
 
                 // Populate servicio select options with external data, including counts
-                select_servicio.html(''); // Clear existing options
+                //select_servicio.html(''); // Clear existing options
                 filteredServiciosData.forEach(servicio => {
                     if (servicio && servicio.nombre) {
                         const count = servicioCounts[servicio.nombre];
@@ -377,7 +377,7 @@ $(document).ready(function () {
                 console.log('Populated Servicios:', filteredServiciosData);
 
                 // Set default value and trigger change event
-                select_servicio.val(default_select_servicio.val()).trigger('change');
+                //select_servicio.val(default_select_servicio.val()).trigger('change');
             }
 
         } else {
