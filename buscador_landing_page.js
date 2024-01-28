@@ -300,6 +300,8 @@ $(document).ready(function () {
                 // Trigger change event to refresh the select (if needed)
                 select_servicio.trigger('change');
             }
+            // ...
+
             if (selectedAdministracion && selectedProvincia && radio_buscador_por_provincia.prop('checked')) {
 
                 // Get all servicios from the JSON
@@ -310,6 +312,8 @@ $(document).ready(function () {
                         allServicios.push(...oficina.servicios);
                     }
                 });
+
+                console.log('All Servicios:', allServicios);
 
                 // Filter servicios based on selectedAdministracion
                 var filteredServiciosData = allServicios.filter(servicio => {
@@ -323,8 +327,11 @@ $(document).ready(function () {
                     return false;
                 });
 
+                console.log('Filtered Servicios:', filteredServiciosData);
+
                 // Check if there are no servicios
                 if (filteredServiciosData.length === 0) {
+                    console.log('No servicios available.');
                     // Display a default message in select_servicio
                     select_servicio.html('').append($('<option>', {
                         value: '',
@@ -341,10 +348,14 @@ $(document).ready(function () {
                         }
                     });
 
+                    console.log('Populated Servicios:', filteredServiciosData);
+
                     // Set default value and trigger change event
                     select_servicio.val(default_select_servicio.val()).trigger('change');
                 }
             }
+
+            // ...
 
         } 
 
