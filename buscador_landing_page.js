@@ -362,12 +362,10 @@ $(document).ready(function () {
                         if (count > 1) {
                             totalDuplicateCount += count - 1;
                         }
-                        const optionText = count > 1 ? `${servicio.nombre} (${count})` : servicio.nombre;
+                        const countText = count > 1 ? `(${count})` : ''; // Include count for counts greater than 1
+                        const optionText = `${servicio.nombre} ${countText}`;
                         var optionElement = $('<option></option>').prop('value', servicio.nombre).text(optionText);
-                        // Check if the option already exists before appending
-                        if (select_servicio.find(`option[value="${servicio.nombre}"]`).length === 0) {
-                            select_servicio.append(optionElement);
-                        }
+                        select_servicio.append(optionElement);
                     }
                 });
 
