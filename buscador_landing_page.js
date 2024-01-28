@@ -318,19 +318,22 @@ $(document).ready(function () {
         
             console.log('All Servicios:', allServicios);
                     
-            var filteredServiciosData = allServicios.filter((servicio, index) => {
-                console.log(`Processing servicio at index ${index}:`, servicio);
+            var filteredServiciosData = allServicios.filter((servicio) => {
                 if (servicio && servicio.id_oficina) {
-                    console.log(`id_oficina for this servicio: ${servicio.id_oficina}`);
+                    const idOficinaLowerCase = servicio.id_oficina.toLowerCase();
+            
                     if (selectedAdministracion === 'EX1') {
-                        return servicio.id_oficina.toLowerCase().includes('gobext');
+                        return idOficinaLowerCase.includes('gobext');
                     } else if (selectedAdministracion === 'RC1') {
-                        return !servicio.id_oficina.toLowerCase().includes('gobext');
+                        return !idOficinaLowerCase.includes('gobext');
                     }
                 }
+            
                 return false;
             });
             
+            // filteredServiciosData now contains the filtered servicios based on the selected administration
+            console.log(filteredServiciosData);
             console.log('Selected Administracion:', selectedAdministracion);
             console.log('Filtered Servicios:', filteredServiciosData);
 
