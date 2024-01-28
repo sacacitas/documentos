@@ -353,9 +353,12 @@ $(document).ready(function () {
                     // Set default value and trigger change event
                     select_servicio.val(default_select_servicio.val()).trigger('change');
                 }
+            } else {
+                console.log('One of the conditions is not met.');
             }
 
             // ...
+
 
         } 
 
