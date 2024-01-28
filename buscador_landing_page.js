@@ -343,17 +343,32 @@ $(document).ready(function () {
                     selected: true
                 }));
             } else {
-                // Use a Set to track unique servicio names
-                const uniqueServicios = new Set();
+                // Variable to keep track of the total count of duplicates
+                let totalDuplicateCount = 0;
 
-                // Populate servicio select options with external data, removing duplicates
+                // Count occurrences of each servicio
+                const servicioCounts = {};
                 filteredServiciosData.forEach(servicio => {
-                    if (servicio && servicio.nombre && !uniqueServicios.has(servicio.nombre)) {
-                        uniqueServicios.add(servicio.nombre);
-                        var optionElement = $('<option></option>').prop('value', servicio.nombre).text(servicio.nombre);
+                    if (servicio && servicio.nombre) {
+                        servicioCounts[servicio.nombre] = (servicioCounts[servicio.nombre] || 0) + 1;
+                    }
+                });
+
+                // Populate servicio select options with external data, including counts
+                filteredServiciosData.forEach(servicio => {
+                    if (servicio && servicio.nombre) {
+                        const count = servicioCounts[servicio.nombre];
+                        if (count > 1) {
+                            totalDuplicateCount += count - 1;
+                        }
+                        const optionText = count > 1 ? `${servicio.nombre} (${count})` : servicio.nombre;
+                        var optionElement = $('<option></option>').prop('value', servicio.nombre).text(optionText);
                         select_servicio.append(optionElement);
                     }
                 });
+
+                // Log the total count of duplicates that were removed
+                console.log('Total duplicates removed:', totalDuplicateCount);
 
                 console.log('Populated Servicios:', filteredServiciosData);
 
