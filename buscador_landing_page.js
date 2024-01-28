@@ -300,7 +300,7 @@ $(document).ready(function () {
                 // Trigger change event to refresh the select (if needed)
                 select_servicio.trigger('change');
             }
-            if (selectedAdministracion && selectedProvincia && radio_buscador_por_provincia.prop('checked')) {
+            else if (selectedAdministracion && selectedProvincia && radio_buscador_por_provincia.prop('checked')) {
                 console.log('Entered the second IF statement.');
             
                 // Get all servicios from the JSON
@@ -354,7 +354,7 @@ $(document).ready(function () {
                 }
             } else {
                 console.log('One of the conditions is not met.');
-            }
+            } 
             
 
         } 
