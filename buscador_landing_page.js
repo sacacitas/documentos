@@ -304,11 +304,69 @@ $(document).ready(function () {
             // Get all servicios from the JSON
             var allServicios = [];
         
-
+            // Check if data is valid and is an array
+            if (data && Array.isArray(data)) {
+                data.forEach(oficina => {
+                    // Check if 'oficina' and 'oficina.servicios' are valid
+                    if (oficina && oficina.servicios && Array.isArray(oficina.servicios)) {
+                        allServicios.push(...oficina.servicios);
+                    }
+                });
+            } else {
+                console.log('Invalid data structure.');
+            }
+        
             console.log('All Servicios:', allServicios);
                     
+            // Filter servicios based on selectedAdministracion
+            var filteredServiciosData = allServicios.filter((servicio, index) => {
+                if (servicio && servicio.id_oficina) {
+                    console.log(`Processing servicio at index ${index}:`, servicio);
+                    if (selectedAdministracion === 'EX1') {
+                        // Show servicios where id_oficina starts with "gobext"
+                        return servicio.id_oficina.toLowerCase().includes('gobext');
+                    } else if (selectedAdministracion === 'RC1') {
+                        // Show servicios where id_oficina does not start with "gobext"
+                        return !servicio.id_oficina.toLowerCase().includes('gobext');
+                    }
+                }
+                return false;
+            });
 
-        } 
+            console.log('Filtered Servicios:', filteredServiciosData);
+
+            // ...
+
+
+            console.log('Filtered Servicios:', filteredServiciosData);
+        
+            // Check if there are no servicios
+            if (filteredServiciosData.length === 0) {
+                console.log('No servicios available.');
+                // Display a default message in select_servicio
+                select_servicio.html('').append($('<option>', {
+                    value: '',
+                    text: 'No hay servicios disponibles',
+                    disabled: true,
+                    selected: true
+                }));
+            } else {
+                // Populate servicio select options with external data
+                filteredServiciosData.forEach(servicio => {
+                    if (servicio && servicio.nombre) {
+                        var optionElement = $('<option></option>').prop('value', servicio.nombre).text(servicio.nombre);
+                        select_servicio.append(optionElement);
+                    }
+                });
+        
+                console.log('Populated Servicios:', filteredServiciosData);
+        
+                // Set default value and trigger change event
+                select_servicio.val(default_select_servicio.val()).trigger('change');
+            }
+        } else {
+            console.log('One of the conditions is not met.');
+        }
 
 
     }
