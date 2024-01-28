@@ -261,22 +261,20 @@ $(document).ready(function () {
     } // Missing closing parenthesis
 
 
-
     //Crear valores y populate select servicio
     function updateCitaPrevia() {
         var selectedOficina = select_oficina.val();
         var selectedAdministracion = select_administracion.val();
         var selectedProvincia = select_provincia.val();
-    
+
         // Clear existing options in select_servicio
         select_servicio.empty().append(default_select_servicio);
-    
+
         // Check if oficina is selected
         if (selectedOficina && selectedAdministracion && selectedProvincia && radio_buscador_con_oficina.prop('checked')) {
-      
             // Find the selected oficina in the external data
             var selectedOficinaData = data.find(item => item.nombre === selectedOficina);
-      
+
             // Check if data is found and servicios is an array 
             if (selectedOficinaData && Array.isArray(selectedOficinaData.servicios)) {
                 // Add a default option if needed
@@ -287,7 +285,7 @@ $(document).ready(function () {
                 //     selected: true
                 // });
                 // select_servicio.append(defaultOption);
-    
+
                 // Populate citaPrevia select options with services from selected oficina
                 selectedOficinaData.servicios.forEach(servicio => {
                     // Check if servicio has the required properties
@@ -296,11 +294,41 @@ $(document).ready(function () {
                         select_servicio.append(optionElement);
                     }
                 });
-      
+
                 // Trigger change event to refresh the select (if needed)
                 select_servicio.trigger('change');
+            }
+        } else if (selectedAdministracion && selectedProvincia && radio_buscador_por_provincia.prop('checked')) {
+            console.log('Entered the second IF statement.');
 
-            } if (selectedAdministracion && selectedProvincia && radio_buscador_por_provincia.prop('checked')) {
+            // Get all servicios from the JSON
+            var allServicios = [];
+
+            data.forEach(oficina => {
+                if (oficina && oficina.servicios && Array.isArray(oficina.servicios)) {
+                    allServicios.push(...oficina.servicios);
+                }
+            });
+
+            console.log('All Servicios:', allServicios);
+
+            // Filter servicios based on selectedAdministracion
+            var filteredServiciosData = allServicios.filter(servicio => {
+                if (selectedAdministracion === 'EX1') {
+                    // Show servicios where id_oficina starts with "gobext"
+                    return servicio.id_oficina.toLowerCase().includes('gobext');
+                } else if (selectedAdministracion === 'RC1') {
+                    // Show servicios where id_oficina does not start with "gobext"
+                    return !servicio.id_oficina.toLowerCase().includes('gobext');
+                }
+                return false;
+            });
+
+            console.log('Filtered Servicios:', filteredServiciosData);
+
+            // Check if there are no servicios
+            if (filteredServiciosData.length === 0) {
+                console.log('No servicios available.');
                 // Display a default message in select_servicio
                 select_servicio.html('').append($('<option>', {
                     value: '',
@@ -308,16 +336,25 @@ $(document).ready(function () {
                     disabled: true,
                     selected: true
                 }));
+            } else {
+                // Populate servicio select options with external data
+                filteredServiciosData.forEach(servicio => {
+                    if (servicio && servicio.nombre) {
+                        var optionElement = $('<option></option>').prop('value', servicio.nombre).text(servicio.nombre);
+                        select_servicio.append(optionElement);
+                    }
+                });
 
-                console.log(selectedAdministracion);
+                console.log('Populated Servicios:', filteredServiciosData);
+
+                // Set default value and trigger change event
+                select_servicio.val(default_select_servicio.val()).trigger('change');
             }
-
-        } 
-
-    
+        } else {
+            console.log('One of the conditions is not met.');
+        }
     }
-    
-  
+
 
     //Cuando se activen uno de los dos triggers, se cambiará el texto con el valor
     function updateNumeroCitasCounter() {
