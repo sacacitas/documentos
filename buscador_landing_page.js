@@ -302,20 +302,29 @@ $(document).ready(function () {
             }
             if (selectedAdministracion && selectedProvincia && radio_buscador_por_provincia.prop('checked')) {
 
-                // Filter data based on selectedAdministracion
-                var filteredOficinasData = data.filter(item => {
+                // Get all servicios from the JSON
+                var allServicios = [];
+
+                data.forEach(oficina => {
+                    if (oficina && oficina.servicios && Array.isArray(oficina.servicios)) {
+                        allServicios.push(...oficina.servicios);
+                    }
+                });
+
+                // Filter servicios based on selectedAdministracion
+                var filteredServiciosData = allServicios.filter(servicio => {
                     if (selectedAdministracion === 'EX1') {
-                        // Show oficinas where id_oficina starts with "gobext"
-                        return item.id_oficina.toLowerCase().includes('gobext');
+                        // Show servicios where id_oficina starts with "gobext"
+                        return servicio.id_oficina.toLowerCase().includes('gobext');
                     } else if (selectedAdministracion === 'RC1') {
-                        // Show oficinas where id_oficina does not start with "gobext"
-                        return !item.id_oficina.toLowerCase().includes('gobext');
+                        // Show servicios where id_oficina does not start with "gobext"
+                        return !servicio.id_oficina.toLowerCase().includes('gobext');
                     }
                     return false;
                 });
-            
-                // Check if there are no oficinas
-                if (filteredOficinasData.length === 0) {
+
+                // Check if there are no servicios
+                if (filteredServiciosData.length === 0) {
                     // Display a default message in select_servicio
                     select_servicio.html('').append($('<option>', {
                         value: '',
@@ -325,23 +334,17 @@ $(document).ready(function () {
                     }));
                 } else {
                     // Populate servicio select options with external data
-                    filteredOficinasData.forEach(oficina => {
-                        if (oficina && oficina.servicios && Array.isArray(oficina.servicios)) {
-                            oficina.servicios.forEach(servicio => {
-                                if (servicio && servicio.nombre) {
-                                    var optionElement = $('<option></option>').prop('value', servicio.nombre).text(servicio.nombre);
-                                    select_servicio.append(optionElement);
-                                }
-                            });
+                    filteredServiciosData.forEach(servicio => {
+                        if (servicio && servicio.nombre) {
+                            var optionElement = $('<option></option>').prop('value', servicio.nombre).text(servicio.nombre);
+                            select_servicio.append(optionElement);
                         }
                     });
-            
+
                     // Set default value and trigger change event
                     select_servicio.val(default_select_servicio.val()).trigger('change');
                 }
             }
-            
-
 
         } 
 
