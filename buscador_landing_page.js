@@ -300,66 +300,66 @@ $(document).ready(function () {
                 // Trigger change event to refresh the select (if needed)
                 select_servicio.trigger('change');
             }
-            // ...
+        // ...
 
-            if (selectedAdministracion && selectedProvincia && radio_buscador_por_provincia.prop('checked')) {
+        if (selectedAdministracion && selectedProvincia && radio_buscador_por_provincia.prop('checked')) {
 
-                console.log('Entered the second IF statement.');
+            console.log('Entered the second IF statement.');
 
-                // Get all servicios from the JSON
-                var allServicios = [];
+            // Get all servicios from the JSON
+            var allServicios = [];
 
-                data.forEach(oficina => {
-                    if (oficina && oficina.servicios && Array.isArray(oficina.servicios)) {
-                        allServicios.push(...oficina.servicios);
-                    }
-                });
-
-                console.log('All Servicios:', allServicios);
-
-                // Filter servicios based on selectedAdministracion
-                var filteredServiciosData = allServicios.filter(servicio => {
-                    if (selectedAdministracion === 'EX1') {
-                        // Show servicios where id_oficina starts with "gobext"
-                        return servicio.id_oficina.toLowerCase().includes('gobext');
-                    } else if (selectedAdministracion === 'RC1') {
-                        // Show servicios where id_oficina does not start with "gobext"
-                        return !servicio.id_oficina.toLowerCase().includes('gobext');
-                    }
-                    return false;
-                });
-
-                console.log('Filtered Servicios:', filteredServiciosData);
-
-                // Check if there are no servicios
-                if (filteredServiciosData.length === 0) {
-                    console.log('No servicios available.');
-                    // Display a default message in select_servicio
-                    select_servicio.html('').append($('<option>', {
-                        value: '',
-                        text: 'No hay servicios disponibles',
-                        disabled: true,
-                        selected: true
-                    }));
-                } else {
-                    // Populate servicio select options with external data
-                    filteredServiciosData.forEach(servicio => {
-                        if (servicio && servicio.nombre) {
-                            var optionElement = $('<option></option>').prop('value', servicio.nombre).text(servicio.nombre);
-                            select_servicio.append(optionElement);
-                        }
-                    });
-
-                    console.log('Populated Servicios:', filteredServiciosData);
-
-                    // Set default value and trigger change event
-                    select_servicio.val(default_select_servicio.val()).trigger('change');
+            data.forEach(oficina => {
+                if (oficina && oficina.servicios && Array.isArray(oficina.servicios)) {
+                    allServicios.push(...oficina.servicios);
                 }
-            } else {
-                console.log('One of the conditions is not met.');
-            }
+            });
 
-            // ...
+            console.log('All Servicios:', allServicios);
+
+            // Filter servicios based on selectedAdministracion
+            var filteredServiciosData = allServicios.filter(servicio => {
+                if (selectedAdministracion === 'EX1') {
+                    // Show servicios where id_oficina starts with "gobext"
+                    return servicio.id_oficina.toLowerCase().includes('gobext');
+                } else if (selectedAdministracion === 'RC1') {
+                    // Show servicios where id_oficina does not start with "gobext"
+                    return !servicio.id_oficina.toLowerCase().includes('gobext');
+                }
+                return false;
+            });
+
+            console.log('Filtered Servicios:', filteredServiciosData);
+
+            // Check if there are no servicios
+            if (filteredServiciosData.length === 0) {
+                console.log('No servicios available.');
+                // Display a default message in select_servicio
+                select_servicio.html('').append($('<option>', {
+                    value: '',
+                    text: 'No hay servicios disponibles',
+                    disabled: true,
+                    selected: true
+                }));
+            } else {
+                // Populate servicio select options with external data
+                filteredServiciosData.forEach(servicio => {
+                    if (servicio && servicio.nombre) {
+                        var optionElement = $('<option></option>').prop('value', servicio.nombre).text(servicio.nombre);
+                        select_servicio.append(optionElement);
+                    }
+                });
+
+                console.log('Populated Servicios:', filteredServiciosData);
+
+                // Set default value and trigger change event
+                select_servicio.val(default_select_servicio.val()).trigger('change');
+            }
+        } else {
+            console.log('One of the conditions is not met.');
+        }
+
+        // ...
 
 
 
