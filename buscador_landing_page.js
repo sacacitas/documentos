@@ -373,7 +373,7 @@ $(document).ready(function () {
                 console.log('Total duplicates removed:', totalDuplicateCount);
 
                 // Set default value and trigger change event
-                select_servicio.val(default_select_servicio.val()).trigger('change');
+                //select_servicio.val(default_select_servicio.val()).trigger('change');
 
 
                 console.log('Populated Servicios:', filteredServiciosData);
