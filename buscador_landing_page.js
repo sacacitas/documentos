@@ -301,62 +301,35 @@ $(document).ready(function () {
         } else if (selectedAdministracion && selectedProvincia && radio_buscador_por_provincia.prop('checked')) {
             console.log('Entered the second IF statement.');
 
-            // Get all servicios from the JSON
+            // Assuming 'data' is your array of oficinas and 'selectedAdministracion' is your selected administration code
+
+            // Initialize the array to store all servicios
             var allServicios = [];
-        
+
             // Check if data is valid and is an array
             if (data && Array.isArray(data)) {
                 data.forEach(oficina => {
                     // Check if 'oficina' and 'oficina.servicios' are valid
                     if (oficina && oficina.servicios && Array.isArray(oficina.servicios)) {
-                        allServicios.push(...oficina.servicios);
+                        // Check if the id_oficina includes the text of the selected administration
+                        const idOficinaLowerCase = oficina.id_oficina.toLowerCase();
+
+                        if (
+                            (selectedAdministracion === 'EX1' && idOficinaLowerCase.includes('gobext')) ||
+                            (selectedAdministracion === 'RC1' && !idOficinaLowerCase.includes('gobext'))
+                        ) {
+                            // Add all servicios for this oficina to the array
+                            allServicios.push(...oficina.servicios);
+                        }
                     }
                 });
             } else {
                 console.log('Invalid data structure.');
             }
-        
+
+            // 'allServicios' now contains the array of servicios based on the selected administration
             console.log('All Servicios:', allServicios);
-                    
-            // Assuming 'allServicios' is your array of servicios and 'selectedAdministracion' is your selected administration code
 
-            var filteredServiciosData = allServicios.filter((servicio) => {
-                if (servicio && servicio.id_oficina) {
-                    console.log("Entered the second IF statement.");
-                    const idOficinaLowerCase = servicio.id_oficina.toLowerCase();
-
-                    if (selectedAdministracion === 'EX1') {
-                        console.log("Selected Administracion: EX1");
-                        console.log("Filtered Servicios (Before):", filteredServiciosData);
-                        
-                        if (idOficinaLowerCase.includes('gobext')) {
-                            filteredServiciosData.push(servicio);
-                        }
-                        
-                        console.log("Filtered Servicios (After):", filteredServiciosData);
-                    } else if (selectedAdministracion === 'RC1') {
-                        console.log("Selected Administracion: RC1");
-                        console.log("Filtered Servicios (Before):", filteredServiciosData);
-                        
-                        if (!idOficinaLowerCase.includes('gobext')) {
-                            filteredServiciosData.push(servicio);
-                        }
-                        
-                        console.log("Filtered Servicios (After):", filteredServiciosData);
-                    }
-                }
-            });
-
-            // filteredServiciosData now contains the filtered servicios based on the selected administration
-            console.log("Final Filtered Servicios:", filteredServiciosData);
-
-            
-            // filteredServiciosData now contains the filtered servicios based on the selected administration
-            console.log(filteredServiciosData);
-            console.log('Selected Administracion:', selectedAdministracion);
-            console.log('Filtered Servicios:', filteredServiciosData);
-
-        
             // Check if there are no servicios
             if (filteredServiciosData.length === 0) {
                 console.log('No servicios available.');
