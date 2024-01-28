@@ -343,13 +343,20 @@ $(document).ready(function () {
                     selected: true
                 }));
             } else {
-                // Sort the servicios array by name
-                filteredServiciosData.sort((a, b) => a.nombre.localeCompare(b.nombre));
-
-                // Populate servicio select options with external data
+                // Count occurrences of each servicio
+                const servicioCounts = {};
                 filteredServiciosData.forEach(servicio => {
                     if (servicio && servicio.nombre) {
-                        var optionElement = $('<option></option>').prop('value', servicio.nombre).text(servicio.nombre);
+                        servicioCounts[servicio.nombre] = (servicioCounts[servicio.nombre] || 0) + 1;
+                    }
+                });
+
+                // Populate servicio select options with external data, including counts
+                filteredServiciosData.forEach(servicio => {
+                    if (servicio && servicio.nombre) {
+                        const count = servicioCounts[servicio.nombre];
+                        const optionText = count > 1 ? `${servicio.nombre} (${count})` : servicio.nombre;
+                        var optionElement = $('<option></option>').prop('value', servicio.nombre).text(optionText);
                         select_servicio.append(optionElement);
                     }
                 });
