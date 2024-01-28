@@ -355,6 +355,7 @@ $(document).ready(function () {
                 });
 
                 // Populate servicio select options with external data, including counts
+                select_servicio.html(''); // Clear existing options
                 filteredServiciosData.forEach(servicio => {
                     if (servicio && servicio.nombre) {
                         const count = servicioCounts[servicio.nombre];
@@ -363,12 +364,19 @@ $(document).ready(function () {
                         }
                         const optionText = count > 1 ? `${servicio.nombre} (${count})` : servicio.nombre;
                         var optionElement = $('<option></option>').prop('value', servicio.nombre).text(optionText);
-                        select_servicio.append(optionElement);
+                        // Check if the option already exists before appending
+                        if (select_servicio.find(`option[value="${servicio.nombre}"]`).length === 0) {
+                            select_servicio.append(optionElement);
+                        }
                     }
                 });
 
                 // Log the total count of duplicates that were removed
                 console.log('Total duplicates removed:', totalDuplicateCount);
+
+                // Set default value and trigger change event
+                //select_servicio.val(default_select_servicio.val()).trigger('change');
+
 
                 console.log('Populated Servicios:', filteredServiciosData);
 
