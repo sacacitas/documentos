@@ -299,7 +299,8 @@ $(document).ready(function () {
       
                 // Trigger change event to refresh the select (if needed)
                 select_servicio.trigger('change');
-            } (selectedAdministracion && selectedProvincia && radio_buscador_por_provincia.prop('checked')) {
+
+            } if (selectedAdministracion && selectedProvincia && radio_buscador_por_provincia.prop('checked')) {
                 // Display a default message in select_servicio
                 select_servicio.html('').append($('<option>', {
                     value: '',
