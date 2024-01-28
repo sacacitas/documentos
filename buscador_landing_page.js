@@ -330,6 +330,9 @@ $(document).ready(function () {
             // 'allServicios' now contains the array of servicios based on the selected administration
             console.log('All Servicios:', allServicios);
 
+
+            var filteredServiciosData = [];
+
             // Check if there are no servicios
             if (filteredServiciosData.length === 0) {
                 console.log('No servicios available.');
