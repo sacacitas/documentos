@@ -362,19 +362,17 @@ $(document).ready(function () {
                         if (count > 1) {
                             totalDuplicateCount += count - 1;
                         }
-                        const countText = count > 1 ? `(${count})` : ''; // Include count only if greater than 1
-                        const optionText = `${servicio.nombre} ${countText}`;
+                        const optionText = count > 1 ? `${servicio.nombre} (${count})` : servicio.nombre;
                         var optionElement = $('<option></option>').prop('value', servicio.nombre).text(optionText);
-                        select_servicio.append(optionElement);
+                        // Check if the option already exists before appending
+                        if (select_servicio.find(`option[value="${servicio.nombre}"]`).length === 0) {
+                            select_servicio.append(optionElement);
+                        }
                     }
                 });
 
                 // Log the total count of duplicates that were removed
                 console.log('Total duplicates removed:', totalDuplicateCount);
-
-                // Set default value and trigger change event
-                //select_servicio.val(default_select_servicio.val()).trigger('change');
-
 
                 console.log('Populated Servicios:', filteredServiciosData);
 
