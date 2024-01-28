@@ -332,13 +332,9 @@ $(document).ready(function () {
                 }
                 return false;
             });
-
+            console.log('Selected Administracion:', selectedAdministracion);
             console.log('Filtered Servicios:', filteredServiciosData);
 
-            // ...
-
-
-            console.log('Filtered Servicios:', filteredServiciosData);
         
             // Check if there are no servicios
             if (filteredServiciosData.length === 0) {
