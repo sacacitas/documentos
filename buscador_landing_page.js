@@ -312,18 +312,19 @@ $(document).ready(function () {
 
             console.log('All Servicios:', allServicios);
 
-            // Filter servicios based on selectedAdministracion
             var filteredServiciosData = allServicios.filter(servicio => {
-                if (selectedAdministracion === 'EX1') {
-                    // Show servicios where id_oficina starts with "gobext"
-                    return servicio.id_oficina.toLowerCase().includes('gobext');
-                } else if (selectedAdministracion === 'RC1') {
-                    // Show servicios where id_oficina does not start with "gobext"
-                    return !servicio.id_oficina.toLowerCase().includes('gobext');
+                if (servicio && servicio.id_oficina) {
+                    if (selectedAdministracion === 'EX1') {
+                        // Show servicios where id_oficina starts with "gobext"
+                        return servicio.id_oficina.toLowerCase().includes('gobext');
+                    } else if (selectedAdministracion === 'RC1') {
+                        // Show servicios where id_oficina does not start with "gobext"
+                        return !servicio.id_oficina.toLowerCase().includes('gobext');
+                    }
                 }
                 return false;
             });
-
+             
             console.log('Filtered Servicios:', filteredServiciosData);
 
             // Check if there are no servicios
