@@ -303,15 +303,22 @@ $(document).ready(function () {
 
             // Get all servicios from the JSON
             var allServicios = [];
-
-            data.forEach(oficina => {
-                if (oficina && oficina.servicios && Array.isArray(oficina.servicios)) {
-                    allServicios.push(...oficina.servicios);
-                }
-            });
-
+        
+            // Check if data is valid and is an array
+            if (data && Array.isArray(data)) {
+                data.forEach(oficina => {
+                    // Check if 'oficina' and 'oficina.servicios' are valid
+                    if (oficina && oficina.servicios && Array.isArray(oficina.servicios)) {
+                        allServicios.push(...oficina.servicios);
+                    }
+                });
+            } else {
+                console.log('Invalid data structure.');
+            }
+        
             console.log('All Servicios:', allServicios);
-
+        
+            // Filter servicios based on selectedAdministracion
             var filteredServiciosData = allServicios.filter(servicio => {
                 if (servicio && servicio.id_oficina) {
                     if (selectedAdministracion === 'EX1') {
@@ -324,9 +331,11 @@ $(document).ready(function () {
                 }
                 return false;
             });
-             
-            console.log('Filtered Servicios:', filteredServiciosData);
 
+            // ...
+
+            console.log('Filtered Servicios:', filteredServiciosData);
+        
             // Check if there are no servicios
             if (filteredServiciosData.length === 0) {
                 console.log('No servicios available.');
@@ -345,15 +354,17 @@ $(document).ready(function () {
                         select_servicio.append(optionElement);
                     }
                 });
-
+        
                 console.log('Populated Servicios:', filteredServiciosData);
-
+        
                 // Set default value and trigger change event
                 select_servicio.val(default_select_servicio.val()).trigger('change');
             }
         } else {
             console.log('One of the conditions is not met.');
         }
+
+
     }
 
 
