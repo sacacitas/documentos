@@ -304,6 +304,8 @@ $(document).ready(function () {
 
             if (selectedAdministracion && selectedProvincia && radio_buscador_por_provincia.prop('checked')) {
 
+                console.log('Entered the second IF statement.');
+
                 // Get all servicios from the JSON
                 var allServicios = [];
 
@@ -358,6 +360,7 @@ $(document).ready(function () {
             }
 
             // ...
+
 
 
         } 
