@@ -317,10 +317,11 @@ $(document).ready(function () {
             }
         
             console.log('All Servicios:', allServicios);
-        
+                    
             // Filter servicios based on selectedAdministracion
-            var filteredServiciosData = allServicios.filter(servicio => {
+            var filteredServiciosData = allServicios.filter((servicio, index) => {
                 if (servicio && servicio.id_oficina) {
+                    console.log(`Processing servicio at index ${index}:`, servicio);
                     if (selectedAdministracion === 'EX1') {
                         // Show servicios where id_oficina starts with "gobext"
                         return servicio.id_oficina.toLowerCase().includes('gobext');
@@ -332,7 +333,10 @@ $(document).ready(function () {
                 return false;
             });
 
+            console.log('Filtered Servicios:', filteredServiciosData);
+
             // ...
+
 
             console.log('Filtered Servicios:', filteredServiciosData);
         
