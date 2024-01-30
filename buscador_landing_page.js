@@ -365,9 +365,6 @@ $(document).ready(function () {
                     return { value: servicio.nombre, text: optionText };
                 });
 
-                // Sort the options by name
-                sortedOptions.sort((a, b) => a.text.localeCompare(b.text));
-
                 // Populate servicio select options with external data, including counts
                 select_servicio.html(''); // Clear existing options
                 sortedOptions.forEach(option => {
