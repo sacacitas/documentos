@@ -378,6 +378,10 @@ $(document).ready(function () {
 
             }
 
+        
+            // Trigger change event to refresh the select (if needed)
+            select_servicio.trigger('change');        
+        
         } else {
             console.log('One of the conditions is not met.');
         }
