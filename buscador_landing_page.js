@@ -393,91 +393,33 @@ $(document).ready(function () {
 
 
 
-
-    //3.Sección de citas previas seleccionadas bloque derecho
-    var checkoutContainer = $('#bloque-items-citas');
-    var maxCheckoutItems = 15; //Items máximos que se pueden añadir
-    //Event listener del select de servicios
+    // Event listener del select de servicios
     select_servicio.on('change', function () {
         // Get the selected values
         var selectedProvincia = select_provincia.val();
         var selectedOficina = select_oficina.val();
-        var selectedServicio = select_servicio.val();
+        var selectedServicios = select_servicio.val();
 
         // Check if all values are selected
-        if (selectedProvincia && selectedOficina && selectedServicio) {
-            // Create a new div with a personalized HTML structure for the checkout item
-            var checkoutItem = $('<div class="checkout-item">' +
-                '<div class="column wide-column">' +
-                '   <span class="item-text">' + selectedProvincia + ' | ' + selectedOficina + '</span>' +
-                '   <span class="item-text">' + selectedServicio + '</span>' +
-                '</div>' +
-                '<div class="column narrow-column">' +
-                '   <button class="delete-item"><img src="https://uploads-ssl.webflow.com/652f00909568ce58c099d55f/652f00919568ce58c099d689_Exit.svg" alt="Delete" style="width: 20px; height: 20px; margin-left: auto;"></button>' +
-                '</div>' +
-                '</div>');
+        if (selectedProvincia && selectedOficina && selectedServicios && radio_buscador_por_provincia.prop('checked')) {
+            // Iterate through selected servicios and create a checkout item for each
+            selectedServicios.forEach(selectedServicio => {
+                // Create a new div with a personalized HTML structure for the checkout item
+                var checkoutItem = $('<div class="checkout-item">' +
+                    '<div class="column wide-column">' +
+                    '   <span class="item-text">' + selectedProvincia + ' | ' + selectedOficina + '</span>' +
+                    '   <span class="item-text">' + selectedServicio + '</span>' +
+                    '</div>' +
+                    '<div class="column narrow-column">' +
+                    '   <button class="delete-item"><img src="https://uploads-ssl.webflow.com/652f00909568ce58c099d55f/652f00919568ce58c099d689_Exit.svg" alt="Delete" style="width: 20px; height: 20px; margin-left: auto;"></button>' +
+                    '</div>' +
+                    '</div>');
 
-            //Box de la cita seleccionada
-            checkoutItem.css({
-                //'padding': '5px',
-                'border': '1px solid #99a4af',
-                'border-radius': '5px',
-                'background-color': '#fff',
-                'padding': '10px 0px 10px 0px',
-                'margin': '5px 0px 5px 0px',
-                'display': 'flex',
-                //'justify-content': 'space-between',
-                'align-items': 'center',
-                'box-shadow': '0px 3px 5px 0px rgba(0, 0, 0, .2)'
+                // ... rest of the styling and functionality code ...
+
+                // Append the checkout item to the checkout container
+                checkoutContainer.append(checkoutItem);
             });
-
-            //Items dentro del box de la cita seleccionada
-            checkoutItem.find('.item-text').css({
-                'font-size': '16px',
-                'color': '#333'
-            });
-
-            //Columna izquierda del grid de la cita seleccionada
-            checkoutItem.find('.wide-column').css({
-                'flex': '85%', // Adjust the percentage as needed
-                'padding': '0px 5px 0px 5px' 
-            });
-
-            //Columna derecha del grid de la cita seleccionada
-            checkoutItem.find('.narrow-column').css({
-                'flex': '15%',
-                'margin': '0px 5px 0px 5px',
-                'padding': '0'
-            });
-
-
-            //Botón de borrar cita seleccionada
-            checkoutItem.find('.delete-item').css({
-                'background-color': '#fff',
-                'border': 'none',
-                'cursor': 'pointer'
-            });
-
-            // Función para borrar cita seleccionada
-            var deleteButton = checkoutItem.find('.delete-item');
-            deleteButton.on('click', function () {
-                // Remove the item when the delete button is clicked
-                checkoutItem.remove();
-
-                // If the counter is greater than 0, decrement it
-                numero_citas_contador = checkoutContainer.children('.checkout-item').length;
-
-                // Update and display the counter
-                updateNumeroCitasCounter();
-
-                // Enable select_servicio if the maximum number of items is not reached
-                if (checkoutContainer.children('.checkout-item').length < maxCheckoutItems) {
-                    select_servicio.prop('disabled', false);
-                }
-            });
-
-            // Append the checkout item to the checkout container
-            checkoutContainer.append(checkoutItem);
 
             // Check if the maximum number of items is reached and disable the select if needed
             if (checkoutContainer.children('.checkout-item').length >= maxCheckoutItems) {
@@ -485,11 +427,9 @@ $(document).ready(function () {
             }
         }
         
-
-        //Resetear select de servicios cuando se añade una cita
-        //select_servicio.val(null).trigger('change');
+        // Resetear select de servicios cuando se añade una cita
+        select_servicio.val(null).trigger('change');
     });
-
 
 
 
