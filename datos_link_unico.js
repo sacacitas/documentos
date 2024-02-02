@@ -248,13 +248,14 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
               //Mostrar grids según lo clickeado en el menu de datos
-              document.getElementById('boton-link-unico-datos').addEventListener('click', function () {
+
+              document.getElementById('boton-link-unico-busqueda').addEventListener('click', function () {
                 document.getElementById('grid-link-unico-datos').style.display = 'grid';
                 document.getElementById('grid-link-unico-busqueda').style.display = 'none';
                 document.getElementById('grid-link-unico-estadistica').style.display = 'none';
                 });
 
-              document.getElementById('boton-link-unico-busqueda').addEventListener('click', function () {
+              document.getElementById('boton-link-unico-datos').addEventListener('click', function () {
                 document.getElementById('grid-link-unico-datos').style.display = 'none';
                 document.getElementById('grid-link-unico-busqueda').style.display = 'grid';
                 document.getElementById('grid-link-unico-estadistica').style.display = 'none';
@@ -267,7 +268,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 });
               
               //De manera predeterminada ocultar los 2 últimos grids
-              document.getElementById('grid-link-unico-busqueda').style.display = 'none';
+              document.getElementById('grid-link-unico-datos').style.display = 'none';
               document.getElementById('grid-link-unico-estadistica').style.display = 'none';
 
 
