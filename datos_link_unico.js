@@ -256,44 +256,27 @@ document.addEventListener('DOMContentLoaded', function () {
                 var gridLinkUnicoEstadistica = document.getElementById('grid-link-unico-estadistica');
 
                 $(document).ready(function () {
-                    // Click event for botonLinkUnicoBusqueda
-                    $(botonLinkUnicoBusqueda).click(function () {
-                        $(gridLinkUnicoBusqueda).show();
-                        $(gridLinkUnicoDatos).hide();
-                        $(gridLinkUnicoEstadistica).hide();
-                        $(gridLinkUnicoBusqueda).addClass('boton-datos-link-unico-selected');
-                        $(gridLinkUnicoDatos).removeClass('boton-datos-link-unico-selected');
-                        $(gridLinkUnicoEstadistica).removeClass('boton-datos-link-unico-selected');
-
+                    $('.boton-link-unico').click(function () {
+                        var target = $(this).data('target');
+                
+                        // Hide all grids
+                        $('.grid-link-unico').hide();
+                
+                        // Show the selected grid
+                        $('#' + target).show();
+                
+                        // Remove the 'boton-datos-link-unico-selected' class from all buttons
+                        $('.boton-link-unico').removeClass('boton-datos-link-unico-selected');
+                
+                        // Add the 'boton-datos-link-unico-selected' class to the clicked button
+                        $(this).addClass('boton-datos-link-unico-selected');
                     });
-
-                    // Click event for botonLinkUnicoDatos
-                    $(botonLinkUnicoDatos).click(function () {
-                        $(gridLinkUnicoBusqueda).hide();
-                        $(gridLinkUnicoDatos).show();
-                        $(gridLinkUnicoEstadistica).hide();
-                        $(gridLinkUnicoBusqueda).removeClass('boton-datos-link-unico-selected');
-                        $(gridLinkUnicoDatos).addClass('boton-datos-link-unico-selected');
-                        $(gridLinkUnicoEstadistica).removeClass('boton-datos-link-unico-selected');                        
-                    });
-
-                    // Click event for botonLinkUnicoEstadistica
-                    $(botonLinkUnicoEstadistica).click(function () {
-                        $(gridLinkUnicoBusqueda).hide();
-                        $(gridLinkUnicoDatos).hide();
-                        $(gridLinkUnicoEstadistica).show();
-                        $(gridLinkUnicoBusqueda).removeClass('boton-datos-link-unico-selected');
-                        $(gridLinkUnicoDatos).removeClass('boton-datos-link-unico-selected');
-                        $(gridLinkUnicoEstadistica).addClass('boton-datos-link-unico-selected');                        
-                    });
-
-                    // De manera predeterminada ocultar los 2 últimos grids
-                    $(gridLinkUnicoDatos).hide();
-                    $(gridLinkUnicoEstadistica).hide();
-                    $(gridLinkUnicoBusqueda).addClass('boton-datos-link-unico-selected');
+                
+                    // Show the default grid and highlight the default button
+                    $('#grid-link-unico-busqueda').show();
+                    $('.boton-link-unico[data-target="grid-link-unico-busqueda"]').addClass('boton-datos-link-unico-selected');
                 });
-
-
+                
 
 
                 //Datos para empresa factura
