@@ -247,37 +247,40 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 
-              //Mostrar grids según lo clickeado en el menu de datos
-              var boton_link_unico_busqueda = document.getElementById('boton-link-unico-busqueda');
-              var boton_link_unico_datos = document.getElementById('boton-link-unico-datos');
-              var boton_link_unico_estadistica = document.getElementById('boton-link-unico-estadistica');
-              var grid_link_unico_busqueda = document.getElementById('grid-link-unico-busqueda');
-              var grid_link_unico_datos = document.getElementById('grid-link-unico-datos');
-              var grid_link_unico_estadistica = document.getElementById('grid-link-unico-estadistica');
+                // Mostrar grids según lo clickeado en el menu de datos
+                var botonLinkUnicoBusqueda = document.getElementById('boton-link-unico-busqueda');
+                var botonLinkUnicoDatos = document.getElementById('boton-link-unico-datos');
+                var botonLinkUnicoEstadistica = document.getElementById('boton-link-unico-estadistica');
+                var gridLinkUnicoBusqueda = document.getElementById('grid-link-unico-busqueda');
+                var gridLinkUnicoDatos = document.getElementById('grid-link-unico-datos');
+                var gridLinkUnicoEstadistica = document.getElementById('grid-link-unico-estadistica');
 
+                $(document).ready(function () {
+                    // Click event for botonLinkUnicoBusqueda
+                    $(botonLinkUnicoBusqueda).click(function () {
+                        $(gridLinkUnicoBusqueda).show();
+                        $(gridLinkUnicoDatos).hide();
+                        $(gridLinkUnicoEstadistica).hide();
+                    });
 
-              $("boton_link_unico_busqueda").addEventListener('click', function () {
-                $("grid_link_unico_busqueda").style.display = 'grid';
-                $("grid_link_unico_datos").style.display = 'none';
-                $("grid_link_unico_estadistica").style.display = 'none';
+                    // Click event for botonLinkUnicoDatos
+                    $(botonLinkUnicoDatos).click(function () {
+                        $(gridLinkUnicoBusqueda).hide();
+                        $(gridLinkUnicoDatos).show();
+                        $(gridLinkUnicoEstadistica).hide();
+                    });
+
+                    // Click event for botonLinkUnicoEstadistica
+                    $(botonLinkUnicoEstadistica).click(function () {
+                        $(gridLinkUnicoBusqueda).hide();
+                        $(gridLinkUnicoDatos).hide();
+                        $(gridLinkUnicoEstadistica).show();
+                    });
+
+                    // De manera predeterminada ocultar los 2 últimos grids
+                    $(gridLinkUnicoDatos).hide();
+                    $(gridLinkUnicoEstadistica).hide();
                 });
-
-              $("boton_link_unico_datos").addEventListener('click', function () {
-                $("grid_link_unico_busqueda").style.display = 'none';
-                $("grid_link_unico_datos").style.display = 'grid';
-                $("grid_link_unico_estadistica").style.display = 'none';
-                });
-
-              $("boton_link_unico_estadistica").addEventListener('click', function () {
-                $("grid_link_unico_busqueda").style.display = 'none';
-                $("grid_link_unico_datos").style.display = 'none';
-                $("grid_link_unico_estadistica").style.display = 'grid';
-                });
-
-              //De manera predeterminada ocultar los 2 últimos grids
-              $("grid_link_unico_datos").style.display = 'none';
-              $("grid_link_unico_estadistica").style.display = 'none';
-
 
 
 
