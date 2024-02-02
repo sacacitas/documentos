@@ -261,6 +261,10 @@ document.addEventListener('DOMContentLoaded', function () {
                         $(gridLinkUnicoBusqueda).show();
                         $(gridLinkUnicoDatos).hide();
                         $(gridLinkUnicoEstadistica).hide();
+                        $(gridLinkUnicoBusqueda).addClass('boton-datos-link-unico-selected');
+                        $(gridLinkUnicoDatos).removeClass('boton-datos-link-unico-selected');
+                        $(gridLinkUnicoEstadistica).removeClass('boton-datos-link-unico-selected');
+
                     });
 
                     // Click event for botonLinkUnicoDatos
@@ -268,6 +272,9 @@ document.addEventListener('DOMContentLoaded', function () {
                         $(gridLinkUnicoBusqueda).hide();
                         $(gridLinkUnicoDatos).show();
                         $(gridLinkUnicoEstadistica).hide();
+                        $(gridLinkUnicoBusqueda).removeClass('boton-datos-link-unico-selected');
+                        $(gridLinkUnicoDatos).addClass('boton-datos-link-unico-selected');
+                        $(gridLinkUnicoEstadistica).removeClass('boton-datos-link-unico-selected');                        
                     });
 
                     // Click event for botonLinkUnicoEstadistica
@@ -275,11 +282,15 @@ document.addEventListener('DOMContentLoaded', function () {
                         $(gridLinkUnicoBusqueda).hide();
                         $(gridLinkUnicoDatos).hide();
                         $(gridLinkUnicoEstadistica).show();
+                        $(gridLinkUnicoBusqueda).removeClass('boton-datos-link-unico-selected');
+                        $(gridLinkUnicoDatos).removeClass('boton-datos-link-unico-selected');
+                        $(gridLinkUnicoEstadistica).addClass('boton-datos-link-unico-selected');                        
                     });
 
                     // De manera predeterminada ocultar los 2 últimos grids
                     $(gridLinkUnicoDatos).hide();
                     $(gridLinkUnicoEstadistica).hide();
+                    $(gridLinkUnicoBusqueda).addClass('boton-datos-link-unico-selected');
                 });
 
 
