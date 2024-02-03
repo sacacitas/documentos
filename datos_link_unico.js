@@ -269,51 +269,88 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
                 $(document).ready(function () {
-                    // Cache jQuery selectors in variables
+                    //botones
+                    var botonLinkUnicoReserva = $('#boton-link-unico-reserva');
                     var botonLinkUnicoBusqueda = $('#boton-link-unico-busqueda');
                     var botonLinkUnicoDatos = $('#boton-link-unico-datos');
                     var botonLinkUnicoEstadistica = $('#boton-link-unico-estadistica');
+                    //Grids
+                    var divPagoYReserva = $('#div-pago-y-reserva');
                     var gridLinkUnicoBusqueda = $('#grid-link-unico-busqueda');
                     var gridLinkUnicoDatos = $('#grid-link-unico-datos');
                     var gridLinkUnicoEstadistica = $('#grid-link-unico-estadistica');
+
+                    //Ocultar boton reserva y div de pago y reserva
+                    botonLinkUnicoReserva.hide();
+                    divPagoYReserva.hide();
+                    // De manera predeterminada ocultar los 2 últimos grids y seleccionar botón Búsqueda
+                    gridLinkUnicoDatos.hide();
+                    gridLinkUnicoEstadistica.hide();
+                    botonLinkUnicoBusqueda.addClass('boton-datos-link-unico-selected');
+
+                    //Si la cita está reservada o pagada, mostrar el botón de reserva y datos pago
+                    if (state_front == 'RESERVADO' || state_front == 'PAGADO') { 
+                        botonLinkUnicoBusqueda.removeClass('boton-datos-link-unico-selected');
+                        gridLinkUnicoBusqueda.hide();
+                        botonLinkUnicoReserva.show();
+                        botonLinkUnicoReserva.addClass('boton-datos-link-unico-selected');
+                        divPagoYReserva.show();
+                        
+
+                    }
+
+                    // Click event for botonLinkUnicoBusqueda
+                    botonLinkUnicoReserva.click(function () {
+                        divPagoYReserva.show();
+                        gridLinkUnicoBusqueda.hide();
+                        gridLinkUnicoDatos.hide();
+                        gridLinkUnicoEstadistica.hide();
+                        botonLinkUnicoReserva.addClass('boton-datos-link-unico-selected');
+                        botonLinkUnicoBusqueda.removeClass('boton-datos-link-unico-selected');
+                        botonLinkUnicoDatos.removeClass('boton-datos-link-unico-selected');
+                        botonLinkUnicoEstadistica.removeClass('boton-datos-link-unico-selected');
+                    });                    
                 
                     // Click event for botonLinkUnicoBusqueda
                     botonLinkUnicoBusqueda.click(function () {
+                        divPagoYReserva.hide();
                         gridLinkUnicoBusqueda.show();
                         gridLinkUnicoDatos.hide();
                         gridLinkUnicoEstadistica.hide();
+                        botonLinkUnicoReserva.removeClass('boton-datos-link-unico-selected');
                         botonLinkUnicoBusqueda.addClass('boton-datos-link-unico-selected');
                         botonLinkUnicoDatos.removeClass('boton-datos-link-unico-selected');
                         botonLinkUnicoEstadistica.removeClass('boton-datos-link-unico-selected');
-                    });
+                    });                    
                 
                 
                     // Click event for botonLinkUnicoBusqueda
                     botonLinkUnicoDatos.click(function () {
+                        divPagoYReserva.hide();
                         gridLinkUnicoBusqueda.hide();
                         gridLinkUnicoDatos.show();
                         gridLinkUnicoEstadistica.hide();
+                        botonLinkUnicoReserva.removeClass('boton-datos-link-unico-selected');
                         botonLinkUnicoBusqueda.removeClass('boton-datos-link-unico-selected');
                         botonLinkUnicoDatos.addClass('boton-datos-link-unico-selected');
                         botonLinkUnicoEstadistica.removeClass('boton-datos-link-unico-selected');
-                    });
+                    });                    
                 
   
                     // Click event for botonLinkUnicoBusqueda
                     botonLinkUnicoEstadistica.click(function () {
+                        divPagoYReserva.hide();
                         gridLinkUnicoBusqueda.hide();
                         gridLinkUnicoDatos.hide();
                         gridLinkUnicoEstadistica.show();
+                        botonLinkUnicoReserva.removeClass('boton-datos-link-unico-selected');
                         botonLinkUnicoBusqueda.removeClass('boton-datos-link-unico-selected');
                         botonLinkUnicoDatos.removeClass('boton-datos-link-unico-selected');
                         botonLinkUnicoEstadistica.addClass('boton-datos-link-unico-selected');
-                    });
+                    });                    
                 
   
-                    // De manera predeterminada ocultar los 2 últimos grids
-                    gridLinkUnicoDatos.hide();
-                    gridLinkUnicoEstadistica.hide();
-                    botonLinkUnicoBusqueda.addClass('boton-datos-link-unico-selected');
+
                 });
 
 
