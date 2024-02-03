@@ -341,8 +341,9 @@ document.addEventListener('DOMContentLoaded', function () {
                     var gridLinkUnicoEstadistica = $('#grid-link-unico-estadistica');
 
 
-                    // De manera predeterminada ocultar los 2 últimos grids y seleccionar botón Búsqueda
+                    // De manera predeterminada ocultar grids y seleccionar botón Búsqueda
                     divPagoYReserva.hide();
+                    gridLinkUnicoOficina.hide();
                     gridLinkUnicoDatos.hide();
                     gridLinkUnicoEstadistica.hide();
                     botonLinkUnicoBusqueda.addClass('boton-datos-link-unico-selected');
