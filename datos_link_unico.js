@@ -360,8 +360,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
                     // Click event for botonLinkUnicoBusqueda
                     botonLinkUnicoBusqueda.click(function () {
-                        divPagoYReserva.show();
-                        divLinkUnicoBusqueda.hide();
+                        divLinkUnicoBusqueda.show();
+                        divPagoYReserva.hide();
                         gridLinkUnicoOficina.hide();
                         gridLinkUnicoDatos.hide();
                         gridLinkUnicoEstadistica.hide();
@@ -374,8 +374,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 
                     // Click event for botonLinkUnicoBusqueda
                     botonLinkUnicoReserva.click(function () {
-                        divPagoYReserva.hide();
-                        divLinkUnicoBusqueda.show();
+                        divLinkUnicoBusqueda.hide();
+                        divPagoYReserva.show();
                         gridLinkUnicoOficina.hide();
                         gridLinkUnicoDatos.hide();
                         gridLinkUnicoEstadistica.hide();
@@ -388,8 +388,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 
                     // Click event for botonLinkUnicoBusqueda
                     botonLinkUnicoOficina.click(function () {
-                        divPagoYReserva.hide();
                         divLinkUnicoBusqueda.hide();
+                        divPagoYReserva.hide();
                         gridLinkUnicoOficina.show();
                         gridLinkUnicoDatos.hide();
                         gridLinkUnicoEstadistica.hide();
@@ -403,8 +403,8 @@ document.addEventListener('DOMContentLoaded', function () {
   
                     // Click event for botonLinkUnicoBusqueda
                     botonLinkUnicoDatos.click(function () {
-                        divPagoYReserva.hide();
                         divLinkUnicoBusqueda.hide();
+                        divPagoYReserva.hide();
                         gridLinkUnicoOficina.hide();
                         gridLinkUnicoDatos.show();
                         gridLinkUnicoEstadistica.hide();
@@ -417,8 +417,8 @@ document.addEventListener('DOMContentLoaded', function () {
                     
                     // Click event for botonLinkUnicoBusqueda
                     botonLinkUnicoEstadistica.click(function () {
-                        divPagoYReserva.hide();
                         divLinkUnicoBusqueda.hide();
+                        divPagoYReserva.hide();
                         gridLinkUnicoOficina.hide();
                         gridLinkUnicoDatos.hide();
                         gridLinkUnicoEstadistica.show();
