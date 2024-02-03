@@ -293,9 +293,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 if (state_front == 'RESERVADO' && horas_busqueda_front > 48) {
                     divCosteHoraBuscando.show();
                 }
-                if (horas_busqueda_front < 24) {
-                    divHorasBuscando.hide();
-                }
                 if (state_front == 'RESERVADO' && retries_front > 500) {
                     divCosteHoraBuscando.show();
                 }
