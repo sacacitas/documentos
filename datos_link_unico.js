@@ -224,6 +224,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 botonCancelarLinkUnico.hide();
                 divUltimaBusqueda.hide();
                 divCosteHoraBuscando.hide();
+                cuadradoPagoCita20.hide();
+                divDatosCitaReservada.hide();
                 
                 
 
