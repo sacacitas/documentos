@@ -229,7 +229,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 cuadradoPagoCita20.hide();
                 divDatosCitaReservada.hide();
                 botonRenovarBusquedaCita.hide();
-                textoCitaAunBuscando.hide();
                 
                 
 
@@ -257,7 +256,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
                 if (state_front == 'BUSCANDO') {
                     divCaducidadBusqueda.show();
-                    textoCitaAunBuscando.show();
                 }
                 if (state_front == 'RESERVADO') {
                     botonEstadoBusqueda.text('Cita reservada, pendiente de pagar');
