@@ -265,9 +265,9 @@ document.addEventListener('DOMContentLoaded', function () {
                 if (state_front == 'BUSCANDO') {
                     divUltimaBusqueda.show();
                 }
-                if (state_front == 'EXPIRADO' || state_front == 'CANCELADO' || state_front == 'ANULADO') {
-                    botonRenovarBusquedaCita.show();
-                }    
+                //if (state_front == 'EXPIRADO' || state_front == 'CANCELADO' || state_front == 'ANULADO') {
+                //    botonRenovarBusquedaCita.show();
+                //}    
 
 
 
