@@ -221,6 +221,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 //Ocultar elementos de manera predeterminada
                 divCaducidadBusqueda.hide();
+                botonCancelarLinkUnico.hide();
                 
 
 
