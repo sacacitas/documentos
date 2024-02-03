@@ -217,6 +217,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 var divCaducidadBusqueda = $('#div_caducidad_busqueda');
                 var botonEstadoBusqueda = $('#boton_estado_busqueda');
                 var divUltimaBusqueda = $('#div-ultima-busqueda');
+                var botonRenovarBusquedaCita = $('#boton-renovar-busqueda-cita');
 
 
                 //Ocultar elementos de manera predeterminada
@@ -226,6 +227,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 divCosteHoraBuscando.hide();
                 cuadradoPagoCita20.hide();
                 divDatosCitaReservada.hide();
+                botonRenovarBusquedaCita.hide();
                 
                 
 
@@ -263,6 +265,9 @@ document.addEventListener('DOMContentLoaded', function () {
                 if (state_front == 'BUSCANDO') {
                     divUltimaBusqueda.show();
                 }
+                if (state_front == 'EXPIRADO' || state_front == 'CANCELADO' || state_front == 'ANULADO') {
+                    botonRenovarBusquedaCita.show();
+                }    
 
 
 
