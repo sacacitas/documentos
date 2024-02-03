@@ -218,6 +218,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 var botonEstadoBusqueda = $('#boton_estado_busqueda');
                 var divUltimaBusqueda = $('#div-ultima-busqueda');
                 var botonRenovarBusquedaCita = $('#boton-renovar-busqueda-cita');
+                var textoCitaAunBuscando = $('#texto-pago-cita-aun-buscando');
 
 
                 //Ocultar elementos de manera predeterminada
@@ -280,10 +281,9 @@ document.addEventListener('DOMContentLoaded', function () {
                     var gridLinkUnicoDatos = $('#grid-link-unico-datos');
                     var gridLinkUnicoEstadistica = $('#grid-link-unico-estadistica');
 
-                    //Ocultar boton reserva y div de pago y reserva
-                    botonLinkUnicoReserva.hide();
-                    divPagoYReserva.hide();
+
                     // De manera predeterminada ocultar los 2 últimos grids y seleccionar botón Búsqueda
+                    divPagoYReserva.hide();
                     gridLinkUnicoDatos.hide();
                     gridLinkUnicoEstadistica.hide();
                     botonLinkUnicoBusqueda.addClass('boton-datos-link-unico-selected');
@@ -295,6 +295,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         botonLinkUnicoReserva.show();
                         botonLinkUnicoReserva.addClass('boton-datos-link-unico-selected');
                         divPagoYReserva.show();
+                        textoCitaAunBuscando.hide();
                         
 
                     }
