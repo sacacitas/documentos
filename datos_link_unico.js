@@ -242,9 +242,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 if (state_front == 'RESERVADO' && retries_front > 500) {
                     divCosteHoraBuscando.show();
                 }
-                if (retries_front < 200) {
-                    divTotalBusquedas.hide();
-                }
                 if (state_front == 'BUSCANDO') {
                     botonCancelarLinkUnico.show();
                 }
