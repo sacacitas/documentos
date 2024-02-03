@@ -351,7 +351,6 @@ document.addEventListener('DOMContentLoaded', function () {
                     if (state_front == 'RESERVADO' || state_front == 'PAGADO') { 
                         botonLinkUnicoBusqueda.removeClass('boton-datos-link-unico-selected');
                         divLinkUnicoBusqueda.hide();
-                        botonLinkUnicoReserva.show();
                         botonLinkUnicoReserva.addClass('boton-datos-link-unico-selected');
                         divPagoYReserva.show();
                         textoCitaAunBuscando.hide();
@@ -366,8 +365,8 @@ document.addEventListener('DOMContentLoaded', function () {
                         gridLinkUnicoOficina.hide();
                         gridLinkUnicoDatos.hide();
                         gridLinkUnicoEstadistica.hide();
-                        botonLinkUnicoReserva.addClass('boton-datos-link-unico-selected');
-                        botonLinkUnicoBusqueda.removeClass('boton-datos-link-unico-selected');
+                        botonLinkUnicoBusqueda.addClass('boton-datos-link-unico-selected');
+                        botonLinkUnicoReserva.removeClass('boton-datos-link-unico-selected');
                         botonLinkUnicoOficina.removeClass('boton-datos-link-unico-selected');
                         botonLinkUnicoDatos.removeClass('boton-datos-link-unico-selected');
                         botonLinkUnicoEstadistica.removeClass('boton-datos-link-unico-selected');
@@ -380,8 +379,8 @@ document.addEventListener('DOMContentLoaded', function () {
                         gridLinkUnicoOficina.hide();
                         gridLinkUnicoDatos.hide();
                         gridLinkUnicoEstadistica.hide();
-                        botonLinkUnicoReserva.removeClass('boton-datos-link-unico-selected');
-                        botonLinkUnicoBusqueda.addClass('boton-datos-link-unico-selected');
+                        botonLinkUnicoBusqueda.removeClass('boton-datos-link-unico-selected');
+                        botonLinkUnicoReserva.addClass('boton-datos-link-unico-selected');
                         botonLinkUnicoOficina.removeClass('boton-datos-link-unico-selected');
                         botonLinkUnicoDatos.removeClass('boton-datos-link-unico-selected');
                         botonLinkUnicoEstadistica.removeClass('boton-datos-link-unico-selected');
@@ -394,8 +393,8 @@ document.addEventListener('DOMContentLoaded', function () {
                         gridLinkUnicoOficina.show();
                         gridLinkUnicoDatos.hide();
                         gridLinkUnicoEstadistica.hide();
-                        botonLinkUnicoReserva.removeClass('boton-datos-link-unico-selected');
                         botonLinkUnicoBusqueda.removeClass('boton-datos-link-unico-selected');
+                        botonLinkUnicoReserva.removeClass('boton-datos-link-unico-selected');
                         botonLinkUnicoOficina.addClass('boton-datos-link-unico-selected');
                         botonLinkUnicoDatos.removeClass('boton-datos-link-unico-selected');
                         botonLinkUnicoEstadistica.removeClass('boton-datos-link-unico-selected');
@@ -409,8 +408,8 @@ document.addEventListener('DOMContentLoaded', function () {
                         gridLinkUnicoOficina.hide();
                         gridLinkUnicoDatos.show();
                         gridLinkUnicoEstadistica.hide();
-                        botonLinkUnicoReserva.removeClass('boton-datos-link-unico-selected');
                         botonLinkUnicoBusqueda.removeClass('boton-datos-link-unico-selected');
+                        botonLinkUnicoReserva.removeClass('boton-datos-link-unico-selected');
                         botonLinkUnicoOficina.removeClass('boton-datos-link-unico-selected');
                         botonLinkUnicoDatos.addClass('boton-datos-link-unico-selected');
                         botonLinkUnicoEstadistica.removeClass('boton-datos-link-unico-selected');
@@ -423,8 +422,8 @@ document.addEventListener('DOMContentLoaded', function () {
                         gridLinkUnicoOficina.hide();
                         gridLinkUnicoDatos.hide();
                         gridLinkUnicoEstadistica.show();
-                        botonLinkUnicoReserva.removeClass('boton-datos-link-unico-selected');
                         botonLinkUnicoBusqueda.removeClass('boton-datos-link-unico-selected');
+                        botonLinkUnicoReserva.removeClass('boton-datos-link-unico-selected');
                         botonLinkUnicoOficina.removeClass('boton-datos-link-unico-selected');
                         botonLinkUnicoDatos.removeClass('boton-datos-link-unico-selected');
                         botonLinkUnicoEstadistica.addClass('boton-datos-link-unico-selected');
