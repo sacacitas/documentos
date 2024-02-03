@@ -206,91 +206,106 @@ document.addEventListener('DOMContentLoaded', function () {
   
   
   
+                // Variables de los IFs
+                var divCosteHoraBuscando = $('#div-coste-hora-buscando');
+                var divHorasBuscando = $('#div-horas-buscando');
+                var divTotalBusquedas = $('#div-total-busquedas');
+                var botonCancelarLinkUnico = $('#boton-cancelar-link-unico');
+                var cuadradoPagoCita20 = $('#cuadrado-pago-cita20');
+                var divDatosCitaReservada = $('#div-datos-cita-reservada');
+                var estadoPagoCitaReservada = $('#estado-pago-cita-reservada');
+                var divCaducidadBusqueda = $('#div_caducidad_busqueda');
+                var botonEstadoBusqueda = $('#boton_estado_busqueda');
+                var divUltimaBusqueda = $('#div-ultima-busqueda');
+
+
+                //Ocultar elementos de manera predeterminada
+                divCaducidadBusqueda.hide();
+                
+
+
                 // Mostrar diferentes items dependiendo del estado
                 if (state_front == 'RESERVADO' && horas_busqueda_front > 48) {
-                    document.getElementById('div-coste-hora-buscando').style.display = 'block';
+                    divCosteHoraBuscando.show();
                 }
                 if (horas_busqueda_front < 24) {
-                    document.getElementById('div-horas-buscando').style.display = 'none';
+                    divHorasBuscando.hide();
                 }
                 if (state_front == 'RESERVADO' && retries_front > 500) {
-                    document.getElementById('div-coste-hora-buscando').style.display = 'block';
+                    divCosteHoraBuscando.show();
                 }
                 if (retries_front < 200) {
-                    document.getElementById('div-total-busquedas').style.display = 'none';
+                    divTotalBusquedas.hide();
                 }
                 if (state_front == 'BUSCANDO') {
-                    document.getElementById('boton-cancelar-link-unico').style.display = 'block';
+                    botonCancelarLinkUnico.show();
                 }
                 if (state_front == 'RESERVADO') {
-                    document.getElementById('cuadrado-pago-cita20').style.display = 'block';
-                }
-                if (state_front == 'RESERVADO') {
-                    document.getElementById('div-datos-cita-reservada').style.display = 'block';
+                    cuadradoPagoCita20.show();
+                    divDatosCitaReservada.show();
                 }
                 if (state_front == 'PAGADO') {
-                    document.getElementById('div-datos-cita-reservada').style.display = 'block';
-                }
-                if (state_front == 'PAGADO') {
-                    document.getElementById('estado-pago-cita-reservada').textContent = 'Pagado';
+                    divDatosCitaReservada.show();
+                    estadoPagoCitaReservada.text('Pagado');
                 }
                 if (state_front == 'BUSCANDO') {
-                    document.getElementById('div_caducidad_busqueda').style.display = 'block';
+                    divCaducidadBusqueda.show();
                 }
                 if (state_front == 'RESERVADO') {
-                    document.getElementById('boton_estado_busqueda').textContent = 'Cita reservada, pendiente de pagar';
+                    botonEstadoBusqueda.text('Cita reservada, pendiente de pagar');
                 }
                 if (state_front == 'BUSCANDO') {
-                    document.getElementById('div-ultima-busqueda').style.display = 'block';
+                    divUltimaBusqueda.show();
                 }
-        
 
 
-
-                // Mostrar grids según lo clickeado en el menu de datos
-                var botonLinkUnicoBusqueda = document.getElementById('boton-link-unico-busqueda');
-                var botonLinkUnicoDatos = document.getElementById('boton-link-unico-datos');
-                var botonLinkUnicoEstadistica = document.getElementById('boton-link-unico-estadistica');
-                var gridLinkUnicoBusqueda = document.getElementById('grid-link-unico-busqueda');
-                var gridLinkUnicoDatos = document.getElementById('grid-link-unico-datos');
-                var gridLinkUnicoEstadistica = document.getElementById('grid-link-unico-estadistica');
 
                 $(document).ready(function () {
+                    // Cache jQuery selectors in variables
+                    var botonLinkUnicoBusqueda = $('#boton-link-unico-busqueda');
+                    var botonLinkUnicoDatos = $('#boton-link-unico-datos');
+                    var botonLinkUnicoEstadistica = $('#boton-link-unico-estadistica');
+                    var gridLinkUnicoBusqueda = $('#grid-link-unico-busqueda');
+                    var gridLinkUnicoDatos = $('#grid-link-unico-datos');
+                    var gridLinkUnicoEstadistica = $('#grid-link-unico-estadistica');
+                
                     // Click event for botonLinkUnicoBusqueda
-                    $(botonLinkUnicoBusqueda).click(function () {
-                        $(gridLinkUnicoBusqueda).show();
-                        $(gridLinkUnicoDatos).hide();
-                        $(gridLinkUnicoEstadistica).hide();
-                        $(botonLinkUnicoBusqueda).addClass('boton-datos-link-unico-selected');
-                        $(botonLinkUnicoDatos).removeClass('boton-datos-link-unico-selected');
-                        $(botonLinkUnicoEstadistica).removeClass('boton-datos-link-unico-selected');
-
+                    botonLinkUnicoBusqueda.click(function () {
+                        gridLinkUnicoBusqueda.show();
+                        gridLinkUnicoDatos.hide();
+                        gridLinkUnicoEstadistica.hide();
+                        botonLinkUnicoBusqueda.addClass('boton-datos-link-unico-selected');
+                        botonLinkUnicoDatos.removeClass('boton-datos-link-unico-selected');
+                        botonLinkUnicoEstadistica.removeClass('boton-datos-link-unico-selected');
                     });
-
-                    // Click event for botonLinkUnicoDatos
-                    $(botonLinkUnicoDatos).click(function () {
-                        $(gridLinkUnicoBusqueda).hide();
-                        $(gridLinkUnicoDatos).show();
-                        $(gridLinkUnicoEstadistica).hide();
-                        $(botonLinkUnicoBusqueda).removeClass('boton-datos-link-unico-selected');
-                        $(botonLinkUnicoDatos).addClass('boton-datos-link-unico-selected');
-                        $(botonLinkUnicoEstadistica).removeClass('boton-datos-link-unico-selected');                        
+                
+                
+                    // Click event for botonLinkUnicoBusqueda
+                    botonLinkUnicoDatos.click(function () {
+                        gridLinkUnicoBusqueda.hide();
+                        gridLinkUnicoDatos.show();
+                        gridLinkUnicoEstadistica.hide();
+                        botonLinkUnicoBusqueda.removeClass('boton-datos-link-unico-selected');
+                        botonLinkUnicoDatos.addClass('boton-datos-link-unico-selected');
+                        botonLinkUnicoEstadistica.removeClass('boton-datos-link-unico-selected');
                     });
-
-                    // Click event for botonLinkUnicoEstadistica
-                    $(botonLinkUnicoEstadistica).click(function () {
-                        $(gridLinkUnicoBusqueda).hide();
-                        $(gridLinkUnicoDatos).hide();
-                        $(gridLinkUnicoEstadistica).show();
-                        $(botonLinkUnicoBusqueda).removeClass('boton-datos-link-unico-selected');
-                        $(botonLinkUnicoDatos).removeClass('boton-datos-link-unico-selected');
-                        $(botonLinkUnicoEstadistica).addClass('boton-datos-link-unico-selected');                        
+                
+  
+                    // Click event for botonLinkUnicoBusqueda
+                    botonLinkUnicoEstadistica.click(function () {
+                        gridLinkUnicoBusqueda.hide();
+                        gridLinkUnicoDatos.hide();
+                        gridLinkUnicoEstadistica.show();
+                        botonLinkUnicoBusqueda.removeClass('boton-datos-link-unico-selected');
+                        botonLinkUnicoDatos.removeClass('boton-datos-link-unico-selected');
+                        botonLinkUnicoEstadistica.addClass('boton-datos-link-unico-selected');
                     });
-
+                
+  
                     // De manera predeterminada ocultar los 2 últimos grids
-                    $(gridLinkUnicoDatos).hide();
-                    $(gridLinkUnicoEstadistica).hide();
-                    $(botonLinkUnicoBusqueda).addClass('boton-datos-link-unico-selected');
+                    gridLinkUnicoDatos.hide();
+                    gridLinkUnicoEstadistica.hide();
+                    botonLinkUnicoBusqueda.addClass('boton-datos-link-unico-selected');
                 });
 
 
