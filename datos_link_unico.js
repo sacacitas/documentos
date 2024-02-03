@@ -276,7 +276,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     var botonLinkUnicoEstadistica = $('#boton-link-unico-estadistica');
                     //Grids
                     var divPagoYReserva = $('#div-pago-y-reserva');
-                    var gridLinkUnicoBusqueda = $('#grid-link-unico-busqueda');
+                    var divLinkUnicoBusqueda = $('#div-busqueda-link-unico');
                     var gridLinkUnicoDatos = $('#grid-link-unico-datos');
                     var gridLinkUnicoEstadistica = $('#grid-link-unico-estadistica');
 
@@ -291,7 +291,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     //Si la cita está reservada o pagada, mostrar el botón de reserva y datos pago
                     if (state_front == 'RESERVADO' || state_front == 'PAGADO') { 
                         botonLinkUnicoBusqueda.removeClass('boton-datos-link-unico-selected');
-                        gridLinkUnicoBusqueda.hide();
+                        divLinkUnicoBusqueda.hide();
                         botonLinkUnicoReserva.show();
                         botonLinkUnicoReserva.addClass('boton-datos-link-unico-selected');
                         divPagoYReserva.show();
@@ -302,7 +302,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     // Click event for botonLinkUnicoBusqueda
                     botonLinkUnicoReserva.click(function () {
                         divPagoYReserva.show();
-                        gridLinkUnicoBusqueda.hide();
+                        divLinkUnicoBusqueda.hide();
                         gridLinkUnicoDatos.hide();
                         gridLinkUnicoEstadistica.hide();
                         botonLinkUnicoReserva.addClass('boton-datos-link-unico-selected');
@@ -314,7 +314,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     // Click event for botonLinkUnicoBusqueda
                     botonLinkUnicoBusqueda.click(function () {
                         divPagoYReserva.hide();
-                        gridLinkUnicoBusqueda.show();
+                        divLinkUnicoBusqueda.show();
                         gridLinkUnicoDatos.hide();
                         gridLinkUnicoEstadistica.hide();
                         botonLinkUnicoReserva.removeClass('boton-datos-link-unico-selected');
@@ -327,7 +327,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     // Click event for botonLinkUnicoBusqueda
                     botonLinkUnicoDatos.click(function () {
                         divPagoYReserva.hide();
-                        gridLinkUnicoBusqueda.hide();
+                        divLinkUnicoBusqueda.hide();
                         gridLinkUnicoDatos.show();
                         gridLinkUnicoEstadistica.hide();
                         botonLinkUnicoReserva.removeClass('boton-datos-link-unico-selected');
@@ -340,7 +340,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     // Click event for botonLinkUnicoBusqueda
                     botonLinkUnicoEstadistica.click(function () {
                         divPagoYReserva.hide();
-                        gridLinkUnicoBusqueda.hide();
+                        divLinkUnicoBusqueda.hide();
                         gridLinkUnicoDatos.hide();
                         gridLinkUnicoEstadistica.show();
                         botonLinkUnicoReserva.removeClass('boton-datos-link-unico-selected');
