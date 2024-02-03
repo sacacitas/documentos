@@ -66,23 +66,53 @@ document.addEventListener('DOMContentLoaded', function () {
               return response.json();
             })
             .then(data => {
-                // Use the data as needed
-                var public_id_front = data.public_id;
-                var servicio_nombre_front = data.servicio_nombre;
+                // IDs del JSON
                 var id_oficina_front = data.id_oficina;
-                var oficina_nombre_front = data.oficina_nombre;
-                var provincia_front = data.provincia;
                 var date_added_front = data.date_added;
                 var state_front = data.state;
                 var date_last_checked_front = data.date_last_checked;
                 var retries_front = data.retries;
-                var cliente_id_obfuscado_front = data.cliente_id_obfuscado;
                 var limit_max_front = data.limit_max;
+                var date_min_front = data.date_min;
                 var fecha_caducidad_front = data.limit_caducidad;
                 var precio_eur_cent_front = data.precio_eur_cent;
+                var public_id_front = data.public_id;
+                var servicio_nombre_front = data.servicio_nombre;
+                var oficina_nombre_front = data.oficina_nombre;
+                var provincia_front = data.provincia;
                 var codigo_reserva_cita_front = data.referencia_reserva;
                 var fecha_cita_reservada_front = data.fecha_cita_reservada;
                 var fecha_limite_pago_front = data.fecha_limite_pago;
+
+                //Datos del cliente
+                var clienteIdDocumento = data.cliente.id_documento;
+                var clienteIdType = data.cliente.id_type;
+                var clienteNombre = data.cliente.nombre;
+                var clienteApellido1 = data.cliente.apellido1;
+                var clienteApellido2 = data.cliente.apellido2;
+                var clienteTelefono = data.cliente.telefono;
+                var clienteEmail = data.cliente.email;
+                var clienteNacionalidad = data.cliente.nacionalidad;
+                var clienteFechaNacimiento = data.cliente.fecha_nacimiento;
+                //var clienteResolucionNacionalidad = data.cliente.resolucion_nacionalidad;
+                //var clienteCsvNacionalidad = data.cliente.csv_nacionalidad;
+                //var clienteIdCaducidad = data.cliente.id_caducidad;
+                //var clienteIdCliente = data.cliente.id_cliente;
+            
+                
+                
+                
+                
+
+                
+                
+                
+                
+                
+                
+                
+                
+
 
                 // Fetching data from jsonUrl2 based on parentIdoficinaIdservicio
                 var precio_cita_front = jsonData2[parentIDofIdoficinaIdservicio] || 'ES_0_SINDATOS';
@@ -93,11 +123,13 @@ document.addEventListener('DOMContentLoaded', function () {
     
                 // Crear fechas
                 var limit_max_date = new Date(limit_max_front);
+                var limit_min_date = new Date(date_min_front);
                 var date_added = new Date(date_added_front);
                 var last_checked = new Date(date_last_checked_front);
                 var fecha_caducidad_date = new Date(fecha_caducidad_front);
                 var fecha_cita_reservada = new Date(fecha_cita_reservada_front);
                 var fecha_limite_pago = new Date(fecha_limite_pago_front);
+                var date_clienteFechaNacimiento = new Date(clienteFechaNacimiento);
     
     
                 //contar hacía atrás del tiempo que falta para pagar
@@ -141,6 +173,14 @@ document.addEventListener('DOMContentLoaded', function () {
                     timeZone: DEFAULT_TIMEZONE // GMT+1
                 }).replace(/,/g, '-');
     
+                var formattedLimitMin = limit_min_date.toLocaleDateString('es-ES', {
+                    year: 'numeric',
+                    month: 'numeric',
+                    day: 'numeric',
+                    timeZone: DEFAULT_TIMEZONE // GMT+1
+                }).replace(/,/g, '-');
+    
+
                 var hoursAndMinutesOptions = {
                     hour: '2-digit',
                     minute: '2-digit',
@@ -163,7 +203,16 @@ document.addEventListener('DOMContentLoaded', function () {
                 function formatNumberWithDots(number) {
                     return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
                 }
-    
+
+                //Fecha nacimiento a DD.MM.YYYY
+                var formatted_date_clienteFechaNacimiento = date_clienteFechaNacimiento.toLocaleDateString('es-ES', {
+                    year: 'numeric',
+                    month: 'numeric',
+                    day: 'numeric',
+                }).replace(/,/g, '-');
+
+
+
                 // Reemplazar items de las variables por texto con ID's de la web
                 document.getElementById('public_id_front').textContent = public_id_front;
                 document.getElementById('public_id_front2').textContent = public_id_front;
@@ -190,8 +239,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 document.getElementById('boton_estado_busqueda').textContent = state_front.charAt(0).toUpperCase() + state_front.substring(1).toLowerCase();
                 document.getElementById('date_last_checked_front').textContent = date_last_checked_front_utc;
                 document.getElementById('retries_front').textContent = formatNumberWithDots(retries_front);
-                document.getElementById('cliente_id_obfuscado_front').textContent = cliente_id_obfuscado_front;
-                document.getElementById('limit_max_front').textContent = formattedLimitMax;
+                document.getElementById('link-busqueda-fechas-min-max').textContent = 'Desde ' + formattedLimitMin + ' hasta ' + formattedLimitMax;
                 document.getElementById('date_added_front').textContent = formattedDateAdded;
                 document.getElementById('caducidad_busqueda').textContent = `Dentro de ${dias_caducidad_restantes} días`;
                 document.getElementById('horas_busqueda_front').textContent = horas_busqueda_front + ' h.';
@@ -201,6 +249,14 @@ document.addEventListener('DOMContentLoaded', function () {
                 document.getElementById('codigo-reserva-cita-reservada').textContent = codigo_reserva_cita_front;
                 document.getElementById('fecha-cita-reservada').textContent = formattedDate_cita_reservada;
                 document.getElementById('boton-fecha-limite-pago').textContent = formattedDate_fecha_limite_pago;
+
+                //Sección datos personales del cliente
+                document.getElementById('link-cliente-nombre-completo').textContent = clienteNombre + ' ' + clienteApellido1 + ' ' + clienteApellido2;
+                document.getElementById('link-cliente-documento-identidad').textContent = clienteIdType + ': ' + clienteIdDocumento;
+                document.getElementById('link-cliente-nacionalidad').textContent = clienteNacionalidad;
+                document.getElementById('link-cliente-fecha-nacimiento').textContent = formatted_date_clienteFechaNacimiento;
+                document.getElementById('link-cliente-telefono').textContent = clienteTelefono;
+                document.getElementById('link-cliente-correo').textContent = clienteEmail;
     
     
   
@@ -271,13 +327,16 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 $(document).ready(function () {
                     //botones
-                    var botonLinkUnicoReserva = $('#boton-link-unico-reserva');
                     var botonLinkUnicoBusqueda = $('#boton-link-unico-busqueda');
+                    var botonLinkUnicoReserva = $('#boton-link-unico-reserva');
+                    var botonLinkUnicoOficina = $('#boton-link-unico-oficina');
                     var botonLinkUnicoDatos = $('#boton-link-unico-datos');
                     var botonLinkUnicoEstadistica = $('#boton-link-unico-estadistica');
+                    
                     //Grids
-                    var divPagoYReserva = $('#div-pago-y-reserva');
                     var divLinkUnicoBusqueda = $('#div-busqueda-link-unico');
+                    var divPagoYReserva = $('#div-pago-y-reserva');
+                    var gridLinkUnicoOficina = $('#grid-link-unico-oficina');
                     var gridLinkUnicoDatos = $('#grid-link-unico-datos');
                     var gridLinkUnicoEstadistica = $('#grid-link-unico-estadistica');
 
@@ -301,54 +360,75 @@ document.addEventListener('DOMContentLoaded', function () {
                     }
 
                     // Click event for botonLinkUnicoBusqueda
-                    botonLinkUnicoReserva.click(function () {
+                    botonLinkUnicoBusqueda.click(function () {
                         divPagoYReserva.show();
                         divLinkUnicoBusqueda.hide();
+                        gridLinkUnicoOficina.hide();
                         gridLinkUnicoDatos.hide();
                         gridLinkUnicoEstadistica.hide();
                         botonLinkUnicoReserva.addClass('boton-datos-link-unico-selected');
                         botonLinkUnicoBusqueda.removeClass('boton-datos-link-unico-selected');
+                        botonLinkUnicoOficina.removeClass('boton-datos-link-unico-selected');
                         botonLinkUnicoDatos.removeClass('boton-datos-link-unico-selected');
                         botonLinkUnicoEstadistica.removeClass('boton-datos-link-unico-selected');
                     });                    
                 
                     // Click event for botonLinkUnicoBusqueda
-                    botonLinkUnicoBusqueda.click(function () {
+                    botonLinkUnicoReserva.click(function () {
                         divPagoYReserva.hide();
                         divLinkUnicoBusqueda.show();
+                        gridLinkUnicoOficina.hide();
                         gridLinkUnicoDatos.hide();
                         gridLinkUnicoEstadistica.hide();
                         botonLinkUnicoReserva.removeClass('boton-datos-link-unico-selected');
                         botonLinkUnicoBusqueda.addClass('boton-datos-link-unico-selected');
+                        botonLinkUnicoOficina.removeClass('boton-datos-link-unico-selected');
                         botonLinkUnicoDatos.removeClass('boton-datos-link-unico-selected');
                         botonLinkUnicoEstadistica.removeClass('boton-datos-link-unico-selected');
                     });                    
                 
+                    // Click event for botonLinkUnicoBusqueda
+                    botonLinkUnicoOficina.click(function () {
+                        divPagoYReserva.hide();
+                        divLinkUnicoBusqueda.hide();
+                        gridLinkUnicoOficina.show();
+                        gridLinkUnicoDatos.hide();
+                        gridLinkUnicoEstadistica.hide();
+                        botonLinkUnicoReserva.removeClass('boton-datos-link-unico-selected');
+                        botonLinkUnicoBusqueda.removeClass('boton-datos-link-unico-selected');
+                        botonLinkUnicoOficina.addClass('boton-datos-link-unico-selected');
+                        botonLinkUnicoDatos.removeClass('boton-datos-link-unico-selected');
+                        botonLinkUnicoEstadistica.removeClass('boton-datos-link-unico-selected');
+                    });                                   
                 
+  
                     // Click event for botonLinkUnicoBusqueda
                     botonLinkUnicoDatos.click(function () {
                         divPagoYReserva.hide();
                         divLinkUnicoBusqueda.hide();
+                        gridLinkUnicoOficina.hide();
                         gridLinkUnicoDatos.show();
                         gridLinkUnicoEstadistica.hide();
                         botonLinkUnicoReserva.removeClass('boton-datos-link-unico-selected');
                         botonLinkUnicoBusqueda.removeClass('boton-datos-link-unico-selected');
+                        botonLinkUnicoOficina.removeClass('boton-datos-link-unico-selected');
                         botonLinkUnicoDatos.addClass('boton-datos-link-unico-selected');
                         botonLinkUnicoEstadistica.removeClass('boton-datos-link-unico-selected');
                     });                    
-                
-  
+                    
                     // Click event for botonLinkUnicoBusqueda
                     botonLinkUnicoEstadistica.click(function () {
                         divPagoYReserva.hide();
                         divLinkUnicoBusqueda.hide();
+                        gridLinkUnicoOficina.hide();
                         gridLinkUnicoDatos.hide();
                         gridLinkUnicoEstadistica.show();
                         botonLinkUnicoReserva.removeClass('boton-datos-link-unico-selected');
                         botonLinkUnicoBusqueda.removeClass('boton-datos-link-unico-selected');
+                        botonLinkUnicoOficina.removeClass('boton-datos-link-unico-selected');
                         botonLinkUnicoDatos.removeClass('boton-datos-link-unico-selected');
                         botonLinkUnicoEstadistica.addClass('boton-datos-link-unico-selected');
-                    });                    
+                    });                                        
                 
   
 
