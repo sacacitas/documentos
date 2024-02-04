@@ -274,7 +274,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     botonEstadoBusqueda.textContent = 'Búsqueda cancelada';
                 }
 
-                if (state_front == 'BUSCANADO') {
+                if (state_front == 'BUSCANDO') {
                     botonEstadoBusqueda.textContent = 'Buscando cita';
                 }
 
