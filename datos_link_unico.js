@@ -102,7 +102,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 
 
                 // Variables de elementos del front-end
-                var botonEstadoBusqueda = getElementById('boton_estado_busqueda');
+                var botonEstadoBusqueda = document.getElementById('boton_estado_busqueda');
                 
                 
                 
