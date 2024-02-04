@@ -276,6 +276,10 @@ document.addEventListener('DOMContentLoaded', function () {
                     botonEstadoBusqueda.text('Cita reservada anulada');
                 }    
                 
+                if (state_front == 'BUSCANDO') {
+                    botonEstadoBusqueda.text('Buscando cita');
+                }        
+                         
 
 
                 // Variables de los IFs
