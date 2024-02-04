@@ -267,6 +267,10 @@ document.addEventListener('DOMContentLoaded', function () {
                 document.getElementById('link-cliente-correo').textContent = clienteEmail;
     
 
+                if (state_front == 'CANCELADO') {
+                    document.getElementById('boton_estado_busqueda').textContent = 'Búsqueda cancelada';
+                }
+
 
 
 
