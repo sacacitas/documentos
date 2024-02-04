@@ -267,19 +267,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 document.getElementById('link-cliente-correo').textContent = clienteEmail;
     
 
-                //Cambiar textos estados cola
-                if (state_front == 'RESERVADO') {
-                    botonEstadoBusqueda.text('Cita reservada, pendiente de pagar');
-                }
-
-                if (state_front == 'ANULADO') {
-                    botonEstadoBusqueda.text('Cita reservada anulada');
-                }    
-                
-                if (state_front == 'BUSCANDO') {
-                    botonEstadoBusqueda.text('Buscando cita');
-                }        
-                         
 
 
                 // Variables de los IFs
