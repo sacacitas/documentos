@@ -269,10 +269,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 
-                //Cambiar textos estados cola
-                if (state_front == 'RESERVADO') {
-                    botonEstadoBusqueda.text('Cita reservada, pendiente de pagar');
-                }                
 
 
                 // Variables de los IFs
