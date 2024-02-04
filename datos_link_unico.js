@@ -303,7 +303,11 @@ document.addEventListener('DOMContentLoaded', function () {
                 if (state_front == 'RESERVADO' && retries_front > 500) {
                     divCosteHoraBuscando.show();
                 }
-
+                if (state_front == 'BUSCANDO') {
+                    botonCancelarLinkUnico.show();
+                    divCaducidadBusqueda.show();
+                    divUltimaBusqueda.show();
+                }
                 if (state_front == 'RESERVADO') {
                     cuadradoPagoCita20.show();
                     divDatosCitaReservada.show();
