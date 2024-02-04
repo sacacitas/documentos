@@ -272,10 +272,10 @@ document.addEventListener('DOMContentLoaded', function () {
                     botonEstadoBusqueda.text('Cita reservada, pendiente de pagar');
                 }
 
-                if (state_front == 'CANCELADO') {
-                    botonEstadoBusqueda.text('Búsqueda cancelada');
-                }   
-  
+                if (state_front == 'ANULADO') {
+                    botonEstadoBusqueda.text('Cita reservada anulada');
+                }    
+                
 
 
                 // Variables de los IFs
