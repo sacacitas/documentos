@@ -235,19 +235,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
                 
 
-                //Cambiar textos estados cola
-                if (state_front == 'RESERVADO') {
-                    botonEstadoBusqueda.text('Cita reservada, pendiente de pagar');
-                }
-                if (state_front == 'BUSCANDO') {
-                    botonEstadoBusqueda.text('Buscando cita');
-                }        
-                if (state_front == 'CANCELADO') {
-                    botonEstadoBusqueda.text('Búsqueda cancelada');
-                }            
-                if (state_front == 'ANULADO') {
-                    botonEstadoBusqueda.text('Cita reservada anulada');
-                }    
 
 
 
@@ -280,11 +267,15 @@ document.addEventListener('DOMContentLoaded', function () {
                 document.getElementById('link-cliente-correo').textContent = clienteEmail;
     
 
-
-
+                //Cambiar textos estados cola
+                if (state_front == 'RESERVADO') {
+                    botonEstadoBusqueda.text('Cita reservada, pendiente de pagar');
+                }
 
 
   
+
+                
                 // Variables de los IFs
                 var divCosteHoraBuscando = $('#div-coste-hora-buscando');
                 var divHorasBuscando = $('#div-horas-buscando');
