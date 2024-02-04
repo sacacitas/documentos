@@ -266,13 +266,30 @@ document.addEventListener('DOMContentLoaded', function () {
                 document.getElementById('link-cliente-telefono').textContent = clienteTelefono;
                 document.getElementById('link-cliente-correo').textContent = clienteEmail;
     
-
+                //Cambiar textos del link único
                 if (state_front == 'CANCELADO') {
                     document.getElementById('boton_estado_busqueda').textContent = 'Búsqueda cancelada';
                 }
 
+                if (state_front == 'BUSCANADO') {
+                    document.getElementById('boton_estado_busqueda').textContent = 'Buscando cita';
+                }
 
+                if (state_front == 'ANULADO') {
+                    document.getElementById('boton_estado_busqueda').textContent = 'Cita reservada anulada';
+                }
 
+                if (state_front == 'RESERVADO') {
+                    document.getElementById('boton_estado_busqueda').textContent = 'Cita reservada, pendiente de pagar';
+                }
+
+                if (state_front == 'EXPIRADO') {
+                    document.getElementById('boton_estado_busqueda').textContent = 'Búsqueda caducada';
+                }
+
+                if (state_front == 'NO_VALIDADO') {
+                    document.getElementById('boton_estado_busqueda').textContent = 'Error al procesar la solicitud';
+                }
 
 
                 // Variables de los IFs
