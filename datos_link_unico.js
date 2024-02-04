@@ -100,6 +100,9 @@ document.addEventListener('DOMContentLoaded', function () {
                 //var clienteIdCliente = data.cliente.id_cliente;
             
                 
+
+                // Variables de elementos del front-end
+                var botonEstadoBusqueda = getElementById('boton_estado_busqueda');
                 
                 
                 
@@ -244,7 +247,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 //Cambiar textos del link único
                 document.getElementById('state_front').textContent = state_front.charAt(0).toUpperCase() + state_front.substring(1).toLowerCase();
-                document.getElementById('boton_estado_busqueda').textContent = state_front.charAt(0).toUpperCase() + state_front.substring(1).toLowerCase();
+                botonEstadoBusqueda.textContent = state_front.charAt(0).toUpperCase() + state_front.substring(1).toLowerCase();
                 document.getElementById('date_last_checked_front').textContent = date_last_checked_front_utc;
                 document.getElementById('retries_front').textContent = formatNumberWithDots(retries_front);
                 document.getElementById('link-busqueda-fechas-min-max').textContent = 'Desde ' + formattedLimitMin + ' hasta ' + formattedLimitMax;
@@ -268,27 +271,27 @@ document.addEventListener('DOMContentLoaded', function () {
     
                 //Cambiar textos del link único
                 if (state_front == 'CANCELADO') {
-                    document.getElementById('boton_estado_busqueda').textContent = 'Búsqueda cancelada';
+                    botonEstadoBusqueda.textContent = 'Búsqueda cancelada';
                 }
 
                 if (state_front == 'BUSCANADO') {
-                    document.getElementById('boton_estado_busqueda').textContent = 'Buscando cita';
+                    botonEstadoBusqueda.textContent = 'Buscando cita';
                 }
 
                 if (state_front == 'ANULADO') {
-                    document.getElementById('boton_estado_busqueda').textContent = 'Cita reservada anulada';
+                    botonEstadoBusqueda.textContent = 'Cita reservada anulada';
                 }
 
                 if (state_front == 'RESERVADO') {
-                    document.getElementById('boton_estado_busqueda').textContent = 'Cita reservada, pendiente de pagar';
+                    botonEstadoBusqueda.textContent = 'Cita reservada, pendiente de pagar';
                 }
 
                 if (state_front == 'EXPIRADO') {
-                    document.getElementById('boton_estado_busqueda').textContent = 'Búsqueda caducada';
+                    botonEstadoBusqueda.textContent = 'Búsqueda caducada';
                 }
 
                 if (state_front == 'NO_VALIDADO') {
-                    document.getElementById('boton_estado_busqueda').textContent = 'Error al procesar la solicitud';
+                    botonEstadoBusqueda.textContent = 'Error al procesar la solicitud';
                 }
 
 
