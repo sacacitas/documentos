@@ -1,3 +1,6 @@
+// ['id_oficina','id_servicio'] = entry
+var SERVICIOS = {};
+
 $(document).ready(function () {
     // Variables de los IDs selects de la landing
     var select_administracion = $('#select-buscador-administracion');
@@ -5,10 +8,10 @@ $(document).ready(function () {
     var select_oficina = $('#select-buscador-oficina');
     var select_servicio = $('#select-buscador-servicio');
     var numero_citas_contador = $('numero-citas-seleccionadas-buscador');
-  
+
     // Variables IDs de info secundaria
     var string_precio_buscador = $('#precio-total-buscador-landing');
-  
+
     // Textos predeterminados en los selects
     // Crear texto predeterminado en ADM
     var default_select_administracion = $('<option>', {
@@ -18,7 +21,7 @@ $(document).ready(function () {
         selected: true
     });
     select_administracion.append(default_select_administracion);
-  
+
     // Crear texto predeterminado en provincias
     var default_select_provincias = $('<option>', {
         value: '',
@@ -27,7 +30,7 @@ $(document).ready(function () {
         selected: true
     });
     select_provincia.append(default_select_provincias);
-  
+
     // Crear texto predeterminado en oficinas
     var default_select_oficina = $('<option>', {
         value: '',
@@ -36,7 +39,7 @@ $(document).ready(function () {
         selected: true
     });
     select_oficina.append(default_select_oficina);
-  
+
     // Crear texto predeterminado en citas previas
     var default_select_servicio = $('<option>', {
         value: '',
@@ -45,22 +48,22 @@ $(document).ready(function () {
         selected: true
     });
     select_servicio.append(default_select_servicio);
-  
 
 
 
 
-// Tipo de buscador (si buscar con oficina o toda la provincia) -> Únicamente estilos y funcionalidades.
+
+    // Tipo de buscador (si buscar con oficina o toda la provincia) -> Únicamente estilos y funcionalidades.
     // (La parte de crear valores está en la segunda parte)
-  
+
     // Preselect del radio con oficina
     $('#radio-buscar-con-oficina').prop('checked', true);
     $('#box-buscar-con-oficina').addClass('selected-radio-buscador');
-  
+
     // Variables de los radios
     var radio_buscador_con_oficina = $('#radio-buscar-con-oficina');
     var radio_buscador_por_provincia = $('#radio-buscar-en-provincia');
-  
+
     // Que haga acciones CSS al seleccionar uno radio u otro
     // Buscar con Oficina
     function RadioOficinaSelected() {
@@ -80,30 +83,30 @@ $(document).ready(function () {
             $('#div-select-oficinas-buscador').css('display', 'none');
         }
     }
-  
+
     // Event listeners de los radios
     radio_buscador_con_oficina.on('change', RadioOficinaSelected);
     radio_buscador_por_provincia.on('change', RadioProvinciaSelected);
-  
 
 
 
 
 
 
-// 1. PRIMERA PARTE BUSCADOR -> Lista estática de administración y provincias
+
+    // 1. PRIMERA PARTE BUSCADOR -> Lista estática de administración y provincias
     // Crear valores en el select de la Administración
     var values_select_administracion = [
         { value: 'EX1', text: 'Extranjería' },
         { value: 'RC1', text: 'Registro Civil' }
     ];
-  
+
     // Populate select administración
     values_select_administracion.forEach(option => {
         var optionElement_administracion = $('<option></option>').prop('value', option.value).text(option.text);
         select_administracion.append(optionElement_administracion);
     });
-  
+
     // Crear valores en el select de la Provincia
     var lista_provincias_espana = {
         "Alava": "Alava",
@@ -159,27 +162,27 @@ $(document).ready(function () {
         "Zamora": "Zamora",
         "Zaragoza": "Zaragoza"
     };
-  
+
     // Populate select provincias con la lista de provincias
     $.each(lista_provincias_espana, function (text_lista_provincias, backend_provincia_id) {
         var optionElement_provincia = $('<option></option>').prop('value', backend_provincia_id).text(text_lista_provincias);
         select_provincia.append(optionElement_provincia);
     });
-  
 
 
 
 
-  
-// 2. SEGUNDA PARTE BUSCADOR -> Lista dinámica de oficinas y servicios desde el backend
+
+
+    // 2. SEGUNDA PARTE BUSCADOR -> Lista dinámica de oficinas y servicios desde el backend
     // Importar JSON externos de lista oficina_servicios y sus precios por categorías
     const lista_oficina_servicios_json = 'https://documentos.sacacitas.es/categorias_servicios.json';
     const precios_citas_categorias_json = 'https://documentos.sacacitas.es/precios_citas.json';
-  
+
     // Variables backend
     var apiBaseUrl = 'https://panelaws.sacacitas.es/public/oficina/';
-  
-   
+
+
     //Contador número de citas seleccionadas
     var numero_citas_contador = 0;
 
@@ -213,6 +216,11 @@ $(document).ready(function () {
                 method: 'GET',
                 dataType: 'json',
                 success: function (responseData) {
+
+                    // Set SERVICIOS with the data we already got from outside
+                    responseData
+                        .forEach(oficina => SERVICIOS[oficina.id_oficina] = oficina);
+
                     data = responseData; // Set the data variable with the response
                     // Populate oficina select con los textos importados del json
                     select_oficina.html('').append(default_select_oficina);
@@ -241,7 +249,10 @@ $(document).ready(function () {
                     } else {
                         // Populate oficina select options with external data
                         $.each(filteredData, function (index, item) {
-                            var optionElement = $('<option></option>').prop('value', item.nombre).text(item.nombre);
+                            var optionElement = $('<option></option>')
+                                .prop('value', item.nombre)
+                                .attr('id_oficina', item.id_oficina) // https://stackoverflow.com/a/5995650
+                                .text(item.nombre);
                             select_oficina.append(optionElement);
                         });
 
@@ -290,7 +301,10 @@ $(document).ready(function () {
                 selectedOficinaData.servicios.forEach(servicio => {
                     // Check if servicio has the required properties
                     if (servicio && servicio.id_servicio && servicio.nombre) {
-                        var optionElement = $('<option></option>').prop('value', servicio.nombre).text(servicio.nombre);
+                        var optionElement = $('<option></option>')
+                            .prop('value', servicio.nombre)
+                            .attr('id_servicio', servicio.id_servicio)
+                            .text(servicio.nombre);
                         select_servicio.append(optionElement);
                     }
                 });
@@ -378,10 +392,10 @@ $(document).ready(function () {
 
             }
 
-        
+
             // Trigger change event to refresh the select (if needed)
-            select_servicio.trigger('change');        
-        
+            select_servicio.trigger('change');
+
         } else {
             console.log('One of the conditions is not met.');
         }
@@ -401,94 +415,140 @@ $(document).ready(function () {
     //3.Sección de citas previas seleccionadas bloque derecho
     var checkoutContainer = $('#bloque-items-citas');
     var maxCheckoutItems = 15; //Items máximos que se pueden añadir
+
+    function add_elemtnt(id_oficina_elem, id_servicio_elem) {
+        // if it exist in the final list, dont continue
+        if (checkoutContainer.children(`.checkout-item[id_oficina="${id_oficina_elem}"][id_servicio="${id_servicio_elem}"]`).length) {
+            return
+        }
+
+        // validate exist oficina id
+        if (!id_oficina_elem in SERVICIOS) {
+            throw new Error(`Id oficina ${id_oficina_elem} not exists in SERVICIOS`);
+        }
+
+        obj = SERVICIOS[id_oficina_elem]
+
+        svc_obj = obj.servicios.find((e) => e.id_servicio == id_servicio_elem);
+
+        // validate exists servicio id
+        if (svc_obj === undefined) {
+            throw new Error(`Id servicio ${id_servicio_elem} not exists in SERVICIOS for oficina ${id_oficina_elem}`);
+        }
+
+
+        var checkoutItem = $(`<div class="checkout-item" id_oficina=${id_oficina_elem} id_servicio=${id_servicio_elem}>` +
+            '<div class="column wide-column">' +
+            '   <span class="item-text">' + obj.provincia + ' | ' + obj.nombre + '</span>' +
+            '   <span class="item-text">' + svc_obj.nombre + '</span>' +
+            '</div>' +
+            '<div class="column narrow-column">' +
+            '   <button class="delete-item"><img src="https://uploads-ssl.webflow.com/652f00909568ce58c099d55f/652f00919568ce58c099d689_Exit.svg" alt="Delete" style="width: 20px; height: 20px; margin-left: auto;"></button>' +
+            '</div>' +
+            '</div>');
+
+        //Box de la cita seleccionada
+        checkoutItem.css({
+            //'padding': '5px',
+            'border': '1px solid #99a4af',
+            'border-radius': '5px',
+            'background-color': '#fff',
+            'padding': '10px 0px 10px 0px',
+            'margin': '5px 0px 5px 0px',
+            'display': 'flex',
+            //'justify-content': 'space-between',
+            'align-items': 'center',
+            'box-shadow': '0px 3px 5px 0px rgba(0, 0, 0, .2)'
+        });
+
+        //Items dentro del box de la cita seleccionada
+        checkoutItem.find('.item-text').css({
+            'font-size': '16px',
+            'color': '#333'
+        });
+
+        //Columna izquierda del grid de la cita seleccionada
+        checkoutItem.find('.wide-column').css({
+            'flex': '85%', // Adjust the percentage as needed
+            'padding': '0px 5px 0px 5px'
+        });
+
+        //Columna derecha del grid de la cita seleccionada
+        checkoutItem.find('.narrow-column').css({
+            'flex': '15%',
+            'margin': '0px 5px 0px 5px',
+            'padding': '0'
+        });
+
+
+        //Botón de borrar cita seleccionada
+        checkoutItem.find('.delete-item').css({
+            'background-color': '#fff',
+            'border': 'none',
+            'cursor': 'pointer'
+        });
+
+        // Función para borrar cita seleccionada
+        var deleteButton = checkoutItem.find('.delete-item');
+        deleteButton.on('click', function () {
+            // Remove the item when the delete button is clicked
+            checkoutItem.remove();
+
+            // If the counter is greater than 0, decrement it
+            numero_citas_contador = checkoutContainer.children('.checkout-item').length;
+
+            // Update and display the counter
+            updateNumeroCitasCounter();
+
+            // Enable select_servicio if the maximum number of items is not reached
+            if (checkoutContainer.children('.checkout-item').length < maxCheckoutItems) {
+                select_servicio.prop('disabled', false);
+            }
+        });
+
+        // Append the checkout item to the checkout container
+        checkoutContainer.append(checkoutItem);
+
+        // Check if the maximum number of items is reached and disable the select if needed
+        if (checkoutContainer.children('.checkout-item').length >= maxCheckoutItems) {
+            select_servicio.prop('disabled', true);
+        }
+    }
     //Event listener del select de servicios
     select_servicio.on('change', function () {
-        // Get the selected values
-        var selectedProvincia = select_provincia.val();
-        var selectedOficina = select_oficina.val();
-        var selectedServicio = select_servicio.val();
+        var elements_to_add = []
 
         // Check if all values are selected
-        if (selectedProvincia && selectedOficina && selectedServicio) {
+        if ($('#radio-buscar-con-oficina').is(':checked') && select_provincia.val() && select_oficina.val() && select_servicio.val()) {
             // Create a new div with a personalized HTML structure for the checkout item
-            var checkoutItem = $('<div class="checkout-item">' +
-                '<div class="column wide-column">' +
-                '   <span class="item-text">' + selectedProvincia + ' | ' + selectedOficina + '</span>' +
-                '   <span class="item-text">' + selectedServicio + '</span>' +
-                '</div>' +
-                '<div class="column narrow-column">' +
-                '   <button class="delete-item"><img src="https://uploads-ssl.webflow.com/652f00909568ce58c099d55f/652f00919568ce58c099d689_Exit.svg" alt="Delete" style="width: 20px; height: 20px; margin-left: auto;"></button>' +
-                '</div>' +
-                '</div>');
+            id_oficina = select_oficina.find(':selected').attr("id_oficina")
+            id_servicio = select_servicio.find(':selected').attr("id_servicio")
 
-            //Box de la cita seleccionada
-            checkoutItem.css({
-                //'padding': '5px',
-                'border': '1px solid #99a4af',
-                'border-radius': '5px',
-                'background-color': '#fff',
-                'padding': '10px 0px 10px 0px',
-                'margin': '5px 0px 5px 0px',
-                'display': 'flex',
-                //'justify-content': 'space-between',
-                'align-items': 'center',
-                'box-shadow': '0px 3px 5px 0px rgba(0, 0, 0, .2)'
-            });
+            elements_to_add.push({
+                'ofi': id_oficina,
+                'srv': id_servicio
+            })
+        }
 
-            //Items dentro del box de la cita seleccionada
-            checkoutItem.find('.item-text').css({
-                'font-size': '16px',
-                'color': '#333'
-            });
+        // elif instead?
+        if ($('#radio-buscar-en-provincia').is(':checked') && select_provincia.val() && select_servicio.val()) {
+            for (const [id_oficina, ofi] of Object.entries(SERVICIOS)) {
+                if (ofi.provincia !== select_provincia.val())
+                    continue
 
-            //Columna izquierda del grid de la cita seleccionada
-            checkoutItem.find('.wide-column').css({
-                'flex': '85%', // Adjust the percentage as needed
-                'padding': '0px 5px 0px 5px' 
-            });
+                svc = ofi.servicios.find((e) => e.nombre == select_servicio.val());
 
-            //Columna derecha del grid de la cita seleccionada
-            checkoutItem.find('.narrow-column').css({
-                'flex': '15%',
-                'margin': '0px 5px 0px 5px',
-                'padding': '0'
-            });
-
-
-            //Botón de borrar cita seleccionada
-            checkoutItem.find('.delete-item').css({
-                'background-color': '#fff',
-                'border': 'none',
-                'cursor': 'pointer'
-            });
-
-            // Función para borrar cita seleccionada
-            var deleteButton = checkoutItem.find('.delete-item');
-            deleteButton.on('click', function () {
-                // Remove the item when the delete button is clicked
-                checkoutItem.remove();
-
-                // If the counter is greater than 0, decrement it
-                numero_citas_contador = checkoutContainer.children('.checkout-item').length;
-
-                // Update and display the counter
-                updateNumeroCitasCounter();
-
-                // Enable select_servicio if the maximum number of items is not reached
-                if (checkoutContainer.children('.checkout-item').length < maxCheckoutItems) {
-                    select_servicio.prop('disabled', false);
+                if (svc) {
+                    elements_to_add.push({
+                        'ofi': id_oficina,
+                        'srv': svc.id_servicio
+                    })
                 }
-            });
-
-            // Append the checkout item to the checkout container
-            checkoutContainer.append(checkoutItem);
-
-            // Check if the maximum number of items is reached and disable the select if needed
-            if (checkoutContainer.children('.checkout-item').length >= maxCheckoutItems) {
-                select_servicio.prop('disabled', true);
             }
         }
-        
+
+        elements_to_add
+            .forEach(e => add_elemtnt(e.ofi, e.srv));
 
         //Resetear select de servicios cuando se añade una cita
         //select_servicio.val(null).trigger('change');
@@ -548,8 +608,8 @@ $(document).ready(function () {
     });
 
 
-    
-    
+
+
 
 
 
@@ -569,11 +629,10 @@ $(document).ready(function () {
 
 
 
-  
 
 
 
 
 
-  });
-  
+
+});
