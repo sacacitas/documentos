@@ -272,10 +272,12 @@ document.addEventListener('DOMContentLoaded', function () {
                     botonEstadoBusqueda.text('Cita reservada, pendiente de pagar');
                 }
 
-
+                if (state_front == 'CANCELADO') {
+                    botonEstadoBusqueda.text('Búsqueda cancelada');
+                }   
   
 
-                
+
                 // Variables de los IFs
                 var divCosteHoraBuscando = $('#div-coste-hora-buscando');
                 var divHorasBuscando = $('#div-horas-buscando');
