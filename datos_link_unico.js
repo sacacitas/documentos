@@ -244,7 +244,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 //Cambiar textos del link único
                 document.getElementById('state_front').textContent = state_front.charAt(0).toUpperCase() + state_front.substring(1).toLowerCase();
-                document.getElementById('boton_estado_busqueda').textContent = state_front.charAt(0).toUpperCase() + state_front.substring(1).toLowerCase();
+                //document.getElementById('boton_estado_busqueda').textContent = state_front.charAt(0).toUpperCase() + state_front.substring(1).toLowerCase();
                 document.getElementById('date_last_checked_front').textContent = date_last_checked_front_utc;
                 document.getElementById('retries_front').textContent = formatNumberWithDots(retries_front);
                 document.getElementById('link-busqueda-fechas-min-max').textContent = 'Desde ' + formattedLimitMin + ' hasta ' + formattedLimitMax;
@@ -268,7 +268,9 @@ document.addEventListener('DOMContentLoaded', function () {
     
 
 
-
+                if (state_front == 'CANCELADO') {
+                    botonEstadoBusqueda.text('Búsqueda cancelada');
+                }   
 
 
                 // Variables de los IFs
