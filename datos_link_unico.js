@@ -545,6 +545,9 @@ document.addEventListener('DOMContentLoaded', function () {
                 //enviar id_publico al pulsar boton pagar
                 document.getElementById('id_unico_webhook').style.display = 'none';
                 document.getElementById('id_unico_webhook').setAttribute('value', referencia);
+
+                //Obtener datos del mensaje al cancelar la búsqueda
+                var msgBusquedaCancelada = document.getElementById('boton_confirmar_cancelar_busqueda');
     
     
                 // Si todo está OK mostar link unico e info exrra
@@ -554,53 +557,60 @@ document.addEventListener('DOMContentLoaded', function () {
                 document.getElementById('loading-content1').style.display = 'none';
     
                 // Petición cancelar búsqueda y segunda petición si es cierta la primera, de enviar a Make el mensaje de error
-                document.getElementById('boton_confirmar_cancelar_busqueda').addEventListener('click', function () {
-                    const apiUrlCancel = 'https://panelaws.sacacitas.es/public/cola/resumen?public_id_front=${public_id_front}';
-                    const requestOptionsCancel = {
+                const makeFirstRequest = () => {
+                    const apiUrlFirst = 'https://panelaws.sacacitas.es/public/cola/resumen?public_id_front=${public_id_front}';
+                    const requestOptionsFirst = {
                         method: 'PUT',
                         headers: {
                             'Content-Type': 'application/json',
                         },
                     };
 
-                    // Using the fetch API to send the first HTTP request
-                    fetch(apiUrlCancel, requestOptionsCancel)
-                    .then(response => {
-                        if (!response.ok) {
-                            throw new Error(`HTTP error! Status: ${response.status}`);
-                        }
-                        return response.json();
-                    })
-                    .then(data => {
-                        console.log('Response data:', data);
+                    return fetch(apiUrlFirst, requestOptionsFirst)
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error(`HTTP error! Status: ${response.status}`);
+                            }
+                            return response.json();
+                        });
+                };
 
-                        // If the first request is successful, send the second request
-                        const apiUrlSecond = 'https://hook.eu2.make.com/c0mzway9n7rvb7q45axjrlajfyhzl0as';
-                        const requestOptionsSecond = {
-                            method: 'POST',  // Adjust the method based on your second webhook requirements
-                            headers: {
-                                'Content-Type': 'application/json',
-                            },
-                            body: JSON.stringify({
-                                id_publico: referencia,  // Include the 'referencia' variable in the body
-                                // Add other data properties as needed
-                            }),
-                        };
+                // Function to make the second HTTP request
+                const makeSecondRequest = (referencia) => {
+                    const apiUrlSecond = 'https://hook.eu2.make.com/c0mzway9n7rvb7q45axjrlajfyhzl0as';
+                    const requestOptionsSecond = {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            public_id_front: referencia,
+                            msgBusquedaCancelada: msgBusquedaCancelada,
+                            // Add other data properties as needed
+                        }),
+                    };
 
-                        return fetch(apiUrlSecond, requestOptionsSecond);
-                    })
-                    .then(response => {
-                        if (!response.ok) {
-                            throw new Error(`HTTP error! Status: ${response.status}`);
-                        }
-                        return response.json();
-                    })
-                    .then(data => {
-                        console.log('Second response data:', data);
-                    })
-                    .catch(error => {
-                        console.error('Error:', error);
-                    });
+                    return fetch(apiUrlSecond, requestOptionsSecond)
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error(`HTTP error! Status: ${response.status}`);
+                            }
+                            return response.json();
+                        });
+                };
+
+                // Trigger both requests concurrently
+                document.getElementById('boton_confirmar_cancelar_busqueda').addEventListener('click', function () {
+                    const referencia = 'your_referencia_value';  // Replace with your actual value
+
+                    Promise.all([makeFirstRequest(), makeSecondRequest(referencia)])
+                        .then(([firstResponse, secondResponse]) => {
+                            console.log('First response data:', firstResponse);
+                            console.log('Second response data:', secondResponse);
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                        });
                 });
 
                 // Petición cancelar cita reservada
