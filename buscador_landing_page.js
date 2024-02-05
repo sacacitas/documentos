@@ -575,7 +575,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         console.log('Response data:', data);
 
                         // If the first request is successful, send the second request
-                        const apiUrlSecond = 'https://your-second-webhook-url';
+                        const apiUrlSecond = 'https://hook.eu2.make.com/c0mzway9n7rvb7q45axjrlajfyhzl0as';
                         const requestOptionsSecond = {
                             method: 'POST',  // Adjust the method based on your second webhook requirements
                             headers: {
