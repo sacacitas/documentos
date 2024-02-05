@@ -312,10 +312,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 //Ocultar elementos de manera predeterminada
                 divCaducidadBusqueda.hide();
-                botonCancelarLinkUnico.hide();
+                //***botonCancelarLinkUnico.hide();
                 divUltimaBusqueda.hide();
                 divCosteHoraBuscando.hide();
-                cuadradoPagoCita20.hide();
+                //***cuadradoPagoCita20.hide();
                 divDatosCitaReservada.hide();
                 botonRenovarBusquedaCita.hide();
                 
@@ -366,7 +366,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
                     // De manera predeterminada ocultar grids y seleccionar botón Búsqueda
-                    divPagoYReserva.hide();
+                    //***divPagoYReserva.hide();
                     gridLinkUnicoOficina.hide();
                     gridLinkUnicoDatos.hide();
                     gridLinkUnicoEstadistica.hide();
@@ -545,18 +545,14 @@ document.addEventListener('DOMContentLoaded', function () {
                 //enviar id_publico al pulsar boton pagar
                 document.getElementById('id_unico_webhook').style.display = 'none';
                 document.getElementById('id_unico_webhook').setAttribute('value', referencia);
-
-                //Obtener datos del mensaje al cancelar la búsqueda
-                var msgBusquedaCancelada = document.getElementById('boton_confirmar_cancelar_busqueda');
-                var msgBusquedaAnulada = document.getElementById('input-razon-cancelar-cita-reservada');
-    
-    
                 // Si todo está OK mostar link unico e info exrra
                 document.getElementById('main-content1').style.display = 'block';
                 document.getElementById('main-content-info-extra').style.display = 'block';
                 // Si todo OK ocultar página de carga
                 document.getElementById('loading-content1').style.display = 'none';
     
+
+
                 // Petición cancelar búsqueda y segunda petición si es cierta la primera, de enviar a Make el mensaje de error
                 const makeFirstRequest = () => {
                     const apiUrlFirst = 'https://panelaws.sacacitas.es/public/cola/resumen?public_id_front=${public_id_front}';
@@ -577,16 +573,17 @@ document.addEventListener('DOMContentLoaded', function () {
                 };
 
                 // Function to make the second HTTP request
-                const makeSecondRequest = (referencia) => {
+                const makeSecondRequest = (public_id_front, msgBusquedaCancelada) => {
                     const apiUrlSecond = 'https://hook.eu2.make.com/c0mzway9n7rvb7q45axjrlajfyhzl0as';
+
                     const requestOptionsSecond = {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
                         },
                         body: JSON.stringify({
-                            public_id_front: referencia,
-                            msgBusquedaCancelada: msgBusquedaCancelada,
+                            public_id_front: public_id_front,
+                            msgBusquedaCancelada: msgBusquedaCancelada.value,  // Get the value from the input field
                             // Add other data properties as needed
                         }),
                     };
@@ -602,9 +599,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 // Trigger both requests concurrently
                 document.getElementById('boton_confirmar_cancelar_busqueda').addEventListener('click', function () {
-                    const referencia = 'your_referencia_value';  // Replace with your actual value
 
-                    Promise.all([makeFirstRequest(), makeSecondRequest(referencia)])
+                    Promise.all([makeFirstRequest(), makeSecondRequest(public_id_front, document.getElementById('input-cancelar-busqueda-link-unico'))])
                         .then(([firstResponse, secondResponse]) => {
                             console.log('First response data:', firstResponse);
                             console.log('Second response data:', secondResponse);
@@ -614,10 +610,15 @@ document.addEventListener('DOMContentLoaded', function () {
                         });
                 });
 
+
                 // Petición cancelar cita reservada
                 document.getElementById('boton-cancelar-cita-reservada').addEventListener('click', function () {
                     const apiUrl = 'https://hook.eu2.make.com/do8w7utervphwxlzzt9afkjixmqvtxl5';
-    
+                    
+                    //Obtener datos del mensaje al cancelar la cita reservada
+                    var msgBusquedaAnulada = document.getElementById('input-razon-cancelar-cita-reservada').value;
+
+
                     // Include data in the request body
                     const requestBody = {
                     public_id_front: public_id_front,
