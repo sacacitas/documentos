@@ -1,638 +1,660 @@
-// ['id_oficina','id_servicio'] = entry
-var SERVICIOS = {};
+document.addEventListener('DOMContentLoaded', function () {
 
-$(document).ready(function () {
-    // Variables de los IDs selects de la landing
-    var select_administracion = $('#select-buscador-administracion');
-    var select_provincia = $('#select-buscador-provincia');
-    var select_oficina = $('#select-buscador-oficina');
-    var select_servicio = $('#select-buscador-servicio');
-    var numero_citas_contador = $('numero-citas-seleccionadas-buscador');
-
-    // Variables IDs de info secundaria
-    var string_precio_buscador = $('#precio-total-buscador-landing');
-
-    // Textos predeterminados en los selects
-    // Crear texto predeterminado en ADM
-    var default_select_administracion = $('<option>', {
-        value: '',
-        text: 'Selecciona una Administración',
-        disabled: true,
-        selected: true
-    });
-    select_administracion.append(default_select_administracion);
-
-    // Crear texto predeterminado en provincias
-    var default_select_provincias = $('<option>', {
-        value: '',
-        text: '¿Para qué provincia?',
-        disabled: true,
-        selected: true
-    });
-    select_provincia.append(default_select_provincias);
-
-    // Crear texto predeterminado en oficinas
-    var default_select_oficina = $('<option>', {
-        value: '',
-        text: 'Escoge una oficina',
-        disabled: true,
-        selected: true
-    });
-    select_oficina.append(default_select_oficina);
-
-    // Crear texto predeterminado en citas previas
-    var default_select_servicio = $('<option>', {
-        value: '',
-        text: 'Escoge tus citas previas',
-        disabled: true,
-        selected: true
-    });
-    select_servicio.append(default_select_servicio);
-
-
-
-
-
-    // Tipo de buscador (si buscar con oficina o toda la provincia) -> Únicamente estilos y funcionalidades.
-    // (La parte de crear valores está en la segunda parte)
-
-    // Preselect del radio con oficina
-    $('#radio-buscar-con-oficina').prop('checked', true);
-    $('#box-buscar-con-oficina').addClass('selected-radio-buscador');
-
-    // Variables de los radios
-    var radio_buscador_con_oficina = $('#radio-buscar-con-oficina');
-    var radio_buscador_por_provincia = $('#radio-buscar-en-provincia');
-
-    // Que haga acciones CSS al seleccionar uno radio u otro
-    // Buscar con Oficina
-    function RadioOficinaSelected() {
-        if (radio_buscador_con_oficina.prop('checked')) {
-            // Apply CSS conditions for 'Con Oficina' selected
-            $('#box-buscar-con-oficina').addClass('selected-radio-buscador');
-            $('#box-buscar-en-provincia').removeClass('selected-radio-buscador');
-            $('#div-select-oficinas-buscador').css('display', 'flex');
-        }
+    // Get the 'referencia' parameter from the URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const referencia = urlParams.get('r');
+  
+    // URLs of your JSON files
+    const json_categorias = 'https://documentos.sacacitas.es/categorias_servicios.json';
+    const json_precios_citas = 'https://documentos.sacacitas.es/precios_citas.json';
+  
+    function loadJSON(url) {
+      return fetch(url)
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+          return response.json();
+        })
+        .catch(error => {
+          console.error('Error loading JSON:', error);
+          throw error;
+        });
     }
-    // Buscar por toda la provincia
-    function RadioProvinciaSelected() {
-        if (radio_buscador_por_provincia.prop('checked')) {
-            // Apply CSS conditions for 'Con Oficina' selected
-            $('#box-buscar-en-provincia').addClass('selected-radio-buscador');
-            $('#box-buscar-con-oficina').removeClass('selected-radio-buscador');
-            $('#div-select-oficinas-buscador').css('display', 'none');
+  
+  
+    // Fetch JSON data asynchronously after the main content has loaded
+    Promise.all([loadJSON(json_categorias), loadJSON(json_precios_citas)])
+  
+      .then(dataArray => {
+        // Handle your JSON data here
+        const [jsonData1, jsonData2] = dataArray;
+  
+        // Buscar el oficina_servicio en el JSON 1
+        let parentIDofIdoficinaIdservicio = null;
+        let idoficina_idservicio = null;
+  
+        // Iterate through the JSON data loaded from jsonUrl1
+        for (const parentKey in jsonData1) {
+          const parentData = jsonData1[parentKey];
+          idoficina_idservicio = parentData.id_oficina + '_' + parentData.id_servicio;
+  
+          // Check if the parentIdoficinaIdservicio matches the idoficina_idservicio
+          if (idoficina_idservicio === idoficina_idservicio) {
+            // Set the variable to the parent key
+            parentIDofIdoficinaIdservicio = parentKey;
+            break; // Assuming idoficina_idservicio is unique, you can stop the iteration
+          }
         }
-    }
+  
+        // Check if 'referencia' is present in the URL
+        if (referencia) {
+          // Construct the URL with the referencia parameter
+          var apiUrl = `https://panelaws.sacacitas.es/public/cola/resumen?id_publico=${referencia}`;
+  
+          const DEFAULT_TIMEZONE = 'Europe/Madrid';
+  
+          // Fetch data from the JSON endpoint
+          fetch(apiUrl)
+            .then(response => {
+              if (!response.ok) {
+                //Mostrar error si falla el servidor
+                document.getElementById('error-message-parameter2').style.display = 'block';
+                document.getElementById('cargando-datos-link-unico').style.display = 'none';
+                throw new Error('Network response was not ok');
+              }
+              return response.json();
+            })
+            .then(data => {
+                // IDs del JSON
+                var id_oficina_front = data.id_oficina;
+                var date_added_front = data.date_added;
+                var state_front = data.state;
+                var date_last_checked_front = data.date_last_checked;
+                var retries_front = data.retries;
+                var limit_max_front = data.limit_max;
+                var date_min_front = data.date_min;
+                var fecha_caducidad_front = data.limit_caducidad;
+                var precio_eur_cent_front = data.precio_eur_cent;
+                var public_id_front = data.public_id;
+                var servicio_nombre_front = data.servicio_nombre;
+                var oficina_nombre_front = data.oficina_nombre;
+                var provincia_front = data.provincia;
+                var codigo_reserva_cita_front = data.referencia_reserva;
+                var fecha_cita_reservada_front = data.fecha_cita_reservada;
+                var fecha_limite_pago_front = data.fecha_limite_pago;
 
-    // Event listeners de los radios
-    radio_buscador_con_oficina.on('change', RadioOficinaSelected);
-    radio_buscador_por_provincia.on('change', RadioProvinciaSelected);
+                //Datos del cliente
+                var clienteIdDocumento = data.cliente.id_documento;
+                var clienteIdType = data.cliente.id_type;
+                var clienteNombre = data.cliente.nombre;
+                var clienteApellido1 = data.cliente.apellido1;
+                var clienteApellido2 = data.cliente.apellido2;
+                var clienteTelefono = data.cliente.telefono;
+                var clienteEmail = data.cliente.email;
+                var clienteNacionalidad = data.cliente.nacionalidad;
+                var clienteFechaNacimiento = data.cliente.fecha_nacimiento;
+                //var clienteResolucionNacionalidad = data.cliente.resolucion_nacionalidad;
+                //var clienteCsvNacionalidad = data.cliente.csv_nacionalidad;
+                //var clienteIdCaducidad = data.cliente.id_caducidad;
+                //var clienteIdCliente = data.cliente.id_cliente;
+            
+                
 
+                // Variables de elementos del front-end
+                var botonEstadoBusqueda = document.getElementById('boton_estado_busqueda');
+                
+                
+                
 
-
-
-
-
-
-    // 1. PRIMERA PARTE BUSCADOR -> Lista estática de administración y provincias
-    // Crear valores en el select de la Administración
-    var values_select_administracion = [
-        { value: 'EX1', text: 'Extranjería' },
-        { value: 'RC1', text: 'Registro Civil' }
-    ];
-
-    // Populate select administración
-    values_select_administracion.forEach(option => {
-        var optionElement_administracion = $('<option></option>').prop('value', option.value).text(option.text);
-        select_administracion.append(optionElement_administracion);
-    });
-
-    // Crear valores en el select de la Provincia
-    var lista_provincias_espana = {
-        "Alava": "Alava",
-        "Albacete": "Albacete",
-        "Alicante": "Alicante",
-        "Almería": "Almería",
-        "Asturias": "Asturias",
-        "Avila": "Avila",
-        "Badajoz": "Badajoz",
-        "Barcelona": "Barcelona",
-        "Burgos": "Burgos",
-        "Cáceres": "Cáceres",
-        "Cádiz": "Cádiz",
-        "Cantabria": "Cantabria",
-        "Castellón": "Castellón",
-        "Ceuta": "Ceuta",
-        "Ciudad Real": "CiudadReal",
-        "Córdoba": "Córdoba",
-        "La Coruña": "LaCoruña",
-        "Cuenca": "Cuenca",
-        "Gerona": "Gerona",
-        "Granada": "Granada",
-        "Guadalajara": "Guadalajara",
-        "Guipúzcoa": "Guipúzcoa",
-        "Huelva": "Huelva",
-        "Huesca": "Huesca",
-        "Islas Baleares": "IslasBaleares",
-        "Jaén": "Jaén",
-        "León": "León",
-        "Lérida": "Lérida",
-        "Lugo": "Lugo",
-        "Madrid": "Madrid",
-        "Málaga": "Málaga",
-        "Melilla": "Melilla",
-        "Murcia": "Murcia",
-        "Navarra": "Navarra",
-        "Orense": "Orense",
-        "Palencia": "Palencia",
-        "Las Palmas": "LasPalmas",
-        "Pontevedra": "Pontevedra",
-        "La Rioja": "LaRioja",
-        "Salamanca": "Salamanca",
-        "Segovia": "Segovia",
-        "Sevilla": "Sevilla",
-        "Soria": "Soria",
-        "Tarragona": "Tarragona",
-        "Santa Cruz De Tenerife": "SantaCruzDeTenerife",
-        "Teruel": "Teruel",
-        "Toledo": "Toledo",
-        "Valencia": "Valencia",
-        "Valladolid": "Valladolid",
-        "Vizcaya": "Vizcaya",
-        "Zamora": "Zamora",
-        "Zaragoza": "Zaragoza"
-    };
-
-    // Populate select provincias con la lista de provincias
-    $.each(lista_provincias_espana, function (text_lista_provincias, backend_provincia_id) {
-        var optionElement_provincia = $('<option></option>').prop('value', backend_provincia_id).text(text_lista_provincias);
-        select_provincia.append(optionElement_provincia);
-    });
+                
+                
+                
+                
+                
+                
+                
+                
 
 
+                // Fetching data from jsonUrl2 based on parentIdoficinaIdservicio
+                var precio_cita_front = jsonData2[parentIDofIdoficinaIdservicio] || 'ES_0_SINDATOS';
+                var precio_cita_front_euros = (precio_cita_front / 100);
+    
+                // Calcular precio en euros de cents
+                var precio_cita_backend = (precio_eur_cent_front / 100);
+    
+                // Crear fechas
+                var limit_max_date = new Date(limit_max_front);
+                var limit_min_date = new Date(date_min_front);
+                var date_added = new Date(date_added_front);
+                var last_checked = new Date(date_last_checked_front);
+                var fecha_caducidad_date = new Date(fecha_caducidad_front);
+                var fecha_cita_reservada = new Date(fecha_cita_reservada_front);
+                var fecha_limite_pago = new Date(fecha_limite_pago_front);
+                var date_clienteFechaNacimiento = new Date(clienteFechaNacimiento);
+    
+    
+                //contar hacía atrás del tiempo que falta para pagar
+                const deadline = fecha_limite_pago.getTime();
+                setInterval(() => {
+                    const now_time = new Date().getTime();
+                    const distance = deadline - now_time;
+    
+                    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                    const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+    
+                    document.getElementById('js-timer-days').innerText = days;
+                    document.getElementById('js-timer-hours').innerText = hours;
+                    document.getElementById('js-timer-minutes').innerText = minutes;
+                    document.getElementById('js-timer-seconds').innerText = seconds;
+    
+                }, 1000);
+    
+    
+                var options = {
+                    year: 'numeric',
+                    month: 'numeric',
+                    day: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    hour12: false, // Use 24-hour format
+                    timeZone: DEFAULT_TIMEZONE, // Madrid
+                    timeZoneName: 'short'
+                };
+    
+                //Formatear fechas a strings
+                var formattedDateAdded = date_added.toLocaleString('es-ES', options).replace(/,/g, ' -');
+                var formattedDate_cita_reservada = fecha_cita_reservada.toLocaleString('es-ES', options).replace(/,/g, ' -');
+                var formattedDate_fecha_limite_pago = fecha_limite_pago.toLocaleString('es-ES', options).replace(/,/g, ' -');
+                var formattedLimitMax = limit_max_date.toLocaleDateString('es-ES', {
+                    year: 'numeric',
+                    month: 'numeric',
+                    day: 'numeric',
+                    timeZone: DEFAULT_TIMEZONE // GMT+1
+                }).replace(/,/g, '-');
+    
+                var formattedLimitMin = limit_min_date.toLocaleDateString('es-ES', {
+                    year: 'numeric',
+                    month: 'numeric',
+                    day: 'numeric',
+                    timeZone: DEFAULT_TIMEZONE // GMT+1
+                }).replace(/,/g, '-');
+    
 
-
-
-
-    // 2. SEGUNDA PARTE BUSCADOR -> Lista dinámica de oficinas y servicios desde el backend
-    // Importar JSON externos de lista oficina_servicios y sus precios por categorías
-    const lista_oficina_servicios_json = 'https://documentos.sacacitas.es/categorias_servicios.json';
-    const precios_citas_categorias_json = 'https://documentos.sacacitas.es/precios_citas.json';
-
-    // Variables backend
-    var apiBaseUrl = 'https://panelaws.sacacitas.es/public/oficina/';
-
-
-    //Contador número de citas seleccionadas
-    var numero_citas_contador = 0;
-
-
-    //Crear valores y populate select oficina
-    // Hacer API call al backend para descargar el JSON de oficinas y servicios según la provincia seleccionada y filtrar por administración
-    function fetchJsonAndPopulateOficina() {
-        var selectedAdministracion = select_administracion.val();
-        var selectedProvincia = select_provincia.val();
-        console.log(selectedAdministracion);
-        console.log(selectedProvincia);
-
-        // Comprobar si Adm, provincia y bsucador por oficina está seleccionado
-        if (selectedAdministracion && selectedProvincia) {
-            // Show loading message in select_oficina
-            select_oficina.html('').append($('<option>', {
-                value: '',
-                text: 'Cargando...',
-                disabled: true,
-                selected: true
-            }));
-
-            console.log(selectedAdministracion);
-            console.log(selectedProvincia);
-            // Build the API URL with the selected provincia
-            var apiUrl = apiBaseUrl + selectedProvincia;
-
-            // API call para descargar el JSON de oficinas y servicios del backend
-            $.ajax({
-                url: apiUrl,
-                method: 'GET',
-                dataType: 'json',
-                success: function (responseData) {
-
-                    // Set SERVICIOS with the data we already got from outside
-                    responseData
-                        .forEach(oficina => SERVICIOS[oficina.id_oficina] = oficina);
-
-                    data = responseData; // Set the data variable with the response
-                    // Populate oficina select con los textos importados del json
-                    select_oficina.html('').append(default_select_oficina);
-
-                    // Mostrar en el select oficinas dependiendo de la administración seleccionada
-                    var filteredData = data.filter(item => {
-                        if (selectedAdministracion === 'EX1') {
-                            // Show names where id_oficina starts with "gobext"
-                            return item.id_oficina.toLowerCase().includes('gobext');
-                        } else if (selectedAdministracion === 'RC1') {
-                            // Show names where id_oficina does not start with "gobext"
-                            return !item.id_oficina.toLowerCase().includes('gobext');
-                        }
-                        return false;
-                    });
-
-                    // Check if there are no oficinas
-                    if (filteredData.length === 0) {
-                        // Display a default message in select_oficina
-                        select_oficina.html('').append($('<option>', {
-                            value: '',
-                            text: 'No hay oficinas disponibles',
-                            disabled: true,
-                            selected: true
-                        }));
-                    } else {
-                        // Populate oficina select options with external data
-                        $.each(filteredData, function (index, item) {
-                            var optionElement = $('<option></option>')
-                                .prop('value', item.nombre)
-                                .attr('id_oficina', item.id_oficina) // https://stackoverflow.com/a/5995650
-                                .text(item.nombre);
-                            select_oficina.append(optionElement);
-                        });
-
-                        // Set default value and trigger change event
-                        select_oficina.val(default_select_oficina.val()).trigger('change');
-                    }
-                },
-                error: function (error) {
-                    console.error('Error fetching data:', error);
+                var hoursAndMinutesOptions = {
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    hour12: false, // Use 24-hour format
+                    timeZone: DEFAULT_TIMEZONE, // Madrid
+                    timeZoneName: 'short'
+                };
+                var date_last_checked_front_utc = last_checked.toLocaleString('es-ES', hoursAndMinutesOptions);
+    
+                // Calculate the number of days between date_added and limit_max_date
+                var dias_caducidad_restantes = Math.floor((fecha_caducidad_date - new Date()) / (24 * 60 * 60 * 1000));
+    
+                // Calcular número de horas buscando
+                var horas_busqueda_front = Math.floor((last_checked - date_added) / (60 * 60 * 1000));
+    
+                //Calcular coste horas buscando
+                var coste_hora_buscando = (precio_cita_backend / horas_busqueda_front);
+    
+                // Function to format number with dots from 'horas_busqueda_front'
+                function formatNumberWithDots(number) {
+                    return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
                 }
+
+                //Fecha nacimiento a DD.MM.YYYY
+                var formatted_date_clienteFechaNacimiento = date_clienteFechaNacimiento.toLocaleDateString('es-ES', {
+                    year: 'numeric',
+                    month: 'numeric',
+                    day: 'numeric',
+                }).replace(/,/g, '-');
+
+
+
+                // Reemplazar items de las variables por texto con ID's de la web
+                document.getElementById('public_id_front').textContent = public_id_front;
+                document.getElementById('public_id_front2').textContent = public_id_front;
+                document.getElementById('servicio_nombre_front').textContent = servicio_nombre_front;
+                document.getElementById('oficina_nombre_front').textContent = oficina_nombre_front;
+                document.getElementById('provincia_front').textContent = provincia_front;
+        
+                // Apply class based on the state text
+                if (state_front == 'BUSCANDO') {
+                    document.getElementById('boton_estado_busqueda').classList.toggle('boton_busqueda_verde');
+                }
+                if (state_front == 'RESERVADO') {
+                    document.getElementById('boton_estado_busqueda').classList.toggle('boton_busqueda_naranja');
+                }
+                if (state_front == 'EXPIRADO' || state_front == 'CANCELADO' || state_front == 'ANULADO') {
+                    document.getElementById('boton_estado_busqueda').classList.toggle('boton_busqueda_rojo');
+                }
+                if (state_front == 'PAGADO') {
+                    document.getElementById('boton_estado_busqueda').classList.toggle('boton_busqueda_azul');
+                }
+                
+
+
+
+
+
+
+
+
+                //Cambiar textos del link único
+                document.getElementById('state_front').textContent = state_front.charAt(0).toUpperCase() + state_front.substring(1).toLowerCase();
+                botonEstadoBusqueda.textContent = state_front.charAt(0).toUpperCase() + state_front.substring(1).toLowerCase();
+                document.getElementById('date_last_checked_front').textContent = date_last_checked_front_utc;
+                document.getElementById('retries_front').textContent = formatNumberWithDots(retries_front);
+                document.getElementById('link-busqueda-fechas-min-max').textContent = 'Desde ' + formattedLimitMin + ' hasta ' + formattedLimitMax;
+                document.getElementById('date_added_front').textContent = formattedDateAdded;
+                document.getElementById('caducidad_busqueda').textContent = `Dentro de ${dias_caducidad_restantes} días`;
+                document.getElementById('horas_busqueda_front').textContent = horas_busqueda_front + ' h.';
+                document.getElementById('precio_cita_front').textContent = precio_cita_backend.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                document.getElementById('precio_cita_hay_que_pagar').textContent = precio_cita_backend.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                document.getElementById('coste_hora_buscando').textContent = coste_hora_buscando.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                document.getElementById('codigo-reserva-cita-reservada').textContent = codigo_reserva_cita_front;
+                document.getElementById('fecha-cita-reservada').textContent = formattedDate_cita_reservada;
+                document.getElementById('boton-fecha-limite-pago').textContent = formattedDate_fecha_limite_pago;
+
+                //Sección datos personales del cliente
+                document.getElementById('link-cliente-nombre-completo').textContent = clienteNombre + ' ' + clienteApellido1 + ' ' + clienteApellido2;
+                document.getElementById('link-cliente-documento-identidad').textContent = clienteIdType + ': ' + clienteIdDocumento;
+                document.getElementById('link-cliente-nacionalidad').textContent = clienteNacionalidad;
+                document.getElementById('link-cliente-fecha-nacimiento').textContent = formatted_date_clienteFechaNacimiento;
+                document.getElementById('link-cliente-telefono').textContent = clienteTelefono;
+                document.getElementById('link-cliente-correo').textContent = clienteEmail;
+    
+                //Cambiar textos del link único
+                if (state_front == 'CANCELADO') {
+                    botonEstadoBusqueda.textContent = 'Búsqueda cancelada';
+                }
+
+                if (state_front == 'BUSCANDO') {
+                    botonEstadoBusqueda.textContent = 'Buscando cita';
+                }
+
+                if (state_front == 'ANULADO') {
+                    botonEstadoBusqueda.textContent = 'Cita reservada anulada';
+                }
+
+                if (state_front == 'RESERVADO') {
+                    botonEstadoBusqueda.textContent = 'Cita reservada, pendiente de pagar';
+                }
+
+                if (state_front == 'EXPIRADO') {
+                    botonEstadoBusqueda.textContent = 'Búsqueda caducada';
+                }
+
+                if (state_front == 'NO_VALIDADO') {
+                    botonEstadoBusqueda.textContent = 'Error al procesar la solicitud';
+                }
+
+
+                // Variables de los IFs
+                var divCosteHoraBuscando = $('#div-coste-hora-buscando');
+                var divHorasBuscando = $('#div-horas-buscando');
+                var divTotalBusquedas = $('#div-total-busquedas');
+                var botonCancelarLinkUnico = $('#boton-cancelar-link-unico');
+                var cuadradoPagoCita20 = $('#cuadrado-pago-cita20');
+                var divDatosCitaReservada = $('#div-datos-cita-reservada');
+                var estadoPagoCitaReservada = $('#estado-pago-cita-reservada');
+                var divCaducidadBusqueda = $('#div_caducidad_busqueda');
+                var botonEstadoBusqueda = $('#boton_estado_busqueda');
+                var divUltimaBusqueda = $('#div-ultima-busqueda');
+                var botonRenovarBusquedaCita = $('#boton-renovar-busqueda-cita');
+                var textoCitaAunBuscando = $('#texto-pago-cita-aun-buscando');
+
+
+                //Ocultar elementos de manera predeterminada
+                divCaducidadBusqueda.hide();
+                botonCancelarLinkUnico.hide();
+                divUltimaBusqueda.hide();
+                divCosteHoraBuscando.hide();
+                cuadradoPagoCita20.hide();
+                divDatosCitaReservada.hide();
+                botonRenovarBusquedaCita.hide();
+                
+                
+
+
+                // Mostrar diferentes items dependiendo del estado
+                if (state_front == 'RESERVADO' && horas_busqueda_front > 48) {
+                    divCosteHoraBuscando.show();
+                }
+                if (state_front == 'RESERVADO' && retries_front > 500) {
+                    divCosteHoraBuscando.show();
+                }
+                if (state_front == 'BUSCANDO') {
+                    botonCancelarLinkUnico.show();
+                    divCaducidadBusqueda.show();
+                    divUltimaBusqueda.show();
+                }
+                if (state_front == 'RESERVADO') {
+                    cuadradoPagoCita20.show();
+                    divDatosCitaReservada.show();
+                }
+                if (state_front == 'PAGADO') {
+                    divDatosCitaReservada.show();
+                    estadoPagoCitaReservada.text('Pagado');
+                }
+
+                //if (state_front == 'EXPIRADO' || state_front == 'CANCELADO' || state_front == 'ANULADO') {
+                //    botonRenovarBusquedaCita.show();
+                //}    
+
+
+
+                $(document).ready(function () {
+                    //botones
+                    var botonLinkUnicoBusqueda = $('#boton-link-unico-busqueda');
+                    var botonLinkUnicoReserva = $('#boton-link-unico-reserva');
+                    var botonLinkUnicoOficina = $('#boton-link-unico-oficina');
+                    var botonLinkUnicoDatos = $('#boton-link-unico-datos');
+                    var botonLinkUnicoEstadistica = $('#boton-link-unico-estadistica');
+                    
+                    //Grids
+                    var divLinkUnicoBusqueda = $('#div-busqueda-link-unico');
+                    var divPagoYReserva = $('#div-pago-y-reserva');
+                    var gridLinkUnicoOficina = $('#grid-link-unico-oficina');
+                    var gridLinkUnicoDatos = $('#grid-link-unico-datos');
+                    var gridLinkUnicoEstadistica = $('#grid-link-unico-estadistica');
+
+
+                    // De manera predeterminada ocultar grids y seleccionar botón Búsqueda
+                    divPagoYReserva.hide();
+                    gridLinkUnicoOficina.hide();
+                    gridLinkUnicoDatos.hide();
+                    gridLinkUnicoEstadistica.hide();
+                    botonLinkUnicoBusqueda.addClass('boton-datos-link-unico-selected');
+
+                    //Si la cita está reservada o pagada, mostrar el botón de reserva y datos pago
+                    if (state_front == 'RESERVADO' || state_front == 'PAGADO') { 
+                        botonLinkUnicoBusqueda.removeClass('boton-datos-link-unico-selected');
+                        divLinkUnicoBusqueda.hide();
+                        botonLinkUnicoReserva.addClass('boton-datos-link-unico-selected');
+                        divPagoYReserva.show();
+                        textoCitaAunBuscando.hide();
+                        
+
+                    }
+
+                    // Click event for botonLinkUnicoBusqueda
+                    botonLinkUnicoBusqueda.click(function () {
+                        divLinkUnicoBusqueda.show();
+                        divPagoYReserva.hide();
+                        gridLinkUnicoOficina.hide();
+                        gridLinkUnicoDatos.hide();
+                        gridLinkUnicoEstadistica.hide();
+                        botonLinkUnicoBusqueda.addClass('boton-datos-link-unico-selected');
+                        botonLinkUnicoReserva.removeClass('boton-datos-link-unico-selected');
+                        botonLinkUnicoOficina.removeClass('boton-datos-link-unico-selected');
+                        botonLinkUnicoDatos.removeClass('boton-datos-link-unico-selected');
+                        botonLinkUnicoEstadistica.removeClass('boton-datos-link-unico-selected');
+                    });                    
+                
+                    // Click event for botonLinkUnicoBusqueda
+                    botonLinkUnicoReserva.click(function () {
+                        divLinkUnicoBusqueda.hide();
+                        divPagoYReserva.show();
+                        gridLinkUnicoOficina.hide();
+                        gridLinkUnicoDatos.hide();
+                        gridLinkUnicoEstadistica.hide();
+                        botonLinkUnicoBusqueda.removeClass('boton-datos-link-unico-selected');
+                        botonLinkUnicoReserva.addClass('boton-datos-link-unico-selected');
+                        botonLinkUnicoOficina.removeClass('boton-datos-link-unico-selected');
+                        botonLinkUnicoDatos.removeClass('boton-datos-link-unico-selected');
+                        botonLinkUnicoEstadistica.removeClass('boton-datos-link-unico-selected');
+                    });                    
+                
+                    // Click event for botonLinkUnicoBusqueda
+                    botonLinkUnicoOficina.click(function () {
+                        divLinkUnicoBusqueda.hide();
+                        divPagoYReserva.hide();
+                        gridLinkUnicoOficina.show();
+                        gridLinkUnicoDatos.hide();
+                        gridLinkUnicoEstadistica.hide();
+                        botonLinkUnicoBusqueda.removeClass('boton-datos-link-unico-selected');
+                        botonLinkUnicoReserva.removeClass('boton-datos-link-unico-selected');
+                        botonLinkUnicoOficina.addClass('boton-datos-link-unico-selected');
+                        botonLinkUnicoDatos.removeClass('boton-datos-link-unico-selected');
+                        botonLinkUnicoEstadistica.removeClass('boton-datos-link-unico-selected');
+                    });                                   
+                
+  
+                    // Click event for botonLinkUnicoBusqueda
+                    botonLinkUnicoDatos.click(function () {
+                        divLinkUnicoBusqueda.hide();
+                        divPagoYReserva.hide();
+                        gridLinkUnicoOficina.hide();
+                        gridLinkUnicoDatos.show();
+                        gridLinkUnicoEstadistica.hide();
+                        botonLinkUnicoBusqueda.removeClass('boton-datos-link-unico-selected');
+                        botonLinkUnicoReserva.removeClass('boton-datos-link-unico-selected');
+                        botonLinkUnicoOficina.removeClass('boton-datos-link-unico-selected');
+                        botonLinkUnicoDatos.addClass('boton-datos-link-unico-selected');
+                        botonLinkUnicoEstadistica.removeClass('boton-datos-link-unico-selected');
+                    });                    
+                    
+                    // Click event for botonLinkUnicoBusqueda
+                    botonLinkUnicoEstadistica.click(function () {
+                        divLinkUnicoBusqueda.hide();
+                        divPagoYReserva.hide();
+                        gridLinkUnicoOficina.hide();
+                        gridLinkUnicoDatos.hide();
+                        gridLinkUnicoEstadistica.show();
+                        botonLinkUnicoBusqueda.removeClass('boton-datos-link-unico-selected');
+                        botonLinkUnicoReserva.removeClass('boton-datos-link-unico-selected');
+                        botonLinkUnicoOficina.removeClass('boton-datos-link-unico-selected');
+                        botonLinkUnicoDatos.removeClass('boton-datos-link-unico-selected');
+                        botonLinkUnicoEstadistica.addClass('boton-datos-link-unico-selected');
+                    });                                        
+                
+  
+
+                });
+
+
+
+
+                //Datos para empresa factura
+                var razon_social = document.getElementById('nombre_razon_social_link_unico-2').value;
+                var datosEmpresaField = document.querySelector('[data-form-datos-empresa]');
+                
+                $("[ms-code-checkbox-input]").click(function () {
+                    // Get the value of the 'ms-code-checkbox-input' attribute
+                    var checkboxVal = $(this).attr('ms-code-checkbox-input');
+                
+                    // Find the corresponding element with the 'ms-code-checkbox-display' attribute and the same value
+                    var displayElement = $("[ms-code-checkbox-display=" + checkboxVal + "]");
+                
+                    // If this checkbox is checked, show the corresponding element
+                    if ($(this).is(":checked")) {
+                        displayElement.show();
+                        // Set the 'required' attribute to true for the element with the attribute 'data-form-datos-empresa'
+                        //$("[data-form-datos-empresa]").setAttribute('required', true);
+                        document.getElementById('tipo_empresa_link_unico').setAttribute('required', true);
+                        document.getElementById('nombre_razon_social_link_unico-2').setAttribute('required', true);
+                        document.getElementById('nif_cif_link_unico-2').setAttribute('required', true);
+                        document.getElementById('calle_link_unico-2').setAttribute('required', true);
+                        document.getElementById('codigo_postal__link_unico-2').setAttribute('required', true);
+                        document.getElementById('poblacion_link_unico').setAttribute('required', true);
+                        document.getElementById('provincia_link_unico-2').setAttribute('required', true);
+            
+                    } else {
+                        // If this checkbox is unchecked, hide the corresponding element
+                        displayElement.hide();
+                        // Set the 'required' attribute to false for the element with the attribute 'data-form-datos-empresa'
+                        document.getElementById('tipo_empresa_link_unico').removeAttribute('required');
+                        document.getElementById('nombre_razon_social_link_unico-2').removeAttribute('required');
+                        document.getElementById('nif_cif_link_unico-2').removeAttribute('required');
+                        document.getElementById('calle_link_unico-2').removeAttribute('required');
+                        document.getElementById('codigo_postal__link_unico-2').removeAttribute('required');
+                        document.getElementById('poblacion_link_unico').removeAttribute('required');
+                        document.getElementById('provincia_link_unico-2').removeAttribute('required');
+                        
+                    }
+                });
+    
+    
+                // Al hacer clic en el botón 'boton_pagar_link_unico', se completará el formulario
+                $('#boton_pagar_link_unico_form').click(function () {
+                    // Comprueba si el checkbox está marcado
+                    if ($("[ms-code-checkbox-input]").is(":checked")) {
+                        // Comprueba si los campos obligatorios están rellenos
+                        if (datosEmpresaField.value == "") {
+                            alert("Por favor, rellena los campos obligatorios.");
+                            return false;
+                        }
+                    }
+                });            
+            
+                //Poner gifs según el estado de búsqueda
+                if (state_front == 'BUSCANDO') {
+                    document.getElementById('gif-radar-buscando').style.display = 'block';
+                }
+                if (state_front == 'RESERVADO') {
+                    document.getElementById('gif-pagar-reservado').style.display = 'block';
+                }
+        
+                //URL administracion dinamico
+                var backendWebOficialElement = document.getElementById('backend-web-oficial')
+    
+                if (id_oficina_front.startsWith("gobrc")) {
+                    backendWebOficialElement.innerHTML = '<a href="https://sede.administracionespublicas.gob.es/icpplustiej/" target="_blank">https://sede.administracionespublicas.gob.es/icpplustiej/</a>';
+                } else if (id_oficina_front.startsWith("gvarc")) {
+                    backendWebOficialElement.innerHTML = '<a href="https://registrocivil.gva.es/es/cita-previa" target="_blank">https://registrocivil.gva.es/es/cita-previa</a>';
+                } else if (id_oficina_front.startsWith("gobext")) {
+                    backendWebOficialElement.innerHTML = '<a href="https://sede.administracionespublicas.gob.es/pagina/index/directorio/icpplus" target="_blank">https://sede.administracionespublicas.gob.es/pagina/index/directorio/icpplus</a>';
+                } else if (id_oficina_front.startsWith("g7mad")) {
+                    backendWebOficialElement.innerHTML = '<a href="https://gestiona7.madrid.org/CTAC_CITA/registro" target="_blank">https://gestiona7.madrid.org/CTAC_CITA/registro</a>';
+                } else if (id_oficina_front.startsWith("gencat")) {
+                    backendWebOficialElement.innerHTML = '<a href="https://seujudicial.gencat.cat/ca/que_cal_fer/registre-civil/" target="_blank">https://seujudicial.gencat.cat/ca/que_cal_fer/registre-civil/</a>';
+                } else {
+                    backendWebOficialElement.innerHTML = 'No hay datos de esta oficina';
+                }
+                //cambiar color al link
+                var linkElement = document.getElementById('backend-web-oficial').querySelector('a');
+                linkElement.style.color = '#2C64E3';
+        
+    
+                //enviar id_publico al pulsar boton pagar
+                document.getElementById('id_unico_webhook').style.display = 'none';
+                document.getElementById('id_unico_webhook').setAttribute('value', referencia);
+    
+    
+                // Si todo está OK mostar link unico e info exrra
+                document.getElementById('main-content1').style.display = 'block';
+                document.getElementById('main-content-info-extra').style.display = 'block';
+                // Si todo OK ocultar página de carga
+                document.getElementById('loading-content1').style.display = 'none';
+    
+                // Petición cancelar búsqueda y segunda petición si es cierta la primera, de enviar a Make el mensaje de error
+                document.getElementById('boton_confirmar_cancelar_busqueda').addEventListener('click', function () {
+                    const apiUrlCancel = 'https://panelaws.sacacitas.es/public/cola/resumen?public_id_front=${public_id_front}';
+                    const requestOptionsCancel = {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                    };
+
+                    // Using the fetch API to send the first HTTP request
+                    fetch(apiUrlCancel, requestOptionsCancel)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error(`HTTP error! Status: ${response.status}`);
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        console.log('Response data:', data);
+
+                        // If the first request is successful, send the second request
+                        const apiUrlSecond = 'https://your-second-webhook-url';
+                        const requestOptionsSecond = {
+                            method: 'POST',  // Adjust the method based on your second webhook requirements
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({
+                                id_publico: referencia,  // Include the 'referencia' variable in the body
+                                // Add other data properties as needed
+                            }),
+                        };
+
+                        return fetch(apiUrlSecond, requestOptionsSecond);
+                    })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error(`HTTP error! Status: ${response.status}`);
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        console.log('Second response data:', data);
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                    });
+                });
+
+                // Petición cancelar cita reservada
+                document.getElementById('boton-cancelar-cita-reservada').addEventListener('click', function () {
+                    const apiUrl = 'https://hook.eu2.make.com/do8w7utervphwxlzzt9afkjixmqvtxl5';
+    
+                    // Include data in the request body
+                    const requestBody = {
+                    public_id_front: public_id_front,
+                    // Add any other data properties as needed
+                    };
+    
+                    const requestOptions = {
+                    method: 'POST', // or 'PUT', 'GET', etc.
+                    headers: {
+                        'Content-Type': 'application/json',
+                        // Add any other headers as needed
+                    },
+                    body: JSON.stringify(requestBody),
+                    };
+    
+                    // Using the fetch API to send the HTTP request
+                    fetch(apiUrl, requestOptions)
+                    .then(response => {
+                        if (!response.ok) {
+                        throw new Error(`HTTP error! Status: ${response.status}`);
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        // Handle the successful response data here
+                        console.log('Response data:', data);
+                    })
+                    .catch(error => {
+                        // Handle errors here
+                        console.error('Error:', error);
+                    });
+                });
+    
+  
+            })
+            .catch(error => {
+              console.error('Error fetching data:', error);
+              // Handle errors and show an error message if needed
+              document.getElementById('error-message-parameter2').style.display = 'block';
+              document.getElementById('cargando-datos-link-unico').style.display = 'none';
+  
             });
         } else {
-            // Clear data and reset options for 'js-oficina' and 'js-cita-previa' selects
-            data = null;
-
+          console.error('Referencia parameter is missing in the URL.');
+          // Handle missing referencia parameter and show an error message if needed
+          document.getElementById('error-message-parameter1').style.display = 'block';
+          document.getElementById('cargando-datos-link-unico').style.display = 'none';
         }
-    } // Missing closing parenthesis
-
-
-    //Crear valores y populate select servicio
-    function updateCitaPrevia() {
-        var selectedOficina = select_oficina.val();
-        var selectedAdministracion = select_administracion.val();
-        var selectedProvincia = select_provincia.val();
-
-        // Clear existing options in select_servicio
-        select_servicio.empty().append(default_select_servicio);
-
-        // Check if oficina is selected
-        if (selectedOficina && selectedAdministracion && selectedProvincia && radio_buscador_con_oficina.prop('checked')) {
-            // Find the selected oficina in the external data
-            var selectedOficinaData = data.find(item => item.nombre === selectedOficina);
-
-            // Check if data is found and servicios is an array 
-            if (selectedOficinaData && Array.isArray(selectedOficinaData.servicios)) {
-                // Add a default option if needed
-                // var defaultOption = $('<option>', {
-                //     value: '',
-                //     text: 'Select a service',
-                //     disabled: true,
-                //     selected: true
-                // });
-                // select_servicio.append(defaultOption);
-
-                // Populate citaPrevia select options with services from selected oficina
-                selectedOficinaData.servicios.forEach(servicio => {
-                    // Check if servicio has the required properties
-                    if (servicio && servicio.id_servicio && servicio.nombre) {
-                        var optionElement = $('<option></option>')
-                            .prop('value', servicio.nombre)
-                            .attr('id_servicio', servicio.id_servicio)
-                            .text(servicio.nombre);
-                        select_servicio.append(optionElement);
-                    }
-                });
-
-                // Trigger change event to refresh the select (if needed)
-                select_servicio.trigger('change');
-            }
-        } else if (selectedAdministracion && selectedProvincia && radio_buscador_por_provincia.prop('checked')) {
-            console.log('Entered the second IF statement.');
-
-            // Assuming 'data' is your array of oficinas and 'selectedAdministracion' is your selected administration code
-
-            // Initialize the array to store all servicios
-            var allServicios = [];
-
-            // Check if data is valid and is an array
-            if (data && Array.isArray(data)) {
-                data.forEach(oficina => {
-                    // Check if 'oficina' and 'oficina.servicios' are valid
-                    if (oficina && oficina.servicios && Array.isArray(oficina.servicios)) {
-                        // Check if the id_oficina includes the text of the selected administration
-                        const idOficinaLowerCase = oficina.id_oficina.toLowerCase();
-
-                        if (
-                            (selectedAdministracion === 'EX1' && idOficinaLowerCase.includes('gobext')) ||
-                            (selectedAdministracion === 'RC1' && !idOficinaLowerCase.includes('gobext'))
-                        ) {
-                            // Add all servicios for this oficina to the array
-                            allServicios.push(...oficina.servicios);
-                        }
-                    }
-                });
-            } else {
-                console.log('Invalid data structure.');
-            }
-
-            // 'allServicios' now contains the array of servicios based on the selected administration
-            console.log('All Servicios:', allServicios);
-
-            var filteredServiciosData = allServicios;
-
-            // Check if there are no servicios
-            if (filteredServiciosData.length === 0) {
-                console.log('No servicios available.');
-                // Display a default message in select_servicio
-                select_servicio.html('').append($('<option>', {
-                    value: '',
-                    text: 'No hay servicios disponibles',
-                    disabled: true,
-                    selected: true
-                }));
-            } else {
-                // Variable to keep track of the total count of duplicates
-                let totalDuplicateCount = 0;
-
-                // Count occurrences of each servicio
-                const servicioCounts = {};
-                filteredServiciosData.forEach(servicio => {
-                    if (servicio && servicio.nombre) {
-                        servicioCounts[servicio.nombre] = (servicioCounts[servicio.nombre] || 0) + 1;
-                    }
-                });
-
-                // Create an array of sorted options
-                const sortedOptions = filteredServiciosData.map(servicio => {
-                    const count = servicioCounts[servicio.nombre];
-                    if (count > 1) {
-                        totalDuplicateCount += count - 1;
-                    }
-                    const countText = count > 1 ? `(${count})` : '';
-                    const optionText = count > 1 ? `${servicio.nombre} ${countText}` : servicio.nombre;
-                    return { value: servicio.nombre, text: optionText };
-                });
-
-                // Populate servicio select options with external data, including counts
-                select_servicio.html(''); // Clear existing options
-                sortedOptions.forEach(option => {
-                    var optionElement = $('<option></option>').prop('value', option.value).text(option.text);
-                    // Check if the option already exists before appending
-                    if (select_servicio.find(`option[value="${option.value}"]`).length === 0) {
-                        select_servicio.append(optionElement);
-                    }
-                });
-
-
-            }
-
-
-            // Trigger change event to refresh the select (if needed)
-            select_servicio.trigger('change');
-
-        } else {
-            console.log('One of the conditions is not met.');
-        }
-
-
-    }
-
-
-    //Cuando se activen uno de los dos triggers, se cambiará el texto con el valor
-    function updateNumeroCitasCounter() {
-        $('#numero-citas-seleccionadas-buscador').text(numero_citas_contador);
-    }
-
-
-
-
-    //3.Sección de citas previas seleccionadas bloque derecho
-    var checkoutContainer = $('#bloque-items-citas');
-    var maxCheckoutItems = 15; //Items máximos que se pueden añadir
-
-    function add_elemtnt(id_oficina_elem, id_servicio_elem) {
-        // if it exist in the final list, dont continue
-        if (checkoutContainer.children(`.checkout-item[id_oficina="${id_oficina_elem}"][id_servicio="${id_servicio_elem}"]`).length) {
-            return
-        }
-
-        // validate exist oficina id
-        if (!id_oficina_elem in SERVICIOS) {
-            throw new Error(`Id oficina ${id_oficina_elem} not exists in SERVICIOS`);
-        }
-
-        obj = SERVICIOS[id_oficina_elem]
-
-        svc_obj = obj.servicios.find((e) => e.id_servicio == id_servicio_elem);
-
-        // validate exists servicio id
-        if (svc_obj === undefined) {
-            throw new Error(`Id servicio ${id_servicio_elem} not exists in SERVICIOS for oficina ${id_oficina_elem}`);
-        }
-
-
-        var checkoutItem = $(`<div class="checkout-item" id_oficina=${id_oficina_elem} id_servicio=${id_servicio_elem}>` +
-            '<div class="column wide-column">' +
-            '   <span class="item-text">' + obj.provincia + ' | ' + obj.nombre + '</span>' +
-            '   <span class="item-text">' + svc_obj.nombre + '</span>' +
-            '</div>' +
-            '<div class="column narrow-column">' +
-            '   <button class="delete-item"><img src="https://uploads-ssl.webflow.com/652f00909568ce58c099d55f/652f00919568ce58c099d689_Exit.svg" alt="Delete" style="width: 20px; height: 20px; margin-left: auto;"></button>' +
-            '</div>' +
-            '</div>');
-
-        //Box de la cita seleccionada
-        checkoutItem.css({
-            //'padding': '5px',
-            'border': '1px solid #99a4af',
-            'border-radius': '5px',
-            'background-color': '#fff',
-            'padding': '10px 0px 10px 0px',
-            'margin': '5px 0px 5px 0px',
-            'display': 'flex',
-            //'justify-content': 'space-between',
-            'align-items': 'center',
-            'box-shadow': '0px 3px 5px 0px rgba(0, 0, 0, .2)'
-        });
-
-        //Items dentro del box de la cita seleccionada
-        checkoutItem.find('.item-text').css({
-            'font-size': '16px',
-            'color': '#333'
-        });
-
-        //Columna izquierda del grid de la cita seleccionada
-        checkoutItem.find('.wide-column').css({
-            'flex': '85%', // Adjust the percentage as needed
-            'padding': '0px 5px 0px 5px'
-        });
-
-        //Columna derecha del grid de la cita seleccionada
-        checkoutItem.find('.narrow-column').css({
-            'flex': '15%',
-            'margin': '0px 5px 0px 5px',
-            'padding': '0'
-        });
-
-
-        //Botón de borrar cita seleccionada
-        checkoutItem.find('.delete-item').css({
-            'background-color': '#fff',
-            'border': 'none',
-            'cursor': 'pointer'
-        });
-
-        // Función para borrar cita seleccionada
-        var deleteButton = checkoutItem.find('.delete-item');
-        deleteButton.on('click', function () {
-            // Remove the item when the delete button is clicked
-            checkoutItem.remove();
-
-            // If the counter is greater than 0, decrement it
-            numero_citas_contador = checkoutContainer.children('.checkout-item').length;
-
-            // Update and display the counter
-            updateNumeroCitasCounter();
-
-            // Enable select_servicio if the maximum number of items is not reached
-            if (checkoutContainer.children('.checkout-item').length < maxCheckoutItems) {
-                select_servicio.prop('disabled', false);
-            }
-        });
-
-        // Append the checkout item to the checkout container
-        checkoutContainer.append(checkoutItem);
-
-        // Check if the maximum number of items is reached and disable the select if needed
-        if (checkoutContainer.children('.checkout-item').length >= maxCheckoutItems) {
-            select_servicio.prop('disabled', true);
-        }
-    }
-    //Event listener del select de servicios
-    select_servicio.on('change', function () {
-        var elements_to_add = []
-
-        // Check if all values are selected
-        if ($('#radio-buscar-con-oficina').is(':checked') && select_provincia.val() && select_oficina.val() && select_servicio.val()) {
-            // Create a new div with a personalized HTML structure for the checkout item
-            id_oficina = select_oficina.find(':selected').attr("id_oficina")
-            id_servicio = select_servicio.find(':selected').attr("id_servicio")
-
-            elements_to_add.push({
-                'ofi': id_oficina,
-                'srv': id_servicio
-            })
-        }
-
-        // elif instead?
-        if ($('#radio-buscar-en-provincia').is(':checked') && select_provincia.val() && select_servicio.val()) {
-            for (const [id_oficina, ofi] of Object.entries(SERVICIOS)) {
-                if (ofi.provincia !== select_provincia.val())
-                    continue
-
-                svc = ofi.servicios.find((e) => e.nombre == select_servicio.val());
-
-                if (svc) {
-                    elements_to_add.push({
-                        'ofi': id_oficina,
-                        'srv': svc.id_servicio
-                    })
-                }
-            }
-        }
-
-        elements_to_add
-            .forEach(e => add_elemtnt(e.ofi, e.srv));
-
-        //Resetear select de servicios cuando se añade una cita
-        //select_servicio.val(null).trigger('change');
-    });
-
-
-
-
-
-
-
-    // Reset values and update cita previa function
-    function resetValuesAndUpdateCitaPrevia() {
-        // Reset the values of the other three selects
-        select_oficina.val('').empty().append(default_select_oficina);
-        select_servicio.val('').empty().append(default_select_servicio);
-        fetchJsonAndPopulateOficina();
-        updateCitaPrevia();
-    }
-
-    // Reset values and update cita previa function
-    function resetOficinaAndUpdateCitaPrevia() {
-        // Reset the values of the other three selects
-        select_servicio.val('').empty().append(default_select_servicio);
-        updateCitaPrevia();
-    }
-
-
-
-    // Event listener for the 'radio_buscador_con_oficina' element
-    radio_buscador_con_oficina.on('change', function () {
-        if (radio_buscador_con_oficina.prop('checked')) {
-            // Reset the values of the three selects when 'Con Oficina' is selected
-            resetValuesAndUpdateCitaPrevia();
-            // Fetch and populate oficinas
-            //fetchJsonAndPopulateOficina();
-        }
-    });
-
-    // Event listener for the 'radio_buscador_por_provincia' element
-    radio_buscador_por_provincia.on('change', function () {
-        if (radio_buscador_por_provincia.prop('checked')) {
-            // Reset the values of the three selects when 'Por Provincia' is selected
-            resetValuesAndUpdateCitaPrevia();
-        }
-    });
-
-
-    // Attach the common change listener to select_administracion and select_provincia
-    select_administracion.on('change', resetValuesAndUpdateCitaPrevia);
-    select_provincia.on('change', resetValuesAndUpdateCitaPrevia);
-
-    // Event listener for the 'change' event on select_oficina
-    select_oficina.on('change', function () {
-        // Update cita previa when oficina changes
-        resetOficinaAndUpdateCitaPrevia();
-    });
-
-
-
-
-
-
-
-    // Event listener for the 'change' event on select_servicio
-    select_servicio.on('change', function () {
-        // If the counter is greater than 0, decrement it
-        numero_citas_contador = checkoutContainer.children('.checkout-item').length;
-
-        // Update and display the counter
-        updateNumeroCitasCounter();
-
-    });
-
-
-
-
-
-
-
-
-
-
-
-
-
-});
+      });
+  });
+  
