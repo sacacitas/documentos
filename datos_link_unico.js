@@ -548,6 +548,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 //Obtener datos del mensaje al cancelar la búsqueda
                 var msgBusquedaCancelada = document.getElementById('boton_confirmar_cancelar_busqueda');
+                var msgBusquedaAnulada = document.getElementById('input-razon-cancelar-cita-reservada');
     
     
                 // Si todo está OK mostar link unico e info exrra
@@ -620,6 +621,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     // Include data in the request body
                     const requestBody = {
                     public_id_front: public_id_front,
+                    msgBusquedaAnulada: msgBusquedaAnulada,
                     // Add any other data properties as needed
                     };
     
