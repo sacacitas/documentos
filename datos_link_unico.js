@@ -553,7 +553,7 @@ document.addEventListener('DOMContentLoaded', function () {
     
 
 
-                // Petición cancelar búsqueda y segunda petición si es cierta la primera, de enviar a Make el mensaje de error
+                // Function to make the first HTTP request
                 const makeFirstRequest = () => {
                     const apiUrlFirst = 'https://panelaws.sacacitas.es/public/cola/resumen?public_id_front=${public_id_front}';
                     const requestOptionsFirst = {
@@ -563,12 +563,18 @@ document.addEventListener('DOMContentLoaded', function () {
                         },
                     };
 
-                    return fetch(apiUrlFirst, requestOptionsFirst)
+                    fetch(apiUrlFirst, requestOptionsFirst)
                         .then(response => {
                             if (!response.ok) {
                                 throw new Error(`HTTP error! Status: ${response.status}`);
                             }
                             return response.json();
+                        })
+                        .then(data => {
+                            console.log('First response data:', data);
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
                         });
                 };
 
@@ -583,33 +589,34 @@ document.addEventListener('DOMContentLoaded', function () {
                         },
                         body: JSON.stringify({
                             public_id_front: public_id_front,
-                            msgBusquedaCancelada: msgBusquedaCancelada.value,  // Get the value from the input field
+                            msgBusquedaCancelada: msgBusquedaCancelada,
                             // Add other data properties as needed
                         }),
                     };
 
-                    return fetch(apiUrlSecond, requestOptionsSecond)
+                    fetch(apiUrlSecond, requestOptionsSecond)
                         .then(response => {
                             if (!response.ok) {
                                 throw new Error(`HTTP error! Status: ${response.status}`);
                             }
                             return response.json();
-                        });
-                };
-
-                // Trigger both requests concurrently
-                document.getElementById('boton_confirmar_cancelar_busqueda').addEventListener('click', function () {
-
-                    Promise.all([makeFirstRequest(), makeSecondRequest(public_id_front, document.getElementById('input-cancelar-busqueda-link-unico'))])
-                        .then(([firstResponse, secondResponse]) => {
-                            console.log('First response data:', firstResponse);
-                            console.log('Second response data:', secondResponse);
+                        })
+                        .then(data => {
+                            console.log('Second response data:', data);
                         })
                         .catch(error => {
                             console.error('Error:', error);
                         });
-                });
+                };
 
+                // Trigger both requests separately on button click
+                document.getElementById('boton_confirmar_cancelar_busqueda').addEventListener('click', function () {
+                    const msgBusquedaCanceladaInput = document.getElementById('input-cancelar-busqueda-link-unico').value;
+
+                    // Make both requests separately
+                    makeFirstRequest();
+                    makeSecondRequest(public_id_front, msgBusquedaCanceladaInput);
+                });
 
                 // Petición cancelar cita reservada
                 document.getElementById('boton-cancelar-cita-reservada').addEventListener('click', function () {
