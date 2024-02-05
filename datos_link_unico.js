@@ -312,10 +312,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 //Ocultar elementos de manera predeterminada
                 divCaducidadBusqueda.hide();
-                //***botonCancelarLinkUnico.hide();
+                botonCancelarLinkUnico.hide();
                 divUltimaBusqueda.hide();
                 divCosteHoraBuscando.hide();
-                //***cuadradoPagoCita20.hide();
+                cuadradoPagoCita20.hide();
                 divDatosCitaReservada.hide();
                 botonRenovarBusquedaCita.hide();
                 
@@ -366,7 +366,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
                     // De manera predeterminada ocultar grids y seleccionar botón Búsqueda
-                    //***divPagoYReserva.hide();
+                    divPagoYReserva.hide();
                     gridLinkUnicoOficina.hide();
                     gridLinkUnicoDatos.hide();
                     gridLinkUnicoEstadistica.hide();
