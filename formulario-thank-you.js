@@ -17,6 +17,7 @@ const tallyId = getParameterByName('tally-id');
 
 // Push data to the data layer
 dataLayer.push({
+    'event': 'datosPaginaFormularioCompletado',
     'GTM-formulario-completado': 'GTM-formulario-completado-true',
     'rating-value-formulario': RatingValueFormulario,
     'precio-cita': precioCita,
