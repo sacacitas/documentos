@@ -12,6 +12,7 @@ function getParameterByName(name, url) {
 
 const RatingValueFormulario = getParameterByName('rating-value-formulario');
 const precioCita = getParameterByName('precio-cita');
+const tallyId = getParameterByName('tally-id');
 
 
 // Push data to the data layer
@@ -19,6 +20,7 @@ dataLayer.push({
     'GTM-formulario-completado': 'GTM-formulario-completado-true',
     'rating-value-formulario': RatingValueFormulario,
     'precio-cita': precioCita,
+    'tally-id': tallyId
     });
 
 
