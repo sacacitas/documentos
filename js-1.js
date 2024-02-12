@@ -5,7 +5,8 @@ document.addEventListener('DOMContentLoaded', function () {
   // Example values for administracion
   var administracionValues = [
     { value: 'EX1', text: 'Extranjería' },
-    { value: 'RC1', text: 'Registro Civil' }
+    { value: 'RC1', text: 'Registro Civil' },
+    { value: 'DGT1', text: 'DGT' }
   ];
 
   // Add default placeholder option
