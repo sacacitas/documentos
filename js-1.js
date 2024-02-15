@@ -149,12 +149,12 @@ console.log("El ID de la cookie es:", leadIdFromCookie);
 //Poner GClid en el input si está en la URL
 var gclidValue = getUrlParameter('gclid');
 document.getElementById('GCLID-form').value = gclidValue;
-console.log("Value of input field:", document.getElementById('GCLID-form').value);
+console.log("Value gclid en la url", document.getElementById('GCLID-form').value);
 
 //Si gclid está vacio en la URL, poner el valor de la cookie si existe la cookie
 if (leadIdFromUrl == '' && leadIdFromCookie !=='' ) {
     document.getElementById('GCLID-form').value = leadIdFromCookie;
-    console.log("Value of input field:", document.getElementById('GCLID-form').value);
+    console.log("Value de la cookie", document.getElementById('GCLID-form').value);
 }
 
 
