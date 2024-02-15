@@ -107,8 +107,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 
+
+
+
 //Cookie ID_lead
-// Function to get URL parameter by name
+//Obtener todos los parametros de la URL
 function getUrlParameter(name) {
     name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
     var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
@@ -116,16 +119,16 @@ function getUrlParameter(name) {
     return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
 }
 
-// Check if lead ID parameter exists in URL
+//Obtener valor de gclid de la UrL
 var leadIdFromUrl = getUrlParameter('gclid');
 
-// If lead ID is present in URL, create a cookie
+//Si existe gclid en la URL crear cookie
 if (leadIdFromUrl !== '') {
     document.cookie = "lead_id_cookie=" + leadIdFromUrl + "; path=/";
     console.log("Lead ID cookie created with value:", leadIdFromUrl);
 }
 
-// Function to get the value of the lead ID cookie
+//Obtener valor de la cookie
 function getLeadIdCookie() {
     var name = "lead_id_cookie=";
     var decodedCookie = decodeURIComponent(document.cookie);
@@ -139,9 +142,20 @@ function getLeadIdCookie() {
     return "";
 }
 
-// Get the value of the lead ID cookie and store it in a variable
+//Obtener valor cookie Lead ID y meterlo en una variable
 var leadIdFromCookie = getLeadIdCookie();
 console.log("El ID de la cookie es:", leadIdFromCookie);
+
+//Poner GClid en el input si está en la URL
+var gclidValue = getUrlParameter('gclid');
+document.getElementById('GCLID-form').value = gclidValue;
+console.log("Value of input field:", document.getElementById('GCLID-form').value);
+
+//Si gclid está vacio en la URL, poner el valor de la cookie si existe la cookie
+if (leadIdFromUrl == '' && leadIdFromCookie !=='' ) {
+    document.getElementById('GCLID-form').value = leadIdFromCookie;
+    console.log("Value of input field:", document.getElementById('GCLID-form').value);
+}
 
 
 
