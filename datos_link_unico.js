@@ -534,7 +534,9 @@ document.addEventListener('DOMContentLoaded', function () {
                     backendWebOficialElement.innerHTML = '<a href="https://gestiona7.madrid.org/CTAC_CITA/registro" target="_blank">https://gestiona7.madrid.org/CTAC_CITA/registro</a>';
                 } else if (id_oficina_front.startsWith("gencat")) {
                     backendWebOficialElement.innerHTML = '<a href="https://seujudicial.gencat.cat/ca/que_cal_fer/registre-civil/" target="_blank">https://seujudicial.gencat.cat/ca/que_cal_fer/registre-civil/</a>';
-                } else {
+                } else if (id_oficina_front.startsWith("dgt")) {
+                    backendWebOficialElement.innerHTML = '<a href="https://sedeclave.dgt.gob.es/WEB_NCIT_CONSULTA/solicitarCita.faces" target="_blank">https://sedeclave.dgt.gob.es/WEB_NCIT_CONSULTA/solicitarCita.faces</a>';
+                }else {
                     backendWebOficialElement.innerHTML = 'No hay datos de esta oficina';
                 }
                 //cambiar color al link
