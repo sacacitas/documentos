@@ -257,18 +257,29 @@ document.addEventListener('DOMContentLoaded', function () {
                 document.getElementById('precio_cita_front').textContent = precio_cita_backend.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
                 document.getElementById('precio_cita_hay_que_pagar').textContent = precio_cita_backend.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
                 document.getElementById('coste_hora_buscando').textContent = coste_hora_buscando.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-                document.getElementById('codigo-reserva-cita-reservada').textContent = codigo_reserva_cita_front;
                 document.getElementById('fecha-cita-reservada').textContent = formattedDate_cita_reservada;
                 document.getElementById('boton-fecha-limite-pago').textContent = formattedDate_fecha_limite_pago;
+                // Comprobar si nº referencia es= 'referencia N/A'
+                if (codigo_reserva_cita_front === 'referencia N/A') {
+                    document.getElementById('codigo-reserva-cita-reservada').textContent = "Esta cita no requiere número de reserva";
+                } else {
+                    // If it's not 'referencia N/A', set the text content as the value of codigo_reserva_cita_front
+                    document.getElementById('codigo-reserva-cita-reservada').textContent = codigo_reserva_cita_front;
+                }
+
+
 
                 //Sección datos personales del cliente
-                document.getElementById('link-cliente-nombre-completo').textContent = clienteNombre + ' ' + clienteApellido1 + ' ' + clienteApellido2;
                 document.getElementById('link-cliente-documento-identidad').textContent = clienteIdType + ': ' + clienteIdDocumento;
                 document.getElementById('link-cliente-nacionalidad').textContent = clienteNacionalidad;
                 document.getElementById('link-cliente-fecha-nacimiento').textContent = formatted_date_clienteFechaNacimiento;
                 document.getElementById('link-cliente-telefono').textContent = clienteTelefono;
                 document.getElementById('link-cliente-correo').textContent = clienteEmail;
-    
+                //Comprobar si está null o no el apellido 2
+                var fullName = clienteNombre + ' ' + clienteApellido1 + (clienteApellido2 ? ' ' + clienteApellido2 : '');
+                document.getElementById('link-cliente-nombre-completo').textContent = fullName;
+
+
                 //Cambiar textos del link único
                 if (state_front == 'CANCELADO') {
                     botonEstadoBusqueda.textContent = 'Búsqueda cancelada';
@@ -534,9 +545,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     backendWebOficialElement.innerHTML = '<a href="https://gestiona7.madrid.org/CTAC_CITA/registro" target="_blank">https://gestiona7.madrid.org/CTAC_CITA/registro</a>';
                 } else if (id_oficina_front.startsWith("gencat")) {
                     backendWebOficialElement.innerHTML = '<a href="https://seujudicial.gencat.cat/ca/que_cal_fer/registre-civil/" target="_blank">https://seujudicial.gencat.cat/ca/que_cal_fer/registre-civil/</a>';
-                } else if (id_oficina_front.startsWith("dgt")) {
-                    backendWebOficialElement.innerHTML = '<a href="https://sedeclave.dgt.gob.es/WEB_NCIT_CONSULTA/solicitarCita.faces" target="_blank">https://sedeclave.dgt.gob.es/WEB_NCIT_CONSULTA/solicitarCita.faces</a>';
-                }else {
+                } else {
                     backendWebOficialElement.innerHTML = 'No hay datos de esta oficina';
                 }
                 //cambiar color al link
