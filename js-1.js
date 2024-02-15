@@ -101,4 +101,54 @@ document.addEventListener('DOMContentLoaded', function () {
     optionElement.text = user_text;
     provinciaSelect.add(optionElement);
   });
+
+
+
+
+
+
+//Cookie ID_lead
+// Function to get URL parameter by name
+function getUrlParameter(name) {
+    name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+    var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+    var results = regex.exec(location.search);
+    return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+}
+
+// Check if lead ID parameter exists in URL
+var leadIdFromUrl = getUrlParameter('gclid');
+
+// If lead ID is present in URL, create a cookie
+if (leadIdFromUrl !== '') {
+    document.cookie = "lead_id_cookie=" + leadIdFromUrl + "; path=/";
+    console.log("Lead ID cookie created with value:", leadIdFromUrl);
+}
+
+// Function to get the value of the lead ID cookie
+function getLeadIdCookie() {
+    var name = "lead_id_cookie=";
+    var decodedCookie = decodeURIComponent(document.cookie);
+    var cookieArray = decodedCookie.split(';');
+    for(var i = 0; i < cookieArray.length; i++) {
+        var cookie = cookieArray[i].trim();
+        if (cookie.indexOf(name) === 0) {
+            return cookie.substring(name.length, cookie.length);
+        }
+    }
+    return "";
+}
+
+// Get the value of the lead ID cookie and store it in a variable
+var leadIdFromCookie = getLeadIdCookie();
+console.log("El ID de la cookie es:", leadIdFromCookie);
+
+
+
+
+
+
+
+
+  
 });
