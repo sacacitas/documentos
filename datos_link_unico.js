@@ -550,7 +550,9 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
                 //cambiar color al link
                 var linkElement = document.getElementById('backend-web-oficial').querySelector('a');
-                linkElement.style.color = '#2C64E3';
+                if (linkElement) {
+                    linkElement.style.color = '#2C64E3';
+                }
         
     
                 //enviar id_publico al pulsar boton pagar
