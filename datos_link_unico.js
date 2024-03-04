@@ -633,7 +633,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 // Petición cancelar cita reservada
                 document.getElementById('boton-cancelar-cita-reservada').addEventListener('click', function () {
-                    const apiUrl = 'https://hook.eu2.make.com/do8w7utervphwxlzzt9afkjixmqvtxl5';
+                    const apiUrl = 'https://n8n.sacacitas.es/webhook/0ab8f72e-48fa-4b5a-9f33-2dcb5d9a81d7';
                     
                     //Obtener datos del mensaje al cancelar la cita reservada
                     var msgBusquedaAnulada = document.getElementById('input-razon-cancelar-cita-reservada').value;
