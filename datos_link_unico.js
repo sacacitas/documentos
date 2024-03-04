@@ -593,7 +593,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 // Function to make the second HTTP request
                 const makeSecondRequest = (public_id_front, msgBusquedaCancelada) => {
-                    const apiUrlSecond = 'https://hook.eu2.make.com/c0mzway9n7rvb7q45axjrlajfyhzl0as';
+                    const apiUrlSecond = 'https://n8n.sacacitas.es/webhook/32a8b1d9-05dd-4ee0-a1c7-323fec2e26d1';
 
                     const requestOptionsSecond = {
                         method: 'POST',
