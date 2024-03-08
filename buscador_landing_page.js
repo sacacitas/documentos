@@ -702,7 +702,12 @@ $(document).ready(function () {
 
         INPUT_JSON['idbuscadores'] = idbuscadores
 
-        $('#INPUT_JSON').val(JSON.stringify(INPUT_JSON))
+        if (idbuscadores.length === 0) {
+            $('#INPUT_JSON').val('')
+        } else {
+            $('#INPUT_JSON').val(JSON.stringify(INPUT_JSON))
+        }
+
 
     }
 
