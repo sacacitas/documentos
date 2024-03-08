@@ -1,30 +1,95 @@
-//Fechas por rango
-var Webflow = Webflow || [];
-Webflow.push(function () {
-	document.getElementById('fechas-max-min').flatpickr({
-		mode: "range",
-        minDate: "today",
-        altInput: true,
-        altFormat: "F j, Y",
-        dateFormat: "Y-m-d",
-  });
-});
-
-
-var Webflow = Webflow || [];
-Webflow.push(function () {
-	document.getElementById('input-fecha-nacimiento').flatpickr({
-    maxDate: "today",
-    altInput: true,
-    altFormat: "F j, Y",
-    dateFormat: "Y-m-d",
-  });
-});
-
-
 
 $(document).ready(function () {
 
+
+    //Crear variables cogiendo las secciones del formulario
+    var seccion1 = $('#Secciones-Form-1');
+    var seccion2 = $('#Secciones-Form-2');
+    var seccion3 = $('#Secciones-Form-3');
+    var seccion4 = $('#Secciones-Form-4');
+    var seccion5 = $('#Secciones-Form-5');
+    var seccion6 = $('#Secciones-Form-6');
+
+    //Crear variables botones de siguiente
+    var NextButon1 = $('#Next-Buton-1');
+    var NextButon2 = $('#Next-Buton-2');
+    var NextButon3 = $('#Next-Buton-3');
+    var NextButon4 = $('#Next-Buton-4');
+    var NextButon5 = $('#Next-Buton-5');
+
+    //Crear variables botones hacia atrás
+    var BackButon1 = $('#Back-Buton-1');
+    var BackButon2 = $('#Back-Buton-2');
+    var BackButon3 = $('#Back-Buton-3');
+    var BackButon4 = $('#Back-Buton-4');
+    var BackButon5 = $('#Back-Buton-5');
+
+    //Ocultar secciones divs
+    seccion1.show();
+    seccion2.hide();
+    seccion3.hide();
+    seccion4.hide();
+    seccion5.hide();
+    seccion6.hide();
+
+    //Botones de siguiente. Ocultra y muestra secciones
+    $(NextButon1).click(function () {
+        seccion1.hide();
+        seccion2.show();
+    });
+
+    $(NextButon2).click(function () {
+        seccion2.hide();
+        seccion3.show();
+    });
+
+    $(NextButon3).click(function () {
+        seccion3.hide();
+        seccion4.show();
+    });
+
+    $(NextButon4).click(function () {
+        seccion4.hide();
+        seccion5.show();
+    });
+
+    $(NextButon5).click(function () {
+        seccion5.hide();
+        seccion6.show();
+    });
+
+
+    //Botones hacia atrás. Ocultra y muestra secciones
+    $(BackButon1).click(function () {
+        seccion1.show();
+        seccion2.hide();
+    });
+
+    $(BackButon2).click(function () {
+        seccion2.show();
+        seccion3.hide();
+    });
+
+    $(BackButon3).click(function () {
+        seccion3.show();
+        seccion4.hide();
+    });
+
+    $(BackButon4).click(function () {
+        seccion4.show();
+        seccion5.hide();
+    });
+
+    $(BackButon5).click(function () {
+        seccion5.show();
+        seccion6.hide();
+    });
+
+
+
+
+
+    //Seleccionar botones de selección de tipo de documento. DNI, NIE, Pasaporte
     var selectFormDocPasaporte = $('#select-pasaporte-form');
     var selectFormDocNIE = $('#select-nie-form');
     var selectFormDocDNI = $('#select-dni-form');
@@ -55,80 +120,87 @@ $(document).ready(function () {
     
 
 
+
+
+
+
+    //Lista desplegable de paises
+    var PaisesSelect = document.getElementById('input-lista-paises'); // Replace with the actual ID of your select element
+        
+    // Mapa paises
+    var map_paises = {
+        "Alava": "Alava",
+        "Albacete": "Albacete",
+        "Alicante": "Alicante",
+        "Almería": "Almería",
+        "Asturias": "Asturias",
+        "Avila": "Avila",
+        "Badajoz": "Badajoz",
+        "Barcelona": "Barcelona",
+        "Burgos": "Burgos",
+        "Cáceres": "Cáceres",
+        "Cádiz": "Cádiz",
+        "Cantabria": "Cantabria",
+        "Castellón": "Castellón",
+        "Ceuta": "Ceuta",
+        "Ciudad Real": "CiudadReal",
+        "Córdoba": "Córdoba",
+        "La Coruña": "LaCoruña",
+        "Cuenca": "Cuenca",
+        "Gerona": "Gerona",
+        "Granada": "Granada",
+        "Guadalajara": "Guadalajara",
+        "Guipúzcoa": "Guipúzcoa",
+        "Huelva": "Huelva",
+        "Huesca": "Huesca",
+        "Islas Baleares": "IslasBaleares",
+        "Jaén": "Jaén",
+        "León": "León",
+        "Lérida": "Lérida",
+        "Lugo": "Lugo",
+        "Madrid": "Madrid",
+        "Málaga": "Málaga",
+        "Melilla": "Melilla",
+        "Murcia": "Murcia",
+        "Navarra": "Navarra",
+        "Orense": "Orense",
+        "Palencia": "Palencia",
+        "Las Palmas": "LasPalmas",
+        "Pontevedra": "Pontevedra",
+        "La Rioja": "LaRioja",
+        "Salamanca": "Salamanca",
+        "Segovia": "Segovia",
+        "Sevilla": "Sevilla",
+        "Soria": "Soria",
+        "Tarragona": "Tarragona",
+        "Santa Cruz De Tenerife": "SantaCruzDeTenerife",
+        "Teruel": "Teruel",
+        "Toledo": "Toledo",
+        "Valencia": "Valencia",
+        "Valladolid": "Valladolid",
+        "Vizcaya": "Vizcaya",
+        "Zamora": "Zamora",
+        "Zaragoza": "Zaragoza"
+    }
+
+    // Añadir un elemento por defecto
+    var defaultOption = document.createElement('option');
+    defaultOption.value = ''; // Set the value to an empty string or a value that is not present in the array
+    defaultOption.text = 'Indica tu nacionalidad';
+    defaultOption.disabled = true;
+    defaultOption.selected = true; // Make this option selected by default
+    PaisesSelect.add(defaultOption);
+
+    // Crear lista en el select
+    Object.entries(map_paises).forEach(([user_text, api_key_call]) => {
+        var optionElement = document.createElement('option');
+        optionElement.value = api_key_call;
+        optionElement.text = user_text;
+        PaisesSelect.add(optionElement);
+    });
+
+
+
+
 });
 
-// For the 'js-provincia' select
-var PaisesSelect = document.getElementById('input-lista-paises'); // Replace with the actual ID of your select element
-
-
-var map_paises = {
-    "Alava": "Alava",
-    "Albacete": "Albacete",
-    "Alicante": "Alicante",
-    "Almería": "Almería",
-    "Asturias": "Asturias",
-    "Avila": "Avila",
-    "Badajoz": "Badajoz",
-    "Barcelona": "Barcelona",
-    "Burgos": "Burgos",
-    "Cáceres": "Cáceres",
-    "Cádiz": "Cádiz",
-    "Cantabria": "Cantabria",
-    "Castellón": "Castellón",
-    "Ceuta": "Ceuta",
-    "Ciudad Real": "CiudadReal",
-    "Córdoba": "Córdoba",
-    "La Coruña": "LaCoruña",
-    "Cuenca": "Cuenca",
-    "Gerona": "Gerona",
-    "Granada": "Granada",
-    "Guadalajara": "Guadalajara",
-    "Guipúzcoa": "Guipúzcoa",
-    "Huelva": "Huelva",
-    "Huesca": "Huesca",
-    "Islas Baleares": "IslasBaleares",
-    "Jaén": "Jaén",
-    "León": "León",
-    "Lérida": "Lérida",
-    "Lugo": "Lugo",
-    "Madrid": "Madrid",
-    "Málaga": "Málaga",
-    "Melilla": "Melilla",
-    "Murcia": "Murcia",
-    "Navarra": "Navarra",
-    "Orense": "Orense",
-    "Palencia": "Palencia",
-    "Las Palmas": "LasPalmas",
-    "Pontevedra": "Pontevedra",
-    "La Rioja": "LaRioja",
-    "Salamanca": "Salamanca",
-    "Segovia": "Segovia",
-    "Sevilla": "Sevilla",
-    "Soria": "Soria",
-    "Tarragona": "Tarragona",
-    "Santa Cruz De Tenerife": "SantaCruzDeTenerife",
-    "Teruel": "Teruel",
-    "Toledo": "Toledo",
-    "Valencia": "Valencia",
-    "Valladolid": "Valladolid",
-    "Vizcaya": "Vizcaya",
-    "Zamora": "Zamora",
-    "Zaragoza": "Zaragoza"
-  }
-
-
-  // Add default placeholder option
-  var defaultOption = document.createElement('option');
-  defaultOption.value = ''; // Set the value to an empty string or a value that is not present in the array
-  defaultOption.text = 'Indica tu nacionalidad';
-  defaultOption.disabled = true;
-  defaultOption.selected = true; // Make this option selected by default
-  PaisesSelect.add(defaultOption);
-
-  // Populate provincia select options
-  Object.entries(map_paises).forEach(([user_text, api_key_call]) => {
-    var optionElement = document.createElement('option');
-    optionElement.value = api_key_call;
-    optionElement.text = user_text;
-    PaisesSelect.add(optionElement);
-  });
