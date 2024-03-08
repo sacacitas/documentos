@@ -186,7 +186,7 @@ $(document).ready(function () {
     // Añadir un elemento por defecto
     var defaultOption = document.createElement('option');
     defaultOption.value = ''; // Set the value to an empty string or a value that is not present in the array
-    defaultOption.text = 'Indica tu nacionalidad';
+    defaultOption.text = 'Indica tu nacionalidad*';
     defaultOption.disabled = true;
     defaultOption.selected = true; // Make this option selected by default
     PaisesSelect.add(defaultOption);
