@@ -1,13 +1,26 @@
 // ['id_oficina','id_servicio'] = entry
 var SERVICIOS = {};
-//bbds
+
+var CATEGORIAS = {};
+var PRECIOS = {}
+var MAX_CHECKOUT_ITEMS = 1; //Items máximos que se pueden añadir
+
+var INPUT_JSON = {}
+
 $(document).ready(function () {
+
+    $.getJSON('https://documentos.sacacitas.es/categorias_servicios.json', (data) => CATEGORIAS = data);
+    $.getJSON('https://documentos.sacacitas.es/precios_citas.json', (data) => PRECIOS = data);
+
+
+
     // Variables de los IDs selects de la landing
     var select_administracion = $('#select-buscador-administracion');
     var select_provincia = $('#select-buscador-provincia');
     var select_oficina = $('#select-buscador-oficina');
     var select_servicio = $('#select-buscador-servicio');
     var numero_citas_contador = $('numero-citas-seleccionadas-buscador');
+
 
     // Variables IDs de info secundaria
     var string_precio_buscador = $('#precio-total-buscador-landing');
@@ -64,6 +77,13 @@ $(document).ready(function () {
     var radio_buscador_con_oficina = $('#radio-buscar-con-oficina');
     var radio_buscador_por_provincia = $('#radio-buscar-en-provincia');
 
+
+    // Disable Multiofi until its implemented in backend
+    ///////////
+    radio_buscador_por_provincia.prop('disabled', true);
+    $('#box-buscar-en-provincia').hide()
+    ///////////
+
     // Que haga acciones CSS al seleccionar uno radio u otro
     // Buscar con Oficina
     function RadioOficinaSelected() {
@@ -98,7 +118,8 @@ $(document).ready(function () {
     // Crear valores en el select de la Administración
     var values_select_administracion = [
         { value: 'EX1', text: 'Extranjería' },
-        { value: 'RC1', text: 'Registro Civil' }
+        { value: 'RC1', text: 'Registro Civil' },
+        { value: 'DGT1', text: 'DGT' }
     ];
 
     // Populate select administración
@@ -172,8 +193,6 @@ $(document).ready(function () {
 
 
 
-
-
     // 2. SEGUNDA PARTE BUSCADOR -> Lista dinámica de oficinas y servicios desde el backend
     // Importar JSON externos de lista oficina_servicios y sus precios por categorías
     const lista_oficina_servicios_json = 'https://documentos.sacacitas.es/categorias_servicios.json';
@@ -230,9 +249,12 @@ $(document).ready(function () {
                         if (selectedAdministracion === 'EX1') {
                             // Show names where id_oficina starts with "gobext"
                             return item.id_oficina.toLowerCase().includes('gobext');
+                        } else if (selectedAdministracion === 'DGT1') {
+                            // All for DGT
+                            return item.id_oficina.toLowerCase().includes('dgt');
                         } else if (selectedAdministracion === 'RC1') {
                             // Show names where id_oficina does not start with "gobext"
-                            return !item.id_oficina.toLowerCase().includes('gobext');
+                            return !(item.id_oficina.toLowerCase().includes('gobext') || item.id_oficina.toLowerCase().includes('dgt'));
                         }
                         return false;
                     });
@@ -361,6 +383,7 @@ $(document).ready(function () {
                 let totalDuplicateCount = 0;
 
                 // Count occurrences of each servicio
+                // https://stackoverflow.com/a/19395302
                 const servicioCounts = {};
                 filteredServiciosData.forEach(servicio => {
                     if (servicio && servicio.nombre) {
@@ -368,26 +391,13 @@ $(document).ready(function () {
                     }
                 });
 
-                // Create an array of sorted options
-                const sortedOptions = filteredServiciosData.map(servicio => {
-                    const count = servicioCounts[servicio.nombre];
-                    if (count > 1) {
-                        totalDuplicateCount += count - 1;
-                    }
-                    const countText = count > 1 ? `(${count})` : '';
-                    const optionText = count > 1 ? `${servicio.nombre} ${countText}` : servicio.nombre;
-                    return { value: servicio.nombre, text: optionText };
-                });
-
-                // Populate servicio select options with external data, including counts
-                select_servicio.html(''); // Clear existing options
-                sortedOptions.forEach(option => {
-                    var optionElement = $('<option></option>').prop('value', option.value).text(option.text);
-                    // Check if the option already exists before appending
-                    if (select_servicio.find(`option[value="${option.value}"]`).length === 0) {
-                        select_servicio.append(optionElement);
-                    }
-                });
+                Object.entries(servicioCounts)
+                    .sort((a, b) => a[0].localeCompare(b[0])) // Reorder by text attribute
+                    .forEach(([text_servicio, amount_repetitions]) => {
+                        select_servicio.append(
+                            $('<option></option>').prop('value', text_servicio).text(`${text_servicio} (${amount_repetitions})`)
+                        );
+                    });
 
 
             }
@@ -411,16 +421,19 @@ $(document).ready(function () {
 
 
 
-
     //3.Sección de citas previas seleccionadas bloque derecho
     var checkoutContainer = $('#bloque-items-citas');
-    var maxCheckoutItems = 15; //Items máximos que se pueden añadir
 
-    function add_elemtnt(id_oficina_elem, id_servicio_elem) {
+    function add_elemtnt(id_oficina_elem, id_servicio_elem, frontend_administracion) {
         // if it exist in the final list, dont continue
         if (checkoutContainer.children(`.checkout-item[id_oficina="${id_oficina_elem}"][id_servicio="${id_servicio_elem}"]`).length) {
             return
         }
+
+        if (checkoutContainer.children('.checkout-item').length >= MAX_CHECKOUT_ITEMS) {
+            return
+        }
+
 
         // validate exist oficina id
         if (!id_oficina_elem in SERVICIOS) {
@@ -437,15 +450,17 @@ $(document).ready(function () {
         }
 
 
-        var checkoutItem = $(`<div class="checkout-item" id_oficina=${id_oficina_elem} id_servicio=${id_servicio_elem}>` +
+        var checkoutItem = $(`<div class="checkout-item" id_oficina=${id_oficina_elem} id_servicio=${id_servicio_elem} frontend_administracion=${frontend_administracion}>` +
             '<div class="column wide-column">' +
             '   <span class="item-text">' + obj.provincia + ' | ' + obj.nombre + '</span>' +
-            '   <span class="item-text">' + svc_obj.nombre + '</span>' +
+            '   <span class="item-text text-span-5">' + svc_obj.nombre + '</span>' +
             '</div>' +
             '<div class="column narrow-column">' +
             '   <button class="delete-item"><img src="https://uploads-ssl.webflow.com/652f00909568ce58c099d55f/652f00919568ce58c099d689_Exit.svg" alt="Delete" style="width: 20px; height: 20px; margin-left: auto;"></button>' +
             '</div>' +
             '</div>');
+
+        // FIXME: CSS should be static based on class, not dynamically inyected!
 
         //Box de la cita seleccionada
         checkoutItem.css({
@@ -501,22 +516,55 @@ $(document).ready(function () {
             updateNumeroCitasCounter();
 
             // Enable select_servicio if the maximum number of items is not reached
-            if (checkoutContainer.children('.checkout-item').length < maxCheckoutItems) {
+            if (checkoutContainer.children('.checkout-item').length < MAX_CHECKOUT_ITEMS) {
                 select_servicio.prop('disabled', false);
             }
+
+            updatePrice();
         });
 
         // Append the checkout item to the checkout container
         checkoutContainer.append(checkoutItem);
 
+        updatePrice();
+
         // Check if the maximum number of items is reached and disable the select if needed
-        if (checkoutContainer.children('.checkout-item').length >= maxCheckoutItems) {
+        if (checkoutContainer.children('.checkout-item').length >= MAX_CHECKOUT_ITEMS) {
             select_servicio.prop('disabled', true);
         }
     }
+
+
+    // Actualizar precio en base a lo que hay en las cajas
+    function updatePrice() {
+        set_price_cents = 0;
+        checkoutContainer.children('.checkout-item').each((idx, elem) => {
+            id_ofi = $(elem).attr('id_oficina')
+            id_ser = $(elem).attr('id_servicio')
+
+            var idoficina_idservicio = `${id_ofi}_${id_ser}`;
+
+            var parentID = Object.keys(CATEGORIAS).find(key => idoficina_idservicio in CATEGORIAS[key]) || "ES_0_SINDATOS";
+            var target_precio = PRECIOS[parentID];
+
+            // CRITICO: Decision de precio final. Coger siempre el mas alto
+            if (target_precio > set_price_cents) {
+                set_price_cents = target_precio
+            }
+        })
+
+        string_precio_buscador.text(set_price_cents / 100)
+        //$('#INPUT_PRECIO').val(set_price_cents)
+
+
+        updateHiddentInputForms()
+    }
+
+
     //Event listener del select de servicios
     select_servicio.on('change', function () {
         var elements_to_add = []
+        frontend_administracion = select_administracion.find(':selected').val()
 
         // Check if all values are selected
         if ($('#radio-buscar-con-oficina').is(':checked') && select_provincia.val() && select_oficina.val() && select_servicio.val()) {
@@ -541,14 +589,15 @@ $(document).ready(function () {
                 if (svc) {
                     elements_to_add.push({
                         'ofi': id_oficina,
-                        'srv': svc.id_servicio
+                        'srv': svc.id_servicio,
                     })
                 }
             }
         }
 
         elements_to_add
-            .forEach(e => add_elemtnt(e.ofi, e.srv));
+            .sort(() => Math.random() - 0.5)
+            .forEach(e => add_elemtnt(e.ofi, e.srv, frontend_administracion));
 
         //Resetear select de servicios cuando se añade una cita
         //select_servicio.val(null).trigger('change');
@@ -626,13 +675,36 @@ $(document).ready(function () {
 
 
 
+    function updateHiddentInputForms() {
+        // reset?
+        INPUT_JSON = {
+            'gclid': null
+        }
+
+        var idbuscadores = []
+
+        checkoutContainer.children('.checkout-item').each((idx, elem) => {
+            id_ofi = $(elem).attr('id_oficina')
+            id_ser = $(elem).attr('id_servicio')
+            // frontend_administracion = $(elem).attr('frontend_administracion')
+
+            // var idoficina_idservicio = `${id_ofi}_${id_ser}`;
+            // var categ_ofi = Object.keys(CATEGORIAS).find(key => idoficina_idservicio in CATEGORIAS[key]) || "ES_0_SINDATOS";
+            // ofi = SERVICIOS[id_ofi]
 
 
+            idbuscadores.push({
+                'id_oficina': id_ofi,
+                'id_servicio': id_ser
+            })
 
+        })
 
+        INPUT_JSON['idbuscadores'] = idbuscadores
 
+        $('#INPUT_JSON').val(JSON.stringify(INPUT_JSON))
 
-
+    }
 
 
 });
