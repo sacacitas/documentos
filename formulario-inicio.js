@@ -224,7 +224,7 @@ $(document).ready(function () {
         format: "DD MMMM YYYY",
         grid: 2,
         calendars: 2,
-        readonly: false,
+        readonly: true,
         inline: false,
         header: "",
         AmpPlugin: {
@@ -272,7 +272,7 @@ $(document).ready(function () {
         zIndex: 500,
         lang: "es-ES",
         format: "DD MMMM YYYY",
-        readonly: false,
+        readonly: true,
         AmpPlugin: {
             dropdown: {
                 months: true,
