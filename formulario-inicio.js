@@ -209,11 +209,12 @@ $(document).ready(function () {
 
 
 
-
+    //Fecha now
     var DateNow = new Date();
 
-
-    const picker = new easepick.create({
+//SECTION: 1 - Escoger fechas máx min
+    //Easepicker codigo
+    const PickerRangoBusqueda = new easepick.create({
         element: "#checkin",
         css: [
             "https://cdn.jsdelivr.net/npm/@easepick/bundle@1.2.1/dist/index.css"
@@ -254,6 +255,38 @@ $(document).ready(function () {
         plugins: [
             "AmpPlugin",
             "RangePlugin",
+            "LockPlugin"
+        ]
+    })
+
+
+
+
+
+
+    const PickerNacimiento = new easepick.create({
+        element: "#input-fecha-nacimiento",
+        css: [
+            "https://cdn.jsdelivr.net/npm/@easepick/bundle@1.2.1/dist/index.css"
+        ],
+        zIndex: 10,
+        lang: "es-ES",
+        format: "DD MMMM YYYY",
+        readonly: true,
+        AmpPlugin: {
+            dropdown: {
+                months: true,
+                years: true,
+                minYear: 1930,
+                maxYear: 2028
+            },
+            resetButton: true
+        },
+        LockPlugin: {
+            maxDate: (DateNow)
+        },
+        plugins: [
+            "AmpPlugin",
             "LockPlugin"
         ]
     })
