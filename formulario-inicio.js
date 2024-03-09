@@ -263,8 +263,6 @@ $(document).ready(function () {
 
 
 
-
-
     const PickerNacimiento = new easepick.create({
         element: "#input-fecha-nacimiento",
         css: [
@@ -291,6 +289,30 @@ $(document).ready(function () {
             "LockPlugin"
         ]
     })
+
+
+
+
+
+
+
+
+  // Get the input element
+  const input = document.getElementById('myInput');
+
+  // Add event listener for double click
+  input.addEventListener('dblclick', function(event) {
+    // Prevent default behavior
+    event.preventDefault();
+    
+    // Remove focus from the input element
+    input.blur();
+  });
+
+
+
+
+
 
 
 });
