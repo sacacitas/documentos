@@ -225,7 +225,7 @@ $(document).ready(function () {
         grid: 2,
         calendars: 2,
         readonly: false,
-        inline: true,
+        inline: false,
         header: "",
         AmpPlugin: {
             dropdown: {
