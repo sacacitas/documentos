@@ -237,7 +237,7 @@ $(document).ready(function () {
         },
         RangePlugin: {
             elementEnd: "#checkout",
-            repick: true,
+            repick: false,
             delimiter: "-",
             locale: {
                 zero: "cero",
