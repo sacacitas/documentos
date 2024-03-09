@@ -1,7 +1,8 @@
 
 $(document).ready(function () {
 
-
+//Variables del fornulario
+{
     //Crear variables cogiendo las secciones divs del formulario
     var seccion1 = $('#Secciones-Form-1');
     var seccion2 = $('#Secciones-Form-2');
@@ -39,12 +40,16 @@ $(document).ready(function () {
     var InputNacionalidad = $('#input-lista-paises');
 
 
+     //Fecha de ahora
+    var DateNow = new Date();
+
+}
 
 
 
 
 
-    //Ocultar secciones divs
+    //Ocultar secciones divs (temporal)
     seccion1.show();
     seccion2.hide();
     seccion3.hide();
@@ -54,27 +59,6 @@ $(document).ready(function () {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-    
-
-
-
-
-
-
-    //Fecha now
-    var DateNow = new Date();
     
 //Funcionalidades de cada sección del formulario 
 {    
@@ -91,7 +75,7 @@ $(document).ready(function () {
         format: "DD MMMM YYYY",
         grid: 2,
         calendars: 2,
-        readonly: true,
+        readonly: false,
         inline: false,
         header: "",
         AmpPlugin: {
@@ -140,7 +124,7 @@ $(document).ready(function () {
         zIndex: 500,
         lang: "es-ES",
         format: "DD MMMM YYYY",
-        readonly: true,
+        readonly: false,
         AmpPlugin: {
             dropdown: {
                 months: true,
