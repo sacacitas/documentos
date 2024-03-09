@@ -43,7 +43,7 @@ $(document).ready(function () {
      //Fecha de ahora
     var DateNow = new Date();
 
-}
+}//Ocultrar seccion
 
 
 
@@ -111,6 +111,10 @@ $(document).ready(function () {
         ]
     })
 
+    //Poner read only al input de fecha max para que no salga el teclado en el movil
+    function makeReadonly() {
+        document.getElementById('readonly-field').setAttribute("readonly", "");
+    }
 
 
 //SECTION: 2 - Datos cliente
@@ -431,10 +435,26 @@ $(document).ready(function () {
 
 
 
+
+
+//Funcionalidades varias 
+{
+    //Poner read only al input de fecha max para que no salga el teclado en el movil
+    $(document).ready(function() {
+        // Select the input field by its ID and make it readonly
+        $('#checkin').prop('readonly', true);
+        $('#checkout').prop('readonly', true);
+        $('#input-fecha-nacimiento').prop('readonly', true);
+    });
+
+
+
+
+
+
     //Bloquear zoom al darle doble click en los moviles
     const input = document.getElementById('myInput');
-
-    // Add event listener for double click
+    // Event listener para el doble click
     input.addEventListener('dblclick', function(event) {
         // Prevent default behavior
         event.preventDefault();
@@ -443,7 +463,7 @@ $(document).ready(function () {
         input.blur();
     });
 
-
+}//Ocultrar seccion
 
 
 
