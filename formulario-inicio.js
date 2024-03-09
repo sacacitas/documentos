@@ -186,7 +186,7 @@ $(document).ready(function () {
     // Añadir un elemento por defecto
     var defaultOption = document.createElement('option');
     defaultOption.value = ''; // Set the value to an empty string or a value that is not present in the array
-    defaultOption.text = 'Indica tu nacionalidad*';
+    defaultOption.text = 'Indica tu nacionalidad';
     defaultOption.disabled = true;
     defaultOption.selected = true; // Make this option selected by default
     PaisesSelect.add(defaultOption);
@@ -200,6 +200,63 @@ $(document).ready(function () {
     });
 
 
+
+
+    
+
+
+
+
+
+
+
+    var DateNow = new Date();
+
+
+    const picker = new easepick.create({
+        element: "#checkin",
+        css: [
+            "https://cdn.jsdelivr.net/npm/@easepick/bundle@1.2.1/dist/index.css"
+        ],
+        zIndex: 100,
+        lang: "es-ES",
+        format: "DD MMMM YYYY",
+        grid: 2,
+        calendars: 2,
+        readonly: false,
+        inline: true,
+        header: "",
+        AmpPlugin: {
+            dropdown: {
+                months: true,
+                minYear: 2024,
+                maxYear: 2026
+            },
+            resetButton: true
+        },
+        RangePlugin: {
+            elementEnd: "#checkout",
+            repick: true,
+            delimiter: "-",
+            locale: {
+                zero: "cero",
+                one: "días",
+                two: "dos",
+                few: "unos cuantos",
+                many: "muchos",
+                other: "días"
+            }
+        },
+        LockPlugin: {
+            minDate: (DateNow),
+            selectForward: true
+        },
+        plugins: [
+            "AmpPlugin",
+            "RangePlugin",
+            "LockPlugin"
+        ]
+    })
 
 
 });
