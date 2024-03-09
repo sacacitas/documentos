@@ -75,7 +75,9 @@ $(document).ready(function () {
 
     //Fecha now
     var DateNow = new Date();
-
+    
+//Funcionalidades de cada sección del formulario 
+{    
 //SECTION: 1 - Escoger fechas máx min
     //Easepicker fechas max min
     const PickerRangoBusqueda = new easepick.create({
@@ -273,12 +275,12 @@ $(document).ready(function () {
         PaisesSelect.add(optionElement);
     });
 
+}//Ocultrar seccion
 
 
 
-
-//Logica de los botones de siguiente y atrás    
-
+//Logica de los botones de siguiente y atrás        
+{
     // Funcion de mostrar mensaje de error debajo de los inputs
     function displayErrorMessage(inputElement, message) {
         // Remove any existing error message
@@ -294,7 +296,8 @@ $(document).ready(function () {
         }
     }
 
-//Botones de siguiente. Oculta y muestra secciones de los 5 botones
+    //Botones de siguiente. Oculta y muestra secciones de los 5 botones
+    {
     //1.Verificar F Min y F Max
     $(NextButon1).click(function () {
         let inputsToCheck = [InputFMin, InputFMax]; // Array de inputs que verificar
@@ -410,6 +413,7 @@ $(document).ready(function () {
             seccion6.show();
         }
     });
+    }
 
 
     //Botones hacia atrás. Ocultra y muestra secciones
@@ -437,7 +441,7 @@ $(document).ready(function () {
         seccion5.show();
         seccion6.hide();
     });
-
+}//Ocultrar seccion
 
 
 
