@@ -219,7 +219,7 @@ $(document).ready(function () {
         css: [
             "https://cdn.jsdelivr.net/npm/@easepick/bundle@1.2.1/dist/index.css"
         ],
-        zIndex: 100,
+        zIndex: 500,
         lang: "es-ES",
         format: "DD MMMM YYYY",
         grid: 2,
@@ -269,10 +269,10 @@ $(document).ready(function () {
         css: [
             "https://cdn.jsdelivr.net/npm/@easepick/bundle@1.2.1/dist/index.css"
         ],
-        zIndex: 10,
+        zIndex: 500,
         lang: "es-ES",
         format: "DD MMMM YYYY",
-        readonly: true,
+        readonly: false,
         AmpPlugin: {
             dropdown: {
                 months: true,
