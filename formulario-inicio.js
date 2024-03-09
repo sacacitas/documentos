@@ -217,7 +217,8 @@ $(document).ready(function () {
     const PickerRangoBusqueda = new easepick.create({
         element: "#checkin",
         css: [
-            "https://cdn.jsdelivr.net/npm/@easepick/bundle@1.2.1/dist/index.css"
+            "https://cdn.jsdelivr.net/npm/@easepick/bundle@1.2.1/dist/index.css",
+            'https://documentos.sacacitas.es/formulario-inicio.css',
         ],
         zIndex: 500,
         lang: "es-ES",
@@ -233,7 +234,7 @@ $(document).ready(function () {
                 minYear: 2024,
                 maxYear: 2026
             },
-            resetButton: true
+            resetButton: false
         },
         RangePlugin: {
             elementEnd: "#checkout",
