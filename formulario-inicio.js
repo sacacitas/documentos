@@ -159,32 +159,12 @@ $(document).ready(function () {
 
         selectFormDocPasaporte.addClass('boton-documento-selected');
 
-        // Click event for botonLinkUnicoBusqueda
-        selectFormDocPasaporte.click(function () {
-            selectFormDocPasaporte.addClass('boton-documento-selected');
-            selectFormDocNIE.removeClass('boton-documento-selected');
-            selectFormDocDNI.removeClass('boton-documento-selected');
+        var options_documento = $('.div-documentos-formulario').children('a')
+
+        options_documento.click(function () {
+            options_documento.removeClass('boton-documento-selected')
+            $(this).addClass('boton-documento-selected');
         });
-
-        // Click event for botonLinkUnicoBusqueda
-        selectFormDocNIE.click(function () {
-            selectFormDocPasaporte.removeClass('boton-documento-selected');
-            selectFormDocNIE.addClass('boton-documento-selected');
-            selectFormDocDNI.removeClass('boton-documento-selected');
-        });
-
-        // Click event for botonLinkUnicoBusqueda
-        selectFormDocDNI.click(function () {
-            selectFormDocPasaporte.removeClass('boton-documento-selected');
-            selectFormDocNIE.removeClass('boton-documento-selected');
-            selectFormDocDNI.addClass('boton-documento-selected');
-        });
-
-
-
-
-
-
 
 
         //SECTION: 5 - Nacionalidad, R Nacionalidad y caducidad tarjeta
@@ -274,14 +254,13 @@ $(document).ready(function () {
             // Remove any existing error message
             $(inputElement).next('.error-message-form').remove();
 
-            // Check if input is empty
-            if ($(inputElement).val().trim() === '') {
-                // Create error message element if input is empty
-                const errorMessage = $('<div>').addClass('error-message-form').text(message);
 
-                // Insert error message after the input element        
-                $(inputElement).after(errorMessage);
-            }
+            // Create error message element if input is empty
+            const errorMessage = $('<div>').addClass('error-message-form').text(message);
+
+            // Insert error message after the input element        
+            $(inputElement).after(errorMessage);
+
         }
 
         //Botones de siguiente. Oculta y muestra secciones de los 5 botones
@@ -340,14 +319,33 @@ $(document).ready(function () {
 
                 // Check each input
                 inputsToCheck.forEach(function (input) {
+                    var selected_document = $('.div-documentos-formulario').find('.boton-documento-selected').attr('id')
+
+                    var func_validate = function (text_input) { return true }; // PASAPORTE will be always True because we cant validate it
+
+                    if (selected_document === 'select-nie-form') {
+                        func_validate = validateNIE
+                    } else if (selected_document === 'select-dni-form') {
+                        func_validate = validateDNI
+                    }
+
+
                     if (input.val().trim() === '') {
                         displayErrorMessage(input, 'Este campo es obligatorio');// Muestra mensaje de error en la funcion displayErrorMessage donde inputElement = input
                         allInputsValid = false;
+                    } else if (!func_validate(input.val())) {
+                        displayErrorMessage(input, 'Documento incorrecto');// Muestra mensaje de error en la funcion displayErrorMessage donde inputElement = input
+                        allInputsValid = false;
+
                     } else {
+                        // Make sure is uppercase
+                        input.val(input.val().toUpperCase());
+
                         // If input is not empty, remove the error message
                         $(input).next('.error-message-form').remove();
                     }
                 });
+
 
                 // Si todo OK pasa a la siguiente
                 if (allInputsValid) {
@@ -363,7 +361,8 @@ $(document).ready(function () {
 
                 // Check each input
                 inputsToCheck.forEach(function (input) {
-                    if (input.val().trim() === '') {
+                    if (input.val().trim() === '' || !input[0].checkValidity()) {
+                        input[0].reportValidity();
                         displayErrorMessage(input, 'Este campo es obligatorio');// Muestra mensaje de error en la funcion displayErrorMessage donde inputElement = input
                         allInputsValid = false;
                     } else {
@@ -371,6 +370,18 @@ $(document).ready(function () {
                         $(input).next('.error-message-form').remove();
                     }
                 });
+
+                if (InputCorreo.val() !== InputCorreoVerf.val()) {
+                    displayErrorMessage(InputCorreo, 'Correos no coinciden');
+                    displayErrorMessage(InputCorreoVerf, 'Correos no coinciden');
+                    allInputsValid = false;
+                }
+
+                if (InputTelef.val() !== InputTelefVerf.val()) {
+                    displayErrorMessage(InputTelef, 'Telefonos no coinciden');
+                    displayErrorMessage(InputTelefVerf, 'Telefonos no coinciden');
+                    allInputsValid = false;
+                }
 
                 // Si todo OK pasa a la siguiente
                 if (allInputsValid) {
@@ -472,3 +483,41 @@ $(document).ready(function () {
 
 });
 
+
+
+// https://donnierock.com/2011/11/05/validar-un-dni-con-javascript/
+function validateDNI(dni) {
+    if (/^\d{8}[a-zA-Z]$/.test(dni)) {
+        var n = dni.substr(0, 8);
+        var c = dni.substr(8, 1);
+        return c.toUpperCase() === 'TRWAGMYFPDXBNJZSQVHLCKET'.charAt(n % 23); // DNI correcto ?
+    }
+    return false; // DNI incorrecto
+}
+
+
+// https://trellat.es/funcion-para-validar-dni-o-nie-en-javascript/
+function validateNIE(nie) {
+    var numero, lett, letra;
+    var expresion_regular_dni = /^[XYZxyz]\d{7}[A-Za-z]$/;
+
+    if (!expresion_regular_dni.test(nie)) {
+        return false;
+    }
+
+    numero = nie.substr(0, nie.length - 1);
+
+    numero = numero.replace('X', 0);
+    numero = numero.replace('x', 0);
+    numero = numero.replace('Y', 1);
+    numero = numero.replace('y', 1);
+    numero = numero.replace('Z', 2);
+    numero = numero.replace('z', 2);
+
+    lett = nie.substr(nie.length - 1, 1).toUpperCase();
+    numero = numero % 23;
+    letra = 'TRWAGMYFPDXBNJZSQVHLCKET';
+    letra = letra.substring(numero, numero + 1);
+
+    return letra === lett;
+}
