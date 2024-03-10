@@ -1,49 +1,49 @@
 
 $(document).ready(function () {
 
-//Variables del fornulario
-{
-    //Crear variables cogiendo las secciones divs del formulario
-    var seccion1 = $('#Secciones-Form-1');
-    var seccion2 = $('#Secciones-Form-2');
-    var seccion3 = $('#Secciones-Form-3');
-    var seccion4 = $('#Secciones-Form-4');
-    var seccion5 = $('#Secciones-Form-5');
-    var seccion6 = $('#Secciones-Form-6');
+    //Variables del fornulario
+    {
+        //Crear variables cogiendo las secciones divs del formulario
+        var seccion1 = $('#Secciones-Form-1');
+        var seccion2 = $('#Secciones-Form-2');
+        var seccion3 = $('#Secciones-Form-3');
+        var seccion4 = $('#Secciones-Form-4');
+        var seccion5 = $('#Secciones-Form-5');
+        var seccion6 = $('#Secciones-Form-6');
 
-    //Crear variables botones de siguiente
-    var NextButon1 = $('#Next-Buton-1');
-    var NextButon2 = $('#Next-Buton-2');
-    var NextButon3 = $('#Next-Buton-3');
-    var NextButon4 = $('#Next-Buton-4');
-    var NextButon5 = $('#Next-Buton-5');
+        //Crear variables botones de siguiente
+        var NextButon1 = $('#Next-Buton-1');
+        var NextButon2 = $('#Next-Buton-2');
+        var NextButon3 = $('#Next-Buton-3');
+        var NextButon4 = $('#Next-Buton-4');
+        var NextButon5 = $('#Next-Buton-5');
 
-    //Crear variables botones hacia atrás
-    var BackButon1 = $('#Back-Buton-1');
-    var BackButon2 = $('#Back-Buton-2');
-    var BackButon3 = $('#Back-Buton-3');
-    var BackButon4 = $('#Back-Buton-4');
-    var BackButon5 = $('#Back-Buton-5');
+        //Crear variables botones hacia atrás
+        var BackButon1 = $('#Back-Buton-1');
+        var BackButon2 = $('#Back-Buton-2');
+        var BackButon3 = $('#Back-Buton-3');
+        var BackButon4 = $('#Back-Buton-4');
+        var BackButon5 = $('#Back-Buton-5');
 
-    //Variables de los inputs del formulario
-    var InputDivFMinMax = $('#div-block-f-min-max');
-    var InputFMin = $('#checkin');
-    var InputFMax = $('#checkout');
-    var InputNombre = $('#input-nombre');
-    var InputApellido1 = $('#input-apellido1');
-    var InputFNacimiento = $('#input-fecha-nacimiento');
-    var InputNumeroDocumento = $('#input-documento');
-    var InputCorreo = $('#input-correo');
-    var InputCorreoVerf = $('#input-confirmar-correo');
-    var InputTelef = $('#input-telefono');
-    var InputTelefVerf = $('#input-confirmar-telefono');
-    var InputNacionalidad = $('#input-lista-paises');
+        //Variables de los inputs del formulario
+        var InputDivFMinMax = $('#div-block-f-min-max');
+        var InputFMin = $('#checkin');
+        var InputFMax = $('#checkout');
+        var InputNombre = $('#input-nombre');
+        var InputApellido1 = $('#input-apellido1');
+        var InputFNacimiento = $('#input-fecha-nacimiento');
+        var InputNumeroDocumento = $('#input-documento');
+        var InputCorreo = $('#input-correo');
+        var InputCorreoVerf = $('#input-confirmar-correo');
+        var InputTelef = $('#input-telefono');
+        var InputTelefVerf = $('#input-confirmar-telefono');
+        var InputNacionalidad = $('#input-lista-paises');
 
 
-     //Fecha de ahora
-    var DateNow = new Date();
+        //Fecha de ahora
+        var DateNow = new Date();
 
-}//Ocultrar seccion
+    }//Ocultrar seccion
 
 
 
@@ -59,377 +59,377 @@ $(document).ready(function () {
 
 
 
-    
-//Funcionalidades de cada sección del formulario 
-{    
-//SECTION: 1 - Escoger fechas máx min
-    //Easepicker fechas max min
-    const PickerRangoBusqueda = new easepick.create({
-        element: "#checkin",
-        css: [
-            "https://cdn.jsdelivr.net/npm/@easepick/bundle@1.2.1/dist/index.css",
-            'https://documentos.sacacitas.es/formulario-inicio.css',
-        ],
-        zIndex: 500,
-        lang: "es-ES",
-        format: "DD MMMM YYYY",
-        grid: 2,
-        calendars: 2,
-        readonly: false,
-        inline: false,
-        header: "",
-        AmpPlugin: {
-            dropdown: {
-                months: true,
-                minYear: 2024,
-                maxYear: 2026
-            },
-            resetButton: false,
-            darkMode: false
-        },
-        RangePlugin: {
-            elementEnd: "#checkout",
-            repick: false,
-            delimiter: "-",
-            locale: {
-                zero: "cero",
-                one: "días",
-                two: "dos",
-                few: "unos cuantos",
-                many: "muchos",
-                other: "días"
-            }
-        },
-        LockPlugin: {
-            minDate: (DateNow),
-            selectForward: true
-        },
-        plugins: [
-            "AmpPlugin",
-            "RangePlugin",
-            "LockPlugin"
-        ]
-    })
 
-    //Poner read only al input de fecha max para que no salga el teclado en el movil
-    function makeReadonly() {
-        document.getElementById('readonly-field').setAttribute("readonly", "");
-    }
-
-
-//SECTION: 2 - Datos cliente
-    //Easepicker fecha nacimiento
-    const PickerNacimiento = new easepick.create({
-        element: "#input-fecha-nacimiento",
-        css: [
-            "https://cdn.jsdelivr.net/npm/@easepick/bundle@1.2.1/dist/index.css",
-            'https://documentos.sacacitas.es/formulario-inicio.css',
-        ],
-        zIndex: 500,
-        lang: "es-ES",
-        format: "DD MMMM YYYY",
-        readonly: false,
-        AmpPlugin: {
-            dropdown: {
-                months: true,
-                years: true,
-                minYear: 1930,
-                maxYear: 2028
-            },
-            resetButton: false,
-            darkMode: false
-        },
-        LockPlugin: {
-            maxDate: (DateNow)
-        },
-        plugins: [
-            "AmpPlugin",
-            "LockPlugin"
-        ]
-    })
-
-
-
-//SECTION: 3 - Documento identidad
-    //Seleccionar botones de selección de tipo de documento. DNI, NIE, Pasaporte
-    var selectFormDocPasaporte = $('#select-pasaporte-form');
-    var selectFormDocNIE = $('#select-nie-form');
-    var selectFormDocDNI = $('#select-dni-form');
-
-
-    selectFormDocPasaporte.addClass('boton-documento-selected');
- 
-    // Click event for botonLinkUnicoBusqueda
-    selectFormDocPasaporte.click(function () {
-        selectFormDocPasaporte.addClass('boton-documento-selected');
-        selectFormDocNIE.removeClass('boton-documento-selected');
-        selectFormDocDNI.removeClass('boton-documento-selected');
-    });                    
-    
-    // Click event for botonLinkUnicoBusqueda
-    selectFormDocNIE.click(function () {
-        selectFormDocPasaporte.removeClass('boton-documento-selected');
-        selectFormDocNIE.addClass('boton-documento-selected');
-        selectFormDocDNI.removeClass('boton-documento-selected');
-    });                    
-    
-    // Click event for botonLinkUnicoBusqueda
-    selectFormDocDNI.click(function () {
-        selectFormDocPasaporte.removeClass('boton-documento-selected');
-        selectFormDocNIE.removeClass('boton-documento-selected');
-        selectFormDocDNI.addClass('boton-documento-selected');
-    });                    
-    
-
-
-
-
-
-
-
-//SECTION: 5 - Nacionalidad, R Nacionalidad y caducidad tarjeta
-    //Lista desplegable de paises
-    var PaisesSelect = document.getElementById('input-lista-paises'); // Replace with the actual ID of your select element
-        
-    // Mapa paises
-    var map_paises = {
-        "Alava": "Alava",
-        "Albacete": "Albacete",
-        "Alicante": "Alicante",
-        "Almería": "Almería",
-        "Asturias": "Asturias",
-        "Avila": "Avila",
-        "Badajoz": "Badajoz",
-        "Barcelona": "Barcelona",
-        "Burgos": "Burgos",
-        "Cáceres": "Cáceres",
-        "Cádiz": "Cádiz",
-        "Cantabria": "Cantabria",
-        "Castellón": "Castellón",
-        "Ceuta": "Ceuta",
-        "Ciudad Real": "CiudadReal",
-        "Córdoba": "Córdoba",
-        "La Coruña": "LaCoruña",
-        "Cuenca": "Cuenca",
-        "Gerona": "Gerona",
-        "Granada": "Granada",
-        "Guadalajara": "Guadalajara",
-        "Guipúzcoa": "Guipúzcoa",
-        "Huelva": "Huelva",
-        "Huesca": "Huesca",
-        "Islas Baleares": "IslasBaleares",
-        "Jaén": "Jaén",
-        "León": "León",
-        "Lérida": "Lérida",
-        "Lugo": "Lugo",
-        "Madrid": "Madrid",
-        "Málaga": "Málaga",
-        "Melilla": "Melilla",
-        "Murcia": "Murcia",
-        "Navarra": "Navarra",
-        "Orense": "Orense",
-        "Palencia": "Palencia",
-        "Las Palmas": "LasPalmas",
-        "Pontevedra": "Pontevedra",
-        "La Rioja": "LaRioja",
-        "Salamanca": "Salamanca",
-        "Segovia": "Segovia",
-        "Sevilla": "Sevilla",
-        "Soria": "Soria",
-        "Tarragona": "Tarragona",
-        "Santa Cruz De Tenerife": "SantaCruzDeTenerife",
-        "Teruel": "Teruel",
-        "Toledo": "Toledo",
-        "Valencia": "Valencia",
-        "Valladolid": "Valladolid",
-        "Vizcaya": "Vizcaya",
-        "Zamora": "Zamora",
-        "Zaragoza": "Zaragoza"
-    }
-
-    // Añadir un elemento por defecto
-    var defaultOption = document.createElement('option');
-    defaultOption.value = ''; // Set the value to an empty string or a value that is not present in the array
-    defaultOption.text = 'Indica tu nacionalidad';
-    defaultOption.disabled = true;
-    defaultOption.selected = true; // Make this option selected by default
-    PaisesSelect.add(defaultOption);
-
-    // Crear lista en el select
-    Object.entries(map_paises).forEach(([user_text, api_key_call]) => {
-        var optionElement = document.createElement('option');
-        optionElement.value = api_key_call;
-        optionElement.text = user_text;
-        PaisesSelect.add(optionElement);
-    });
-
-}//Ocultrar seccion
-
-
-
-//Logica de los botones de siguiente y atrás        
-{
-    // Funcion de mostrar mensaje de error debajo de los inputs
-    function displayErrorMessage(inputElement, message) {
-        // Remove any existing error message
-        $(inputElement).next('.error-message-form').remove();
-
-        // Check if input is empty
-        if ($(inputElement).val().trim() === '') {
-            // Create error message element if input is empty
-            const errorMessage = $('<div>').addClass('error-message-form').text(message);
-            
-            // Insert error message after the input element        
-            $(inputElement).after(errorMessage);
-        }
-    }
-
-    //Botones de siguiente. Oculta y muestra secciones de los 5 botones
+    //Funcionalidades de cada sección del formulario 
     {
-    //1.Verificar F Min y F Max
-    $(NextButon1).click(function () {
-        let inputsToCheck = [InputFMin, InputFMax]; // Array de inputs que verificar
-        let allInputsValid = true; // Si todo OK pasa a la siguiente
-    
-        // Check each input
-        inputsToCheck.some(function(input) {
-            if (input.val().trim() === '') {
-                displayErrorMessage(InputDivFMinMax, 'Debes seleccionar un rango de fechas');// Muestra mensaje de error en la funcion displayErrorMessage donde inputElement = input
-                allInputsValid = false;
-            } else {
-                // If input is not empty, remove the error message
-                $(InputDivFMinMax).next('.error-message-form').remove();
-            }
-        });
-    
-        // Si todo OK pasa a la siguiente
-        if (allInputsValid) {
-            seccion1.hide();
-            seccion2.show();
-        }
-    });
+        //SECTION: 1 - Escoger fechas máx min
+        //Easepicker fechas max min
+        const PickerRangoBusqueda = new easepick.create({
+            element: "#checkin",
+            css: [
+                "https://cdn.jsdelivr.net/npm/@easepick/bundle@1.2.1/dist/index.css",
+                'https://documentos.sacacitas.es/formulario-inicio.css',
+            ],
+            zIndex: 500,
+            lang: "es-ES",
+            format: "DD MMMM YYYY",
+            grid: 2,
+            calendars: 2,
+            readonly: false,
+            inline: false,
+            header: "",
+            AmpPlugin: {
+                dropdown: {
+                    months: true,
+                    minYear: 2024,
+                    maxYear: 2026
+                },
+                resetButton: false,
+                darkMode: false
+            },
+            RangePlugin: {
+                elementEnd: "#checkout",
+                repick: false,
+                delimiter: "-",
+                locale: {
+                    zero: "cero",
+                    one: "días",
+                    two: "dos",
+                    few: "unos cuantos",
+                    many: "muchos",
+                    other: "días"
+                }
+            },
+            LockPlugin: {
+                minDate: (DateNow),
+                selectForward: true
+            },
+            plugins: [
+                "AmpPlugin",
+                "RangePlugin",
+                "LockPlugin"
+            ]
+        })
 
-    //2.Comprobar nombre, apellido1 y input-fecha-nacimiento
-    $(NextButon2).click(function () {
-        let inputsToCheck = [InputNombre, InputApellido1, InputFNacimiento]; // Array de inputs que verificar
-        let allInputsValid = true; // Si todo OK pasa a la siguiente
-    
-        // Check each input
-        inputsToCheck.forEach(function(input) {
-            if (input.val().trim() === '') {
-                displayErrorMessage(input, 'Este campo es obligatorio');// Muestra mensaje de error en la funcion displayErrorMessage donde inputElement = input
-                allInputsValid = false;
-            } else {
-                // If input is not empty, remove the error message
-                $(input).next('.error-message-form').remove();
-            }
+        //Poner read only al input de fecha max para que no salga el teclado en el movil
+        function makeReadonly() {
+            document.getElementById('readonly-field').setAttribute("readonly", "");
+        }
+
+
+        //SECTION: 2 - Datos cliente
+        //Easepicker fecha nacimiento
+        const PickerNacimiento = new easepick.create({
+            element: "#input-fecha-nacimiento",
+            css: [
+                "https://cdn.jsdelivr.net/npm/@easepick/bundle@1.2.1/dist/index.css",
+                'https://documentos.sacacitas.es/formulario-inicio.css',
+            ],
+            zIndex: 500,
+            lang: "es-ES",
+            format: "DD MMMM YYYY",
+            readonly: false,
+            AmpPlugin: {
+                dropdown: {
+                    months: true,
+                    years: true,
+                    minYear: 1930,
+                    maxYear: 2028
+                },
+                resetButton: false,
+                darkMode: false
+            },
+            LockPlugin: {
+                maxDate: (DateNow)
+            },
+            plugins: [
+                "AmpPlugin",
+                "LockPlugin"
+            ]
+        })
+
+
+
+        //SECTION: 3 - Documento identidad
+        //Seleccionar botones de selección de tipo de documento. DNI, NIE, Pasaporte
+        var selectFormDocPasaporte = $('#select-pasaporte-form');
+        var selectFormDocNIE = $('#select-nie-form');
+        var selectFormDocDNI = $('#select-dni-form');
+
+
+        selectFormDocPasaporte.addClass('boton-documento-selected');
+
+        // Click event for botonLinkUnicoBusqueda
+        selectFormDocPasaporte.click(function () {
+            selectFormDocPasaporte.addClass('boton-documento-selected');
+            selectFormDocNIE.removeClass('boton-documento-selected');
+            selectFormDocDNI.removeClass('boton-documento-selected');
         });
-    
-        // Si todo OK pasa a la siguiente
-        if (allInputsValid) {
+
+        // Click event for botonLinkUnicoBusqueda
+        selectFormDocNIE.click(function () {
+            selectFormDocPasaporte.removeClass('boton-documento-selected');
+            selectFormDocNIE.addClass('boton-documento-selected');
+            selectFormDocDNI.removeClass('boton-documento-selected');
+        });
+
+        // Click event for botonLinkUnicoBusqueda
+        selectFormDocDNI.click(function () {
+            selectFormDocPasaporte.removeClass('boton-documento-selected');
+            selectFormDocNIE.removeClass('boton-documento-selected');
+            selectFormDocDNI.addClass('boton-documento-selected');
+        });
+
+
+
+
+
+
+
+
+        //SECTION: 5 - Nacionalidad, R Nacionalidad y caducidad tarjeta
+        //Lista desplegable de paises
+        var PaisesSelect = document.getElementById('input-lista-paises'); // Replace with the actual ID of your select element
+
+        // Mapa paises
+        var map_paises = {
+            "Alava": "Alava",
+            "Albacete": "Albacete",
+            "Alicante": "Alicante",
+            "Almería": "Almería",
+            "Asturias": "Asturias",
+            "Avila": "Avila",
+            "Badajoz": "Badajoz",
+            "Barcelona": "Barcelona",
+            "Burgos": "Burgos",
+            "Cáceres": "Cáceres",
+            "Cádiz": "Cádiz",
+            "Cantabria": "Cantabria",
+            "Castellón": "Castellón",
+            "Ceuta": "Ceuta",
+            "Ciudad Real": "CiudadReal",
+            "Córdoba": "Córdoba",
+            "La Coruña": "LaCoruña",
+            "Cuenca": "Cuenca",
+            "Gerona": "Gerona",
+            "Granada": "Granada",
+            "Guadalajara": "Guadalajara",
+            "Guipúzcoa": "Guipúzcoa",
+            "Huelva": "Huelva",
+            "Huesca": "Huesca",
+            "Islas Baleares": "IslasBaleares",
+            "Jaén": "Jaén",
+            "León": "León",
+            "Lérida": "Lérida",
+            "Lugo": "Lugo",
+            "Madrid": "Madrid",
+            "Málaga": "Málaga",
+            "Melilla": "Melilla",
+            "Murcia": "Murcia",
+            "Navarra": "Navarra",
+            "Orense": "Orense",
+            "Palencia": "Palencia",
+            "Las Palmas": "LasPalmas",
+            "Pontevedra": "Pontevedra",
+            "La Rioja": "LaRioja",
+            "Salamanca": "Salamanca",
+            "Segovia": "Segovia",
+            "Sevilla": "Sevilla",
+            "Soria": "Soria",
+            "Tarragona": "Tarragona",
+            "Santa Cruz De Tenerife": "SantaCruzDeTenerife",
+            "Teruel": "Teruel",
+            "Toledo": "Toledo",
+            "Valencia": "Valencia",
+            "Valladolid": "Valladolid",
+            "Vizcaya": "Vizcaya",
+            "Zamora": "Zamora",
+            "Zaragoza": "Zaragoza"
+        }
+
+        // Añadir un elemento por defecto
+        var defaultOption = document.createElement('option');
+        defaultOption.value = ''; // Set the value to an empty string or a value that is not present in the array
+        defaultOption.text = 'Indica tu nacionalidad';
+        defaultOption.disabled = true;
+        defaultOption.selected = true; // Make this option selected by default
+        PaisesSelect.add(defaultOption);
+
+        // Crear lista en el select
+        Object.entries(map_paises).forEach(([user_text, api_key_call]) => {
+            var optionElement = document.createElement('option');
+            optionElement.value = api_key_call;
+            optionElement.text = user_text;
+            PaisesSelect.add(optionElement);
+        });
+
+    }//Ocultrar seccion
+
+
+
+    //Logica de los botones de siguiente y atrás        
+    {
+        // Funcion de mostrar mensaje de error debajo de los inputs
+        function displayErrorMessage(inputElement, message) {
+            // Remove any existing error message
+            $(inputElement).next('.error-message-form').remove();
+
+            // Check if input is empty
+            if ($(inputElement).val().trim() === '') {
+                // Create error message element if input is empty
+                const errorMessage = $('<div>').addClass('error-message-form').text(message);
+
+                // Insert error message after the input element        
+                $(inputElement).after(errorMessage);
+            }
+        }
+
+        //Botones de siguiente. Oculta y muestra secciones de los 5 botones
+        {
+            //1.Verificar F Min y F Max
+            $(NextButon1).click(function () {
+                let inputsToCheck = [InputFMin, InputFMax]; // Array de inputs que verificar
+                let allInputsValid = true; // Si todo OK pasa a la siguiente
+
+                // Check each input
+                inputsToCheck.some(function (input) {
+                    if (input.val().trim() === '') {
+                        displayErrorMessage(InputDivFMinMax, 'Debes seleccionar un rango de fechas');// Muestra mensaje de error en la funcion displayErrorMessage donde inputElement = input
+                        allInputsValid = false;
+                    } else {
+                        // If input is not empty, remove the error message
+                        $(InputDivFMinMax).next('.error-message-form').remove();
+                    }
+                });
+
+                // Si todo OK pasa a la siguiente
+                if (allInputsValid) {
+                    seccion1.hide();
+                    seccion2.show();
+                }
+            });
+
+            //2.Comprobar nombre, apellido1 y input-fecha-nacimiento
+            $(NextButon2).click(function () {
+                let inputsToCheck = [InputNombre, InputApellido1, InputFNacimiento]; // Array de inputs que verificar
+                let allInputsValid = true; // Si todo OK pasa a la siguiente
+
+                // Check each input
+                inputsToCheck.forEach(function (input) {
+                    if (input.val().trim() === '') {
+                        displayErrorMessage(input, 'Este campo es obligatorio');// Muestra mensaje de error en la funcion displayErrorMessage donde inputElement = input
+                        allInputsValid = false;
+                    } else {
+                        // If input is not empty, remove the error message
+                        $(input).next('.error-message-form').remove();
+                    }
+                });
+
+                // Si todo OK pasa a la siguiente
+                if (allInputsValid) {
+                    seccion2.hide();
+                    seccion3.show();
+                }
+            });
+
+
+            //3.Comprobar numero de documento
+            $(NextButon3).click(function () {
+                let inputsToCheck = [InputNumeroDocumento]; // Array de inputs que verificar
+                let allInputsValid = true; // Si todo OK pasa a la siguiente
+
+                // Check each input
+                inputsToCheck.forEach(function (input) {
+                    if (input.val().trim() === '') {
+                        displayErrorMessage(input, 'Este campo es obligatorio');// Muestra mensaje de error en la funcion displayErrorMessage donde inputElement = input
+                        allInputsValid = false;
+                    } else {
+                        // If input is not empty, remove the error message
+                        $(input).next('.error-message-form').remove();
+                    }
+                });
+
+                // Si todo OK pasa a la siguiente
+                if (allInputsValid) {
+                    seccion3.hide();
+                    seccion4.show();
+                }
+            });
+
+            //4.Comprobar correo y telefono
+            $(NextButon4).click(function () {
+                let inputsToCheck = [InputCorreo, InputCorreoVerf, InputTelef, InputTelefVerf]; // Array de inputs que verificar
+                let allInputsValid = true; // Si todo OK pasa a la siguiente
+
+                // Check each input
+                inputsToCheck.forEach(function (input) {
+                    if (input.val().trim() === '') {
+                        displayErrorMessage(input, 'Este campo es obligatorio');// Muestra mensaje de error en la funcion displayErrorMessage donde inputElement = input
+                        allInputsValid = false;
+                    } else {
+                        // If input is not empty, remove the error message
+                        $(input).next('.error-message-form').remove();
+                    }
+                });
+
+                // Si todo OK pasa a la siguiente
+                if (allInputsValid) {
+                    seccion4.hide();
+                    seccion5.show();
+                }
+            });
+
+            //5.Comprobar nacionalidad. R Nacionalidad y caducidad tarjeta
+            $(NextButon5).click(function () {
+                let inputsToCheck = [InputNacionalidad]; // Array de inputs que verificar
+                let allInputsValid = true; // Si todo OK pasa a la siguiente
+
+                // Check each input
+                inputsToCheck.forEach(function (input) {
+                    if (input.val().trim() === '') {
+                        displayErrorMessage(input, 'Este campo es obligatorio');// Muestra mensaje de error en la funcion displayErrorMessage donde inputElement = input
+                        allInputsValid = false;
+                    } else {
+                        // If input is not empty, remove the error message
+                        $(input).next('.error-message-form').remove();
+                    }
+                });
+
+                // Si todo OK pasa a la siguiente
+                if (allInputsValid) {
+                    seccion5.hide();
+                    seccion6.show();
+                }
+            });
+        }
+
+
+        //Botones hacia atrás. Ocultra y muestra secciones
+        $(BackButon1).click(function () {
+            seccion1.show();
             seccion2.hide();
-            seccion3.show();
-        }
-    });
-
-
-    //3.Comprobar numero de documento
-    $(NextButon3).click(function () {
-        let inputsToCheck = [InputNumeroDocumento]; // Array de inputs que verificar
-        let allInputsValid = true; // Si todo OK pasa a la siguiente
-    
-        // Check each input
-        inputsToCheck.forEach(function(input) {
-            if (input.val().trim() === '') {
-                displayErrorMessage(input, 'Este campo es obligatorio');// Muestra mensaje de error en la funcion displayErrorMessage donde inputElement = input
-                allInputsValid = false;
-            } else {
-                // If input is not empty, remove the error message
-                $(input).next('.error-message-form').remove();
-            }
         });
-    
-        // Si todo OK pasa a la siguiente
-        if (allInputsValid) {
+
+        $(BackButon2).click(function () {
+            seccion2.show();
             seccion3.hide();
-            seccion4.show();
-        }
-    });
-
-    //4.Comprobar correo y telefono
-    $(NextButon4).click(function () {
-        let inputsToCheck = [InputCorreo, InputCorreoVerf, InputTelef, InputTelefVerf]; // Array de inputs que verificar
-        let allInputsValid = true; // Si todo OK pasa a la siguiente
-    
-        // Check each input
-        inputsToCheck.forEach(function(input) {
-            if (input.val().trim() === '') {
-                displayErrorMessage(input, 'Este campo es obligatorio');// Muestra mensaje de error en la funcion displayErrorMessage donde inputElement = input
-                allInputsValid = false;
-            } else {
-                // If input is not empty, remove the error message
-                $(input).next('.error-message-form').remove();
-            }
         });
-    
-        // Si todo OK pasa a la siguiente
-        if (allInputsValid) {
+
+        $(BackButon3).click(function () {
+            seccion3.show();
             seccion4.hide();
-            seccion5.show();
-        }
-    });
-
-    //5.Comprobar nacionalidad. R Nacionalidad y caducidad tarjeta
-    $(NextButon5).click(function () {
-        let inputsToCheck = [InputNacionalidad]; // Array de inputs que verificar
-        let allInputsValid = true; // Si todo OK pasa a la siguiente
-    
-        // Check each input
-        inputsToCheck.forEach(function(input) {
-            if (input.val().trim() === '') {
-                displayErrorMessage(input, 'Este campo es obligatorio');// Muestra mensaje de error en la funcion displayErrorMessage donde inputElement = input
-                allInputsValid = false;
-            } else {
-                // If input is not empty, remove the error message
-                $(input).next('.error-message-form').remove();
-            }
         });
-    
-        // Si todo OK pasa a la siguiente
-        if (allInputsValid) {
+
+        $(BackButon4).click(function () {
+            seccion4.show();
             seccion5.hide();
-            seccion6.show();
-        }
-    });
-    }
+        });
 
-
-    //Botones hacia atrás. Ocultra y muestra secciones
-    $(BackButon1).click(function () {
-        seccion1.show();
-        seccion2.hide();
-    });
-
-    $(BackButon2).click(function () {
-        seccion2.show();
-        seccion3.hide();
-    });
-
-    $(BackButon3).click(function () {
-        seccion3.show();
-        seccion4.hide();
-    });
-
-    $(BackButon4).click(function () {
-        seccion4.show();
-        seccion5.hide();
-    });
-
-    $(BackButon5).click(function () {
-        seccion5.show();
-        seccion6.hide();
-    });
-}//Ocultrar seccion
+        $(BackButon5).click(function () {
+            seccion5.show();
+            seccion6.hide();
+        });
+    }//Ocultrar seccion
 
 
 
@@ -437,33 +437,33 @@ $(document).ready(function () {
 
 
 
-//Funcionalidades varias 
-{
-    //Poner read only al input de fecha max para que no salga el teclado en el movil
-    $(document).ready(function() {
-        // Select the input field by its ID and make it readonly
-        $('#checkin').prop('readonly', true);
-        $('#checkout').prop('readonly', true);
-        $('#input-fecha-nacimiento').prop('readonly', true);
-    });
+    //Funcionalidades varias 
+    {
+        //Poner read only al input de fecha max para que no salga el teclado en el movil
+        $(document).ready(function () {
+            // Select the input field by its ID and make it readonly
+            $('#checkin').prop('readonly', true);
+            $('#checkout').prop('readonly', true);
+            $('#input-fecha-nacimiento').prop('readonly', true);
+        });
 
 
 
 
 
 
-    //Bloquear zoom al darle doble click en los moviles
-    const input = document.getElementById('myInput');
-    // Event listener para el doble click
-    input.addEventListener('dblclick', function(event) {
-        // Prevent default behavior
-        event.preventDefault();
-        
-        // Remove focus from the input element
-        input.blur();
-    });
+        //Bloquear zoom al darle doble click en los moviles
+        const input = document.getElementById('myInput');
+        // Event listener para el doble click
+        input.addEventListener('dblclick', function (event) {
+            // Prevent default behavior
+            event.preventDefault();
 
-}//Ocultrar seccion
+            // Remove focus from the input element
+            input.blur();
+        });
+
+    }//Ocultrar seccion
 
 
 
