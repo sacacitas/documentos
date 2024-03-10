@@ -102,7 +102,8 @@ $(document).ready(function () {
             },
             LockPlugin: {
                 minDate: (DateNow),
-                selectForward: true
+                selectForward: true,
+                minDays: 3
             },
             plugins: [
                 "AmpPlugin",
