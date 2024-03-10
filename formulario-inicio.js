@@ -171,62 +171,6 @@ $(document).ready(function () {
         //Lista desplegable de paises
         var PaisesSelect = document.getElementById('input-lista-paises'); // Replace with the actual ID of your select element
 
-        // Mapa paises
-        var map_paises = {
-            "Alava": "Alava",
-            "Albacete": "Albacete",
-            "Alicante": "Alicante",
-            "Almería": "Almería",
-            "Asturias": "Asturias",
-            "Avila": "Avila",
-            "Badajoz": "Badajoz",
-            "Barcelona": "Barcelona",
-            "Burgos": "Burgos",
-            "Cáceres": "Cáceres",
-            "Cádiz": "Cádiz",
-            "Cantabria": "Cantabria",
-            "Castellón": "Castellón",
-            "Ceuta": "Ceuta",
-            "Ciudad Real": "CiudadReal",
-            "Córdoba": "Córdoba",
-            "La Coruña": "LaCoruña",
-            "Cuenca": "Cuenca",
-            "Gerona": "Gerona",
-            "Granada": "Granada",
-            "Guadalajara": "Guadalajara",
-            "Guipúzcoa": "Guipúzcoa",
-            "Huelva": "Huelva",
-            "Huesca": "Huesca",
-            "Islas Baleares": "IslasBaleares",
-            "Jaén": "Jaén",
-            "León": "León",
-            "Lérida": "Lérida",
-            "Lugo": "Lugo",
-            "Madrid": "Madrid",
-            "Málaga": "Málaga",
-            "Melilla": "Melilla",
-            "Murcia": "Murcia",
-            "Navarra": "Navarra",
-            "Orense": "Orense",
-            "Palencia": "Palencia",
-            "Las Palmas": "LasPalmas",
-            "Pontevedra": "Pontevedra",
-            "La Rioja": "LaRioja",
-            "Salamanca": "Salamanca",
-            "Segovia": "Segovia",
-            "Sevilla": "Sevilla",
-            "Soria": "Soria",
-            "Tarragona": "Tarragona",
-            "Santa Cruz De Tenerife": "SantaCruzDeTenerife",
-            "Teruel": "Teruel",
-            "Toledo": "Toledo",
-            "Valencia": "Valencia",
-            "Valladolid": "Valladolid",
-            "Vizcaya": "Vizcaya",
-            "Zamora": "Zamora",
-            "Zaragoza": "Zaragoza"
-        }
-
         // Añadir un elemento por defecto
         var defaultOption = document.createElement('option');
         defaultOption.value = ''; // Set the value to an empty string or a value that is not present in the array
@@ -236,12 +180,14 @@ $(document).ready(function () {
         PaisesSelect.add(defaultOption);
 
         // Crear lista en el select
-        Object.entries(map_paises).forEach(([user_text, api_key_call]) => {
-            var optionElement = document.createElement('option');
-            optionElement.value = api_key_call;
-            optionElement.text = user_text;
-            PaisesSelect.add(optionElement);
-        });
+        window.iso3166.iso31661
+            .sort((a, b) => a.name.localeCompare(b.name))
+            .forEach(elem => {
+                var optionElement = document.createElement('option');
+                optionElement.value = elem.alpha3;
+                optionElement.text = elem.name;
+                PaisesSelect.add(optionElement);
+            });
 
     }//Ocultrar seccion
 
