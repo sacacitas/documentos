@@ -173,7 +173,7 @@ $(document).ready(function () {
         var PaisesSelect = document.getElementById('input-lista-paises'); // Replace with the actual ID of your select element
 
         // Añadir un elemento por defecto
-        var defaultOption = document.createElement ('option');
+        var defaultOption = document.createElement('option');
         defaultOption.value = ''; // Set the value to an empty string or a value that is not present in the array
         defaultOption.text = 'Indica tu nacionalidad';
         defaultOption.disabled = true; // Make this option disabled
@@ -193,32 +193,32 @@ $(document).ready(function () {
             });
 
 
-            const PickerCadTarjeta = new easepick.create({
-                element: "#input-caducidad-tarjeta",
-                css: [
-                    "https://cdn.jsdelivr.net/npm/@easepick/bundle@1.2.1/dist/index.css",
-                    'https://documentos.sacacitas.es/formulario-inicio.css',
-                ],
-                zIndex: 500,
-                lang: "es-ES",
-                format: "DD MMMM YYYY",
-                readonly: false,
-                AmpPlugin: {
-                    dropdown: {
-                        months: true,
-                        years: true,
-                        minYear: 2000,
-                        maxYear: 2050
-                    },
-                    resetButton: false,
-                    darkMode: false
+        const PickerCadTarjeta = new easepick.create({
+            element: "#input-caducidad-tarjeta",
+            css: [
+                "https://cdn.jsdelivr.net/npm/@easepick/bundle@1.2.1/dist/index.css",
+                'https://documentos.sacacitas.es/formulario-inicio.css',
+            ],
+            zIndex: 500,
+            lang: "es-ES",
+            format: "DD MMMM YYYY",
+            readonly: false,
+            AmpPlugin: {
+                dropdown: {
+                    months: true,
+                    years: true,
+                    minYear: 2000,
+                    maxYear: 2050
                 },
-                plugins: [
-                    "AmpPlugin",
-                    "LockPlugin"
-                ]
-            })
-    
+                resetButton: false,
+                darkMode: false
+            },
+            plugins: [
+                "AmpPlugin",
+                "LockPlugin"
+            ]
+        })
+
 
 
 
