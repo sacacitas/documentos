@@ -3,11 +3,13 @@ var CONFIG_FORM = {
     'caducidad_tarjeta': false
 }
 
+var INPUT_JSON = null
+
 $(document).ready(function () {
 
     var urlParams = new URLSearchParams(window.location.search);
     if (urlParams.has('INPUT_JSON')) {
-        var INPUT_JSON = JSON.parse(atob(urlParams.get('INPUT_JSON')))
+        INPUT_JSON = JSON.parse(atob(urlParams.get('INPUT_JSON')))
     } else {
         alert('Por favor, use https://sacacitas.es para comenzar este formulario')
     }
