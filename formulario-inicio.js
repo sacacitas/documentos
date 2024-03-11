@@ -5,6 +5,13 @@ var CONFIG_FORM = {
 
 $(document).ready(function () {
 
+    var urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.has('INPUT_JSON')) {
+        var INPUT_JSON = JSON.parse(atob(urlParams.get('INPUT_JSON')))
+    } else {
+        alert('Por favor, use https://sacacitas.es para comenzar este formulario')
+    }
+
     //Variables del fornulario
     {
         //Crear variables cogiendo las secciones divs del formulario
