@@ -1,3 +1,7 @@
+var CONFIG_FORM = {
+    'resolucion_nacionalidad': false,
+    'caducidad_tarjeta': false
+}
 
 $(document).ready(function () {
 
@@ -39,15 +43,18 @@ $(document).ready(function () {
         var InputTelefVerf = $('#input-confirmar-telefono');
         var InputNacionalidad = $('#input-lista-paises');
 
-
         //Fecha de ahora
         var DateNow = new Date();
 
-    }//Ocultrar seccion
+        // Parte dinamica del formulario
+        $('#clientes-jura-nacionalidad').toggle(CONFIG_FORM.resolucion_nacionalidad || false)
+        $('#input-resolucion-nacionalidad').prop('required', CONFIG_FORM.resolucion_nacionalidad || false);
 
+        $('#input-caducidad-tarjeta').toggle(CONFIG_FORM.caducidad_tarjeta || false)
+        $('#input-caducidad-tarjeta').prop('required', CONFIG_FORM.caducidad_tarjeta || false);
 
-
-
+    }
+    //Ocultrar seccion
 
     //Ocultar secciones divs (temporal)
     seccion1.show();
@@ -57,19 +64,13 @@ $(document).ready(function () {
     seccion5.hide();
     seccion6.hide();
 
-
-
-
     //Funcionalidades de cada sección del formulario 
     {
         //SECTION: 1 - Escoger fechas máx min
         //Easepicker fechas max min
         const PickerRangoBusqueda = new easepick.create({
             element: "#checkin",
-            css: [
-                "https://cdn.jsdelivr.net/npm/@easepick/bundle@1.2.1/dist/index.css",
-                'https://documentos.sacacitas.es/formulario-inicio.css',
-            ],
+            css: ["https://cdn.jsdelivr.net/npm/@easepick/bundle@1.2.1/dist/index.css", 'https://documentos.sacacitas.es/formulario-inicio.css',],
             zIndex: 500,
             lang: "es-ES",
             format: "DD MMMM YYYY",
@@ -105,11 +106,7 @@ $(document).ready(function () {
                 selectForward: true,
                 minDays: 3
             },
-            plugins: [
-                "AmpPlugin",
-                "RangePlugin",
-                "LockPlugin"
-            ]
+            plugins: ["AmpPlugin", "RangePlugin", "LockPlugin"]
         })
 
         //Poner read only al input de fecha max para que no salga el teclado en el movil
@@ -117,15 +114,11 @@ $(document).ready(function () {
             document.getElementById('readonly-field').setAttribute("readonly", "");
         }
 
-
         //SECTION: 2 - Datos cliente
         //Easepicker fecha nacimiento
         const PickerNacimiento = new easepick.create({
             element: "#input-fecha-nacimiento",
-            css: [
-                "https://cdn.jsdelivr.net/npm/@easepick/bundle@1.2.1/dist/index.css",
-                'https://documentos.sacacitas.es/formulario-inicio.css',
-            ],
+            css: ["https://cdn.jsdelivr.net/npm/@easepick/bundle@1.2.1/dist/index.css", 'https://documentos.sacacitas.es/formulario-inicio.css',],
             zIndex: 500,
             lang: "es-ES",
             format: "DD MMMM YYYY",
@@ -143,20 +136,14 @@ $(document).ready(function () {
             LockPlugin: {
                 maxDate: (DateNow)
             },
-            plugins: [
-                "AmpPlugin",
-                "LockPlugin"
-            ]
+            plugins: ["AmpPlugin", "LockPlugin"]
         })
-
-
 
         //SECTION: 3 - Documento identidad
         //Seleccionar botones de selección de tipo de documento. DNI, NIE, Pasaporte
         var selectFormDocPasaporte = $('#select-pasaporte-form');
         var selectFormDocNIE = $('#select-nie-form');
         var selectFormDocDNI = $('#select-dni-form');
-
 
         selectFormDocPasaporte.addClass('boton-documento-selected');
 
@@ -167,17 +154,20 @@ $(document).ready(function () {
             $(this).addClass('boton-documento-selected');
         });
 
-
         //SECTION: 5 - Nacionalidad, R Nacionalidad y caducidad tarjeta
         //Lista desplegable de paises
-        var PaisesSelect = document.getElementById('input-lista-paises'); // Replace with the actual ID of your select element
+        var PaisesSelect = document.getElementById('input-lista-paises');
+        // Replace with the actual ID of your select element
 
         // Añadir un elemento por defecto
         var defaultOption = document.createElement('option');
-        defaultOption.value = ''; // Set the value to an empty string or a value that is not present in the array
+        defaultOption.value = '';
+        // Set the value to an empty string or a value that is not present in the array
         defaultOption.text = 'Indica tu nacionalidad';
-        defaultOption.disabled = true; // Make this option disabled
-        defaultOption.selected = true; // Make this option selected by default
+        defaultOption.disabled = true;
+        // Make this option disabled
+        defaultOption.selected = true;
+        // Make this option selected by default
         PaisesSelect.add(defaultOption);
 
         // Crear lista en el select
@@ -194,13 +184,9 @@ $(document).ready(function () {
         }
         );
 
-
         const PickerCadTarjeta = new easepick.create({
             element: "#input-caducidad-tarjeta",
-            css: [
-                "https://cdn.jsdelivr.net/npm/@easepick/bundle@1.2.1/dist/index.css",
-                'https://documentos.sacacitas.es/formulario-inicio.css',
-            ],
+            css: ["https://cdn.jsdelivr.net/npm/@easepick/bundle@1.2.1/dist/index.css", 'https://documentos.sacacitas.es/formulario-inicio.css',],
             zIndex: 500,
             lang: "es-ES",
             format: "DD MMMM YYYY",
@@ -215,19 +201,11 @@ $(document).ready(function () {
                 resetButton: false,
                 darkMode: false
             },
-            plugins: [
-                "AmpPlugin",
-                "LockPlugin"
-            ]
+            plugins: ["AmpPlugin", "LockPlugin"]
         })
 
-
-
-
-
-    }//Ocultrar seccion
-
-
+    }
+    //Ocultrar seccion
 
     //Logica de los botones de siguiente y atrás        
     {
@@ -235,7 +213,6 @@ $(document).ready(function () {
         function displayErrorMessage(inputElement, message) {
             // Remove any existing error message
             $(inputElement).next('.error-message-form').remove();
-
 
             // Create error message element if input is empty
             const errorMessage = $('<div>').addClass('error-message-form').text(message);
@@ -249,13 +226,16 @@ $(document).ready(function () {
         {
             //1.Verificar F Min y F Max
             $(NextButon1).click(function () {
-                let inputsToCheck = [InputFMin, InputFMax]; // Array de inputs que verificar
-                let allInputsValid = true; // Si todo OK pasa a la siguiente
+                let inputsToCheck = [InputFMin, InputFMax];
+                // Array de inputs que verificar
+                let allInputsValid = true;
+                // Si todo OK pasa a la siguiente
 
                 // Check each input
                 inputsToCheck.some(function (input) {
                     if (input.val().trim() === '') {
-                        displayErrorMessage(InputDivFMinMax, 'Debes seleccionar un rango de fechas');// Muestra mensaje de error en la funcion displayErrorMessage donde inputElement = input
+                        displayErrorMessage(InputDivFMinMax, 'Debes seleccionar un rango de fechas');
+                        // Muestra mensaje de error en la funcion displayErrorMessage donde inputElement = input
                         allInputsValid = false;
                     } else {
                         // If input is not empty, remove the error message
@@ -272,13 +252,16 @@ $(document).ready(function () {
 
             //2.Comprobar nombre, apellido1 y input-fecha-nacimiento
             $(NextButon2).click(function () {
-                let inputsToCheck = [InputNombre, InputApellido1, InputFNacimiento]; // Array de inputs que verificar
-                let allInputsValid = true; // Si todo OK pasa a la siguiente
+                let inputsToCheck = [InputNombre, InputApellido1, InputFNacimiento];
+                // Array de inputs que verificar
+                let allInputsValid = true;
+                // Si todo OK pasa a la siguiente
 
                 // Check each input
                 inputsToCheck.forEach(function (input) {
                     if (input.val().trim() === '') {
-                        displayErrorMessage(input, 'Este campo es obligatorio');// Muestra mensaje de error en la funcion displayErrorMessage donde inputElement = input
+                        displayErrorMessage(input, 'Este campo es obligatorio');
+                        // Muestra mensaje de error en la funcion displayErrorMessage donde inputElement = input
                         allInputsValid = false;
                     } else {
                         // If input is not empty, remove the error message
@@ -293,17 +276,21 @@ $(document).ready(function () {
                 }
             });
 
-
             //3.Comprobar numero de documento
             $(NextButon3).click(function () {
-                let inputsToCheck = [InputNumeroDocumento]; // Array de inputs que verificar
-                let allInputsValid = true; // Si todo OK pasa a la siguiente
+                let inputsToCheck = [InputNumeroDocumento];
+                // Array de inputs que verificar
+                let allInputsValid = true;
+                // Si todo OK pasa a la siguiente
 
                 // Check each input
                 inputsToCheck.forEach(function (input) {
                     var selected_document = $('.div-documentos-formulario').find('.boton-documento-selected').attr('id')
 
-                    var func_validate = function (text_input) { return true }; // PASAPORTE will be always True because we cant validate it
+                    var func_validate = function (text_input) {
+                        return true
+                    };
+                    // PASAPORTE will be always True because we cant validate it
 
                     if (selected_document === 'select-nie-form') {
                         func_validate = validateNIE
@@ -311,12 +298,13 @@ $(document).ready(function () {
                         func_validate = validateDNI
                     }
 
-
                     if (input.val().trim() === '') {
-                        displayErrorMessage(input, 'Este campo es obligatorio');// Muestra mensaje de error en la funcion displayErrorMessage donde inputElement = input
+                        displayErrorMessage(input, 'Este campo es obligatorio');
+                        // Muestra mensaje de error en la funcion displayErrorMessage donde inputElement = input
                         allInputsValid = false;
                     } else if (!func_validate(input.val())) {
-                        displayErrorMessage(input, 'Documento incorrecto');// Muestra mensaje de error en la funcion displayErrorMessage donde inputElement = input
+                        displayErrorMessage(input, 'Documento incorrecto');
+                        // Muestra mensaje de error en la funcion displayErrorMessage donde inputElement = input
                         allInputsValid = false;
 
                     } else {
@@ -327,7 +315,6 @@ $(document).ready(function () {
                         $(input).next('.error-message-form').remove();
                     }
                 });
-
 
                 // Si todo OK pasa a la siguiente
                 if (allInputsValid) {
@@ -344,14 +331,17 @@ $(document).ready(function () {
                 }
             });
             $(NextButon4).click(function () {
-                let inputsToCheck = [InputCorreo, InputCorreoVerf, InputTelef, InputTelefVerf]; // Array de inputs que verificar
-                let allInputsValid = true; // Si todo OK pasa a la siguiente
+                let inputsToCheck = [InputCorreo, InputCorreoVerf, InputTelef, InputTelefVerf];
+                // Array de inputs que verificar
+                let allInputsValid = true;
+                // Si todo OK pasa a la siguiente
 
                 // Check each input
                 inputsToCheck.forEach(function (input) {
                     if (input.val().trim() === '' || !input[0].checkValidity()) {
                         input[0].reportValidity();
-                        displayErrorMessage(input, 'Este campo es obligatorio');// Muestra mensaje de error en la funcion displayErrorMessage donde inputElement = input
+                        displayErrorMessage(input, 'Este campo es obligatorio');
+                        // Muestra mensaje de error en la funcion displayErrorMessage donde inputElement = input
                         allInputsValid = false;
                     } else {
                         // If input is not empty, remove the error message
@@ -380,13 +370,16 @@ $(document).ready(function () {
 
             //5.Comprobar nacionalidad. R Nacionalidad y caducidad tarjeta
             $(NextButon5).click(function () {
-                let inputsToCheck = [InputNacionalidad]; // Array de inputs que verificar
-                let allInputsValid = true; // Si todo OK pasa a la siguiente
+                let inputsToCheck = [InputNacionalidad];
+                // Array de inputs que verificar
+                let allInputsValid = true;
+                // Si todo OK pasa a la siguiente
 
                 // Check each input
                 inputsToCheck.forEach(function (input) {
                     if (input.val().trim() === '') {
-                        displayErrorMessage(input, 'Este campo es obligatorio');// Muestra mensaje de error en la funcion displayErrorMessage donde inputElement = input
+                        displayErrorMessage(input, 'Este campo es obligatorio');
+                        // Muestra mensaje de error en la funcion displayErrorMessage donde inputElement = input
                         allInputsValid = false;
                     } else {
                         // If input is not empty, remove the error message
@@ -401,7 +394,6 @@ $(document).ready(function () {
                 }
             });
         }
-
 
         //Botones hacia atrás. Ocultra y muestra secciones
         $(BackButon1).click(function () {
@@ -428,13 +420,8 @@ $(document).ready(function () {
             seccion5.show();
             seccion6.hide();
         });
-    }//Ocultrar seccion
-
-
-
-
-
-
+    }
+    //Ocultrar seccion
 
     //Funcionalidades varias 
     {
@@ -445,11 +432,6 @@ $(document).ready(function () {
             $('#checkout').prop('readonly', true);
             $('#input-fecha-nacimiento').prop('readonly', true);
         });
-
-
-
-
-
 
         //Bloquear zoom al darle doble click en los moviles
         const input = document.getElementById('myInput');
@@ -462,27 +444,22 @@ $(document).ready(function () {
             input.blur();
         });
 
-    }//Ocultrar seccion
-
-
-
-
-
+    }
+    //Ocultrar seccion
 
 });
-
-
 
 // https://donnierock.com/2011/11/05/validar-un-dni-con-javascript/
 function validateDNI(dni) {
     if (/^\d{8}[a-zA-Z]$/.test(dni)) {
         var n = dni.substr(0, 8);
         var c = dni.substr(8, 1);
-        return c.toUpperCase() === 'TRWAGMYFPDXBNJZSQVHLCKET'.charAt(n % 23); // DNI correcto ?
+        return c.toUpperCase() === 'TRWAGMYFPDXBNJZSQVHLCKET'.charAt(n % 23);
+        // DNI correcto ?
     }
-    return false; // DNI incorrecto
+    return false;
+    // DNI incorrecto
 }
-
 
 // https://trellat.es/funcion-para-validar-dni-o-nie-en-javascript/
 function validateNIE(nie) {
