@@ -9,7 +9,7 @@ $(document).ready(function () {
 
     var urlParams = new URLSearchParams(window.location.search);
     if (urlParams.has('INPUT_JSON')) {
-        INPUT_JSON = JSON.parse(atob(urlParams.get('INPUT_JSON')))
+        INPUT_JSON = JSON.parse(atob(urlParams.get('INPUT_JSON')))        
     } else {
         alert('Por favor, use https://sacacitas.es para comenzar este formulario')
     }
@@ -162,6 +162,19 @@ $(document).ready(function () {
             options_documento.removeClass('boton-documento-selected')
             $(this).addClass('boton-documento-selected');
         });
+
+        //Si es de una adminsitración o de otra, preguntar un tipo de documento u otro
+        const id_oficina = INPUT_JSON.idbuscadores[0].id_oficina;
+
+        if (id_oficina.startsWith("gva")) {
+            selectFormDocNIE.hide();
+        }   
+
+
+
+
+
+
 
         //SECTION: 5 - Nacionalidad, R Nacionalidad y caducidad tarjeta
         //Lista desplegable de paises
