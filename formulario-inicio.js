@@ -25,22 +25,6 @@ $(document).ready(function () {
     id_servicio: id_servicio
     };
 
-    // Make the POST request using $.ajax
-    $.ajax({
-    url: "https://n8n.sacacitas.es/webhook/0a372cab-4efe-4fa0-b471-545e93719107",
-    type: "POST",
-    data: data,
-    success: function(response) {
-        var responseData = response; // Assuming response is JSON
-        // Assuming responseData has variables variable3 and variable4
-        const categoria_cita = responseData.categoria_cita;
-        // Now you can use variable3 and variable4 as needed
-        console.log(categoria_cita);
-    },
-    error: function(jqXHR, textStatus, errorThrown) {
-        console.error("Error:", errorThrown);
-    }
-    });
 
 
     //Variables del fornulario
@@ -232,6 +216,31 @@ $(document).ready(function () {
             PaisesSelect.add(optionElement);
         }
         );
+
+        // Make the POST request using $.ajax
+        $.ajax({
+            url: "https://n8n.sacacitas.es/webhook/0a372cab-4efe-4fa0-b471-545e93719107",
+            type: "POST",
+            data: data,
+            success: function(response) {
+                var responseData = response; // Assuming response is JSON
+                // Assuming responseData has variables variable3 and variable4
+                const categoria_cita = responseData.categoria_cita;
+                // Now you can use variable3 and variable4 as needed
+                console.log(categoria_cita);
+
+                //Mostrar div R Nacionalidad si categoria es Jura
+                if (categoria_cita.includes("JURA")) {
+                    // Show the div element with ID 'clientes-jura-nacionalidad'
+                    $("#clientes-jura-nacionalidad").show();
+                }
+
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                console.error("Error:", errorThrown);
+            }
+            });
+        
 
         const PickerCadTarjeta = new easepick.create({
             element: "#input-caducidad-tarjeta",
