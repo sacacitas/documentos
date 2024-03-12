@@ -17,7 +17,7 @@ $(document).ready(function () {
 
     //Enviar petición a n8n
     const id_oficina = INPUT_JSON.idbuscadores[0].id_oficina;
-    const id_servicio = INPUT_JSON.idbuscadores[0].id_oficina;
+    const id_servicio = INPUT_JSON.idbuscadores[0].id_servicio;
 
     // Construct the data to be sent in the request body
     var data = {
