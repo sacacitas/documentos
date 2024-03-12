@@ -7,12 +7,41 @@ var INPUT_JSON = null
 
 $(document).ready(function () {
 
+    //Cargar datos del buscador
     var urlParams = new URLSearchParams(window.location.search);
     if (urlParams.has('INPUT_JSON')) {
         INPUT_JSON = JSON.parse(atob(urlParams.get('INPUT_JSON')))        
     } else {
         alert('Por favor, use https://sacacitas.es para comenzar este formulario')
     }
+
+    //Enviar petición a n8n
+    const id_oficina = INPUT_JSON.idbuscadores[0].id_oficina;
+    const id_servicio = INPUT_JSON.idbuscadores[0].id_oficina;
+
+    // Construct the data to be sent in the request body
+    var data = {
+    id_oficina: id_oficina,
+    id_servicio: id_servicio
+    };
+
+    // Make the POST request using $.ajax
+    $.ajax({
+    url: "https://n8n.sacacitas.es/webhook/0a372cab-4efe-4fa0-b471-545e93719107",
+    type: "POST",
+    data: data,
+    success: function(response) {
+        var responseData = response; // Assuming response is JSON
+        // Assuming responseData has variables variable3 and variable4
+        const categoria_cita = responseData.categoria_cita;
+        // Now you can use variable3 and variable4 as needed
+        console.log(categoria_cita);
+    },
+    error: function(jqXHR, textStatus, errorThrown) {
+        console.error("Error:", errorThrown);
+    }
+    });
+
 
     //Variables del fornulario
     {
@@ -164,8 +193,6 @@ $(document).ready(function () {
         });
 
         //Si es de una adminsitración o de otra, preguntar un tipo de documento u otro
-        const id_oficina = INPUT_JSON.idbuscadores[0].id_oficina;
-
         if (id_oficina.startsWith("gva")) {
             selectFormDocNIE.hide();
         }   
