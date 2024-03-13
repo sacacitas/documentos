@@ -30,6 +30,8 @@ $(document).ready(function () {
     //Variables del fornulario
     {
         //Crear variables cogiendo las secciones divs del formulario
+        var AsiloPrimeraBloque = $('#bloque-asilo-primera-vez-form');
+
         var seccion1 = $('#Secciones-Form-1');
         var seccion2 = $('#Secciones-Form-2');
         var seccion3 = $('#Secciones-Form-3');
@@ -65,11 +67,15 @@ $(document).ready(function () {
         var InputTelefVerf = $('#input-confirmar-telefono');
         var InputNacionalidad = $('#input-lista-paises');
 
+        //Divs del formulario
+        var DivJuraNacionalidad = $('#clientes-jura-nacionalidad');
+        var DivCaducidadTarjeta = $('#clientes-caducidad-tarjeta');
+
         //Fecha de ahora
         var DateNow = new Date();
 
         // Parte dinamica del formulario
-        $('#clientes-jura-nacionalidad').toggle(CONFIG_FORM.resolucion_nacionalidad || false)
+        DivJuraNacionalidad.toggle(CONFIG_FORM.resolucion_nacionalidad || false)
         $('#input-resolucion-nacionalidad').prop('required', CONFIG_FORM.resolucion_nacionalidad || false);
 
         $('#input-caducidad-tarjeta').toggle(CONFIG_FORM.caducidad_tarjeta || false)
@@ -85,6 +91,50 @@ $(document).ready(function () {
     seccion4.hide();
     seccion5.hide();
     seccion6.hide();
+
+
+    //Mostrar una sección u otra según la categoría de la cita
+    $.ajax({
+        url: "https://n8n.sacacitas.es/webhook/0a372cab-4efe-4fa0-b471-545e93719107",
+        type: "POST",
+        data: data,
+        success: function(response) {
+            var responseData = response; // Assuming response is JSON
+            // Assuming responseData has variables variable3 and variable4
+            const categoria_cita = responseData.categoria_cita;
+            // Now you can use variable3 and variable4 as needed
+            console.log(categoria_cita);
+
+            //Mostrar div R Nacionalidad si categoria es Jura
+            if (categoria_cita.includes("_JURA")) {
+                // Show the div element with ID 'clientes-jura-nacionalidad'
+                DivJuraNacionalidad.show();
+            }
+
+            //Renovación asilo, pedir tarjeta caducidad
+            if (categoria_cita.includes("_ASILO_RENOVACION")) {
+                // Show the div element with ID 'clientes-jura-nacionalidad'
+                DivCaducidadTarjeta.show();
+            }
+            
+            //Cita primera de asilo, bloquear
+            if (categoria_cita.includes("_ASILO_PRIMERA")) {
+                // Show the div element with ID 'clientes-jura-nacionalidad'
+                seccion1.hide();
+                AsiloPrimeraBloque.show();
+            }
+            
+
+
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            console.error("Error:", errorThrown);
+        }
+        });
+    
+
+
+
 
     //Funcionalidades de cada sección del formulario 
     {
@@ -216,31 +266,6 @@ $(document).ready(function () {
             PaisesSelect.add(optionElement);
         }
         );
-
-        // Make the POST request using $.ajax
-        $.ajax({
-            url: "https://n8n.sacacitas.es/webhook/0a372cab-4efe-4fa0-b471-545e93719107",
-            type: "POST",
-            data: data,
-            success: function(response) {
-                var responseData = response; // Assuming response is JSON
-                // Assuming responseData has variables variable3 and variable4
-                const categoria_cita = responseData.categoria_cita;
-                // Now you can use variable3 and variable4 as needed
-                console.log(categoria_cita);
-
-                //Mostrar div R Nacionalidad si categoria es Jura
-                if (categoria_cita.includes("JURA")) {
-                    // Show the div element with ID 'clientes-jura-nacionalidad'
-                    $("#clientes-jura-nacionalidad").show();
-                }
-
-            },
-            error: function(jqXHR, textStatus, errorThrown) {
-                console.error("Error:", errorThrown);
-            }
-            });
-        
 
         const PickerCadTarjeta = new easepick.create({
             element: "#input-caducidad-tarjeta",
