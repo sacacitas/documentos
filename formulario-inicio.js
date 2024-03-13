@@ -1,546 +1,760 @@
-var CONFIG_FORM = {
-    'resolucion_nacionalidad': false,
-    'caducidad_tarjeta': false
-}
+// ['id_oficina','id_servicio'] = entry
+var SERVICIOS = {};
 
-var INPUT_JSON = null
+var CATEGORIAS = {};
+var PRECIOS = {}
+var MAX_CHECKOUT_ITEMS = 1; //Items máximos que se pueden añadir
+
+var INPUT_JSON = {}
 
 $(document).ready(function () {
 
-    //Cargar datos del buscador
-    var urlParams = new URLSearchParams(window.location.search);
-    if (urlParams.has('INPUT_JSON')) {
-        INPUT_JSON = JSON.parse(atob(urlParams.get('INPUT_JSON')))        
-    } else {
-        alert('Por favor, use https://sacacitas.es para comenzar este formulario')
+    $.getJSON('https://documentos.sacacitas.es/categorias_servicios.json', (data) => CATEGORIAS = data);
+    $.getJSON('https://documentos.sacacitas.es/precios_citas.json', (data) => PRECIOS = data);
+
+
+
+    // Variables de los IDs selects de la landing
+    var select_administracion = $('#select-buscador-administracion');
+    var select_provincia = $('#select-buscador-provincia');
+    var select_oficina = $('#select-buscador-oficina');
+    var select_servicio = $('#select-buscador-servicio');
+    var numero_citas_contador = $('numero-citas-seleccionadas-buscador');
+
+
+    // Variables IDs de info secundaria
+    var string_precio_buscador = $('#precio-total-buscador-landing');
+
+    // Textos predeterminados en los selects
+    // Crear texto predeterminado en ADM
+    var default_select_administracion = $('<option>', {
+        value: '',
+        text: 'Selecciona una Administración',
+        disabled: true,
+        selected: true
+    });
+    select_administracion.append(default_select_administracion);
+
+    // Crear texto predeterminado en provincias
+    var default_select_provincias = $('<option>', {
+        value: '',
+        text: '¿Para qué provincia?',
+        disabled: true,
+        selected: true
+    });
+    select_provincia.append(default_select_provincias);
+
+    // Crear texto predeterminado en oficinas
+    var default_select_oficina = $('<option>', {
+        value: '',
+        text: 'Escoge una oficina',
+        disabled: true,
+        selected: true
+    });
+    select_oficina.append(default_select_oficina);
+
+    // Crear texto predeterminado en citas previas
+    var default_select_servicio = $('<option>', {
+        value: '',
+        text: 'Escoge tus citas previas',
+        disabled: true,
+        selected: true
+    });
+    select_servicio.append(default_select_servicio);
+
+
+
+
+
+    // Tipo de buscador (si buscar con oficina o toda la provincia) -> Únicamente estilos y funcionalidades.
+    // (La parte de crear valores está en la segunda parte)
+
+    // Preselect del radio con oficina
+    $('#radio-buscar-con-oficina').prop('checked', true);
+    $('#box-buscar-con-oficina').addClass('selected-radio-buscador');
+
+    // Variables de los radios
+    var radio_buscador_con_oficina = $('#radio-buscar-con-oficina');
+    var radio_buscador_por_provincia = $('#radio-buscar-en-provincia');
+
+
+    // Disable Multiofi until its implemented in backend
+    ///////////
+    radio_buscador_por_provincia.prop('disabled', true);
+    $('#box-buscar-en-provincia').hide()
+    ///////////
+
+    // Que haga acciones CSS al seleccionar uno radio u otro
+    // Buscar con Oficina
+    function RadioOficinaSelected() {
+        if (radio_buscador_con_oficina.prop('checked')) {
+            // Apply CSS conditions for 'Con Oficina' selected
+            $('#box-buscar-con-oficina').addClass('selected-radio-buscador');
+            $('#box-buscar-en-provincia').removeClass('selected-radio-buscador');
+            $('#div-select-oficinas-buscador').css('display', 'flex');
+        }
+    }
+    // Buscar por toda la provincia
+    function RadioProvinciaSelected() {
+        if (radio_buscador_por_provincia.prop('checked')) {
+            // Apply CSS conditions for 'Con Oficina' selected
+            $('#box-buscar-en-provincia').addClass('selected-radio-buscador');
+            $('#box-buscar-con-oficina').removeClass('selected-radio-buscador');
+            $('#div-select-oficinas-buscador').css('display', 'none');
+        }
     }
 
-    //Enviar petición a n8n
-    const id_oficina = INPUT_JSON.idbuscadores[0].id_oficina;
-    const id_servicio = INPUT_JSON.idbuscadores[0].id_servicio;
+    // Event listeners de los radios
+    radio_buscador_con_oficina.on('change', RadioOficinaSelected);
+    radio_buscador_por_provincia.on('change', RadioProvinciaSelected);
 
-    // Construct the data to be sent in the request body
-    var data = {
-    id_oficina: id_oficina,
-    id_servicio: id_servicio
+
+
+    //Tratamiento GCLID en la URL   
+    {
+    //Obtener todos los parametros de la URL
+    function getUrlParameter(name) {
+        name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+        var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+        var results = regex.exec(location.search);
+        return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+    }
+
+    //Obtener valor de gclid de la UrL y crear variable con GCLID
+    var leadIdFromUrl = getUrlParameter('gclid');
+
+    //Si existe gclid en la URL crear cookie
+    if (leadIdFromUrl !== '') {
+        document.cookie = "lead_id_cookie=" + leadIdFromUrl + "; path=/";
+        console.log("Lead ID cookie created with value:", leadIdFromUrl);
+    }
+
+    //Obtener valor de la cookie
+    function getLeadIdCookie() {
+        var name = "lead_id_cookie=";
+        var decodedCookie = decodeURIComponent(document.cookie);
+        var cookieArray = decodedCookie.split(';');
+        for(var i = 0; i < cookieArray.length; i++) {
+            var cookie = cookieArray[i].trim();
+            if (cookie.indexOf(name) === 0) {
+                return cookie.substring(name.length, cookie.length);
+            }
+        }
+        return "";
+    }
+
+    //Obtener valor cookie Lead ID y meterlo en una variable
+    var leadIdFromCookie = getLeadIdCookie();
+
+    //Poner GClid en el input si está en la URL
+    var gclidValue = getUrlParameter('gclid');
+    document.getElementById('GCLID-form').value = gclidValue;
+
+    //Si gclid está vacio en la URL, poner el valor de la cookie si existe la cookie
+    if (leadIdFromUrl == '' && leadIdFromCookie !=='' ) {
+        document.getElementById('GCLID-form').value = leadIdFromCookie;
+    }
+    }//Ocultar seccion
+
+
+
+
+    // 1. PRIMERA PARTE BUSCADOR -> Lista estática de administración y provincias
+    // Crear valores en el select de la Administración
+    var values_select_administracion = [
+        { value: 'EX1', text: 'Extranjería' },
+        { value: 'RC1', text: 'Registro Civil' },
+        { value: 'DGT1', text: 'DGT' }
+    ];
+
+    // Populate select administración
+    values_select_administracion.forEach(option => {
+        var optionElement_administracion = $('<option></option>').prop('value', option.value).text(option.text);
+        select_administracion.append(optionElement_administracion);
+    });
+
+    // Crear valores en el select de la Provincia
+    var lista_provincias_espana = {
+        "Alava": "Alava",
+        "Albacete": "Albacete",
+        "Alicante": "Alicante",
+        "Almería": "Almería",
+        "Asturias": "Asturias",
+        "Avila": "Avila",
+        "Badajoz": "Badajoz",
+        "Barcelona": "Barcelona",
+        "Burgos": "Burgos",
+        "Cáceres": "Cáceres",
+        "Cádiz": "Cádiz",
+        "Cantabria": "Cantabria",
+        "Castellón": "Castellón",
+        "Ceuta": "Ceuta",
+        "Ciudad Real": "CiudadReal",
+        "Córdoba": "Córdoba",
+        "La Coruña": "LaCoruña",
+        "Cuenca": "Cuenca",
+        "Gerona": "Gerona",
+        "Granada": "Granada",
+        "Guadalajara": "Guadalajara",
+        "Guipúzcoa": "Guipúzcoa",
+        "Huelva": "Huelva",
+        "Huesca": "Huesca",
+        "Islas Baleares": "IslasBaleares",
+        "Jaén": "Jaén",
+        "León": "León",
+        "Lérida": "Lérida",
+        "Lugo": "Lugo",
+        "Madrid": "Madrid",
+        "Málaga": "Málaga",
+        "Melilla": "Melilla",
+        "Murcia": "Murcia",
+        "Navarra": "Navarra",
+        "Orense": "Orense",
+        "Palencia": "Palencia",
+        "Las Palmas": "LasPalmas",
+        "Pontevedra": "Pontevedra",
+        "La Rioja": "LaRioja",
+        "Salamanca": "Salamanca",
+        "Segovia": "Segovia",
+        "Sevilla": "Sevilla",
+        "Soria": "Soria",
+        "Tarragona": "Tarragona",
+        "Santa Cruz De Tenerife": "SantaCruzDeTenerife",
+        "Teruel": "Teruel",
+        "Toledo": "Toledo",
+        "Valencia": "Valencia",
+        "Valladolid": "Valladolid",
+        "Vizcaya": "Vizcaya",
+        "Zamora": "Zamora",
+        "Zaragoza": "Zaragoza"
     };
 
+    // Populate select provincias con la lista de provincias
+    $.each(lista_provincias_espana, function (text_lista_provincias, backend_provincia_id) {
+        var optionElement_provincia = $('<option></option>').prop('value', backend_provincia_id).text(text_lista_provincias);
+        select_provincia.append(optionElement_provincia);
+    });
 
 
-    //Variables del fornulario
-    {
-        //Crear variables cogiendo las secciones divs del formulario
-        var seccion1 = $('#Secciones-Form-1');
-        var seccion2 = $('#Secciones-Form-2');
-        var seccion3 = $('#Secciones-Form-3');
-        var seccion4 = $('#Secciones-Form-4');
-        var seccion5 = $('#Secciones-Form-5');
-        var seccion6 = $('#Secciones-Form-6');
 
-        //Crear variables botones de siguiente
-        var NextButon1 = $('#Next-Buton-1');
-        var NextButon2 = $('#Next-Buton-2');
-        var NextButon3 = $('#Next-Buton-3');
-        var NextButon4 = $('#Next-Buton-4');
-        var NextButon5 = $('#Next-Buton-5');
 
-        //Crear variables botones hacia atrás
-        var BackButon1 = $('#Back-Buton-1');
-        var BackButon2 = $('#Back-Buton-2');
-        var BackButon3 = $('#Back-Buton-3');
-        var BackButon4 = $('#Back-Buton-4');
-        var BackButon5 = $('#Back-Buton-5');
+    // 2. SEGUNDA PARTE BUSCADOR -> Lista dinámica de oficinas y servicios desde el backend
+    // Importar JSON externos de lista oficina_servicios y sus precios por categorías
+    const lista_oficina_servicios_json = 'https://documentos.sacacitas.es/categorias_servicios.json';
+    const precios_citas_categorias_json = 'https://documentos.sacacitas.es/precios_citas.json';
 
-        //Variables de los inputs del formulario
-        var InputDivFMinMax = $('#div-block-f-min-max');
-        var InputFMin = $('#checkin');
-        var InputFMax = $('#checkout');
-        var InputNombre = $('#input-nombre');
-        var InputApellido1 = $('#input-apellido1');
-        var InputFNacimiento = $('#input-fecha-nacimiento');
-        var InputNumeroDocumento = $('#input-documento');
-        var InputCorreo = $('#input-correo');
-        var InputCorreoVerf = $('#input-confirmar-correo');
-        var InputTelef = $('#input-telefono');
-        var InputTelefVerf = $('#input-confirmar-telefono');
-        var InputNacionalidad = $('#input-lista-paises');
+    // Variables backend
+    var apiBaseUrl = 'https://panelaws.sacacitas.es/public/oficina/';
 
-        //Fecha de ahora
-        var DateNow = new Date();
 
-        // Parte dinamica del formulario
-        $('#clientes-jura-nacionalidad').toggle(CONFIG_FORM.resolucion_nacionalidad || false)
-        $('#input-resolucion-nacionalidad').prop('required', CONFIG_FORM.resolucion_nacionalidad || false);
+    //Contador número de citas seleccionadas
+    var numero_citas_contador = 0;
 
-        $('#input-caducidad-tarjeta').toggle(CONFIG_FORM.caducidad_tarjeta || false)
-        $('#input-caducidad-tarjeta').prop('required', CONFIG_FORM.caducidad_tarjeta || false);
 
-    }
-    //Ocultrar seccion
+    //Crear valores y populate select oficina
+    // Hacer API call al backend para descargar el JSON de oficinas y servicios según la provincia seleccionada y filtrar por administración
+    function fetchJsonAndPopulateOficina() {
+        var selectedAdministracion = select_administracion.val();
+        var selectedProvincia = select_provincia.val();
+        console.log(selectedAdministracion);
+        console.log(selectedProvincia);
 
-    //Ocultar secciones divs (temporal)
-    seccion1.show();
-    seccion2.hide();
-    seccion3.hide();
-    seccion4.hide();
-    seccion5.hide();
-    seccion6.hide();
+        // Comprobar si Adm, provincia y bsucador por oficina está seleccionado
+        if (selectedAdministracion && selectedProvincia) {
+            // Show loading message in select_oficina
+            select_oficina.html('').append($('<option>', {
+                value: '',
+                text: 'Cargando...',
+                disabled: true,
+                selected: true
+            }));
 
-    //Funcionalidades de cada sección del formulario 
-    {
-        //SECTION: 1 - Escoger fechas máx min
-        //Easepicker fechas max min
-        const PickerRangoBusqueda = new easepick.create({
-            element: "#checkin",
-            css: ["https://cdn.jsdelivr.net/npm/@easepick/bundle@1.2.1/dist/index.css", 'https://documentos.sacacitas.es/formulario-inicio.css',],
-            zIndex: 500,
-            lang: "es-ES",
-            format: "DD MMMM YYYY",
-            grid: 2,
-            calendars: 2,
-            readonly: false,
-            inline: false,
-            header: "",
-            AmpPlugin: {
-                dropdown: {
-                    months: true,
-                    minYear: 2024,
-                    maxYear: 2026
+            console.log(selectedAdministracion);
+            console.log(selectedProvincia);
+            // Build the API URL with the selected provincia
+            var apiUrl = apiBaseUrl + selectedProvincia;
+
+            // API call para descargar el JSON de oficinas y servicios del backend
+            $.ajax({
+                url: apiUrl,
+                method: 'GET',
+                dataType: 'json',
+                success: function (responseData) {
+
+                    // Set SERVICIOS with the data we already got from outside
+                    responseData
+                        .forEach(oficina => SERVICIOS[oficina.id_oficina] = oficina);
+
+                    data = responseData; // Set the data variable with the response
+                    // Populate oficina select con los textos importados del json
+                    select_oficina.html('').append(default_select_oficina);
+
+                    // Mostrar en el select oficinas dependiendo de la administración seleccionada
+                    var filteredData = data.filter(item => {
+                        if (selectedAdministracion === 'EX1') {
+                            // Show names where id_oficina starts with "gobext"
+                            return item.id_oficina.toLowerCase().includes('gobext');
+                        } else if (selectedAdministracion === 'DGT1') {
+                            // All for DGT
+                            return item.id_oficina.toLowerCase().includes('dgt');
+                        } else if (selectedAdministracion === 'RC1') {
+                            // Show names where id_oficina does not start with "gobext"
+                            return !(item.id_oficina.toLowerCase().includes('gobext') || item.id_oficina.toLowerCase().includes('dgt'));
+                        }
+                        return false;
+                    });
+
+                    // Check if there are no oficinas
+                    if (filteredData.length === 0) {
+                        // Display a default message in select_oficina
+                        select_oficina.html('').append($('<option>', {
+                            value: '',
+                            text: 'No hay oficinas disponibles',
+                            disabled: true,
+                            selected: true
+                        }));
+                    } else {
+                        // Populate oficina select options with external data
+                        $.each(filteredData, function (index, item) {
+                            var optionElement = $('<option></option>')
+                                .prop('value', item.nombre)
+                                .attr('id_oficina', item.id_oficina) // https://stackoverflow.com/a/5995650
+                                .text(item.nombre);
+                            select_oficina.append(optionElement);
+                        });
+
+                        // Set default value and trigger change event
+                        select_oficina.val(default_select_oficina.val()).trigger('change');
+                    }
                 },
-                resetButton: false,
-                darkMode: false
-            },
-            RangePlugin: {
-                elementEnd: "#checkout",
-                repick: false,
-                delimiter: "-",
-                locale: {
-                    zero: "cero",
-                    one: "días",
-                    two: "dos",
-                    few: "unos cuantos",
-                    many: "muchos",
-                    other: "días"
+                error: function (error) {
+                    console.error('Error fetching data:', error);
                 }
-            },
-            LockPlugin: {
-                minDate: (DateNow),
-                selectForward: true,
-                minDays: 3
-            },
-            plugins: ["AmpPlugin", "RangePlugin", "LockPlugin"]
-        })
+            });
+        } else {
+            // Clear data and reset options for 'js-oficina' and 'js-cita-previa' selects
+            data = null;
 
-        //Poner read only al input de fecha max para que no salga el teclado en el movil
-        function makeReadonly() {
-            document.getElementById('readonly-field').setAttribute("readonly", "");
         }
-
-        //SECTION: 2 - Datos cliente
-        //Easepicker fecha nacimiento
-        const PickerNacimiento = new easepick.create({
-            element: "#input-fecha-nacimiento",
-            css: ["https://cdn.jsdelivr.net/npm/@easepick/bundle@1.2.1/dist/index.css", 'https://documentos.sacacitas.es/formulario-inicio.css',],
-            zIndex: 500,
-            lang: "es-ES",
-            format: "DD MMMM YYYY",
-            readonly: false,
-            AmpPlugin: {
-                dropdown: {
-                    months: true,
-                    years: true,
-                    minYear: 1930,
-                    maxYear: 2028
-                },
-                resetButton: false,
-                darkMode: false
-            },
-            LockPlugin: {
-                maxDate: (DateNow)
-            },
-            plugins: ["AmpPlugin", "LockPlugin"]
-        })
-
-        //SECTION: 3 - Documento identidad
-        //Seleccionar botones de selección de tipo de documento. DNI, NIE, Pasaporte
-        var selectFormDocPasaporte = $('#select-pasaporte-form');
-        var selectFormDocNIE = $('#select-nie-form');
-        var selectFormDocDNI = $('#select-dni-form');
-
-        selectFormDocPasaporte.addClass('boton-documento-selected');
-
-        var options_documento = $('.div-documentos-formulario').children('a')
-
-        options_documento.click(function () {
-            options_documento.removeClass('boton-documento-selected')
-            $(this).addClass('boton-documento-selected');
-        });
-
-        //Si es de una adminsitración o de otra, preguntar un tipo de documento u otro
-        if (id_oficina.startsWith("gva")) {
-            selectFormDocNIE.hide();
-        }   
+    } // Missing closing parenthesis
 
 
+    //Crear valores y populate select servicio
+    function updateCitaPrevia() {
+        var selectedOficina = select_oficina.val();
+        var selectedAdministracion = select_administracion.val();
+        var selectedProvincia = select_provincia.val();
 
+        // Clear existing options in select_servicio
+        select_servicio.empty().append(default_select_servicio);
 
+        // Check if oficina is selected
+        if (selectedOficina && selectedAdministracion && selectedProvincia && radio_buscador_con_oficina.prop('checked')) {
+            // Find the selected oficina in the external data
+            var selectedOficinaData = data.find(item => item.nombre === selectedOficina);
 
+            // Check if data is found and servicios is an array 
+            if (selectedOficinaData && Array.isArray(selectedOficinaData.servicios)) {
+                // Add a default option if needed
+                // var defaultOption = $('<option>', {
+                //     value: '',
+                //     text: 'Select a service',
+                //     disabled: true,
+                //     selected: true
+                // });
+                // select_servicio.append(defaultOption);
 
+                // Populate citaPrevia select options with services from selected oficina
+                selectedOficinaData.servicios.forEach(servicio => {
+                    // Check if servicio has the required properties
+                    if (servicio && servicio.id_servicio && servicio.nombre) {
+                        var optionElement = $('<option></option>')
+                            .prop('value', servicio.nombre)
+                            .attr('id_servicio', servicio.id_servicio)
+                            .text(servicio.nombre);
+                        select_servicio.append(optionElement);
+                    }
+                });
 
-        //SECTION: 5 - Nacionalidad, R Nacionalidad y caducidad tarjeta
-        //Lista desplegable de paises
-        var PaisesSelect = document.getElementById('input-lista-paises');
-        // Replace with the actual ID of your select element
-
-        // Añadir un elemento por defecto
-        var defaultOption = document.createElement('option');
-        defaultOption.value = '';
-        // Set the value to an empty string or a value that is not present in the array
-        defaultOption.text = 'Indica tu nacionalidad';
-        defaultOption.disabled = true;
-        // Make this option disabled
-        defaultOption.selected = true;
-        // Make this option selected by default
-        PaisesSelect.add(defaultOption);
-
-        // Crear lista en el select
-        // list_paises = window.iso3166.iso31661.sort((a,b)=>a.name.localeCompare(b.name)).
-        list_paises = ["AFGANISTAN", "ALBANIA", "ALEMANIA", "ANDORRA", "ANGOLA", "ANGUILLA", "ANTIGUA Y BARBUDA", "ANTILLAS NL.", "APATRIDA", "ARABIA SAUDI", "ARGELIA", "ARGENTINA", "ARMENIA", "ARUBA", "AUSTRALIA", "AUSTRIA", "AZERBAYAN", "BAHAMAS", "BAHREIN", "BANGLADESH", "BARBADOS", "BELGICA", "BELICE", "BENIN", "BHUTAN", "BIELORRUSIA O BELARUS", "BOLIVIA", "BOSNIA-HERZEGOVINA", "BOTSWANA", "BRASIL", "BRUNEI DARUSSALAM", "BULGARIA", "BURKINA FASO", "BURUNDI", "CABO VERDE", "CAMBOYA", "CAMERUN", "CANADA", "CENTROAFRICA REPUBLICA", "CHAD", "CHILE", "CHINA", "CHIPRE", "COLOMBIA", "COMORES", "CONGO BRAZZAVILLE", "COREA, REP. POP. DEMOC.", "COREA, REPUBLICA", "COSTA DE MARFIL", "COSTA RICA", "CROACIA", "CUBA", "DINAMARCA", "DJIBOUTI", "DOMINICA", "DOMINICANA REPUBLICA", "ECUADOR", "EEUU", "EGIPTO", "EL SALVADOR", "EL VATICANO", "EMIRATOS ARABES UNIDOS", "ERITREA", "ESLOVAQUIA", "ESLOVENIA", "ESPAÑA", "ESTONIA", "ETIOPIA", "FIDJI", "FILIPINAS", "FINLANDIA", "FRANCIA", "GABON", "GAMBIA", "GEORGIA", "GHANA", "GRANADA REPUBLICA", "GRECIA", "GUATEMALA", "GUAYANA", "GUINEA ECUATORIAL", "GUINEA REPUBLICA", "GUINEA-BISSAU", "HAITI", "HOLANDA", "HONDURAS", "HUNGRIA", "INDIA", "INDONESIA", "IRAK", "IRAN", "IRLANDA", "ISLANDIA", "ISLAS MARSCHALL", "ISRAEL", "ITALIA", "JAMAICA", "JAPON", "JORDANIA", "KAZAJSTAN", "KENIA", "KIRGUISTAN", "KIRIBATI", "KUWAIT", "LAOS", "LAS MALDIVAS", "LESOTHO", "LETONIA", "LIBANO", "LIBERIA", "LIBIA", "LIECHTENSTEIN", "LITUANIA", "LUXEMBURGO", "MACAO", "MACEDONIA", "MADAGASCAR", "MALASIA", "MALASIA - GRAN BRETAÑA", "MALAWI", "MALI", "MALTA", "MARRUECOS", "MAURICIO", "MAURITANIA", "MEJICO", "MICRONESIA", "MOLDAVIA", "MONACO", "MONGOLIA", "MONTENEGRO", "MOZAMBIQUE", "MYANMAR", "NAMIBIA", "NAURU", "NEPAL", "NICARAGUA", "NIGER", "NIGERIA", "NORUEGA", "NUEVA ZELANDA", "OMAN", "PAKISTAN", "PALESTINA EONU", "PANAMA", "PAPUA NUEVA GUINEA", "PARAGUAY", "PERU", "POLONIA", "PORTUGAL", "PUERTO RICO", "QATAR", "REINO UNIDO", "REP. DEMOCRATICA DEL CONGO (EX-ZAIRE)", "REPUBLICA CHECA", "REUNION-COMO", "RUANDA", "RUMANIA", "RUSIA", "SALOMON", "SAMOA OCCIDENTAL", "SAN CRISTOBAL Y NEVIS", "SAN MARINO", "SAN VICENTE", "SANTA LUCIA", "SANTO TOME Y PRINCIPE", "SEICHELLES", "SENEGAL", "SENEGAMBIA", "SERBIA", "SIERRA LEONA", "SINGAPUR", "SIRIA", "SOMALIA", "SRI LANKA", "SUDAFRICA", "SUDAN", "SUECIA", "SUIZA", "SURINAM", "SWAZILANDIA", "TADJIKISTAN", "TAIWAN", "TANZANIA", "THAILANDIA", "TIMOR ORIENTAL", "TOGO", "TONGA", "TRINIDAD Y TOBAGO", "TUNEZ", "TURKMENIA", "TURQUIA", "TUVALU", "UCRANIA", "UGANDA", "URUGUAY", "UZBEKISTAN", "VANUATU", "VENEZUELA", "VIETNAM", "YEMEN", "ZAMBIA", "ZIMBABWE",]
-        list_paises.sort((a, b) => a.localeCompare(b)).forEach(elem => {
-            var optionElement = document.createElement('option');
-            //optionElement.value = elem.alpha3;
-            //optionElement.text = elem.name;
-
-            optionElement.value = elem;
-            optionElement.text = elem;
-            PaisesSelect.add(optionElement);
-        }
-        );
-
-        // Make the POST request using $.ajax
-        $.ajax({
-            url: "https://n8n.sacacitas.es/webhook/0a372cab-4efe-4fa0-b471-545e93719107",
-            type: "POST",
-            data: data,
-            success: function(response) {
-                var responseData = response; // Assuming response is JSON
-                // Assuming responseData has variables variable3 and variable4
-                const categoria_cita = responseData.categoria_cita;
-                // Now you can use variable3 and variable4 as needed
-                console.log(categoria_cita);
-
-                //Mostrar div R Nacionalidad si categoria es Jura
-                if (categoria_cita.includes("JURA")) {
-                    // Show the div element with ID 'clientes-jura-nacionalidad'
-                    $("#clientes-jura-nacionalidad").show();
-                }
-
-            },
-            error: function(jqXHR, textStatus, errorThrown) {
-                console.error("Error:", errorThrown);
+                // Trigger change event to refresh the select (if needed)
+                select_servicio.trigger('change');
             }
-            });
-        
+        } else if (selectedAdministracion && selectedProvincia && radio_buscador_por_provincia.prop('checked')) {
+            console.log('Entered the second IF statement.');
 
-        const PickerCadTarjeta = new easepick.create({
-            element: "#input-caducidad-tarjeta",
-            css: ["https://cdn.jsdelivr.net/npm/@easepick/bundle@1.2.1/dist/index.css", 'https://documentos.sacacitas.es/formulario-inicio.css',],
-            zIndex: 500,
-            lang: "es-ES",
-            format: "DD MMMM YYYY",
-            readonly: false,
-            AmpPlugin: {
-                dropdown: {
-                    months: true,
-                    years: true,
-                    minYear: 2000,
-                    maxYear: 2050
-                },
-                resetButton: false,
-                darkMode: false
-            },
-            plugins: ["AmpPlugin", "LockPlugin"]
+            // Assuming 'data' is your array of oficinas and 'selectedAdministracion' is your selected administration code
+
+            // Initialize the array to store all servicios
+            var allServicios = [];
+
+            // Check if data is valid and is an array
+            if (data && Array.isArray(data)) {
+                data.forEach(oficina => {
+                    // Check if 'oficina' and 'oficina.servicios' are valid
+                    if (oficina && oficina.servicios && Array.isArray(oficina.servicios)) {
+                        // Check if the id_oficina includes the text of the selected administration
+                        const idOficinaLowerCase = oficina.id_oficina.toLowerCase();
+
+                        if (
+                            (selectedAdministracion === 'EX1' && idOficinaLowerCase.includes('gobext')) ||
+                            (selectedAdministracion === 'RC1' && !idOficinaLowerCase.includes('gobext'))
+                        ) {
+                            // Add all servicios for this oficina to the array
+                            allServicios.push(...oficina.servicios);
+                        }
+                    }
+                });
+            } else {
+                console.log('Invalid data structure.');
+            }
+
+            // 'allServicios' now contains the array of servicios based on the selected administration
+            console.log('All Servicios:', allServicios);
+
+            var filteredServiciosData = allServicios;
+
+            // Check if there are no servicios
+            if (filteredServiciosData.length === 0) {
+                console.log('No servicios available.');
+                // Display a default message in select_servicio
+                select_servicio.html('').append($('<option>', {
+                    value: '',
+                    text: 'No hay servicios disponibles',
+                    disabled: true,
+                    selected: true
+                }));
+            } else {
+                // Variable to keep track of the total count of duplicates
+                let totalDuplicateCount = 0;
+
+                // Count occurrences of each servicio
+                // https://stackoverflow.com/a/19395302
+                const servicioCounts = {};
+                filteredServiciosData.forEach(servicio => {
+                    if (servicio && servicio.nombre) {
+                        servicioCounts[servicio.nombre] = (servicioCounts[servicio.nombre] || 0) + 1;
+                    }
+                });
+
+                Object.entries(servicioCounts)
+                    .sort((a, b) => a[0].localeCompare(b[0])) // Reorder by text attribute
+                    .forEach(([text_servicio, amount_repetitions]) => {
+                        select_servicio.append(
+                            $('<option></option>').prop('value', text_servicio).text(`${text_servicio} (${amount_repetitions})`)
+                        );
+                    });
+
+
+            }
+
+
+            // Trigger change event to refresh the select (if needed)
+            select_servicio.trigger('change');
+
+        } else {
+            console.log('One of the conditions is not met.');
+        }
+
+
+    }
+
+
+    //Cuando se activen uno de los dos triggers, se cambiará el texto con el valor
+    function updateNumeroCitasCounter() {
+        $('#numero-citas-seleccionadas-buscador').text(numero_citas_contador);
+    }
+
+
+
+    //3.Sección de citas previas seleccionadas bloque derecho
+    var checkoutContainer = $('#bloque-items-citas');
+
+    function add_elemtnt(id_oficina_elem, id_servicio_elem, frontend_administracion) {
+        // if it exist in the final list, dont continue
+        if (checkoutContainer.children(`.checkout-item[id_oficina="${id_oficina_elem}"][id_servicio="${id_servicio_elem}"]`).length) {
+            return
+        }
+
+        if (checkoutContainer.children('.checkout-item').length >= MAX_CHECKOUT_ITEMS) {
+            return
+        }
+
+
+        // validate exist oficina id
+        if (!id_oficina_elem in SERVICIOS) {
+            throw new Error(`Id oficina ${id_oficina_elem} not exists in SERVICIOS`);
+        }
+
+        obj = SERVICIOS[id_oficina_elem]
+
+        svc_obj = obj.servicios.find((e) => e.id_servicio == id_servicio_elem);
+
+        // validate exists servicio id
+        if (svc_obj === undefined) {
+            throw new Error(`Id servicio ${id_servicio_elem} not exists in SERVICIOS for oficina ${id_oficina_elem}`);
+        }
+
+
+        var checkoutItem = $(`<div class="checkout-item" id_oficina=${id_oficina_elem} id_servicio=${id_servicio_elem} frontend_administracion=${frontend_administracion}>` +
+            '<div class="column wide-column">' +
+            '   <span class="item-text">' + obj.provincia + ' | ' + obj.nombre + '</span>' +
+            '   <span class="item-text text-span-5">' + svc_obj.nombre + '</span>' +
+            '</div>' +
+            '<div class="column narrow-column">' +
+            '   <button class="delete-item"><img src="https://uploads-ssl.webflow.com/652f00909568ce58c099d55f/652f00919568ce58c099d689_Exit.svg" alt="Delete" style="width: 20px; height: 20px; margin-left: auto;"></button>' +
+            '</div>' +
+            '</div>');
+
+        // FIXME: CSS should be static based on class, not dynamically inyected!
+
+        //Box de la cita seleccionada
+        checkoutItem.css({
+            //'padding': '5px',
+            'border': '1px solid #99a4af',
+            'border-radius': '5px',
+            'background-color': '#fff',
+            'padding': '10px 0px 10px 0px',
+            'margin': '5px 0px 5px 0px',
+            'display': 'flex',
+            //'justify-content': 'space-between',
+            'align-items': 'center',
+            'box-shadow': '0px 3px 5px 0px rgba(0, 0, 0, .2)'
+        });
+
+        //Items dentro del box de la cita seleccionada
+        checkoutItem.find('.item-text').css({
+            'font-size': '16px',
+            'color': '#333'
+        });
+
+        //Columna izquierda del grid de la cita seleccionada
+        checkoutItem.find('.wide-column').css({
+            'flex': '85%', // Adjust the percentage as needed
+            'padding': '0px 5px 0px 5px'
+        });
+
+        //Columna derecha del grid de la cita seleccionada
+        checkoutItem.find('.narrow-column').css({
+            'flex': '15%',
+            'margin': '0px 5px 0px 5px',
+            'padding': '0'
+        });
+
+
+        //Botón de borrar cita seleccionada
+        checkoutItem.find('.delete-item').css({
+            'background-color': '#fff',
+            'border': 'none',
+            'cursor': 'pointer'
+        });
+
+        // Función para borrar cita seleccionada
+        var deleteButton = checkoutItem.find('.delete-item');
+        deleteButton.on('click', function () {
+            // Remove the item when the delete button is clicked
+            checkoutItem.remove();
+
+            // If the counter is greater than 0, decrement it
+            numero_citas_contador = checkoutContainer.children('.checkout-item').length;
+
+            // Update and display the counter
+            updateNumeroCitasCounter();
+
+            // Enable select_servicio if the maximum number of items is not reached
+            if (checkoutContainer.children('.checkout-item').length < MAX_CHECKOUT_ITEMS) {
+                select_servicio.prop('disabled', false);
+            }
+
+            updatePrice();
+        });
+
+        // Append the checkout item to the checkout container
+        checkoutContainer.append(checkoutItem);
+
+        updatePrice();
+
+        // Check if the maximum number of items is reached and disable the select if needed
+        if (checkoutContainer.children('.checkout-item').length >= MAX_CHECKOUT_ITEMS) {
+            select_servicio.prop('disabled', true);
+        }
+    }
+
+
+    // Actualizar precio en base a lo que hay en las cajas
+    function updatePrice() {
+        set_price_cents = 0;
+        checkoutContainer.children('.checkout-item').each((idx, elem) => {
+            id_ofi = $(elem).attr('id_oficina')
+            id_ser = $(elem).attr('id_servicio')
+
+            var idoficina_idservicio = `${id_ofi}_${id_ser}`;
+
+            var parentID = Object.keys(CATEGORIAS).find(key => idoficina_idservicio in CATEGORIAS[key]) || "ES_0_SINDATOS";
+            var target_precio = PRECIOS[parentID];
+
+            // CRITICO: Decision de precio final. Coger siempre el mas alto
+            if (target_precio > set_price_cents) {
+                set_price_cents = target_precio
+            }
         })
 
+        string_precio_buscador.text(set_price_cents / 100)
+        //$('#INPUT_PRECIO').val(set_price_cents)
+
+
+        updateHiddentInputForms()
     }
-    //Ocultrar seccion
 
-    //Logica de los botones de siguiente y atrás        
-    {
-        // Funcion de mostrar mensaje de error debajo de los inputs
-        function displayErrorMessage(inputElement, message) {
-            // Remove any existing error message
-            $(inputElement).next('.error-message-form').remove();
 
-            // Create error message element if input is empty
-            const errorMessage = $('<div>').addClass('error-message-form').text(message);
+    //Event listener del select de servicios
+    select_servicio.on('change', function () {
+        var elements_to_add = []
+        frontend_administracion = select_administracion.find(':selected').val()
 
-            // Insert error message after the input element        
-            $(inputElement).after(errorMessage);
+        // Check if all values are selected
+        if ($('#radio-buscar-con-oficina').is(':checked') && select_provincia.val() && select_oficina.val() && select_servicio.val()) {
+            // Create a new div with a personalized HTML structure for the checkout item
+            id_oficina = select_oficina.find(':selected').attr("id_oficina")
+            id_servicio = select_servicio.find(':selected').attr("id_servicio")
 
+            elements_to_add.push({
+                'ofi': id_oficina,
+                'srv': id_servicio
+            })
         }
 
-        //Botones de siguiente. Oculta y muestra secciones de los 5 botones
-        {
-            //1.Verificar F Min y F Max
-            $(NextButon1).click(function () {
-                let inputsToCheck = [InputFMin, InputFMax];
-                // Array de inputs que verificar
-                let allInputsValid = true;
-                // Si todo OK pasa a la siguiente
+        // elif instead?
+        if ($('#radio-buscar-en-provincia').is(':checked') && select_provincia.val() && select_servicio.val()) {
+            for (const [id_oficina, ofi] of Object.entries(SERVICIOS)) {
+                if (ofi.provincia !== select_provincia.val())
+                    continue
 
-                // Check each input
-                inputsToCheck.some(function (input) {
-                    if (input.val().trim() === '') {
-                        displayErrorMessage(InputDivFMinMax, 'Debes seleccionar un rango de fechas');
-                        // Muestra mensaje de error en la funcion displayErrorMessage donde inputElement = input
-                        allInputsValid = false;
-                    } else {
-                        // If input is not empty, remove the error message
-                        $(InputDivFMinMax).next('.error-message-form').remove();
-                    }
-                });
+                svc = ofi.servicios.find((e) => e.nombre == select_servicio.val());
 
-                // Si todo OK pasa a la siguiente
-                if (allInputsValid) {
-                    seccion1.hide();
-                    seccion2.show();
+                if (svc) {
+                    elements_to_add.push({
+                        'ofi': id_oficina,
+                        'srv': svc.id_servicio,
+                    })
                 }
-            });
-
-            //2.Comprobar nombre, apellido1 y input-fecha-nacimiento
-            $(NextButon2).click(function () {
-                let inputsToCheck = [InputNombre, InputApellido1, InputFNacimiento];
-                // Array de inputs que verificar
-                let allInputsValid = true;
-                // Si todo OK pasa a la siguiente
-
-                // Check each input
-                inputsToCheck.forEach(function (input) {
-                    if (input.val().trim() === '') {
-                        displayErrorMessage(input, 'Este campo es obligatorio');
-                        // Muestra mensaje de error en la funcion displayErrorMessage donde inputElement = input
-                        allInputsValid = false;
-                    } else {
-                        // If input is not empty, remove the error message
-                        $(input).next('.error-message-form').remove();
-                    }
-                });
-
-                // Si todo OK pasa a la siguiente
-                if (allInputsValid) {
-                    seccion2.hide();
-                    seccion3.show();
-                }
-            });
-
-            //3.Comprobar numero de documento
-            $(NextButon3).click(function () {
-                let inputsToCheck = [InputNumeroDocumento];
-                // Array de inputs que verificar
-                let allInputsValid = true;
-                // Si todo OK pasa a la siguiente
-
-                // Check each input
-                inputsToCheck.forEach(function (input) {
-                    var selected_document = $('.div-documentos-formulario').find('.boton-documento-selected').attr('id')
-
-                    var func_validate = function (text_input) {
-                        return true
-                    };
-                    // PASAPORTE will be always True because we cant validate it
-
-                    if (selected_document === 'select-nie-form') {
-                        func_validate = validateNIE
-                    } else if (selected_document === 'select-dni-form') {
-                        func_validate = validateDNI
-                    }
-
-                    if (input.val().trim() === '') {
-                        displayErrorMessage(input, 'Este campo es obligatorio');
-                        // Muestra mensaje de error en la funcion displayErrorMessage donde inputElement = input
-                        allInputsValid = false;
-                    } else if (!func_validate(input.val())) {
-                        displayErrorMessage(input, 'Documento incorrecto');
-                        // Muestra mensaje de error en la funcion displayErrorMessage donde inputElement = input
-                        allInputsValid = false;
-
-                    } else {
-                        // Make sure is uppercase
-                        input.val(input.val().toUpperCase());
-
-                        // If input is not empty, remove the error message
-                        $(input).next('.error-message-form').remove();
-                    }
-                });
-
-                // Si todo OK pasa a la siguiente
-                if (allInputsValid) {
-                    seccion3.hide();
-                    seccion4.show();
-                }
-            });
-
-            //4.Comprobar correo y telefono
-            InputTelef.add(InputTelefVerf).keyup(function (e) {
-                var prefix = '+34'
-                if (this.value.substring(0, prefix.length) != prefix) {
-                    $(this).val(prefix)
-                }
-            });
-            $(NextButon4).click(function () {
-                let inputsToCheck = [InputCorreo, InputCorreoVerf, InputTelef, InputTelefVerf];
-                // Array de inputs que verificar
-                let allInputsValid = true;
-                // Si todo OK pasa a la siguiente
-
-                // Check each input
-                inputsToCheck.forEach(function (input) {
-                    if (input.val().trim() === '' || !input[0].checkValidity()) {
-                        input[0].reportValidity();
-                        displayErrorMessage(input, 'Este campo es obligatorio');
-                        // Muestra mensaje de error en la funcion displayErrorMessage donde inputElement = input
-                        allInputsValid = false;
-                    } else {
-                        // If input is not empty, remove the error message
-                        $(input).next('.error-message-form').remove();
-                    }
-                });
-
-                if (InputCorreo.val() !== InputCorreoVerf.val()) {
-                    displayErrorMessage(InputCorreo, 'Correos no coinciden');
-                    displayErrorMessage(InputCorreoVerf, 'Correos no coinciden');
-                    allInputsValid = false;
-                }
-
-                if (InputTelef.val() !== InputTelefVerf.val()) {
-                    displayErrorMessage(InputTelef, 'Telefonos no coinciden');
-                    displayErrorMessage(InputTelefVerf, 'Telefonos no coinciden');
-                    allInputsValid = false;
-                }
-
-                // Si todo OK pasa a la siguiente
-                if (allInputsValid) {
-                    seccion4.hide();
-                    seccion5.show();
-                }
-            });
-
-            //5.Comprobar nacionalidad. R Nacionalidad y caducidad tarjeta
-            $(NextButon5).click(function () {
-                let inputsToCheck = [InputNacionalidad];
-                // Array de inputs que verificar
-                let allInputsValid = true;
-                // Si todo OK pasa a la siguiente
-
-                // Check each input
-                inputsToCheck.forEach(function (input) {
-                    if (input.val().trim() === '') {
-                        displayErrorMessage(input, 'Este campo es obligatorio');
-                        // Muestra mensaje de error en la funcion displayErrorMessage donde inputElement = input
-                        allInputsValid = false;
-                    } else {
-                        // If input is not empty, remove the error message
-                        $(input).next('.error-message-form').remove();
-                    }
-                });
-
-                // Si todo OK pasa a la siguiente
-                if (allInputsValid) {
-                    seccion5.hide();
-                    seccion6.show();
-                }
-            });
+            }
         }
 
-        //Botones hacia atrás. Ocultra y muestra secciones
-        $(BackButon1).click(function () {
-            seccion1.show();
-            seccion2.hide();
-        });
+        elements_to_add
+            .sort(() => Math.random() - 0.5)
+            .forEach(e => add_elemtnt(e.ofi, e.srv, frontend_administracion));
 
-        $(BackButon2).click(function () {
-            seccion2.show();
-            seccion3.hide();
-        });
+        //Resetear select de servicios cuando se añade una cita
+        //select_servicio.val(null).trigger('change');
+    });
 
-        $(BackButon3).click(function () {
-            seccion3.show();
-            seccion4.hide();
-        });
 
-        $(BackButon4).click(function () {
-            seccion4.show();
-            seccion5.hide();
-        });
 
-        $(BackButon5).click(function () {
-            seccion5.show();
-            seccion6.hide();
-        });
+
+
+
+
+    // Reset values and update cita previa function
+    function resetValuesAndUpdateCitaPrevia() {
+        // Reset the values of the other three selects
+        select_oficina.val('').empty().append(default_select_oficina);
+        select_servicio.val('').empty().append(default_select_servicio);
+        fetchJsonAndPopulateOficina();
+        updateCitaPrevia();
     }
-    //Ocultrar seccion
 
-    //Funcionalidades varias 
-    {
-        //Poner read only al input de fecha max para que no salga el teclado en el movil
-        $(document).ready(function () {
-            // Select the input field by its ID and make it readonly
-            $('#checkin').prop('readonly', true);
-            $('#checkout').prop('readonly', true);
-            $('#input-fecha-nacimiento').prop('readonly', true);
-        });
+    // Reset values and update cita previa function
+    function resetOficinaAndUpdateCitaPrevia() {
+        // Reset the values of the other three selects
+        select_servicio.val('').empty().append(default_select_servicio);
+        updateCitaPrevia();
+    }
 
-        //Bloquear zoom al darle doble click en los moviles
-        const input = document.getElementById('myInput');
-        // Event listener para el doble click
-        input.addEventListener('dblclick', function (event) {
-            // Prevent default behavior
-            event.preventDefault();
 
-            // Remove focus from the input element
-            input.blur();
-        });
+
+    // Event listener for the 'radio_buscador_con_oficina' element
+    radio_buscador_con_oficina.on('change', function () {
+        if (radio_buscador_con_oficina.prop('checked')) {
+            // Reset the values of the three selects when 'Con Oficina' is selected
+            resetValuesAndUpdateCitaPrevia();
+            // Fetch and populate oficinas
+            //fetchJsonAndPopulateOficina();
+        }
+    });
+
+    // Event listener for the 'radio_buscador_por_provincia' element
+    radio_buscador_por_provincia.on('change', function () {
+        if (radio_buscador_por_provincia.prop('checked')) {
+            // Reset the values of the three selects when 'Por Provincia' is selected
+            resetValuesAndUpdateCitaPrevia();
+        }
+    });
+
+
+    // Attach the common change listener to select_administracion and select_provincia
+    select_administracion.on('change', resetValuesAndUpdateCitaPrevia);
+    select_provincia.on('change', resetValuesAndUpdateCitaPrevia);
+
+    // Event listener for the 'change' event on select_oficina
+    select_oficina.on('change', function () {
+        // Update cita previa when oficina changes
+        resetOficinaAndUpdateCitaPrevia();
+    });
+
+
+
+
+
+
+
+    // Event listener for the 'change' event on select_servicio
+    select_servicio.on('change', function () {
+        // If the counter is greater than 0, decrement it
+        numero_citas_contador = checkoutContainer.children('.checkout-item').length;
+
+        // Update and display the counter
+        updateNumeroCitasCounter();
+
+    });
+
+
+
+
+    function updateHiddentInputForms() {
+        // reset?
+        INPUT_JSON = {
+            'gclid': leadIdFromUrl
+        }
+
+        var idbuscadores = []
+
+        checkoutContainer.children('.checkout-item').each((idx, elem) => {
+            id_ofi = $(elem).attr('id_oficina')
+            id_ser = $(elem).attr('id_servicio')
+            // frontend_administracion = $(elem).attr('frontend_administracion')
+
+            // var idoficina_idservicio = `${id_ofi}_${id_ser}`;
+            // var categ_ofi = Object.keys(CATEGORIAS).find(key => idoficina_idservicio in CATEGORIAS[key]) || "ES_0_SINDATOS";
+            // ofi = SERVICIOS[id_ofi]
+
+
+            idbuscadores.push({
+                'id_oficina': id_ofi,
+                'id_servicio': id_ser
+            })
+
+        })
+
+        INPUT_JSON['idbuscadores'] = idbuscadores
+
+        if (idbuscadores.length === 0) {
+            $('#INPUT_JSON').val('')
+        } else {
+            $('#INPUT_JSON').val(btoa(JSON.stringify(INPUT_JSON))) //base64
+        }
+
 
     }
-    //Ocultrar seccion
+
 
 });
-
-// https://donnierock.com/2011/11/05/validar-un-dni-con-javascript/
-function validateDNI(dni) {
-    if (/^\d{8}[a-zA-Z]$/.test(dni)) {
-        var n = dni.substr(0, 8);
-        var c = dni.substr(8, 1);
-        return c.toUpperCase() === 'TRWAGMYFPDXBNJZSQVHLCKET'.charAt(n % 23);
-        // DNI correcto ?
-    }
-    return false;
-    // DNI incorrecto
-}
-
-// https://trellat.es/funcion-para-validar-dni-o-nie-en-javascript/
-function validateNIE(nie) {
-    var numero, lett, letra;
-    var expresion_regular_dni = /^[XYZxyz]\d{7}[A-Za-z]$/;
-
-    if (!expresion_regular_dni.test(nie)) {
-        return false;
-    }
-
-    numero = nie.substr(0, nie.length - 1);
-
-    numero = numero.replace('X', 0);
-    numero = numero.replace('x', 0);
-    numero = numero.replace('Y', 1);
-    numero = numero.replace('y', 1);
-    numero = numero.replace('Z', 2);
-    numero = numero.replace('z', 2);
-
-    lett = nie.substr(nie.length - 1, 1).toUpperCase();
-    numero = numero % 23;
-    letra = 'TRWAGMYFPDXBNJZSQVHLCKET';
-    letra = letra.substring(numero, numero + 1);
-
-    return letra === lett;
-}
