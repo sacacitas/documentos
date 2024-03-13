@@ -20,6 +20,7 @@ $(document).ready(function () {
     var select_oficina = $('#select-buscador-oficina');
     var select_servicio = $('#select-buscador-servicio');
     var numero_citas_contador = $('numero-citas-seleccionadas-buscador');
+    
 
 
     // Variables IDs de info secundaria
