@@ -110,6 +110,41 @@ $(document).ready(function () {
 
 
 
+    //Tratamiento GCLID en la URL   
+    {
+    //Obtener todos los parametros de la URL
+    function getUrlParameter(name) {
+        name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+        var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+        var results = regex.exec(location.search);
+        return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+    }
+
+    //Obtener valor de gclid de la UrL y crear variable con GCLID
+    var leadIdFromUrl = getUrlParameter('gclid');
+    
+    //Si existe gclid en la URL crear cookie
+    if (leadIdFromUrl !== '') {
+        document.cookie = "lead_id_cookie=" + leadIdFromUrl + "; path=/";
+    }
+
+    //Obtener valor de la cookie
+    function getLeadIdCookie() {
+        var name = "lead_id_cookie=";
+        var decodedCookie = decodeURIComponent(document.cookie);
+        var cookieArray = decodedCookie.split(';');
+        for(var i = 0; i < cookieArray.length; i++) {
+            var cookie = cookieArray[i].trim();
+            if (cookie.indexOf(name) === 0) {
+                return cookie.substring(name.length, cookie.length);
+            }
+        }
+        return "";
+    }
+
+    //Obtener valor cookie Lead ID y meterlo en una variable
+    var leadIdFromUrl = getLeadIdCookie();
+    }//Ocultar seccion
 
 
 
@@ -678,9 +713,10 @@ $(document).ready(function () {
     function updateHiddentInputForms() {
         // reset?
         INPUT_JSON = {
-            'gclid': null
+            'gclid': leadIdFromUrl
+            
         }
-
+        console.log(INPUT_JSON)
         var idbuscadores = []
 
         checkoutContainer.children('.checkout-item').each((idx, elem) => {
