@@ -7,26 +7,6 @@ var INPUT_JSON = null
 
 $(document).ready(function () {
 
-    //Cargar datos del buscador
-    var urlParams = new URLSearchParams(window.location.search);
-    if (urlParams.has('INPUT_JSON')) {
-        INPUT_JSON = JSON.parse(atob(urlParams.get('INPUT_JSON')))        
-    } else {
-        alert('Por favor, use https://sacacitas.es para comenzar este formulario')
-    }
-
-    //Enviar petición a n8n
-    const id_oficina = INPUT_JSON.idbuscadores[0].id_oficina;
-    const id_servicio = INPUT_JSON.idbuscadores[0].id_servicio;
-
-    // Construct the data to be sent in the request body
-    var data = {
-    id_oficina: id_oficina,
-    id_servicio: id_servicio
-    };
-
-
-
     //Variables del fornulario
     {
         //Crear variables cogiendo las secciones divs del formulario
@@ -52,6 +32,9 @@ $(document).ready(function () {
         var BackButon3 = $('#Back-Buton-3');
         var BackButon4 = $('#Back-Buton-4');
         var BackButon5 = $('#Back-Buton-5');
+
+        //Boton finalizar
+        var FinalizarButon = $('#formulario-boton-finalizar');
 
         //Variables de los inputs del formulario
         var InputDivFMinMax = $('#div-block-f-min-max');
@@ -84,13 +67,34 @@ $(document).ready(function () {
     }
     //Ocultrar seccion
 
+    
     //Ocultar secciones divs (temporal)
-    seccion1.show();
+    seccion1.hide();
     seccion2.hide();
     seccion3.hide();
     seccion4.hide();
     seccion5.hide();
-    seccion6.hide();
+    seccion6.show();
+
+
+
+    //Cargar datos del buscador
+    var urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.has('INPUT_JSON')) {
+        INPUT_JSON = JSON.parse(atob(urlParams.get('INPUT_JSON')))        
+    } else {
+        alert('Hubo un problema al procesar la solicitud, acceda al formulario desde el buscador de https://sacacitas.es, Si el problema persiste, contacte con nosotros.')
+    }
+
+    //Crear variables para enviar petición a n8n
+    const id_oficina = INPUT_JSON.idbuscadores[0].id_oficina;
+    const id_servicio = INPUT_JSON.idbuscadores[0].id_servicio;
+
+    var data = {
+    id_oficina: id_oficina,
+    id_servicio: id_servicio
+    };
+
 
 
     //Mostrar una sección u otra según la categoría de la cita
@@ -287,6 +291,43 @@ $(document).ready(function () {
             plugins: ["AmpPlugin", "LockPlugin"]
         })
 
+
+
+
+        //6. Finalizar y enviar a backend los datos
+        $('#formulario_ID').submit(function(event) {
+            // Prevent the default form submission behavior
+            event.preventDefault(); 
+            
+            // Gather form data
+            var formData = {
+                name: $('#name').val(),
+                email: $('#email').val()
+            };
+    
+            // Send POST request
+            $.ajax({
+                type: 'POST',
+                url: 'https://n8n.sacacitas.es/webhook-test/d34bf08d-32d8-4956-8dc4-9e1d676bb5fa',
+                data: data,
+                success: function(response) {
+                    // Handle successful response
+                    console.log('Form submitted successfully');
+                
+                    // Redirect to a new page
+                    window.location.href = 'https://sacacitas.es/';                    
+
+                },
+                error: function(xhr, status, error) {
+                    // Handle error response
+                    console.error('Form submission failed');
+                }
+            });
+    
+            // Prevent default form submission in Webflow
+            return false;
+        });
+
     }
     //Ocultrar seccion
 
@@ -477,6 +518,7 @@ $(document).ready(function () {
                 }
             });
         }
+
 
         //Botones hacia atrás. Ocultra y muestra secciones
         $(BackButon1).click(function () {
