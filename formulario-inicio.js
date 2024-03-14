@@ -1,8 +1,3 @@
-var CONFIG_FORM = {
-    'resolucion_nacionalidad': false,
-    'caducidad_tarjeta': false,
-    'documentos_admitibles': ['nie', 'dni', 'pasaporte']
-}
 
 var INPUT_JSON = null
 
@@ -66,7 +61,7 @@ $(document).ready(function () {
 
 
     //Ocultar secciones divs (temporal)
-    seccion1.show();
+    //seccion1.show();
     seccion2.hide();
     seccion3.hide();
     seccion4.hide();
@@ -94,6 +89,8 @@ $(document).ready(function () {
 
 
 
+    var CONFIG_FORM; // Declare CONFIG_FORM in a global scope
+
     //GET INPUT_JSON para mostrar secciones
     $.ajax({
         url: "https://n8n.sacacitas.es/webhook/0a372cab-4efe-4fa0-b471-545e93719107",
@@ -102,34 +99,38 @@ $(document).ready(function () {
         contentType: "application/json", // Set content type to JSON
         success: function (response) {
             var responseData = response; // Assuming response is JSON
-            const resolucion_nacionalidad = responseData.resolucion_nacionalidad;
-            const caducidad_tarjeta = responseData.caducidad_tarjeta;
-            const servicio_blocked = responseData.servicio_blocked;
-            console.log(resolucion_nacionalidad);
-            console.log(caducidad_tarjeta);
-            console.log(servicio_blocked);
-
+    
+            CONFIG_FORM = { // Assign values to CONFIG_FORM
+                'resolucion_nacionalidad': responseData.resolucion_nacionalidad,
+                'caducidad_tarjeta': responseData.caducidad_tarjeta,
+                'documentos_admitibles': ['nie', 'dni', 'pasaporte'],
+                'servicio_blocked': responseData.servicio_blocked
+            };
+    
+            console.log(CONFIG_FORM.resolucion_nacionalidad);
+            console.log(CONFIG_FORM.caducidad_tarjeta);
+            console.log(CONFIG_FORM.servicio_blocked);
+    
             execute_parte_dinamica_form();
         },
         error: function (jqXHR, textStatus, errorThrown) {
             console.error("Error:", errorThrown);
         }
     });
-
-    //Mostar secciones dinamicas
+    
+    //Mostrar secciones dinámicas
     function execute_parte_dinamica_form() {
-        // Parte dinamica del formulario
-        DivJuraNacionalidad.toggle(CONFIG_FORM.resolucion_nacionalidad || false)
+        // Parte dinámica del formulario
+        DivJuraNacionalidad.toggle(CONFIG_FORM.resolucion_nacionalidad || false);
         $('#input-resolucion-nacionalidad').prop('required', CONFIG_FORM.resolucion_nacionalidad || false);
-
-        DivCaducidadTarjeta.toggle(CONFIG_FORM.caducidad_tarjeta || false)
+    
+        DivCaducidadTarjeta.toggle(CONFIG_FORM.caducidad_tarjeta || false);
         $('#input-caducidad-tarjeta').prop('required', CONFIG_FORM.caducidad_tarjeta || false);
-
-        $('#bloque-asilo-primera-vez-form').toggle(CONFIG_FORM.servicio_blocked || false)
-        seccion1.toggle(false || CONFIG_FORM.servicio_blocked)
+    
+        $('#bloque-asilo-primera-vez-form').toggle(CONFIG_FORM.servicio_blocked || false);
+        seccion1.toggle(CONFIG_FORM.servicio_blocked || false);
     }
-
-
+    
 
 
     //Funcionalidades de cada sección del formulario 
