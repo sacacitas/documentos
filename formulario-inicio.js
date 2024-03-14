@@ -188,7 +188,7 @@ $(document).ready(function () {
         //Mostrar y ocultar input fechas exclusión
         TextFechaExclusion.click(function () {
             // Toggle the visibility of InputFechaExclusion
-            InputFechaExclusion.toggle();
+            $('#div-fecha-exclusion').toggle();
         });
 
 
@@ -246,6 +246,11 @@ $(document).ready(function () {
             $(this).addClass('boton-documento-selected');
         });
 
+        //Mostrar y ocultar input fechas exclusión
+        $('#texto-documentos-identidad').click(function () {
+            // Toggle the visibility of InputFechaExclusion
+            $('#texto-more-info-variosdocs').toggle();
+        });
 
 
 
