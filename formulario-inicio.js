@@ -11,7 +11,6 @@ $(document).ready(function () {
     {
         //Crear variables cogiendo las secciones divs del formulario
         var AsiloPrimeraBloque = $('#bloque-asilo-primera-vez-form');
-
         var seccion1 = $('#Secciones-Form-1');
         var seccion2 = $('#Secciones-Form-2');
         var seccion3 = $('#Secciones-Form-3');
@@ -54,15 +53,12 @@ $(document).ready(function () {
         var DivJuraNacionalidad = $('#clientes-jura-nacionalidad');
         var DivCaducidadTarjeta = $('#clientes-caducidad-tarjeta');
 
+        //Fecha exclusion
+        var TextFechaExclusion = $('#texto-fechas-exclusion');
+
         //Fecha de ahora
         var DateNow = new Date();
 
-        // Parte dinamica del formulario
-        DivJuraNacionalidad.toggle(CONFIG_FORM.resolucion_nacionalidad || false)
-        $('#input-resolucion-nacionalidad').prop('required', CONFIG_FORM.resolucion_nacionalidad || false);
-
-        $('#input-caducidad-tarjeta').toggle(CONFIG_FORM.caducidad_tarjeta || false)
-        $('#input-caducidad-tarjeta').prop('required', CONFIG_FORM.caducidad_tarjeta || false);
 
     }
     //Ocultrar seccion
@@ -97,45 +93,40 @@ $(document).ready(function () {
 
 
 
-    //Mostrar una sección u otra según la categoría de la cita
+    //GET INPUT_JSON para mostrar secciones
     $.ajax({
         url: "https://n8n.sacacitas.es/webhook/0a372cab-4efe-4fa0-b471-545e93719107",
         type: "POST",
-        data: data,
+        data: JSON.stringify(data), // Assuming data is your JSON object
+        contentType: "application/json", // Set content type to JSON
         success: function(response) {
             var responseData = response; // Assuming response is JSON
-            // Assuming responseData has variables variable3 and variable4
-            const categoria_cita = responseData.categoria_cita;
-            // Now you can use variable3 and variable4 as needed
-            console.log(categoria_cita);
-
-            //Mostrar div R Nacionalidad si categoria es Jura
-            if (categoria_cita.includes("_JURA")) {
-                // Show the div element with ID 'clientes-jura-nacionalidad'
-                DivJuraNacionalidad.show();
-            }
-
-            //Renovación asilo, pedir tarjeta caducidad
-            if (categoria_cita.includes("_ASILO_RENOVACION")) {
-                // Show the div element with ID 'clientes-jura-nacionalidad'
-                DivCaducidadTarjeta.show();
-            }
+            const resolucion_nacionalidad = responseData.resolucion_nacionalidad;
+            const caducidad_tarjeta = responseData.caducidad_tarjeta;
+            const servicio_blocked = responseData.servicio_blocked;
+            console.log(resolucion_nacionalidad) ;
+            console.log(caducidad_tarjeta) ;
+            console.log(servicio_blocked) ;
             
-            //Cita primera de asilo, bloquear
-            if (categoria_cita.includes("_ASILO_PRIMERA")) {
-                // Show the div element with ID 'clientes-jura-nacionalidad'
-                seccion1.hide();
-                AsiloPrimeraBloque.show();
-            }
-            
-
-
+            execute_parte_dinamica_form();
         },
         error: function(jqXHR, textStatus, errorThrown) {
             console.error("Error:", errorThrown);
         }
-        });
-    
+    });
+
+    //Mostar secciones dinamicas
+    function execute_parte_dinamica_form() {
+        // Parte dinamica del formulario
+        DivJuraNacionalidad.toggle(CONFIG_FORM.resolucion_nacionalidad || false)
+        $('#input-resolucion-nacionalidad').prop('required', CONFIG_FORM.resolucion_nacionalidad || false);
+
+        DivCaducidadTarjeta.toggle(CONFIG_FORM.caducidad_tarjeta || false)
+        $('#input-caducidad-tarjeta').prop('required', CONFIG_FORM.caducidad_tarjeta || false);
+
+        $('#bloque-asilo-primera-vez-form').toggle(CONFIG_FORM.servicio_blocked || false)
+        seccion1.toggle(false || CONFIG_FORM.servicio_blocked)
+    }
 
 
 
@@ -568,6 +559,23 @@ $(document).ready(function () {
             // Remove focus from the input element
             input.blur();
         });
+
+
+
+        //Mostrar y ocultrar fehcas exclusion
+
+        TextFechaExclusion.addEventListener('click', function() {
+            // Check if the element is currently visible
+            if (elementToToggle.style.display === 'none') {
+              // If it's hidden, show it
+              elementToToggle.style.display = 'block';
+            } else {
+              // If it's visible, hide it
+              elementToToggle.style.display = 'none';
+            }
+          });
+
+
 
     }
     //Ocultrar seccion
