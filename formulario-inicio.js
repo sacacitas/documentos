@@ -69,12 +69,12 @@ $(document).ready(function () {
 
     
     //Ocultar secciones divs (temporal)
-    seccion1.hide();
+    seccion1.show();
     seccion2.hide();
     seccion3.hide();
     seccion4.hide();
     seccion5.hide();
-    seccion6.show();
+    seccion6.hide();
 
 
 
