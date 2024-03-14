@@ -35,6 +35,7 @@ $(document).ready(function () {
         var InputDivFMinMax = $('#div-block-f-min-max');
         var InputFMin = $('#checkin');
         var InputFMax = $('#checkout');
+        var InputFechaExclusion = $('#input-fecha-exclusion');
         var InputNombre = $('#input-nombre');
         var InputApellido1 = $('#input-apellido1');
         var InputFNacimiento = $('#input-fecha-nacimiento');
@@ -44,6 +45,7 @@ $(document).ready(function () {
         var InputTelef = $('#input-telefono');
         var InputTelefVerf = $('#input-confirmar-telefono');
         var InputNacionalidad = $('#input-lista-paises');
+        
 
         //Divs del formulario
         var DivJuraNacionalidad = $('#clientes-jura-nacionalidad');
@@ -51,6 +53,7 @@ $(document).ready(function () {
 
         //Fecha exclusion
         var TextFechaExclusion = $('#texto-fechas-exclusion');
+        
 
         //Fecha de ahora
         var DateNow = new Date();
@@ -61,7 +64,7 @@ $(document).ready(function () {
 
 
     //Ocultar secciones divs (temporal)
-    //seccion1.show();
+    seccion1.show();
     seccion2.hide();
     seccion3.hide();
     seccion4.hide();
@@ -78,15 +81,14 @@ $(document).ready(function () {
         alert('Hubo un problema al procesar la solicitud, acceda al formulario desde el buscador de https://sacacitas.es, Si el problema persiste, contacte con nosotros.')
     }
 
-    //Crear variables para enviar petición a n8n
-    const id_oficina = INPUT_JSON.idbuscadores[0].id_oficina;
-    const id_servicio = INPUT_JSON.idbuscadores[0].id_servicio;
-
+    const id_oficina = INPUT_JSON.idbuscadores.map(item => item.id_oficina);
+    const id_servicio = INPUT_JSON.idbuscadores.map(item => item.id_servicio);
+    
     var data = {
         id_oficina: id_oficina,
         id_servicio: id_servicio
     };
-
+    
 
 
     var CONFIG_FORM; // Declare CONFIG_FORM in a global scope
@@ -103,15 +105,13 @@ $(document).ready(function () {
             CONFIG_FORM = { // Assign values to CONFIG_FORM
                 'resolucion_nacionalidad': responseData.resolucion_nacionalidad,
                 'caducidad_tarjeta': responseData.caducidad_tarjeta,
-                'documentos_admitibles': ['nie', 'dni', 'pasaporte'],
+                'documentos_admitibles': responseData.documentos_admitibles,
                 'servicio_blocked': responseData.servicio_blocked
             };
-    
-            console.log(CONFIG_FORM.resolucion_nacionalidad);
-            console.log(CONFIG_FORM.caducidad_tarjeta);
-            console.log(CONFIG_FORM.servicio_blocked);
+
     
             execute_parte_dinamica_form();
+            toggleDocumentosAdmitibles();
         },
         error: function (jqXHR, textStatus, errorThrown) {
             console.error("Error:", errorThrown);
@@ -126,9 +126,11 @@ $(document).ready(function () {
     
         DivCaducidadTarjeta.toggle(CONFIG_FORM.caducidad_tarjeta || false);
         $('#input-caducidad-tarjeta').prop('required', CONFIG_FORM.caducidad_tarjeta || false);
-    
-        $('#bloque-asilo-primera-vez-form').toggle(CONFIG_FORM.servicio_blocked || false);
-        seccion1.toggle(CONFIG_FORM.servicio_blocked || false);
+
+        if (CONFIG_FORM.servicio_blocked === true) {
+            $('#bloque-asilo-primera-vez-form').show();
+            seccion1.hide();
+        }
     }
     
 
@@ -183,6 +185,15 @@ $(document).ready(function () {
             document.getElementById('readonly-field').setAttribute("readonly", "");
         }
 
+        //Mostrar y ocultar input fechas exclusión
+        TextFechaExclusion.click(function () {
+            // Toggle the visibility of InputFechaExclusion
+            InputFechaExclusion.toggle();
+        });
+
+
+
+
         //SECTION: 2 - Datos cliente
         //Easepicker fecha nacimiento
         const PickerNacimiento = new easepick.create({
@@ -215,10 +226,16 @@ $(document).ready(function () {
         var selectFormDocDNI = $('#select-dni-form');
 
         selectFormDocPasaporte.add(selectFormDocNIE).add(selectFormDocDNI).hide();
-        CONFIG_FORM.documentos_admitibles.forEach(elem => {
-            $(`#select-${elem}-form`).show();
+        
+        function toggleDocumentosAdmitibles() {
+
+            CONFIG_FORM.documentos_admitibles.forEach(elem => {
+                $(`#select-${elem}-form`).show();
+            }
+            );
+
+
         }
-        );
 
         selectFormDocPasaporte.addClass('boton-documento-selected');
 
@@ -564,18 +581,6 @@ $(document).ready(function () {
 
 
 
-        //Mostrar y ocultrar fehcas exclusion
-
-        TextFechaExclusion.addEventListener('click', function () {
-            // Check if the element is currently visible
-            if (elementToToggle.style.display === 'none') {
-                // If it's hidden, show it
-                elementToToggle.style.display = 'block';
-            } else {
-                // If it's visible, hide it
-                elementToToggle.style.display = 'none';
-            }
-        });
 
 
 
