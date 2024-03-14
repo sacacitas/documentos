@@ -1,6 +1,7 @@
 var CONFIG_FORM = {
     'resolucion_nacionalidad': false,
-    'caducidad_tarjeta': false
+    'caducidad_tarjeta': false,
+    'documentos_admitibles': ['nie', 'dni', 'pasaporte']
 }
 
 var INPUT_JSON = null
@@ -63,7 +64,7 @@ $(document).ready(function () {
     }
     //Ocultrar seccion
 
-    
+
     //Ocultar secciones divs (temporal)
     seccion1.show();
     seccion2.hide();
@@ -77,7 +78,7 @@ $(document).ready(function () {
     //Cargar datos del buscador
     var urlParams = new URLSearchParams(window.location.search);
     if (urlParams.has('INPUT_JSON')) {
-        INPUT_JSON = JSON.parse(atob(urlParams.get('INPUT_JSON')))        
+        INPUT_JSON = JSON.parse(atob(urlParams.get('INPUT_JSON')))
     } else {
         alert('Hubo un problema al procesar la solicitud, acceda al formulario desde el buscador de https://sacacitas.es, Si el problema persiste, contacte con nosotros.')
     }
@@ -87,8 +88,8 @@ $(document).ready(function () {
     const id_servicio = INPUT_JSON.idbuscadores[0].id_servicio;
 
     var data = {
-    id_oficina: id_oficina,
-    id_servicio: id_servicio
+        id_oficina: id_oficina,
+        id_servicio: id_servicio
     };
 
 
@@ -99,18 +100,18 @@ $(document).ready(function () {
         type: "POST",
         data: JSON.stringify(data), // Assuming data is your JSON object
         contentType: "application/json", // Set content type to JSON
-        success: function(response) {
+        success: function (response) {
             var responseData = response; // Assuming response is JSON
             const resolucion_nacionalidad = responseData.resolucion_nacionalidad;
             const caducidad_tarjeta = responseData.caducidad_tarjeta;
             const servicio_blocked = responseData.servicio_blocked;
-            console.log(resolucion_nacionalidad) ;
-            console.log(caducidad_tarjeta) ;
-            console.log(servicio_blocked) ;
-            
+            console.log(resolucion_nacionalidad);
+            console.log(caducidad_tarjeta);
+            console.log(servicio_blocked);
+
             execute_parte_dinamica_form();
         },
-        error: function(jqXHR, textStatus, errorThrown) {
+        error: function (jqXHR, textStatus, errorThrown) {
             console.error("Error:", errorThrown);
         }
     });
@@ -212,6 +213,12 @@ $(document).ready(function () {
         var selectFormDocNIE = $('#select-nie-form');
         var selectFormDocDNI = $('#select-dni-form');
 
+        selectFormDocPasaporte.add(selectFormDocNIE).add(selectFormDocDNI).hide();
+        CONFIG_FORM.documentos_admitibles.forEach(elem => {
+            $(`#select-${elem}-form`).show();
+        }
+        );
+
         selectFormDocPasaporte.addClass('boton-documento-selected');
 
         var options_documento = $('.div-documentos-formulario').children('a')
@@ -220,14 +227,6 @@ $(document).ready(function () {
             options_documento.removeClass('boton-documento-selected')
             $(this).addClass('boton-documento-selected');
         });
-
-        //Si es de una adminsitración o de otra, preguntar un tipo de documento u otro
-        if (id_oficina.startsWith("gva")) {
-            selectFormDocNIE.hide();
-        }   
-
-
-
 
 
 
@@ -286,35 +285,35 @@ $(document).ready(function () {
 
 
         //6. Finalizar y enviar a backend los datos
-        $('#formulario_ID').submit(function(event) {
+        $('#formulario_ID').submit(function (event) {
             // Prevent the default form submission behavior
-            event.preventDefault(); 
-            
+            event.preventDefault();
+
             // Gather form data
             var formData = {
                 name: $('#name').val(),
                 email: $('#email').val()
             };
-    
+
             // Send POST request
             $.ajax({
                 type: 'POST',
                 url: 'https://n8n.sacacitas.es/webhook-test/d34bf08d-32d8-4956-8dc4-9e1d676bb5fa',
                 data: data,
-                success: function(response) {
+                success: function (response) {
                     // Handle successful response
                     console.log('Form submitted successfully');
-                
+
                     // Redirect to a new page
-                    window.location.href = 'https://sacacitas.es/';                    
+                    window.location.href = 'https://sacacitas.es/';
 
                 },
-                error: function(xhr, status, error) {
+                error: function (xhr, status, error) {
                     // Handle error response
                     console.error('Form submission failed');
                 }
             });
-    
+
             // Prevent default form submission in Webflow
             return false;
         });
@@ -551,29 +550,31 @@ $(document).ready(function () {
 
         //Bloquear zoom al darle doble click en los moviles
         const input = document.getElementById('myInput');
-        // Event listener para el doble click
-        input.addEventListener('dblclick', function (event) {
-            // Prevent default behavior
-            event.preventDefault();
+        if (input) {
+            // Event listener para el doble click
+            input.addEventListener('dblclick', function (event) {
+                // Prevent default behavior
+                event.preventDefault();
 
-            // Remove focus from the input element
-            input.blur();
-        });
+                // Remove focus from the input element
+                input.blur();
+            });
+        }
 
 
 
         //Mostrar y ocultrar fehcas exclusion
 
-        TextFechaExclusion.addEventListener('click', function() {
+        TextFechaExclusion.addEventListener('click', function () {
             // Check if the element is currently visible
             if (elementToToggle.style.display === 'none') {
-              // If it's hidden, show it
-              elementToToggle.style.display = 'block';
+                // If it's hidden, show it
+                elementToToggle.style.display = 'block';
             } else {
-              // If it's visible, hide it
-              elementToToggle.style.display = 'none';
+                // If it's visible, hide it
+                elementToToggle.style.display = 'none';
             }
-          });
+        });
 
 
 
