@@ -122,10 +122,10 @@ $(document).ready(function () {
     function execute_parte_dinamica_form() {
         // Parte dinámica del formulario
         DivJuraNacionalidad.toggle(CONFIG_FORM.resolucion_nacionalidad || false);
-        $('#input-resolucion-nacionalidad').prop('required', CONFIG_FORM.resolucion_nacionalidad || false);
+        //$('#input-resolucion-nacionalidad').prop('required', CONFIG_FORM.resolucion_nacionalidad || false);
     
         DivCaducidadTarjeta.toggle(CONFIG_FORM.caducidad_tarjeta || false);
-        $('#input-caducidad-tarjeta').prop('required', CONFIG_FORM.caducidad_tarjeta || false);
+        //$('#input-caducidad-tarjeta').prop('required', CONFIG_FORM.caducidad_tarjeta || false);
 
         if (CONFIG_FORM.servicio_blocked === true) {
             $('#bloque-asilo-primera-vez-form').show();
@@ -308,39 +308,59 @@ $(document).ready(function () {
 
 
         //6. Finalizar y enviar a backend los datos
-        $('#formulario_ID').submit(function (event) {
+        $('#formulario_ID').submit(function(event) {
             // Prevent the default form submission behavior
             event.preventDefault();
+            
+            //No coge el var de fuera entonces lo vuelvo a obtener para enviarlo en el formulario
+            var selected_document = $('.div-documentos-formulario').find('.boton-documento-selected').attr('id')
+            console.log(selected_document)
 
+            $('#gif-cargando-boton-finalizar').show();
+        
             // Gather form data
             var formData = {
-                name: $('#name').val(),
-                email: $('#email').val()
-            };
-
+                Fmin: $('#checkin').val(),
+                Fmax: $('#checkout').val(),
+                Nombre: $('#input-nombre').val(),
+                Apellido1: $('#input-apellido1').val(),
+                Apellido2: $('#input-apellido2').val(), // Fixed typo here
+                Fnacimiento: $('#input-fecha-nacimiento').val(),
+                SelectedDocument: selected_document,
+                NDocumento: $('#input-documento').val(),
+                Correo: $('#input-correo').val(),
+                Telefono: $('#input-telefono').val(),
+                Pais: $('#input-lista-paises').val(),
+                RNacionalidad: $('#input-resolucion-nacionalidad').val(),
+                CaducidadTarjeta: $('#input-caducidad-tarjeta').val(),
+            }
+            ;
+        
             // Send POST request
             $.ajax({
                 type: 'POST',
-                url: 'https://n8n.sacacitas.es/webhook-test/d34bf08d-32d8-4956-8dc4-9e1d676bb5fa',
-                data: data,
-                success: function (response) {
+                url: 'https://n8n.sacacitas.es/webhook-test/d34bf08d-32d8-4956-8dc4-9e1d676bb5fa434',
+                data: formData, // Send form data using the 'data' property
+                success: function(response) {
                     // Handle successful response
                     console.log('Form submitted successfully');
-
+        
                     // Redirect to a new page
-                    window.location.href = 'https://sacacitas.es/';
-
+                    window.location.href = 'https://www.sacacitas.es/operaciones/fin-tramite?redirect=isTrue';
                 },
-                error: function (xhr, status, error) {
+                error: function(xhr, status, error) {
                     // Handle error response
                     console.error('Form submission failed');
+
+                    $('#div-error-enviar-datos').show();
                 }
             });
-
+        
             // Prevent default form submission in Webflow
             return false;
+            
         });
-
+        
     }
     //Ocultrar seccion
 
@@ -423,6 +443,7 @@ $(document).ready(function () {
                 // Check each input
                 inputsToCheck.forEach(function (input) {
                     var selected_document = $('.div-documentos-formulario').find('.boton-documento-selected').attr('id')
+                    console.log(selected_document)
 
                     var func_validate = function (text_input) {
                         return true
