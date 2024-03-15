@@ -45,7 +45,7 @@ $(document).ready(function () {
         var InputTelef = $('#input-telefono');
         var InputTelefVerf = $('#input-confirmar-telefono');
         var InputNacionalidad = $('#input-lista-paises');
-        
+
 
         //Divs del formulario
         var DivJuraNacionalidad = $('#clientes-jura-nacionalidad');
@@ -53,7 +53,7 @@ $(document).ready(function () {
 
         //Fecha exclusion
         var TextFechaExclusion = $('#texto-fechas-exclusion');
-        
+
 
         //Fecha de ahora
         var DateNow = new Date();
@@ -83,12 +83,12 @@ $(document).ready(function () {
 
     const id_oficina = INPUT_JSON.idbuscadores.map(item => item.id_oficina);
     const id_servicio = INPUT_JSON.idbuscadores.map(item => item.id_servicio);
-    
+
     var data = {
         id_oficina: id_oficina,
         id_servicio: id_servicio
     };
-    
+
 
 
     var CONFIG_FORM; // Declare CONFIG_FORM in a global scope
@@ -101,7 +101,7 @@ $(document).ready(function () {
         contentType: "application/json", // Set content type to JSON
         success: function (response) {
             var responseData = response; // Assuming response is JSON
-    
+
             CONFIG_FORM = { // Assign values to CONFIG_FORM
                 'resolucion_nacionalidad': responseData.resolucion_nacionalidad,
                 'caducidad_tarjeta': responseData.caducidad_tarjeta,
@@ -109,7 +109,7 @@ $(document).ready(function () {
                 'servicio_blocked': responseData.servicio_blocked
             };
 
-    
+
             execute_parte_dinamica_form();
             toggleDocumentosAdmitibles();
         },
@@ -117,13 +117,13 @@ $(document).ready(function () {
             console.error("Error:", errorThrown);
         }
     });
-    
+
     //Mostrar secciones dinámicas
     function execute_parte_dinamica_form() {
         // Parte dinámica del formulario
         DivJuraNacionalidad.toggle(CONFIG_FORM.resolucion_nacionalidad || false);
         //$('#input-resolucion-nacionalidad').prop('required', CONFIG_FORM.resolucion_nacionalidad || false);
-    
+
         DivCaducidadTarjeta.toggle(CONFIG_FORM.caducidad_tarjeta || false);
         //$('#input-caducidad-tarjeta').prop('required', CONFIG_FORM.caducidad_tarjeta || false);
 
@@ -132,7 +132,7 @@ $(document).ready(function () {
             seccion1.hide();
         }
     }
-    
+
 
 
     //Funcionalidades de cada sección del formulario 
@@ -226,7 +226,7 @@ $(document).ready(function () {
         var selectFormDocDNI = $('#select-dni-form');
 
         selectFormDocPasaporte.add(selectFormDocNIE).add(selectFormDocDNI).hide();
-        
+
         function toggleDocumentosAdmitibles() {
 
             CONFIG_FORM.documentos_admitibles.forEach(elem => {
@@ -308,16 +308,16 @@ $(document).ready(function () {
 
 
         //6. Finalizar y enviar a backend los datos
-        $('#formulario_ID').submit(function(event) {
+        $('#formulario_ID').submit(function (event) {
             // Prevent the default form submission behavior
             event.preventDefault();
-            
+
             //No coge el var de fuera entonces lo vuelvo a obtener para enviarlo en el formulario
             var selected_document = $('.div-documentos-formulario').find('.boton-documento-selected').attr('id')
             console.log(selected_document)
 
             $('#gif-cargando-boton-finalizar').show();
-        
+
             // Gather form data
             var formData = {
                 Fmin: $('#checkin').val(),
@@ -334,33 +334,33 @@ $(document).ready(function () {
                 RNacionalidad: $('#input-resolucion-nacionalidad').val(),
                 CaducidadTarjeta: $('#input-caducidad-tarjeta').val(),
             }
-            ;
-        
+                ;
+
             // Send POST request
             $.ajax({
                 type: 'POST',
                 url: 'https://n8n.sacacitas.es/webhook-test/d34bf08d-32d8-4956-8dc4-9e1d676bb5fa434',
                 data: formData, // Send form data using the 'data' property
-                success: function(response) {
+                success: function (response) {
                     // Handle successful response
                     console.log('Form submitted successfully');
-        
+
                     // Redirect to a new page
                     window.location.href = 'https://www.sacacitas.es/operaciones/fin-tramite?redirect=isTrue';
                 },
-                error: function(xhr, status, error) {
+                error: function (xhr, status, error) {
                     // Handle error response
                     console.error('Form submission failed');
 
                     $('#div-error-enviar-datos').show();
                 }
             });
-        
+
             // Prevent default form submission in Webflow
             return false;
-            
+
         });
-        
+
     }
     //Ocultrar seccion
 
