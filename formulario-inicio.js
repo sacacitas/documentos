@@ -1,5 +1,13 @@
 
+// Declare in a global scope
 var INPUT_JSON = null
+
+var CONFIG_FORM = {
+    'resolucion_nacionalidad': false,
+    'caducidad_tarjeta': false,
+    'documentos_admitibles': ['pasaporte', 'dni', 'nie'],
+    'servicio_blocked': false
+};
 
 $(document).ready(function () {
 
@@ -77,46 +85,26 @@ $(document).ready(function () {
     var urlParams = new URLSearchParams(window.location.search);
     if (urlParams.has('INPUT_JSON')) {
         INPUT_JSON = JSON.parse(atob(urlParams.get('INPUT_JSON')))
+        //GET INPUT_JSON para mostrar secciones
+        $.ajax({
+            url: "https://n8n.sacacitas.es/webhook/0a372cab-4efe-4fa0-b471-545e93719107",
+            type: "POST",
+            data: INPUT_JSON.idbuscadores,
+            dataType: 'json',
+            success: function (response) {
+                // merge two dict
+                CONFIG_FORM = Object.assign(CONFIG_FORM, response)
+
+                execute_parte_dinamica_form();
+                toggleDocumentosAdmitibles();
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.error("Error:", errorThrown);
+            }
+        });
     } else {
         alert('Hubo un problema al procesar la solicitud, acceda al formulario desde el buscador de https://sacacitas.es, Si el problema persiste, contacte con nosotros.')
     }
-
-    const id_oficina = INPUT_JSON.idbuscadores.map(item => item.id_oficina);
-    const id_servicio = INPUT_JSON.idbuscadores.map(item => item.id_servicio);
-
-    var data = {
-        id_oficina: id_oficina,
-        id_servicio: id_servicio
-    };
-
-
-
-    var CONFIG_FORM; // Declare CONFIG_FORM in a global scope
-
-    //GET INPUT_JSON para mostrar secciones
-    $.ajax({
-        url: "https://n8n.sacacitas.es/webhook/0a372cab-4efe-4fa0-b471-545e93719107",
-        type: "POST",
-        data: JSON.stringify(data), // Assuming data is your JSON object
-        contentType: "application/json", // Set content type to JSON
-        success: function (response) {
-            var responseData = response; // Assuming response is JSON
-
-            CONFIG_FORM = { // Assign values to CONFIG_FORM
-                'resolucion_nacionalidad': responseData.resolucion_nacionalidad,
-                'caducidad_tarjeta': responseData.caducidad_tarjeta,
-                'documentos_admitibles': responseData.documentos_admitibles,
-                'servicio_blocked': responseData.servicio_blocked
-            };
-
-
-            execute_parte_dinamica_form();
-            toggleDocumentosAdmitibles();
-        },
-        error: function (jqXHR, textStatus, errorThrown) {
-            console.error("Error:", errorThrown);
-        }
-    });
 
     //Mostrar secciones dinámicas
     function execute_parte_dinamica_form() {
@@ -320,6 +308,7 @@ $(document).ready(function () {
 
             // Gather form data
             var formData = {
+                idbuscadores: INPUT_JSON.idbuscadores,
                 Fmin: $('#checkin').val(),
                 Fmax: $('#checkout').val(),
                 Nombre: $('#input-nombre').val(),
@@ -341,6 +330,7 @@ $(document).ready(function () {
                 type: 'POST',
                 url: 'https://n8n.sacacitas.es/webhook-test/d34bf08d-32d8-4956-8dc4-9e1d676bb5fa434',
                 data: formData, // Send form data using the 'data' property
+                dataType: 'json',
                 success: function (response) {
                     // Handle successful response
                     console.log('Form submitted successfully');
