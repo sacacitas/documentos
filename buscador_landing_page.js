@@ -732,7 +732,7 @@ $(document).ready(function () {
             ofi = SERVICIOS[id_ofi]
 
             nombre_oficina = ofi.nombre
-            nombre_servicio = ofi.servicios.find((e) => e.id_servicio == id_servicio_elem);
+            nombre_servicio = ofi.servicios.find((e) => e.id_servicio == id_ser);
 
             idbuscadores.push({
                 'id_oficina': id_ofi,
