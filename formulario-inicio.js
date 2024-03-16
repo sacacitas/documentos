@@ -98,12 +98,13 @@ $(document).ready(function () {
             url: "https://n8n.sacacitas.es/webhook/0a372cab-4efe-4fa0-b471-545e93719107",
             type: "POST",
             contentType: "application/json", // Specify content type as JSON
+            dataType: 'json',
             data: inputData, // Send the JSON data
             success: function (response) {
                 // merge two dict
                 CONFIG_FORM = Object.assign(CONFIG_FORM, response);
                 console.log(CONFIG_FORM);
-                
+
                 execute_parte_dinamica_form();
                 toggleDocumentosAdmitibles();
             },
@@ -175,8 +176,8 @@ $(document).ready(function () {
                 minDays: 3
             },
             plugins: ["AmpPlugin", "RangePlugin", "LockPlugin"]
-        
-        
+
+
         })
 
 
@@ -342,11 +343,12 @@ $(document).ready(function () {
             $.ajax({
                 type: 'POST',
                 url: 'https://n8n.sacacitas.es/webhook-test/d34bf08d-32d8-4956-8dc4-9e1d676bb5fa434',
-                data: formData, // Send form data using the 'data' property
+                data: JSON.stringify(formData), // Send form data using the 'data' property
                 dataType: 'json',
+                contentType: 'application/json',
                 success: function (response) {
                     // Handle successful response
-                    
+
 
                     // Redirect to a new page
                     window.location.href = 'https://www.sacacitas.es/operaciones/fin-tramite?redirect=isTrue';
