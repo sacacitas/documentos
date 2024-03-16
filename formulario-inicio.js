@@ -84,17 +84,23 @@ $(document).ready(function () {
     //Cargar datos del buscador
     var urlParams = new URLSearchParams(window.location.search);
     if (urlParams.has('INPUT_JSON')) {
-        INPUT_JSON = JSON.parse(atob(urlParams.get('INPUT_JSON')))
+        INPUT_JSON = JSON.parse(atob(urlParams.get('INPUT_JSON')));
+        console.log(INPUT_JSON.idbuscadores);
+
+        // Stringify the JSON data
+        var inputData = JSON.stringify(INPUT_JSON);
+
         //GET INPUT_JSON para mostrar secciones
         $.ajax({
             url: "https://n8n.sacacitas.es/webhook/0a372cab-4efe-4fa0-b471-545e93719107",
             type: "POST",
-            data: INPUT_JSON.idbuscadores,
-            dataType: 'json',
+            contentType: "application/json", // Specify content type as JSON
+            data: inputData, // Send the JSON data
             success: function (response) {
                 // merge two dict
-                CONFIG_FORM = Object.assign(CONFIG_FORM, response)
-
+                CONFIG_FORM = Object.assign(CONFIG_FORM, response);
+                console.log(CONFIG_FORM);
+                
                 execute_parte_dinamica_form();
                 toggleDocumentosAdmitibles();
             },
@@ -103,7 +109,7 @@ $(document).ready(function () {
             }
         });
     } else {
-        alert('Hubo un problema al procesar la solicitud, acceda al formulario desde el buscador de https://sacacitas.es, Si el problema persiste, contacte con nosotros.')
+        alert('Hubo un problema al procesar la solicitud, acceda al formulario desde el buscador de https://sacacitas.es, Si el problema persiste, contacte con nosotros.');
     }
 
     //Mostrar secciones dinámicas
