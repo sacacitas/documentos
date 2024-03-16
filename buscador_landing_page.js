@@ -731,14 +731,18 @@ $(document).ready(function () {
             // var categ_ofi = Object.keys(CATEGORIAS).find(key => idoficina_idservicio in CATEGORIAS[key]) || "ES_0_SINDATOS";
             ofi = SERVICIOS[id_ofi]
 
+            //Obtener datos de la oficina
+            nombre_provincia = ofi.provincia
             nombre_oficina = ofi.nombre
             nombre_servicio = ofi.servicios.find((e) => e.id_servicio == id_ser);
 
+            //Crear var con los objetos 
             idbuscadores.push({
                 'id_oficina': id_ofi,
                 'id_servicio': id_ser,
                 'nombre_oficina': nombre_oficina,
-                'nombre_servicio': nombre_servicio
+                'nombre_servicio': nombre_servicio,
+                'nombre_provincia': nombre_provincia
             })
 
         })
