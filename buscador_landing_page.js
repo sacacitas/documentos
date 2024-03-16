@@ -20,7 +20,7 @@ $(document).ready(function () {
     var select_oficina = $('#select-buscador-oficina');
     var select_servicio = $('#select-buscador-servicio');
     var numero_citas_contador = $('numero-citas-seleccionadas-buscador');
-    
+
 
 
     // Variables IDs de info secundaria
@@ -113,38 +113,38 @@ $(document).ready(function () {
 
     //Tratamiento GCLID en la URL   
     {
-    //Obtener todos los parametros de la URL
-    function getUrlParameter(name) {
-        name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
-        var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
-        var results = regex.exec(location.search);
-        return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
-    }
-
-    //Obtener valor de gclid de la UrL y crear variable con GCLID
-    var leadIdFromUrl = getUrlParameter('gclid');
-    
-    //Si existe gclid en la URL crear cookie
-    if (leadIdFromUrl !== '') {
-        document.cookie = "lead_id_cookie=" + leadIdFromUrl + "; path=/";
-    }
-
-    //Obtener valor de la cookie
-    function getLeadIdCookie() {
-        var name = "lead_id_cookie=";
-        var decodedCookie = decodeURIComponent(document.cookie);
-        var cookieArray = decodedCookie.split(';');
-        for(var i = 0; i < cookieArray.length; i++) {
-            var cookie = cookieArray[i].trim();
-            if (cookie.indexOf(name) === 0) {
-                return cookie.substring(name.length, cookie.length);
-            }
+        //Obtener todos los parametros de la URL
+        function getUrlParameter(name) {
+            name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+            var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+            var results = regex.exec(location.search);
+            return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
         }
-        return "";
-    }
 
-    //Obtener valor cookie Lead ID y meterlo en una variable
-    var leadIdFromUrl = getLeadIdCookie();
+        //Obtener valor de gclid de la UrL y crear variable con GCLID
+        var leadIdFromUrl = getUrlParameter('gclid');
+
+        //Si existe gclid en la URL crear cookie
+        if (leadIdFromUrl !== '') {
+            document.cookie = "lead_id_cookie=" + leadIdFromUrl + "; path=/";
+        }
+
+        //Obtener valor de la cookie
+        function getLeadIdCookie() {
+            var name = "lead_id_cookie=";
+            var decodedCookie = decodeURIComponent(document.cookie);
+            var cookieArray = decodedCookie.split(';');
+            for (var i = 0; i < cookieArray.length; i++) {
+                var cookie = cookieArray[i].trim();
+                if (cookie.indexOf(name) === 0) {
+                    return cookie.substring(name.length, cookie.length);
+                }
+            }
+            return "";
+        }
+
+        //Obtener valor cookie Lead ID y meterlo en una variable
+        var leadIdFromUrl = getLeadIdCookie();
     }//Ocultar seccion
 
 
@@ -479,7 +479,7 @@ $(document).ready(function () {
         obj = SERVICIOS[id_oficina_elem]
 
         svc_obj = obj.servicios.find((e) => e.id_servicio == id_servicio_elem);
-        
+
         // validate exists servicio id
         if (svc_obj === undefined) {
             throw new Error(`Id servicio ${id_servicio_elem} not exists in SERVICIOS for oficina ${id_oficina_elem}`);
@@ -590,6 +590,7 @@ $(document).ready(function () {
         })
 
         string_precio_buscador.text(set_price_cents / 100)
+        INPUT_JSON['estimacion_precio_eur'] = set_price_cents
         //$('#INPUT_PRECIO').val(set_price_cents)
 
 
@@ -715,7 +716,7 @@ $(document).ready(function () {
         // reset?
         INPUT_JSON = {
             'gclid': leadIdFromUrl
-            
+
         }
         console.log(INPUT_JSON)
         var idbuscadores = []
@@ -728,13 +729,16 @@ $(document).ready(function () {
 
             // var idoficina_idservicio = `${id_ofi}_${id_ser}`;
             // var categ_ofi = Object.keys(CATEGORIAS).find(key => idoficina_idservicio in CATEGORIAS[key]) || "ES_0_SINDATOS";
-            // ofi = SERVICIOS[id_ofi]
+            ofi = SERVICIOS[id_ofi]
 
+            nombre_oficina = ofi.nombre
+            nombre_servicio = ofi.servicios.find((e) => e.id_servicio == id_servicio_elem);
 
             idbuscadores.push({
                 'id_oficina': id_ofi,
                 'id_servicio': id_ser,
-
+                'nombre_oficina': nombre_oficina,
+                'nombre_servicio': nombre_servicio
             })
 
         })
