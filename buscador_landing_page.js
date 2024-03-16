@@ -154,8 +154,7 @@ $(document).ready(function () {
     // Crear valores en el select de la Administración
     var values_select_administracion = [
         { value: 'EX1', text: 'Extranjería' },
-        { value: 'RC1', text: 'Registro Civil' },
-        { value: 'DGT1', text: 'DGT' }
+        { value: 'RC1', text: 'Registro Civil' }
     ];
 
     // Populate select administración
@@ -476,10 +475,11 @@ $(document).ready(function () {
             throw new Error(`Id oficina ${id_oficina_elem} not exists in SERVICIOS`);
         }
 
+
         obj = SERVICIOS[id_oficina_elem]
 
         svc_obj = obj.servicios.find((e) => e.id_servicio == id_servicio_elem);
-
+        
         // validate exists servicio id
         if (svc_obj === undefined) {
             throw new Error(`Id servicio ${id_servicio_elem} not exists in SERVICIOS for oficina ${id_oficina_elem}`);
@@ -723,6 +723,7 @@ $(document).ready(function () {
         checkoutContainer.children('.checkout-item').each((idx, elem) => {
             id_ofi = $(elem).attr('id_oficina')
             id_ser = $(elem).attr('id_servicio')
+
             // frontend_administracion = $(elem).attr('frontend_administracion')
 
             // var idoficina_idservicio = `${id_ofi}_${id_ser}`;
@@ -732,7 +733,8 @@ $(document).ready(function () {
 
             idbuscadores.push({
                 'id_oficina': id_ofi,
-                'id_servicio': id_ser
+                'id_servicio': id_ser,
+
             })
 
         })
