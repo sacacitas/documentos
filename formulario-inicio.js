@@ -43,7 +43,7 @@ $(document).ready(function () {
         var InputDivFMinMax = $('#div-block-f-min-max');
         var InputFMin = $('#checkin');
         var InputFMax = $('#checkout');
-        var InputFechaExclusion = $('#input-fecha-exclusion');
+        //var InputFechaExclusion = $('#input-fecha-exclusion');
         var InputNombre = $('#input-nombre');
         var InputApellido1 = $('#input-apellido1');
         var InputFNacimiento = $('#input-fecha-nacimiento');
@@ -65,6 +65,9 @@ $(document).ready(function () {
 
         //Fecha de ahora
         var DateNow = new Date();
+
+        //Lenguaje del navegador
+        var LangBrowser = navigator.language || navigator.userLanguage;
 
 
     }
@@ -172,7 +175,10 @@ $(document).ready(function () {
                 minDays: 3
             },
             plugins: ["AmpPlugin", "RangePlugin", "LockPlugin"]
+        
+        
         })
+
 
         //Poner read only al input de fecha max para que no salga el teclado en el movil
         function makeReadonly() {
@@ -328,6 +334,7 @@ $(document).ready(function () {
                 Pais: $('#input-lista-paises').val(),
                 RNacionalidad: $('#input-resolucion-nacionalidad').val(),
                 CaducidadTarjeta: $('#input-caducidad-tarjeta').val(),
+                LangBrowser: LangBrowser
             }
                 ;
 
@@ -339,7 +346,7 @@ $(document).ready(function () {
                 dataType: 'json',
                 success: function (response) {
                     // Handle successful response
-                    console.log('Form submitted successfully');
+                    
 
                     // Redirect to a new page
                     window.location.href = 'https://www.sacacitas.es/operaciones/fin-tramite?redirect=isTrue';
