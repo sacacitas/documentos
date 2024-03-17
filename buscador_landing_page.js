@@ -734,7 +734,7 @@ $(document).ready(function () {
             //Obtener datos de la oficina
             nombre_provincia = ofi.provincia
             nombre_oficina = ofi.nombre
-            nombre_servicio = ofi.servicios.find((e) => e.id_servicio == id_ser);
+            nombre_servicio = ofi.servicios.find((e) => e.id_servicio == id_ser).nombre;
 
             //Crear var con los objetos 
             idbuscadores.push({
