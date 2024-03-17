@@ -752,7 +752,7 @@ $(document).ready(function () {
         if (idbuscadores.length === 0) {
             $('#INPUT_JSON').val('')
         } else {
-            $('#INPUT_JSON').val(btoa(JSON.stringify(INPUT_JSON))) //base64
+            $('#INPUT_JSON').val(btoa(encodeURIComponent(JSON.stringify(INPUT_JSON)))) //base64
         }
 
 

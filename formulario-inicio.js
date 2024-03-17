@@ -89,7 +89,7 @@ $(document).ready(function () {
     //Cargar datos del buscador
     var urlParams = new URLSearchParams(window.location.search);
     if (urlParams.has('INPUT_JSON')) {
-        INPUT_JSON = JSON.parse(atob(urlParams.get('INPUT_JSON')));
+        INPUT_JSON = JSON.parse(decodeURIComponent(atob(urlParams.get('INPUT_JSON'))));
         // Stringify the JSON data
         var inputData = JSON.stringify(INPUT_JSON.idbuscadores);
 
