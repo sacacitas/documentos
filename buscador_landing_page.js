@@ -556,6 +556,14 @@ $(document).ready(function () {
                 select_servicio.prop('disabled', false);
             }
 
+            //Si no hay citas seleccionadas, mostrar el div mensaje
+            if (checkoutContainer.children('.checkout-item').length === 0) {
+                $('#div-mensaje-citas-seleccionadas').show();
+            }
+            
+            //Poner en default selector servicios cuando se borre algo
+            resetOficinaAndUpdateCitaPrevia();
+
             updatePrice();
         });
 
@@ -568,6 +576,14 @@ $(document).ready(function () {
         if (checkoutContainer.children('.checkout-item').length >= MAX_CHECKOUT_ITEMS) {
             select_servicio.prop('disabled', true);
         }
+
+        //Si hay una cita seleccionada, ocultrar el div mensaje
+        if (checkoutContainer.children('.checkout-item').length > 0) {
+            $('#div-mensaje-citas-seleccionadas').hide();
+        } 
+     
+
+
     }
 
 
