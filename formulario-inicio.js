@@ -575,10 +575,33 @@ $(document).ready(function () {
                     }
                 });
 
-                // Si todo OK pasa a la siguiente
+                // Si todo OK pasa a la siguiente y crea el texto del resumen
                 if (allInputsValid) {
                     seccion5.hide();
                     seccion6.show();
+
+                    //Crear texto resumen
+                    $('#resumen-servicio').text(INPUT_JSON.idbuscadores[0].nombre_oficina);
+                    $('#resumen-oficina').text(INPUT_JSON.idbuscadores[0].nombre_servicio);
+                    $('#resumen-provincia').text(INPUT_JSON.idbuscadores[0].nombre_provincia);
+                    $('#resumen-nombre-completo').text($('#input-nombre').val() + ' ' + $('#input-apellido1').val() + ' ' + $('#input-apellido2').val());
+                    $('#resumen-documento-identidad').text( $('#input-documento').val());
+                    $('#resumen-fecha-nacimiento').text($('#input-fecha-nacimiento').val());
+                    $('#resumen-nacionalidad').text($('#input-lista-paises').val());
+                    $('#resumen-telefono').text($('#input-telefono').val());
+                    $('#resumen-correo').text($('#input-correo').val());
+                    $('#resumen-Fmin').text($('#checkin').val());
+                    $('#resumen-Fmax').text($('#checkout').val());
+                    // Convert cents to dollars and format with commas and two decimal places
+                    var formatted_price = ((CONFIG_FORM.precio) / 100).toLocaleString('es-ES', {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2
+                    });
+                    $('#end-form-text-precio').text(formatted_price);
+
+
+                    
+                    
                 }
             });
         }
