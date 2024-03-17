@@ -115,7 +115,7 @@ $(document).ready(function () {
     } else {
         alert('Hubo un problema al procesar la solicitud, acceda al formulario desde el buscador de https://sacacitas.es, Si el problema persiste, contacte con nosotros.');
     }
-
+    console.log(INPUT_JSON);
     //Mostrar secciones dinámicas
     function execute_parte_dinamica_form() {
         // Parte dinámica del formulario
@@ -326,6 +326,7 @@ $(document).ready(function () {
             } else if (selected_document === 'select-nie-form') {
                 var NiceSelected_document = 'NIE'
             }
+            
 
             $('#gif-cargando-boton-finalizar').show();
 
@@ -346,7 +347,8 @@ $(document).ready(function () {
                 RNacionalidad: $('#input-resolucion-nacionalidad').val(),
                 CaducidadTarjeta: $('#input-caducidad-tarjeta').val(),
                 RandomStringID: RandomStringID,
-                LangBrowser: LangBrowser
+                LangBrowser: LangBrowser,
+                gclid: INPUT_JSON.gclid
             }
                 ;
 
