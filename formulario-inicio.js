@@ -66,7 +66,7 @@ $(document).ready(function () {
         var RandomNumber = Math.floor(Math.random() * 10000).toString(36);
         var DateNow = Date.now().toString(36);
 
-        var RandomStringID =(DateNow + '-' + RandomNumber);
+        var RandomStringID = (DateNow + '-' + RandomNumber);
 
         //Lenguaje del navegador
         var LangBrowser = navigator.language || navigator.userLanguage;
@@ -90,10 +90,8 @@ $(document).ready(function () {
     var urlParams = new URLSearchParams(window.location.search);
     if (urlParams.has('INPUT_JSON')) {
         INPUT_JSON = JSON.parse(atob(urlParams.get('INPUT_JSON')));
-        console.log(INPUT_JSON.idbuscadores);
-
         // Stringify the JSON data
-        var inputData = JSON.stringify(INPUT_JSON);
+        var inputData = JSON.stringify(INPUT_JSON.idbuscadores);
 
         //GET INPUT_JSON para mostrar secciones
         $.ajax({
@@ -327,7 +325,7 @@ $(document).ready(function () {
                 var NiceSelected_document = 'DNI'
             } else if (selected_document === 'select-nie-form') {
                 var NiceSelected_document = 'NIE'
-            }     
+            }
 
             $('#gif-cargando-boton-finalizar').show();
 
@@ -473,7 +471,7 @@ $(document).ready(function () {
 
                     } else if (selected_document === 'select-dni-form') {
                         func_validate = validateDNI
-                        
+
                     }
 
                     if (input.val().trim() === '') {
@@ -502,7 +500,7 @@ $(document).ready(function () {
                 }
             });
 
-            
+
 
 
 
