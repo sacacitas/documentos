@@ -62,9 +62,11 @@ $(document).ready(function () {
         //Fecha exclusion
         var TextFechaExclusion = $('#texto-fechas-exclusion');
 
+        //Generar random id para el formulario
+        var RandomNumber = Math.floor(Math.random() * 10000).toString(36);
+        var DateNow = Date.now().toString(36);
 
-        //Fecha de ahora
-        var DateNow = new Date();
+        var RandomStringID =(DateNow + '-' + RandomNumber);
 
         //Lenguaje del navegador
         var LangBrowser = navigator.language || navigator.userLanguage;
@@ -317,6 +319,16 @@ $(document).ready(function () {
             var selected_document = $('.div-documentos-formulario').find('.boton-documento-selected').attr('id')
             console.log(selected_document)
 
+            //Dejar bonito el document type
+            //Poner datos del selected document bonito 
+            if (selected_document === 'select-pasaporte-form') {
+                var NiceSelected_document = 'PASAPORTE'
+            } else if (selected_document === 'select-dni-form') {
+                var NiceSelected_document = 'DNI'
+            } else if (selected_document === 'select-nie-form') {
+                var NiceSelected_document = 'NIE'
+            }     
+
             $('#gif-cargando-boton-finalizar').show();
 
             // Gather form data
@@ -328,13 +340,14 @@ $(document).ready(function () {
                 Apellido1: $('#input-apellido1').val(),
                 Apellido2: $('#input-apellido2').val(), // Fixed typo here
                 Fnacimiento: $('#input-fecha-nacimiento').val(),
-                SelectedDocument: selected_document,
+                SelectedDocument: NiceSelected_document,
                 NDocumento: $('#input-documento').val(),
                 Correo: $('#input-correo').val(),
                 Telefono: $('#input-telefono').val(),
                 Pais: $('#input-lista-paises').val(),
                 RNacionalidad: $('#input-resolucion-nacionalidad').val(),
                 CaducidadTarjeta: $('#input-caducidad-tarjeta').val(),
+                RandomStringID: RandomStringID,
                 LangBrowser: LangBrowser
             }
                 ;
@@ -457,8 +470,10 @@ $(document).ready(function () {
 
                     if (selected_document === 'select-nie-form') {
                         func_validate = validateNIE
+
                     } else if (selected_document === 'select-dni-form') {
                         func_validate = validateDNI
+                        
                     }
 
                     if (input.val().trim() === '') {
@@ -477,6 +492,7 @@ $(document).ready(function () {
                         // If input is not empty, remove the error message
                         $(input).next('.error-message-form').remove();
                     }
+
                 });
 
                 // Si todo OK pasa a la siguiente
@@ -485,6 +501,12 @@ $(document).ready(function () {
                     seccion4.show();
                 }
             });
+
+            
+
+
+
+
 
             //4.Comprobar correo y telefono
             InputTelef.add(InputTelefVerf).keyup(function (e) {
