@@ -605,7 +605,15 @@ $(document).ready(function () {
             }
         })
 
-        string_precio_buscador.text(set_price_cents / 100)
+        // Convert cents to dollars and format with commas and two decimal places
+        var formatted_price = (set_price_cents / 100).toLocaleString('es-ES', {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        });
+
+        // Display the formatted price in your text element
+        string_precio_buscador.text(formatted_price);
+
         INPUT_JSON['estimacion_precio_eur'] = set_price_cents
         //$('#INPUT_PRECIO').val(set_price_cents)
 
