@@ -327,6 +327,9 @@ $(document).ready(function () {
                 var NiceSelected_document = 'NIE'
             }
             
+            //Crear variables null y no "" para que no de error en el backend
+            var InputResNacionalidad = $('#input-resolucion-nacionalidad').val();
+            var InputCadTarjeta = $('#input-caducidad-tarjeta').val();
 
             $('#gif-cargando-boton-finalizar').show();
 
@@ -355,7 +358,7 @@ $(document).ready(function () {
             // Send POST request
             $.ajax({
                 type: 'POST',
-                url: 'https://n8n.sacacitas.es/webhook-test/d34bf08d-32d8-4956-8dc4-9e1d676bb5fa434',
+                url: 'https://n8n.sacacitas.es/webhook/d34bf08d-32d8-4956-8dc4-9e1d676bb5fa434',
                 data: JSON.stringify(formData), // Send form data using the 'data' property
                 dataType: 'json',
                 contentType: 'application/json',
@@ -679,3 +682,7 @@ function validateNIE(nie) {
 
     return letra === lett;
 }
+
+
+
+
