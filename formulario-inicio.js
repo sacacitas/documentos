@@ -1,4 +1,3 @@
-
 // Declare in a global scope
 var INPUT_JSON = null
 
@@ -9,7 +8,12 @@ var CONFIG_FORM = {
     'servicio_blocked': false
 };
 
+
+var PickerExcluidosDias = null
+
+
 $(document).ready(function () {
+
 
     //Variables del fornulario
     {
@@ -54,7 +58,6 @@ $(document).ready(function () {
         var InputTelefVerf = $('#input-confirmar-telefono');
         var InputNacionalidad = $('#input-lista-paises');
 
-
         //Divs del formulario
         var DivJuraNacionalidad = $('#clientes-jura-nacionalidad');
         var DivCaducidadTarjeta = $('#clientes-caducidad-tarjeta');
@@ -71,10 +74,8 @@ $(document).ready(function () {
         //Lenguaje del navegador
         var LangBrowser = navigator.language || navigator.userLanguage;
 
-
     }
     //Ocultrar seccion
-
 
     //Ocultar secciones divs (temporal)
     seccion1.show();
@@ -83,8 +84,6 @@ $(document).ready(function () {
     seccion4.hide();
     seccion5.hide();
     seccion6.hide();
-
-
 
     //Cargar datos del buscador
     var urlParams = new URLSearchParams(window.location.search);
@@ -97,9 +96,11 @@ $(document).ready(function () {
         $.ajax({
             url: "https://n8n.sacacitas.es/webhook/0a372cab-4efe-4fa0-b471-545e93719107",
             type: "POST",
-            contentType: "application/json", // Specify content type as JSON
+            contentType: "application/json",
+            // Specify content type as JSON
             dataType: 'json',
-            data: inputData, // Send the JSON data
+            data: inputData,
+            // Send the JSON data
             success: function (response) {
                 // merge two dict
                 CONFIG_FORM = Object.assign(CONFIG_FORM, response);
@@ -130,8 +131,6 @@ $(document).ready(function () {
             seccion1.hide();
         }
     }
-
-
 
     //Funcionalidades de cada sección del formulario 
     {
@@ -177,9 +176,20 @@ $(document).ready(function () {
             },
             plugins: ["AmpPlugin", "RangePlugin", "LockPlugin"]
 
-
         })
 
+        PickerExcluidosDias = new Litepicker({
+            element: document.getElementById('exclude-days'),
+            plugins: ['multiselect', 'mobilefriendly'],
+            minDate: new Date(),
+            numberOfColumns: 2,
+            numberOfMonths: 2,
+            setup: function (picker) {
+                picker.on('button:apply', function () {
+                    document.getElementById('exclude-days').value = picker.multipleDatesToString();
+                });
+            }
+        });
 
         //Poner read only al input de fecha max para que no salga el teclado en el movil
         function makeReadonly() {
@@ -191,9 +201,6 @@ $(document).ready(function () {
             // Toggle the visibility of InputFechaExclusion
             $('#div-fecha-exclusion').toggle();
         });
-
-
-
 
         //SECTION: 2 - Datos cliente
         //Easepicker fecha nacimiento
@@ -235,7 +242,6 @@ $(document).ready(function () {
             }
             );
 
-
         }
 
         selectFormDocPasaporte.addClass('boton-documento-selected');
@@ -252,8 +258,6 @@ $(document).ready(function () {
             // Toggle the visibility of InputFechaExclusion
             $('#texto-more-info-variosdocs').toggle();
         });
-
-
 
         //SECTION: 5 - Nacionalidad, R Nacionalidad y caducidad tarjeta
         //Lista desplegable de paises
@@ -305,9 +309,6 @@ $(document).ready(function () {
             plugins: ["AmpPlugin", "LockPlugin"]
         })
 
-
-
-
         //6. Finalizar y enviar a backend los datos
         $('#formulario_ID').submit(function (event) {
             // Prevent the default form submission behavior
@@ -326,7 +327,7 @@ $(document).ready(function () {
             } else if (selected_document === 'select-nie-form') {
                 var NiceSelected_document = 'NIE'
             }
-            
+
             //Crear variables null y no "" para que no de error en el backend
             var InputResNacionalidad = $('#input-resolucion-nacionalidad').val();
             var InputCadTarjeta = $('#input-caducidad-tarjeta').val();
@@ -338,9 +339,11 @@ $(document).ready(function () {
                 idbuscadores: INPUT_JSON.idbuscadores,
                 Fmin: $('#checkin').val(),
                 Fmax: $('#checkout').val(),
+                dias_excluidos: PickerExcluidosDias.multipleDatesToString() === '' ? [] : PickerExcluidosDias.multipleDatesToString().split(','),
                 Nombre: $('#input-nombre').val(),
                 Apellido1: $('#input-apellido1').val(),
-                Apellido2: $('#input-apellido2').val(), // Fixed typo here
+                Apellido2: $('#input-apellido2').val(),
+                // Fixed typo here
                 Fnacimiento: $('#input-fecha-nacimiento').val(),
                 SelectedDocument: NiceSelected_document,
                 NDocumento: $('#input-documento').val(),
@@ -352,19 +355,18 @@ $(document).ready(function () {
                 RandomStringID: RandomStringID,
                 LangBrowser: LangBrowser,
                 gclid: INPUT_JSON.gclid
-            }
-                ;
+            };
 
             // Send POST request
             $.ajax({
                 type: 'POST',
                 url: 'https://n8n.sacacitas.es/webhook/d34bf08d-32d8-4956-8dc4-9e1d676bb5fa434',
-                data: JSON.stringify(formData), // Send form data using the 'data' property
+                data: JSON.stringify(formData),
+                // Send form data using the 'data' property
                 dataType: 'json',
                 contentType: 'application/json',
                 success: function (response) {
                     // Handle successful response
-
 
                     // Redirect to a new page
                     window.location.href = 'https://www.sacacitas.es/operaciones/fin-tramite?redirect=isTrue';
@@ -505,12 +507,6 @@ $(document).ready(function () {
                 }
             });
 
-
-
-
-
-
-
             //4.Comprobar correo y telefono
             InputTelef.add(InputTelefVerf).keyup(function (e) {
                 var prefix = '+34'
@@ -585,7 +581,7 @@ $(document).ready(function () {
                     $('#resumen-oficina').text(INPUT_JSON.idbuscadores[0].nombre_servicio);
                     $('#resumen-provincia').text(INPUT_JSON.idbuscadores[0].nombre_provincia);
                     $('#resumen-nombre-completo').text($('#input-nombre').val() + ' ' + $('#input-apellido1').val() + ' ' + $('#input-apellido2').val());
-                    $('#resumen-documento-identidad').text( $('#input-documento').val());
+                    $('#resumen-documento-identidad').text($('#input-documento').val());
                     $('#resumen-fecha-nacimiento').text($('#input-fecha-nacimiento').val());
                     $('#resumen-nacionalidad').text($('#input-lista-paises').val());
                     $('#resumen-telefono').text($('#input-telefono').val());
@@ -599,13 +595,9 @@ $(document).ready(function () {
                     });
                     $('#end-form-text-precio').text(formatted_price);
 
-
-                    
-                    
                 }
             });
         }
-
 
         //Botones hacia atrás. Ocultra y muestra secciones
         $(BackButon1).click(function () {
@@ -658,11 +650,6 @@ $(document).ready(function () {
             });
         }
 
-
-
-
-
-
     }
     //Ocultrar seccion
 
@@ -705,7 +692,3 @@ function validateNIE(nie) {
 
     return letra === lett;
 }
-
-
-
-

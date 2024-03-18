@@ -560,7 +560,7 @@ $(document).ready(function () {
             if (checkoutContainer.children('.checkout-item').length === 0) {
                 $('#div-mensaje-citas-seleccionadas').show();
             }
-            
+
             //Poner en default selector servicios cuando se borre algo
             resetOficinaAndUpdateCitaPrevia();
 
@@ -580,8 +580,8 @@ $(document).ready(function () {
         //Si hay una cita seleccionada, ocultrar el div mensaje
         if (checkoutContainer.children('.checkout-item').length > 0) {
             $('#div-mensaje-citas-seleccionadas').hide();
-        } 
-     
+        }
+
 
 
     }
