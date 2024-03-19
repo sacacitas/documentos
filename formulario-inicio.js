@@ -178,12 +178,14 @@ $(document).ready(function () {
 
         })
 
+        //Días de exclusión
         PickerExcluidosDias = new Litepicker({
             element: document.getElementById('exclude-days'),
             plugins: ['multiselect', 'mobilefriendly'],
             minDate: new Date(),
             numberOfColumns: 2,
             numberOfMonths: 2,
+            lang: 'es-ES',
             setup: function (picker) {
                 picker.on('button:apply', function () {
                     document.getElementById('exclude-days').value = picker.multipleDatesToString();
