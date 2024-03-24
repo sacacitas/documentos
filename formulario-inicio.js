@@ -188,7 +188,7 @@ $(document).ready(function () {
             lang: 'es-ES',
             buttonText: {
             apply: 'Aplicar',
-            cancel: 'Cancelar',
+            cancel: 'Borrar',
             },
             tooltipText: {
             one: 'día',
