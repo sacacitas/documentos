@@ -1055,7 +1055,7 @@ document.addEventListener('DOMContentLoaded', function () {
         //Mostrar bloque pidiendo codigo verificacion email y cambiar texto estado
         if (!EmailVerified) {
             $('#block-email-verify').show(); // Show the block
-            $('#boton_estado_busqueda').text('Email no verificado');
+            $('#boton_estado_busqueda').text('Email pendiente verificar');
             console.log('Email no verificado');
         }
 
