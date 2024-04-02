@@ -370,16 +370,24 @@ $(document).ready(function () {
             // Send POST request
             $.ajax({
                 type: 'POST',
-                url: 'https://n8n.sacacitas.es/webhook/d34bf08d-32d8-4956-8dc4-9e1d676bb5fa434',
+                url: 'https://n8n.sacacitas.es/webhook/d34bf08d-32d8-4956-8dc4-9e1d676bb5fa434-formulario-recibido-new-form',
                 data: JSON.stringify(formData),
                 // Send form data using the 'data' property
                 dataType: 'json',
                 contentType: 'application/json',
                 success: function (response) {
                     // Handle successful response
+                    // Here, response contains the data sent back by the server
+
+                    // Check if ID_publico exists in the response
+                    if (response.ID_publico) {
+                        // Use the ID_publico property
+                        var publicItemId = response.ID_publico;
+                        // Do something with publicItemId
+                    }
 
                     // Redirect to a new page
-                    window.location.href = 'https://www.sacacitas.es/operaciones/fin-tramite?redirect=isTrue';
+                    window.location.href = 'https://www.sacacitas.es/link?r='+publicItemId;
                 },
                 error: function (xhr, status, error) {
                     // Handle error response
@@ -388,6 +396,7 @@ $(document).ready(function () {
                     $('#div-error-enviar-datos').show();
                 }
             });
+
 
             // Prevent default form submission in Webflow
             return false;
