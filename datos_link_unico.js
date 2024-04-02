@@ -713,7 +713,11 @@ document.addEventListener('DOMContentLoaded', function () {
             document.getElementById('texto-pago-cita-aun-buscando').textContent = 'Cita reservada anulada';
             document.getElementById('boton_estado_busqueda').classList.add('boton_busqueda_rojo');
         }
-
+        if (state_front == 'ANULANDO-COLA') {
+            botonEstadoBusqueda.textContent = 'Anulando cita...';
+            document.getElementById('texto-pago-cita-aun-buscando').textContent = 'Anulando cita...';
+            document.getElementById('boton_estado_busqueda').classList.add('boton_busqueda_rojo');
+        }
         if (state_front == 'EXPIRADO') {
             botonEstadoBusqueda.textContent = 'Búsqueda caducada';
             document.getElementById('boton_estado_busqueda').classList.add('boton_busqueda_rojo');
@@ -722,6 +726,17 @@ document.addEventListener('DOMContentLoaded', function () {
         if (state_front == 'NO_VALIDADO') {
             botonEstadoBusqueda.textContent = 'Error al procesar la solicitud';
         }
+        //Estados de inicialización
+        if (state_front == 'CLIENTE-CREADO') {
+            botonEstadoBusqueda.textContent = 'Verificando datos cliente...';
+        }
+        if (state_front == 'COLA-CREADA') {
+            botonEstadoBusqueda.textContent = 'Verificando datos búsqueda...';
+        }
+        if (state_front == 'VALIDANDO-COLA') {
+            botonEstadoBusqueda.textContent = 'Iniciando primera búsqueda...';
+        }
+
 
 
         //Poner gifs según el estado de búsqueda
@@ -1085,7 +1100,21 @@ document.addEventListener('DOMContentLoaded', function () {
             intervalId = 45000;
             fetchDataStateDynamicInterval();
         } 
-
+        if (state_front == 'CLIENTE-CREADO' || state_front == 'COLA-CREADA') {
+            // Call fetchData() initially (optional)
+            intervalId = 5000;
+            fetchDataStateDynamicInterval();
+        } 
+        if (state_front == 'VALIDANDO-COLA') {
+            // Call fetchData() initially (optional)
+            intervalId = 15000;
+            fetchDataStateDynamicInterval();
+        }         
+        if (state_front == 'ANULANDO-COLA') {
+            // Call fetchData() initially (optional)
+            intervalId = 10000;
+            fetchDataStateDynamicInterval();
+        }             
     }
     //Ejecutar peticion datos dinamicos
     function fetchDataStateDynamicInterval() {
