@@ -26,6 +26,7 @@ document.addEventListener('DOMContentLoaded', function () {
     var codigo_reserva_cita_front = null;
     var fecha_cita_reservada_front = null;
     var fecha_limite_pago_front = null;
+    var StatePendienteReason = null;
 
 
     //Datos del cliente
@@ -117,7 +118,7 @@ document.addEventListener('DOMContentLoaded', function () {
             codigo_reserva_cita_front = data.referencia_reserva;
             fecha_cita_reservada_front = data.fecha_cita_reservada;
             fecha_limite_pago_front = data.fecha_limite_pago;
-
+            StatePendienteReason = data.cola_pendiente_reason;
 
             //Datos del cliente
             clienteIdDocumento = data.cliente_numero_documento;
@@ -183,6 +184,7 @@ document.addEventListener('DOMContentLoaded', function () {
             state_front = data.state_backend;
             date_last_checked_front = data.date_last_checked;
             retries_front = data.retries;
+            StatePendienteReason = data.cola_pendiente_reason;
             //Verificacion correo
             EmailVerified = data.cliente_correo_validated;
             console.log(EmailVerified);
@@ -723,10 +725,11 @@ document.addEventListener('DOMContentLoaded', function () {
             document.getElementById('boton_estado_busqueda').classList.add('boton_busqueda_rojo');
         }
 
+        //Errores
         if (state_front == 'NO_VALIDADO') {
             botonEstadoBusqueda.textContent = 'Error al procesar la solicitud';
         }
-        //Estados de inicialización
+        //Estados de inicialización   
         if (state_front == 'CLIENTE-CREADO') {
             botonEstadoBusqueda.textContent = 'Verificando datos cliente...';
         }
@@ -734,17 +737,30 @@ document.addEventListener('DOMContentLoaded', function () {
             botonEstadoBusqueda.textContent = 'Verificando datos búsqueda...';
         }
         if (state_front == 'VALIDANDO-COLA') {
-            botonEstadoBusqueda.textContent = 'Iniciando primera búsqueda...';
+            botonEstadoBusqueda.textContent = 'Validando primera búsqueda...';
         }
-
+        //Estados pendientes
+        if (state_front == 'PENDIENTE') {
+            botonEstadoBusqueda.textContent = 'Pendiente de validación';
+        }
+        if (StatePendienteReason == 'LIMITE-BUSQUEDAS-DIARIAS' && state_front == 'PENDIENTE') {
+            document.getElementById('div-sub-estado').style.display = 'block';
+        } else {
+            document.getElementById('div-sub-estado').style.display = 'none';
+        }
 
 
         //Poner gifs según el estado de búsqueda
         if (state_front == 'BUSCANDO') {
             document.getElementById('gif-radar-buscando').style.display = 'block';
+        } else {
+            document.getElementById('gif-radar-buscando').style.display = 'none';
         }
+
         if (state_front == 'RESERVADO') {
             document.getElementById('gif-pagar-reservado').style.display = 'block';
+        } else {
+            document.getElementById('gif-pagar-reservado').style.display = 'none';
         }
 
 
@@ -762,6 +778,7 @@ document.addEventListener('DOMContentLoaded', function () {
         if (state_front == 'PAGADO') {
             divDatosCitaReservada.show();
             estadoPagoCitaReservada.text('Pagado');
+            cuadradoPagoCita20.hide();
         }
 
 
