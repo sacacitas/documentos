@@ -139,7 +139,7 @@ $(document).ready(function () {
         const PickerRangoBusqueda = new easepick.create({
             element: "#checkin",
             css: ["https://cdn.jsdelivr.net/npm/@easepick/bundle@1.2.1/dist/index.css", 'https://documentos.sacacitas.es/formulario-inicio.css',],
-            zIndex: 99999,
+            zIndex: 999999999,
             lang: "es-ES",
             format: "DD MMMM YYYY",
             grid: 2,
@@ -217,7 +217,7 @@ $(document).ready(function () {
         const PickerNacimiento = new easepick.create({
             element: "#input-fecha-nacimiento",
             css: ["https://cdn.jsdelivr.net/npm/@easepick/bundle@1.2.1/dist/index.css", 'https://documentos.sacacitas.es/formulario-inicio.css',],
-            zIndex: 99999,
+            zIndex: 999999999,
             lang: "es-ES",
             format: "DD MMMM YYYY",
             readonly: false,
@@ -302,7 +302,7 @@ $(document).ready(function () {
         const PickerCadTarjeta = new easepick.create({
             element: "#input-caducidad-tarjeta",
             css: ["https://cdn.jsdelivr.net/npm/@easepick/bundle@1.2.1/dist/index.css", 'https://documentos.sacacitas.es/formulario-inicio.css',],
-            zIndex: 99999,
+            zIndex: 999999999,
             lang: "es-ES",
             format: "DD MMMM YYYY",
             readonly: false,
