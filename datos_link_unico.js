@@ -24,6 +24,7 @@ document.addEventListener('DOMContentLoaded', function () {
     var oficina_nombre_front = null;
     var provincia_front = null;
     var codigo_reserva_cita_front = null;
+    var resumen_reserva = null;
     var fecha_cita_reservada_front = null;
     var fecha_limite_pago_front = null;
     var StatePendienteReason = null;
@@ -116,6 +117,7 @@ document.addEventListener('DOMContentLoaded', function () {
             oficina_nombre_front = data.oficina_nombre;
             provincia_front = data.provincia;
             codigo_reserva_cita_front = data.referencia_reserva;
+            resumen_reserva = data.reserva
             fecha_cita_reservada_front = data.fecha_cita_reservada;
             fecha_limite_pago_front = data.fecha_limite_pago;
             StatePendienteReason = data.cola_pendiente_reason;
@@ -343,11 +345,15 @@ document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('boton-fecha-limite-pago').textContent = formattedDate_fecha_limite_pago;
         document.getElementById('correo_usuario_verify').textContent = clienteEmail;
         // Comprobar si nº referencia es= 'referencia N/A'
-        if (codigo_reserva_cita_front === 'referencia N/A') {
-            document.getElementById('codigo-reserva-cita-reservada').textContent = "Esta cita no requiere número de reserva";
+
+        var bloque_reserva = document.getElementById('codigo-reserva-cita-reservada')
+        if (resumen_reserva && resumen_reserva.pdf) {
+            bloque_reserva.innerHTML = `<a download="Justificante" style="color: rgb(44, 100, 227);" href="data:application/pdf;base64,${resumen_reserva.pdf}">DESCARGAR</a>`
+        } else if (codigo_reserva_cita_front === 'referencia N/A') {
+            bloque_reserva.textContent = "Esta cita no requiere número de reserva";
         } else {
             // If it's not 'referencia N/A', set the text content as the value of codigo_reserva_cita_front
-            document.getElementById('codigo-reserva-cita-reservada').textContent = codigo_reserva_cita_front;
+            bloque_reserva.textContent = codigo_reserva_cita_front;
         }
 
 
