@@ -24,7 +24,6 @@ document.addEventListener('DOMContentLoaded', function () {
     var oficina_nombre_front = null;
     var provincia_front = null;
     var codigo_reserva_cita_front = null;
-    var resumen_reserva = null;
     var fecha_cita_reservada_front = null;
     var fecha_limite_pago_front = null;
     var StatePendienteReason = null;
@@ -58,6 +57,7 @@ document.addEventListener('DOMContentLoaded', function () {
     var botonLinkUnicoReserva = $('#boton-link-unico-reserva');
     var botonLinkUnicoOficina = $('#boton-link-unico-oficina');
     var botonLinkUnicoDatos = $('#boton-link-unico-datos');
+    var botonAjustesLinkUnico = $('#boton-link-unico-ajustes');
     var botonCancelarLinkUnico = $('#boton-cancelar-link-unico');
     var botonEstadoBusqueda = document.getElementById('boton_estado_busqueda');
 
@@ -69,18 +69,23 @@ document.addEventListener('DOMContentLoaded', function () {
     var gridLinkUnicoDatos = $('#grid-link-unico-datos');
     var gridLinkUnicoEstadistica = $('#grid-link-unico-estadistica');
     var divCaducidadBusqueda = $('#div_caducidad_busqueda');
+    var divAjustesLinkUnico = $('#div-ajustes-link-unico');
 
 
     //Default hide
     $('#texto-dinamico-debajoestado').hide();
+    $('#form_block_modificar_datos_personales').hide();
+
 
     //default flags
     flag_loading_text = false;
 
 
+    //Date now
+    var DateNow = Date.now().toString(36);
 
 
-    
+
 
     // Function to fetch the data from the API
     function fetchDataStatic() {
@@ -117,7 +122,6 @@ document.addEventListener('DOMContentLoaded', function () {
             oficina_nombre_front = data.oficina_nombre;
             provincia_front = data.provincia;
             codigo_reserva_cita_front = data.referencia_reserva;
-            resumen_reserva = data.reserva
             fecha_cita_reservada_front = data.fecha_cita_reservada;
             fecha_limite_pago_front = data.fecha_limite_pago;
             StatePendienteReason = data.cola_pendiente_reason;
@@ -228,6 +232,7 @@ document.addEventListener('DOMContentLoaded', function () {
     //Reemplazar items más fijos
     function ReplaceItemsStatic() {
 
+
         const DEFAULT_TIMEZONE = 'Europe/Madrid';
 
 
@@ -311,9 +316,10 @@ document.addEventListener('DOMContentLoaded', function () {
         //Fecha nacimiento a DD.MM.YYYY
         var formatted_date_clienteFechaNacimiento = date_clienteFechaNacimiento.toLocaleDateString('es-ES', {
             year: 'numeric',
-            month: 'numeric',
-            day: 'numeric',
-        }).replace(/,/g, '-');
+            month: '2-digit', // Use '2-digit' to ensure leading zeros for single-digit months
+            day: '2-digit', // Use '2-digit' to ensure leading zeros for single-digit days
+        }).replace(/\./g, '/'); // Replace dots with slashes if needed
+
 
 
 
@@ -345,15 +351,11 @@ document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('boton-fecha-limite-pago').textContent = formattedDate_fecha_limite_pago;
         document.getElementById('correo_usuario_verify').textContent = clienteEmail;
         // Comprobar si nº referencia es= 'referencia N/A'
-
-        var bloque_reserva = document.getElementById('codigo-reserva-cita-reservada')
-        if (resumen_reserva && resumen_reserva.pdf) {
-            bloque_reserva.innerHTML = `<a download="Justificante" style="color: rgb(44, 100, 227);" href="data:application/pdf;base64,${resumen_reserva.pdf}">DESCARGAR</a>`
-        } else if (codigo_reserva_cita_front === 'referencia N/A') {
-            bloque_reserva.textContent = "Esta cita no requiere número de reserva";
+        if (codigo_reserva_cita_front === 'referencia N/A') {
+            document.getElementById('codigo-reserva-cita-reservada').textContent = "Esta cita no requiere número de reserva";
         } else {
             // If it's not 'referencia N/A', set the text content as the value of codigo_reserva_cita_front
-            bloque_reserva.textContent = codigo_reserva_cita_front;
+            document.getElementById('codigo-reserva-cita-reservada').textContent = codigo_reserva_cita_front;
         }
 
 
@@ -409,6 +411,7 @@ document.addEventListener('DOMContentLoaded', function () {
             gridLinkUnicoOficina.hide();
             gridLinkUnicoDatos.hide();
             gridLinkUnicoEstadistica.hide();
+            divAjustesLinkUnico.hide();
             botonLinkUnicoBusqueda.addClass('boton-datos-link-unico-selected');
 
 
@@ -432,10 +435,12 @@ document.addEventListener('DOMContentLoaded', function () {
                 gridLinkUnicoOficina.hide();
                 gridLinkUnicoDatos.hide();
                 gridLinkUnicoEstadistica.hide();
+                divAjustesLinkUnico.hide();
                 botonLinkUnicoBusqueda.addClass('boton-datos-link-unico-selected');
                 botonLinkUnicoReserva.removeClass('boton-datos-link-unico-selected');
                 botonLinkUnicoOficina.removeClass('boton-datos-link-unico-selected');
                 botonLinkUnicoDatos.removeClass('boton-datos-link-unico-selected');
+                botonAjustesLinkUnico.removeClass('boton-datos-link-unico-selected');
             });                    
         
             // Click event for botonLinkUnicoBusqueda
@@ -445,10 +450,12 @@ document.addEventListener('DOMContentLoaded', function () {
                 gridLinkUnicoOficina.hide();
                 gridLinkUnicoDatos.hide();
                 gridLinkUnicoEstadistica.hide();
+                divAjustesLinkUnico.hide();
                 botonLinkUnicoBusqueda.removeClass('boton-datos-link-unico-selected');
                 botonLinkUnicoReserva.addClass('boton-datos-link-unico-selected');
                 botonLinkUnicoOficina.removeClass('boton-datos-link-unico-selected');
                 botonLinkUnicoDatos.removeClass('boton-datos-link-unico-selected');
+                botonAjustesLinkUnico.removeClass('boton-datos-link-unico-selected');
             });                    
         
             // Click event for botonLinkUnicoBusqueda
@@ -458,10 +465,12 @@ document.addEventListener('DOMContentLoaded', function () {
                 gridLinkUnicoOficina.show();
                 gridLinkUnicoDatos.hide();
                 gridLinkUnicoEstadistica.hide();
+                divAjustesLinkUnico.hide();
                 botonLinkUnicoBusqueda.removeClass('boton-datos-link-unico-selected');
                 botonLinkUnicoReserva.removeClass('boton-datos-link-unico-selected');
                 botonLinkUnicoOficina.addClass('boton-datos-link-unico-selected');
                 botonLinkUnicoDatos.removeClass('boton-datos-link-unico-selected');
+                botonAjustesLinkUnico.removeClass('boton-datos-link-unico-selected');
             });                                   
         
 
@@ -472,13 +481,29 @@ document.addEventListener('DOMContentLoaded', function () {
                 gridLinkUnicoOficina.hide();
                 gridLinkUnicoDatos.show();
                 gridLinkUnicoEstadistica.hide();
+                divAjustesLinkUnico.hide();
                 botonLinkUnicoBusqueda.removeClass('boton-datos-link-unico-selected');
                 botonLinkUnicoReserva.removeClass('boton-datos-link-unico-selected');
                 botonLinkUnicoOficina.removeClass('boton-datos-link-unico-selected');
                 botonLinkUnicoDatos.addClass('boton-datos-link-unico-selected');
+                botonAjustesLinkUnico.removeClass('boton-datos-link-unico-selected');
             });                    
             
-
+            // Click event for botonAjustesLinkUnico
+            botonAjustesLinkUnico.click(function () {
+                divLinkUnicoBusqueda.hide();
+                divPagoYReserva.hide();
+                gridLinkUnicoOficina.hide();
+                gridLinkUnicoDatos.hide();
+                gridLinkUnicoEstadistica.hide();
+                divAjustesLinkUnico.show();
+                botonLinkUnicoBusqueda.removeClass('boton-datos-link-unico-selected');
+                botonLinkUnicoReserva.removeClass('boton-datos-link-unico-selected');
+                botonLinkUnicoOficina.removeClass('boton-datos-link-unico-selected');
+                botonLinkUnicoDatos.removeClass('boton-datos-link-unico-selected');
+                botonAjustesLinkUnico.addClass('boton-datos-link-unico-selected');
+            });                    
+            
 
 
 
@@ -678,6 +703,9 @@ document.addEventListener('DOMContentLoaded', function () {
                 console.error('Error:', error);
             });
         });
+
+
+        ReplaceAjustesDatosLinkUnico();
     }                
 
 
@@ -776,6 +804,8 @@ document.addEventListener('DOMContentLoaded', function () {
             botonCancelarLinkUnico.show();
             divCaducidadBusqueda.show();
             divUltimaBusqueda.show();
+            $('#form_block_modificar_datos_personales').show();
+            $('#texto-info-modificar-datos-personales').hide();
         }
         if (state_front == 'RESERVADO') {
             cuadradoPagoCita20.show();
@@ -1094,6 +1124,10 @@ document.addEventListener('DOMContentLoaded', function () {
     
 
 
+
+
+
+
     //Cargar datos estaticos
     // Check if 'referencia' is present in the URL
     if (referencia) {
@@ -1153,6 +1187,278 @@ document.addEventListener('DOMContentLoaded', function () {
             document.getElementById('cargando-datos-link-unico').style.display = 'none';
         }
     }
+
+
+
+
+
+
+
+
+
+
+
+    //Reemplazar datos en los campos de ajustes
+    function ReplaceAjustesDatosLinkUnico() {
+
+        var date_clienteFechaNacimiento = new Date(clienteFechaNacimiento);
+        var formatted_date_clienteFechaNacimiento = date_clienteFechaNacimiento.toLocaleDateString('es-ES', {
+            year: 'numeric',
+            month: '2-digit', // Use '2-digit' to ensure leading zeros for single-digit months
+            day: '2-digit', // Use '2-digit' to ensure leading zeros for single-digit days
+        }).replace(/\./g, '/'); // Replace dots with slashes if needed
+
+
+
+
+
+
+
+        
+
+
+
+        //Seleccionar botones de selección de tipo de documento. DNI, NIE, Pasaporte
+        var selectFormDocPasaporte = $('#select-pasaporte-form');
+        var selectFormDocNIE = $('#select-nie-form');
+        var selectFormDocDNI = $('#select-dni-form');
+
+        selectFormDocPasaporte.add(selectFormDocNIE).add(selectFormDocDNI).hide();
+
+        optionsDocuments = {
+            documentos_admitibles: ['pasaporte', 'nie', 'dni']
+        }
+
+        function toggleDocumentosAdmitibles() {
+
+            optionsDocuments.documentos_admitibles.forEach(elem => {
+                $(`#select-${elem}-form`).show();
+            }
+            );
+
+        }
+
+        //Quitar clase predeterminada
+        selectFormDocPasaporte.removeClass('boton-documento-selected');
+        //Preseleccionar botones
+        if (clienteIdType === 'PASAPORTE') {
+            selectFormDocPasaporte.addClass('boton-documento-selected');
+        } else if (clienteIdType === 'DNI') {
+            selectFormDocDNI.addClass('boton-documento-selected');
+        } else if (clienteIdType === 'NIE') {
+            selectFormDocNIE.addClass('boton-documento-selected');
+        }
+
+        var options_documento = $('.div-documentos-formulario').children('a')
+
+        options_documento.click(function () {
+            options_documento.removeClass('boton-documento-selected')
+            $(this).addClass('boton-documento-selected');
+
+        });
+
+
+
+
+
+
+
+
+        //Lista desplegable de paises
+        var PaisesSelect = document.getElementById('input-lista-paises');
+        // Añadir un elemento por defecto
+        var defaultOption = document.createElement('option');
+        defaultOption.value = '';
+        // Set the value to an empty string or a value that is not present in the array
+        defaultOption.text = 'Indica tu nacionalidad';
+        defaultOption.disabled = true;
+        // Make this option disabled
+        defaultOption.selected = true;
+        // Make this option selected by default
+        PaisesSelect.add(defaultOption);
+        
+
+        // Crear lista en el select
+        // list_paises = window.iso3166.iso31661.sort((a,b)=>a.name.localeCompare(b.name)).
+        list_paises = ["AFGANISTAN", "ALBANIA", "ALEMANIA", "ANDORRA", "ANGOLA", "ANGUILLA", "ANTIGUA Y BARBUDA", "ANTILLAS NL.", "APATRIDA", "ARABIA SAUDI", "ARGELIA", "ARGENTINA", "ARMENIA", "ARUBA", "AUSTRALIA", "AUSTRIA", "AZERBAYAN", "BAHAMAS", "BAHREIN", "BANGLADESH", "BARBADOS", "BELGICA", "BELICE", "BENIN", "BHUTAN", "BIELORRUSIA O BELARUS", "BOLIVIA", "BOSNIA-HERZEGOVINA", "BOTSWANA", "BRASIL", "BRUNEI DARUSSALAM", "BULGARIA", "BURKINA FASO", "BURUNDI", "CABO VERDE", "CAMBOYA", "CAMERUN", "CANADA", "CENTROAFRICA REPUBLICA", "CHAD", "CHILE", "CHINA", "CHIPRE", "COLOMBIA", "COMORES", "CONGO BRAZZAVILLE", "COREA, REP. POP. DEMOC.", "COREA, REPUBLICA", "COSTA DE MARFIL", "COSTA RICA", "CROACIA", "CUBA", "DINAMARCA", "DJIBOUTI", "DOMINICA", "DOMINICANA REPUBLICA", "ECUADOR", "EEUU", "EGIPTO", "EL SALVADOR", "EL VATICANO", "EMIRATOS ARABES UNIDOS", "ERITREA", "ESLOVAQUIA", "ESLOVENIA", "ESPAÑA", "ESTONIA", "ETIOPIA", "FIDJI", "FILIPINAS", "FINLANDIA", "FRANCIA", "GABON", "GAMBIA", "GEORGIA", "GHANA", "GRANADA REPUBLICA", "GRECIA", "GUATEMALA", "GUAYANA", "GUINEA ECUATORIAL", "GUINEA REPUBLICA", "GUINEA-BISSAU", "HAITI", "HOLANDA", "HONDURAS", "HUNGRIA", "INDIA", "INDONESIA", "IRAK", "IRAN", "IRLANDA", "ISLANDIA", "ISLAS MARSCHALL", "ISRAEL", "ITALIA", "JAMAICA", "JAPON", "JORDANIA", "KAZAJSTAN", "KENIA", "KIRGUISTAN", "KIRIBATI", "KUWAIT", "LAOS", "LAS MALDIVAS", "LESOTHO", "LETONIA", "LIBANO", "LIBERIA", "LIBIA", "LIECHTENSTEIN", "LITUANIA", "LUXEMBURGO", "MACAO", "MACEDONIA", "MADAGASCAR", "MALASIA", "MALASIA - GRAN BRETAÑA", "MALAWI", "MALI", "MALTA", "MARRUECOS", "MAURICIO", "MAURITANIA", "MEJICO", "MICRONESIA", "MOLDAVIA", "MONACO", "MONGOLIA", "MONTENEGRO", "MOZAMBIQUE", "MYANMAR", "NAMIBIA", "NAURU", "NEPAL", "NICARAGUA", "NIGER", "NIGERIA", "NORUEGA", "NUEVA ZELANDA", "OMAN", "PAKISTAN", "PALESTINA EONU", "PANAMA", "PAPUA NUEVA GUINEA", "PARAGUAY", "PERU", "POLONIA", "PORTUGAL", "PUERTO RICO", "QATAR", "REINO UNIDO", "REP. DEMOCRATICA DEL CONGO (EX-ZAIRE)", "REPUBLICA CHECA", "REUNION-COMO", "RUANDA", "RUMANIA", "RUSIA", "SALOMON", "SAMOA OCCIDENTAL", "SAN CRISTOBAL Y NEVIS", "SAN MARINO", "SAN VICENTE", "SANTA LUCIA", "SANTO TOME Y PRINCIPE", "SEICHELLES", "SENEGAL", "SENEGAMBIA", "SERBIA", "SIERRA LEONA", "SINGAPUR", "SIRIA", "SOMALIA", "SRI LANKA", "SUDAFRICA", "SUDAN", "SUECIA", "SUIZA", "SURINAM", "SWAZILANDIA", "TADJIKISTAN", "TAIWAN", "TANZANIA", "THAILANDIA", "TIMOR ORIENTAL", "TOGO", "TONGA", "TRINIDAD Y TOBAGO", "TUNEZ", "TURKMENIA", "TURQUIA", "TUVALU", "UCRANIA", "UGANDA", "URUGUAY", "UZBEKISTAN", "VANUATU", "VENEZUELA", "VIETNAM", "YEMEN", "ZAMBIA", "ZIMBABWE",]
+        list_paises.sort((a, b) => a.localeCompare(b)).forEach(elem => {
+            var optionElement = document.createElement('option');
+            //optionElement.value = elem.alpha3;
+            //optionElement.text = elem.name;
+
+            optionElement.value = elem;
+            optionElement.text = elem;
+            PaisesSelect.add(optionElement);
+        }
+        );
+
+
+
+
+
+
+
+
+
+
+        //Easepicker fecha nacimiento
+        const PickerNacimiento = new easepick.create({
+            element: "#input-fecha-nacimiento",
+            css: ["https://cdn.jsdelivr.net/npm/@easepick/bundle@1.2.1/dist/index.css", 'https://documentos.sacacitas.es/formulario-inicio.css',],
+            zIndex: 999999999,
+            lang: "es-ES",
+            format: "DD/MM/YYYY",
+            readonly: false,
+            AmpPlugin: {
+                dropdown: {
+                    months: true,
+                    years: true,
+                    minYear: 1930,
+                    maxYear: 2028
+                },
+                resetButton: false,
+                darkMode: false
+            },
+            LockPlugin: {
+                maxDate: (DateNow)
+            },
+            plugins: ["AmpPlugin", "LockPlugin"]
+        })
+
+
+
+
+
+        toggleDocumentosAdmitibles();   
+
+
+
+
+
+
+
+
+
+
+        //Values existentes del cliente
+        $('#input-nombre').val(clienteNombre);
+        $('#input-apellido1').val(clienteApellido1);
+        $('#input-apellido2').val(clienteApellido2);
+        $('#input-fecha-nacimiento').val(formatted_date_clienteFechaNacimiento);
+        $('#input-ndocumento').val(clienteIdDocumento);
+        $('#input-telefono').val(clienteTelefono);
+        $('#input-lista-paises').val(clienteNacionalidad);
+
+
+
+    }
+
+
+
+
+    //Formularios modificar datos
+    $('#form_block_modificar_datos_personales').submit(function (event) {
+        // Prevent the default form submission behavior
+        event.preventDefault();
+        //Desactivar boton enviar peticion 
+        $('#finalizar-form-datos-personales').prop('disabled', true);
+        
+
+
+        //Capturar tipo documento seleccionado
+        var selected_document = $('.div-documentos-formulario').find('.boton-documento-selected').attr('id');
+        if (selected_document === 'select-pasaporte-form') {
+            var NiceSelected_document = 'PASAPORTE'
+        } else if (selected_document === 'select-dni-form') {
+            var NiceSelected_document = 'DNI'
+        } else if (selected_document === 'select-nie-form') {
+            var NiceSelected_document = 'NIE'
+        }
+
+
+
+
+        // Show loading spinner
+        $('#gif-cargando-boton-finalizar').show();
+        $('#gif-error-boton-finalizar').hide();
+
+
+
+
+
+
+        // Gather form data
+        var formData = {
+            Nombre: $('#input-nombre').val(),
+            Apellido1: $('#input-apellido1').val(),
+            Apellido2: $('#input-apellido2').val(),
+            Fnacimiento: $('#input-fecha-nacimiento').val(),
+            SelectedDocument: NiceSelected_document,
+            NDocumento: $('#input-ndocumento').val(),
+            Telefono: $('#input-telefono').val(),
+            Pais: $('#input-lista-paises').val(),
+            referencia: referencia
+        };
+
+        // Send POST request
+        $.ajax({
+            type: 'POST',
+            url: 'https://n8n.sacacitas.es/webhook/69aba9e4-c06c-450e-9b50-69ec9b0782a5-actualizar-datos-personales',
+            data: JSON.stringify(formData),
+            // Send form data using the 'data' property
+            dataType: 'json',
+            contentType: 'application/json',
+            success: function (response) {
+                // Show your loading GIF 
+                $('#gif-success-boton-finalizar').show();
+                //$('#gif-cargando-boton-finalizar').hide();
+
+                // Check if ID_publico exists in the response
+                if (response.ID_publico) {
+                    // Use the ID_publico property
+                    var publicItemId = response.ID_publico;
+                }
+
+
+                // Redirect to a new page after a delay
+                setTimeout(function() {
+                    // Redirect to a new page
+                    window.location.href = 'https://sacacitas.webflow.io/link?r='+publicItemId;
+                }, 1000);
+            },
+            error: function (xhr, status, error) {
+                // Handle error response
+                console.error('Form submission failed');
+
+                $('#div-error-enviar-datos').show();
+                // Show loading spinner
+                $('#gif-cargando-boton-finalizar').hide();
+                $('#gif-error-boton-finalizar').show();   
+                // Enable submit button
+                $('#finalizar-form-datos-personales').prop('disabled', false);        
+            }
+        });
+
+
+        // Prevent default form submission in Webflow
+        return false;
+
+    });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
