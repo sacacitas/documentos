@@ -153,7 +153,7 @@ $(document).ready(function () {
     // 1. PRIMERA PARTE BUSCADOR -> Lista estática de administración y provincias
     // Crear valores en el select de la Administración
     var values_select_administracion = [
-        { value: 'EX1', text: 'Extranjería' },
+        //{ value: 'EX1', text: 'Extranjería' },
         { value: 'RC1', text: 'Registro Civil' }
     ];
 
