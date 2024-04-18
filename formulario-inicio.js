@@ -326,7 +326,6 @@ $(document).ready(function () {
 
             //No coge el var de fuera entonces lo vuelvo a obtener para enviarlo en el formulario
             var selected_document = $('.div-documentos-formulario').find('.boton-documento-selected').attr('id')
-            console.log(selected_document)
 
             //Dejar bonito el document type
             //Poner datos del selected document bonito 
@@ -338,9 +337,6 @@ $(document).ready(function () {
                 var NiceSelected_document = 'NIE'
             }
 
-            //Crear variables null y no "" para que no de error en el backend
-            var InputResNacionalidad = $('#input-resolucion-nacionalidad').val();
-            var InputCadTarjeta = $('#input-caducidad-tarjeta').val();
 
             $('#gif-cargando-boton-finalizar').show();
 
@@ -383,7 +379,6 @@ $(document).ready(function () {
                     if (response.ID_publico) {
                         // Use the ID_publico property
                         var publicItemId = response.ID_publico;
-                        // Do something with publicItemId
                     }
 
                     // Redirect to a new page
