@@ -1449,8 +1449,19 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 
+    //Funcionalidad varias de ajustes y modificar datos
+    //Bloquear zoom al darle doble click en los moviles
+    const input = document.getElementById('myInput');
+    if (input) {
+        // Event listener para el doble click
+        input.addEventListener('dblclick', function (event) {
+            // Prevent default behavior
+            event.preventDefault();
 
-
+            // Remove focus from the input element
+            input.blur();
+        });
+    }
 
 
 
