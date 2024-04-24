@@ -1362,6 +1362,16 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
 
+        //Poner read only al input de fecha max para que no salga el teclado en el movil
+        $(document).ready(function () {
+            // Select the input field by its ID and make it readonly
+            $('#checkin').prop('readonly', true);
+            $('#checkout').prop('readonly', true);
+            $('#exclude-days').prop('readonly', true);
+            $('#input-fecha-nacimiento').prop('readonly', true);
+        });
+
+
 
         // Formatear fechas
         var formattedDate1 = formatDateToSpanishLocale(date_min_front);
@@ -1586,17 +1596,6 @@ document.addEventListener('DOMContentLoaded', function () {
             input.blur();
         });
     }
-
-
-
-    //Poner read only al input de fecha max para que no salga el teclado en el movil
-    $(document).ready(function () {
-        // Select the input field by its ID and make it readonly
-        $('#checkin').prop('readonly', true);
-        $('#checkout').prop('readonly', true);
-        $('#exclude-days').prop('readonly', true);
-        $('#input-fecha-nacimiento').prop('readonly', true);
-    });
 
 
 
