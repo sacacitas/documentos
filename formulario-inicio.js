@@ -104,7 +104,6 @@ $(document).ready(function () {
             success: function (response) {
                 // merge two dict
                 CONFIG_FORM = Object.assign(CONFIG_FORM, response);
-                console.log(CONFIG_FORM);
 
                 execute_parte_dinamica_form();
                 toggleDocumentosAdmitibles();
@@ -116,7 +115,6 @@ $(document).ready(function () {
     } else {
         alert('Hubo un problema al procesar la solicitud, acceda al formulario desde el buscador de https://sacacitas.es, Si el problema persiste, contacte con nosotros.');
     }
-    console.log(INPUT_JSON);
     //Mostrar secciones dinámicas
     function execute_parte_dinamica_form() {
         // Parte dinámica del formulario
@@ -480,7 +478,6 @@ $(document).ready(function () {
                 // Check each input
                 inputsToCheck.forEach(function (input) {
                     var selected_document = $('.div-documentos-formulario').find('.boton-documento-selected').attr('id')
-                    console.log(selected_document)
 
                     var func_validate = function (text_input) {
                         return true
@@ -648,6 +645,7 @@ $(document).ready(function () {
             // Select the input field by its ID and make it readonly
             $('#checkin').prop('readonly', true);
             $('#checkout').prop('readonly', true);
+            $('#exclude-days').prop('readonly', true);
             $('#input-fecha-nacimiento').prop('readonly', true);
         });
 
