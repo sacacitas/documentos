@@ -17,6 +17,7 @@ document.addEventListener('DOMContentLoaded', function () {
     var retries_front = null;
     var limit_max_front = null;
     var date_min_front = null;
+    var cola_dias_excluidos = null;
     var fecha_caducidad_front = null;
     var precio_eur_cent_front = null;
     var public_id_front = null;
@@ -75,6 +76,7 @@ document.addEventListener('DOMContentLoaded', function () {
     //Default hide
     $('#texto-dinamico-debajoestado').hide();
     $('#form_block_modificar_datos_personales').hide();
+    $('#form_block_modificar_datos_busqueda').hide();
 
 
     //default flags
@@ -110,11 +112,11 @@ document.addEventListener('DOMContentLoaded', function () {
             id_oficina_front = data.ID_buscadores[0].id_oficina;
             date_added_front = data.fecha_cliente_creado;
             state_front = data.state_backend;
-            console.log(state_front);
             date_last_checked_front = data.date_last_checked;
             retries_front = data.retries;
             limit_max_front = data.fecha_maxima_cola;
             date_min_front = data.fecha_minima_cola;
+            cola_dias_excluidos = data.cola_dias_excluidos;
             fecha_caducidad_front = data.fecha_caducidad_cola;
             precio_eur_cent_front = data.precio_centimos;
             public_id_front = data.ID_publico;
@@ -125,6 +127,7 @@ document.addEventListener('DOMContentLoaded', function () {
             fecha_cita_reservada_front = data.fecha_cita_reservada;
             fecha_limite_pago_front = data.fecha_limite_pago;
             StatePendienteReason = data.cola_pendiente_reason;
+            
 
             //Datos del cliente
             clienteIdDocumento = data.cliente_numero_documento;
@@ -139,7 +142,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
             //Verificacion correo
             EmailVerified = data.cliente_correo_validated;
-            console.log(EmailVerified);
             
             
 
@@ -150,8 +152,6 @@ document.addEventListener('DOMContentLoaded', function () {
             //Inyectar datos fijos y dinamicos al principio
             ReplaceItemsStatic ();
             ReplaceDynamicItems ();
-            console.log('Paso 1 ok - ReplaceDynamicItems ');
-
             //Ejecutar timer para cargar datos dinámicos
         })
         .catch(error => {
@@ -193,12 +193,10 @@ document.addEventListener('DOMContentLoaded', function () {
             StatePendienteReason = data.cola_pendiente_reason;
             //Verificacion correo
             EmailVerified = data.cliente_correo_validated;
-            console.log(EmailVerified);
             
         })
         .then(() => {
             ReplaceDynamicItems ();
-            console.log('Paso 6 ok - Parte dinamica ejecutada y enviado a reemplazar');
 
         })
         .catch(error => {
@@ -242,10 +240,7 @@ document.addEventListener('DOMContentLoaded', function () {
         var precio_cita_backend = (precio_eur_cent_front / 100);
 
         // Crear fechas
-        var limit_max_date = new Date(limit_max_front);
-        var limit_min_date = new Date(date_min_front);
         var date_added = new Date(date_added_front);
-        console.log(date_added_front);
         var fecha_caducidad_date = new Date(fecha_caducidad_front);
         var fecha_cita_reservada = new Date(fecha_cita_reservada_front);
         var fecha_limite_pago = new Date(fecha_limite_pago_front);
@@ -286,19 +281,10 @@ document.addEventListener('DOMContentLoaded', function () {
         var formattedDateAdded = date_added.toLocaleString('es-ES', options).replace(/,/g, ' -');
         var formattedDate_cita_reservada = fecha_cita_reservada.toLocaleString('es-ES', options).replace(/,/g, ' -');
         var formattedDate_fecha_limite_pago = fecha_limite_pago.toLocaleString('es-ES', options).replace(/,/g, ' -');
-        var formattedLimitMax = limit_max_date.toLocaleDateString('es-ES', {
-            year: 'numeric',
-            month: 'numeric',
-            day: 'numeric',
-            timeZone: DEFAULT_TIMEZONE // GMT+1
-        }).replace(/,/g, '-');
-
-        var formattedLimitMin = limit_min_date.toLocaleDateString('es-ES', {
-            year: 'numeric',
-            month: 'numeric',
-            day: 'numeric',
-            timeZone: DEFAULT_TIMEZONE // GMT+1
-        }).replace(/,/g, '-');
+        
+        //Fecha max y min formateada
+        var formattedLimitMax = formatDateFromISOToDMY(limit_max_front);
+        var formattedLimitMin = formatDateFromISOToDMY(date_min_front);
 
 
         var hoursAndMinutesOptions = {
@@ -343,7 +329,6 @@ document.addEventListener('DOMContentLoaded', function () {
             formattedDateAdded = 'Búsqueda aún no iniciada';
         }
         document.getElementById('date_added_front').textContent = formattedDateAdded;
-        console.log('Fecha de la búsqueda: ' + formattedDateAdded);
         document.getElementById('caducidad_busqueda').textContent = `Dentro de ${dias_caducidad_restantes} días`;
         document.getElementById('precio_cita_front').textContent = precio_cita_backend.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
         document.getElementById('precio_cita_hay_que_pagar').textContent = precio_cita_backend.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
@@ -806,6 +791,8 @@ document.addEventListener('DOMContentLoaded', function () {
             divUltimaBusqueda.show();
             $('#form_block_modificar_datos_personales').show();
             $('#texto-info-modificar-datos-personales').hide();
+            $('#form_block_modificar_datos_busqueda').show();
+            $('#texto-info-modificar-datos-personales-2').hide();            
         }
         if (state_front == 'RESERVADO') {
             cuadradoPagoCita20.show();
@@ -993,7 +980,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 })
                 .then(data => {
                     // Handle the response data
-                    console.log(data);
                     // Check if the response contains "cliente_correo_validated" set to true
                     if (data[0].cliente_correo_validated === true) {
                         // Redirect to a new URL
@@ -1118,7 +1104,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
         //Inicializar operacion de tiempo para cargar datos dinámicos y peticion http
         GetTimeIntervalDynamic();
-        console.log('Paso 2 ok - Llamar a GetTimeIntervalDynamic() para obtener tiempo'); 
     }
     
     
@@ -1179,7 +1164,6 @@ document.addEventListener('DOMContentLoaded', function () {
         if (referencia) {
             // Call fetchData() initially (optional)
             const InicializarPeticion = setTimeout(fetchDataStateDynamic, intervalId);
-            console.log('Paso 5 ok - Esperando');
         } else {
             console.error('Referencia parameter is missing in the URL.');
             // Handle missing referencia parameter and show an error message if needed
@@ -1198,25 +1182,17 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 
-    //Reemplazar datos en los campos de ajustes
+    //Reemplazar datos en los campos de ajustes 
     function ReplaceAjustesDatosLinkUnico() {
+        //--> Primer formulario 
 
+        //Datos personales cliente
         var date_clienteFechaNacimiento = new Date(clienteFechaNacimiento);
         var formatted_date_clienteFechaNacimiento = date_clienteFechaNacimiento.toLocaleDateString('es-ES', {
             year: 'numeric',
             month: '2-digit', // Use '2-digit' to ensure leading zeros for single-digit months
             day: '2-digit', // Use '2-digit' to ensure leading zeros for single-digit days
         }).replace(/\./g, '/'); // Replace dots with slashes if needed
-
-
-
-
-
-
-
-        
-
-
 
         //Seleccionar botones de selección de tipo de documento. DNI, NIE, Pasaporte
         var selectFormDocPasaporte = $('#select-pasaporte-form');
@@ -1238,6 +1214,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
         }
 
+        toggleDocumentosAdmitibles();   
+
         //Quitar clase predeterminada
         selectFormDocPasaporte.removeClass('boton-documento-selected');
         //Preseleccionar botones
@@ -1257,13 +1235,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
         });
 
-
-
-
-
-
-
-
         //Lista desplegable de paises
         var PaisesSelect = document.getElementById('input-lista-paises');
         // Añadir un elemento por defecto
@@ -1276,7 +1247,6 @@ document.addEventListener('DOMContentLoaded', function () {
         defaultOption.selected = true;
         // Make this option selected by default
         PaisesSelect.add(defaultOption);
-        
 
         // Crear lista en el select
         // list_paises = window.iso3166.iso31661.sort((a,b)=>a.name.localeCompare(b.name)).
@@ -1291,15 +1261,6 @@ document.addEventListener('DOMContentLoaded', function () {
             PaisesSelect.add(optionElement);
         }
         );
-
-
-
-
-
-
-
-
-
 
         //Easepicker fecha nacimiento
         const PickerNacimiento = new easepick.create({
@@ -1325,12 +1286,7 @@ document.addEventListener('DOMContentLoaded', function () {
             plugins: ["AmpPlugin", "LockPlugin"]
         })
 
-
-
-
-
-        toggleDocumentosAdmitibles();   
-
+        
 
 
 
@@ -1338,9 +1294,81 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 
+        //--> Segundo formulario 
+
+        //Easepicker rango de fechas de búsqueda
+        const PickerRangoBusqueda = new easepick.create({
+            element: "#checkin",
+            css: ["https://cdn.jsdelivr.net/npm/@easepick/bundle@1.2.1/dist/index.css", 'https://documentos.sacacitas.es/formulario-inicio.css',],
+            zIndex: 999999999,
+            lang: "es-ES",
+            format: "DD MMMM YYYY",
+            grid: 2,
+            calendars: 2,
+            readonly: false,
+            inline: false,
+            header: "",
+            AmpPlugin: {
+                dropdown: {
+                    months: true,
+                    minYear: 2024,
+                    maxYear: 2026
+                },
+                resetButton: false,
+                darkMode: false
+            },
+            RangePlugin: {
+                elementEnd: "#checkout",
+                repick: false,
+                delimiter: "-",
+                locale: {
+                    zero: "cero",
+                    one: "días",
+                    two: "dos",
+                    few: "unos cuantos",
+                    many: "muchos",
+                    other: "días"
+                }
+            },
+            LockPlugin: {
+                minDate: (DateNow),
+                selectForward: true,
+                minDays: 3
+            },
+            plugins: ["AmpPlugin", "RangePlugin", "LockPlugin"]
+
+        })
+
+        //Días de exclusión
+        PickerExcluidosDias = new Litepicker({
+            element: document.getElementById('exclude-days'),
+            plugins: ['multiselect', 'mobilefriendly'],
+            minDate: new Date(),
+            numberOfColumns: 2,
+            numberOfMonths: 2,
+            lang: 'es-ES',
+            buttonText: {
+            apply: 'Aplicar',
+            cancel: 'Borrar',
+            },
+            tooltipText: {
+            one: 'día',
+            other: 'días'
+            },
+            setup: function (picker) {
+                picker.on('button:apply', function () {
+                    document.getElementById('exclude-days').value = picker.multipleDatesToString();
+                });
+            }
+        });
 
 
-        //Values existentes del cliente
+        // Formatear fechas
+        var formattedDate1 = formatDateToSpanishLocale(date_min_front);
+        var formattedDate2 = formatDateToSpanishLocale(limit_max_front);
+
+
+        //Reemplazar values existentes del cliente a los inputs
         $('#input-nombre').val(clienteNombre);
         $('#input-apellido1').val(clienteApellido1);
         $('#input-apellido2').val(clienteApellido2);
@@ -1348,21 +1376,31 @@ document.addEventListener('DOMContentLoaded', function () {
         $('#input-ndocumento').val(clienteIdDocumento);
         $('#input-telefono').val(clienteTelefono);
         $('#input-lista-paises').val(clienteNacionalidad);
-
-
+        //Value fechas de búsuqueda
+        $('#checkin').val(formattedDate1);
+        $('#checkout').val(formattedDate2);
+        $('#exclude-days').val(cola_dias_excluidos);
 
     }
 
 
 
 
-    //Formularios modificar datos
+    //Formularios modificar datos personales
     $('#form_block_modificar_datos_personales').submit(function (event) {
         // Prevent the default form submission behavior
         event.preventDefault();
         //Desactivar boton enviar peticion 
         $('#finalizar-form-datos-personales').prop('disabled', true);
         
+        // Show loading spinner
+        $('#gif-cargando-boton-finalizar').show();
+        $('#gif-error-boton-finalizar').hide();
+
+
+
+
+
 
 
         //Capturar tipo documento seleccionado
@@ -1374,16 +1412,6 @@ document.addEventListener('DOMContentLoaded', function () {
         } else if (selected_document === 'select-nie-form') {
             var NiceSelected_document = 'NIE'
         }
-
-
-
-
-        // Show loading spinner
-        $('#gif-cargando-boton-finalizar').show();
-        $('#gif-error-boton-finalizar').hide();
-
-
-
 
 
 
@@ -1449,6 +1477,102 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+    
+
+
+    //Formularios modificar fechas de búsqueda
+    $('#form_block_modificar_datos_busqueda').submit(function (event) {
+        // Prevent the default form submission behavior
+        event.preventDefault();
+        //Desactivar boton enviar peticion 
+        $('#finalizar-form-datos-busqueda').prop('disabled', true);
+        
+        // Show loading spinner
+        $('#gif-cargando-boton-finalizar-2').show();
+        $('#gif-error-boton-finalizar-2').hide();
+
+
+
+
+
+        // Gather form data
+        var formData = {
+            FMax: $('#checkin').val(),
+            FMin: $('#checkout').val(),
+            DiasExclusion: PickerExcluidosDias.multipleDatesToString() === '' ? [] : PickerExcluidosDias.multipleDatesToString().split(','),
+            referencia: referencia
+        };
+
+        // Send POST request
+        $.ajax({
+            type: 'POST',
+            url: 'https://n8n.sacacitas.es/webhook/69aba9e4-c06c-450e-9b50-69ec9b0782a5-actualizar-fechas-busqueda',
+            data: JSON.stringify(formData),
+            // Send form data using the 'data' property
+            dataType: 'json',
+            contentType: 'application/json',
+            success: function (response) {
+                // Show your loading GIF 
+                $('#gif-success-boton-finalizar-2').show();
+                //$('#gif-cargando-boton-finalizar').hide();
+
+                // Check if ID_publico exists in the response
+                if (response.ID_publico) {
+                    // Use the ID_publico property
+                    var publicItemId = response.ID_publico;
+                }
+
+
+                // Redirect to a new page after a delay
+                setTimeout(function() {
+                    // Redirect to a new page
+                    window.location.href = 'https://sacacitas.webflow.io/link?r='+publicItemId;
+                }, 1000);
+            },
+            error: function (xhr, status, error) {
+                // Handle error response
+                console.error('Form submission failed');
+
+                $('#div-error-enviar-datos').show();
+                // Show loading spinner
+                $('#gif-cargando-boton-finalizar').hide();
+                $('#gif-error-boton-finalizar').show();   
+                // Enable submit button
+                $('#finalizar-form-datos-personales').prop('disabled', false);        
+            }
+        });
+
+
+        // Prevent default form submission in Webflow
+        return false;
+
+    });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//Otros / varios
     //Funcionalidad varias de ajustes y modificar datos
     //Bloquear zoom al darle doble click en los moviles
     const input = document.getElementById('myInput');
@@ -1465,8 +1589,56 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 
+    //Poner read only al input de fecha max para que no salga el teclado en el movil
+    $(document).ready(function () {
+        // Select the input field by its ID and make it readonly
+        $('#checkin').prop('readonly', true);
+        $('#checkout').prop('readonly', true);
+        $('#exclude-days').prop('readonly', true);
+        $('#input-fecha-nacimiento').prop('readonly', true);
+    });
 
 
+
+
+    //Función para transformar fechas a formato dd mes yyyy en locale es
+    function formatDateToSpanishLocale(dateString) {
+        // Create a Date object
+        var date = new Date(dateString);
+    
+        // Get the day, month, and year parts
+        var day = date.getDate();
+        var month = date.getMonth() + 1; // Month is zero-based, so we add 1
+        var year = date.getFullYear();
+    
+        // Get the full month name using toLocaleDateString with locale "es-ES"
+        var monthName = date.toLocaleDateString('es-ES', { month: 'long' });
+    
+        // Format the date with the full month name
+        var formattedDate = day + ' ' + monthName + ' ' + year;
+    
+        return formattedDate;
+    }
+
+    //Funcion transformar a DD/MM/YYYY
+    function formatDateFromISOToDMY(dateString) {
+        // Create a Date object from the ISO format date string
+        var date = new Date(dateString);
+    
+        // Get day, month, and year from the Date object
+        var day = date.getDate();
+        var month = date.getMonth() + 1; // Month is zero-based, so we add 1
+        var year = date.getFullYear();
+    
+        // Pad day and month with leading zeros if necessary
+        var paddedDay = day < 10 ? '0' + day : day;
+        var paddedMonth = month < 10 ? '0' + month : month;
+    
+        // Construct the formatted date string in DD/MM/YYYY format
+        var formattedDate = paddedDay + '/' + paddedMonth + '/' + year;
+    
+        return formattedDate;
+    }
 
 
 
