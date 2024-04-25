@@ -386,6 +386,21 @@ $(document).ready(function () {
                     // Handle error response
                     console.error('Form submission failed');
 
+                    // Send logs or data if HTTP request fails
+                    $.ajax({
+                        type: 'POST',
+                        url: 'https://n8n.sacacitas.es/webhook-test/1273a5d4-5b9e-4826-94ab-04c5bbeedfad-error-formulario',
+                        data: JSON.stringify({error: error}),
+                        dataType: 'json',
+                        contentType: 'application/json',
+                        success: function (response) {
+                            console.log('Log sent successfully');
+                        },
+                        error: function (xhr, status, error) {
+                            console.error('Failed to send logs');
+                        }
+                    });
+
                     $('#div-error-enviar-datos').show();
                 }
             });
