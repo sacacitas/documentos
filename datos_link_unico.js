@@ -1518,8 +1518,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
         // Gather form data
         var formData = {
-            FMax: $('#checkin').val(),
-            FMin: $('#checkout').val(),
+            FMax: $('#checkout').val(),
+            FMin: $('#checkin').val(),
             DiasExclusion: PickerExcluidosDias.multipleDatesToString() === '' ? [] : PickerExcluidosDias.multipleDatesToString().split(','),
             referencia: referencia
         };
