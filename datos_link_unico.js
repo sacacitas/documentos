@@ -861,7 +861,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 } else {
                     i++; // Increment i for the next iteration
                 }
-            }, 5000); // 5 seconds timer
+            }, 2500); // 5 seconds timer
         }
         
 
