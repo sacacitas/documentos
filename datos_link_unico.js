@@ -749,6 +749,7 @@ document.addEventListener('DOMContentLoaded', function () {
             botonEstadoBusqueda.textContent = 'Error al procesar la solicitud';
         }
         if (state_front == 'EMAIL-NO-VERIFICADO') {
+            $('#block-email-verify').hide();
             botonEstadoBusqueda.textContent = 'Email no verificado, solicitud rechazada';
         }        
         //Estados de inicialización   
@@ -1095,10 +1096,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
         //Cosas relacionadas con la verificación del correo
         //Mostrar bloque pidiendo codigo verificacion email y cambiar texto estado
-        if (!EmailVerified) {
+        if (!EmailVerified && !(state_front == 'EMAIL-NO-VERIFICADO')) {
             $('#block-email-verify').show(); // Show the block
             $('#boton_estado_busqueda').text('Email pendiente verificar');
-            console.log('Email no verificado');
         }
 
         //Petición para verificar correo
