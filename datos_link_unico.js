@@ -748,6 +748,9 @@ document.addEventListener('DOMContentLoaded', function () {
         if (state_front == 'NO_VALIDADO') {
             botonEstadoBusqueda.textContent = 'Error al procesar la solicitud';
         }
+        if (state_front == 'EMAIL-NO-VERIFICADO') {
+            botonEstadoBusqueda.textContent = 'Email no verificado, solicitud rechazada';
+        }        
         //Estados de inicialización   
         if (state_front == 'CLIENTE-CREADO') {
             botonEstadoBusqueda.textContent = 'Verificando datos cliente...';
