@@ -1216,7 +1216,7 @@ document.addEventListener('DOMContentLoaded', function () {
             intervalId = 5000;
             fetchDataStateDynamicInterval();
         } 
-        if (state_front == 'VALIDANDO-COLA' || state_front == 'PAUSADO-REQUIERE-ACCION' || state_front == 'ERROR-NO-CONSIGUE-BUSCAR' ) {
+        if (state_front == 'VALIDANDO-COLA' || state_front == 'PAUSADO-REQUIERE-ACCION') {
             // Call fetchData() initially (optional)
             intervalId = 15000;
             fetchDataStateDynamicInterval();
