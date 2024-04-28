@@ -12,7 +12,6 @@ document.addEventListener('DOMContentLoaded', function () {
     // IDs del JSON
     var id_oficina_front = null;
     var date_added_front = null;
-    var state_front = null;
     var date_last_checked_front = null;
     var retries_front = null;
     var limit_max_front = null;
@@ -27,7 +26,6 @@ document.addEventListener('DOMContentLoaded', function () {
     var codigo_reserva_cita_front = null;
     var fecha_cita_reservada_front = null;
     var fecha_limite_pago_front = null;
-    var StatePendienteReason = null;
 
 
     //Datos del cliente
@@ -40,7 +38,17 @@ document.addEventListener('DOMContentLoaded', function () {
     var clienteEmail = null;
     var clienteNacionalidad = null;
     var clienteFechaNacimiento = null;
+    
+    //Verify email
     var EmailVerified = null;
+    
+    //Estados de la búsqueda
+    var state_front = null;
+    let previousState = null;
+    var StatePendienteReason = null;
+    var StatePausadoReason = null;
+
+
 
 
     //Items de la web
@@ -59,7 +67,6 @@ document.addEventListener('DOMContentLoaded', function () {
     var botonLinkUnicoOficina = $('#boton-link-unico-oficina');
     var botonLinkUnicoDatos = $('#boton-link-unico-datos');
     var botonAjustesLinkUnico = $('#boton-link-unico-ajustes');
-    var botonCancelarLinkUnico = $('#boton-cancelar-link-unico');
     var botonEstadoBusqueda = document.getElementById('boton_estado_busqueda');
 
     
@@ -73,18 +80,18 @@ document.addEventListener('DOMContentLoaded', function () {
     var divAjustesLinkUnico = $('#div-ajustes-link-unico');
 
 
-    //Default hide
-    $('#texto-dinamico-debajoestado').hide();
-    $('#form_block_modificar_datos_personales').hide();
-    $('#form_block_modificar_datos_busqueda').hide();
-
-
     //default flags
     flag_loading_text = false;
 
 
     //Date now
     var DateNow = Date.now().toString(36);
+
+
+
+
+
+
 
 
 
@@ -111,7 +118,6 @@ document.addEventListener('DOMContentLoaded', function () {
             // IDs del JSON
             id_oficina_front = data.ID_buscadores[0].id_oficina;
             date_added_front = data.fecha_cliente_creado;
-            state_front = data.state_backend;
             date_last_checked_front = data.date_last_checked;
             retries_front = data.retries;
             limit_max_front = data.fecha_maxima_cola;
@@ -126,7 +132,10 @@ document.addEventListener('DOMContentLoaded', function () {
             codigo_reserva_cita_front = data.referencia_reserva;
             fecha_cita_reservada_front = data.fecha_cita_reservada;
             fecha_limite_pago_front = data.fecha_limite_pago;
+            //Estados
+            state_front = data.state_backend;
             StatePendienteReason = data.cola_pendiente_reason;
+            StatePausadoReason = data.cola_pausado_reason;
             
 
             //Datos del cliente
@@ -140,7 +149,7 @@ document.addEventListener('DOMContentLoaded', function () {
             clienteNacionalidad = data.cliente_nacionalidad;
             clienteFechaNacimiento = data.cliente_fecha_nacimiento;
 
-            //Verificacion correo
+            //Verify email
             EmailVerified = data.cliente_correo_validated;
             
             
@@ -163,13 +172,13 @@ document.addEventListener('DOMContentLoaded', function () {
         });
 
     }
-            
 
-            
-            
-            
-         
-    
+
+
+
+
+
+
 
 
 
@@ -186,12 +195,15 @@ document.addEventListener('DOMContentLoaded', function () {
                 return response.json();
             })
         .then(data => {
-            // Variables estados
-            state_front = data.state_backend;
+            //Variables
             date_last_checked_front = data.date_last_checked;
             retries_front = data.retries;
+            //Estados
+            state_front = data.state_backend;
             StatePendienteReason = data.cola_pendiente_reason;
-            //Verificacion correo
+            StatePausadoReason = data.cola_pausado_reason;
+            
+            //Verify email
             EmailVerified = data.cliente_correo_validated;
             
         })
@@ -208,7 +220,6 @@ document.addEventListener('DOMContentLoaded', function () {
         });
 
     }
-            
 
 
 
@@ -218,15 +229,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 
-
-
-
-
-
-
-            
-            
-            
+      
     //Reemplazar items más fijos
     function ReplaceItemsStatic() {
 
@@ -376,8 +379,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
         $(document).ready(function () {
-
-
 
             //Mostrar diferentes elementos de la web según el estado de la búsqueda
             document.getElementById('id_unico_webhook').style.display = 'none';
@@ -706,168 +707,224 @@ document.addEventListener('DOMContentLoaded', function () {
     function ReplaceDynamicItems() {
  
 
-
-
-        //Cambiar textos según estado e inyectar CSS
-        if (state_front == 'BUSCANDO') {
-            botonEstadoBusqueda.textContent = 'Buscando cita';
-            document.getElementById('boton_estado_busqueda').classList.add('boton_busqueda_verde');
-        }
-
-        if (state_front == 'RESERVADO') {
-            botonEstadoBusqueda.textContent = 'Cita reservada, pendiente de pagar';
-            document.getElementById('boton_estado_busqueda').classList.add('boton_busqueda_naranja');
-        }
-
-        if (state_front == 'PAGADO') {
-            botonEstadoBusqueda.textContent = 'Pagado y confirmado';
-            document.getElementById('boton_estado_busqueda').classList.add('boton_busqueda_azul');
-        }
-
-        if (state_front == 'CANCELADO') {
-            botonEstadoBusqueda.textContent = 'Búsqueda cancelada';
-            document.getElementById('boton_estado_busqueda').classList.add('boton_busqueda_rojo');
-        }
-
-        if (state_front == 'ANULADO') {
-            botonEstadoBusqueda.textContent = 'Cita reservada anulada';
-            document.getElementById('texto-pago-cita-aun-buscando').textContent = 'Cita reservada anulada';
-            document.getElementById('boton_estado_busqueda').classList.add('boton_busqueda_rojo');
-        }
-        if (state_front == 'ANULANDO-COLA') {
-            botonEstadoBusqueda.textContent = 'Anulando cita...';
-            document.getElementById('texto-pago-cita-aun-buscando').textContent = 'Anulando cita...';
-            document.getElementById('boton_estado_busqueda').classList.add('boton_busqueda_rojo');
-        }
-        if (state_front == 'EXPIRADO') {
-            botonEstadoBusqueda.textContent = 'Búsqueda caducada';
-            document.getElementById('boton_estado_busqueda').classList.add('boton_busqueda_rojo');
-        }
-
-        //Errores
-        if (state_front == 'NO_VALIDADO') {
-            botonEstadoBusqueda.textContent = 'Error al procesar la solicitud';
-        }
-        if (state_front == 'EMAIL-NO-VERIFICADO') {
+        //Función para actualizar mostrar/ocultar items si cambia el estado de la búsqueda
+        function MostrarOcultarItemsSegunEstado() {
+ 
+            //--> Reestablecer config original
+            //Cosas de verificar email
             $('#block-email-verify').hide();
-            botonEstadoBusqueda.textContent = 'Email no verificado, solicitud rechazada';
-        }        
-        //Estados de inicialización   
-        if (state_front == 'CLIENTE-CREADO') {
-            botonEstadoBusqueda.textContent = 'Verificando datos cliente...';
-        }
-        if (state_front == 'COLA-CREADA') {
-            botonEstadoBusqueda.textContent = 'Verificando datos búsqueda...';
-        }
-        if (state_front == 'VALIDANDO-COLA') {
-            botonEstadoBusqueda.textContent = 'Validando primera búsqueda...';
-        }
-        //Estados pendientes
-        if (state_front == 'PENDIENTE') {
-            botonEstadoBusqueda.textContent = 'Pendiente de validación';
-        }
-        if (StatePendienteReason == 'LIMITE-BUSQUEDAS-DIARIAS' && state_front == 'PENDIENTE') {
-            document.getElementById('div-sub-estado').style.display = 'block';
-        } else {
-            document.getElementById('div-sub-estado').style.display = 'none';
-        }
+            //Texto debajo del estado
+            $('#texto-dinamico-debajoestado').hide();
+            $('#div-sub-estado').hide();
+            $('#texto-sub-estado').text('Cargando...');
+            $('#texto-sub-estado2').hide();
+            //Cosas de sección ajustes
+            $('#form_block_modificar_datos_personales').hide();
+            $('#form_block_modificar_datos_busqueda').hide();
+            $('#texto-info-modificar-datos-personales').show();
+            $('#texto-info-modificar-datos-personales-2').show();
+            //Gifs en el lateral del botón del estado
+            $('#gif-radar-buscando').hide();
+            $('#gif-pagar-reservado').hide();
+            //Botones acciones relacionadas con el estado
+            $('#boton_estado_busqueda').text('Cargando...');
+            $('#boton-cancelar-link-unico').hide();
+            //CSS botones del estado
+            $('#boton_estado_busqueda').removeClass('boton_busqueda_verde');
+            $('#boton_estado_busqueda').removeClass('boton_busqueda_naranja');
+            $('#boton_estado_busqueda').removeClass('boton_busqueda_azul');
+            $('#boton_estado_busqueda').removeClass('boton_busqueda_rojo');
+            //Items e inputs relacionados con el estado
+            $('#div_caducidad_busqueda').hide();
+            $('#div-ultima-busqueda').hide();
+            $('#cuadrado-pago-cita20').hide();
+            $('#div-datos-cita-reservada').hide();
+            $('#div-datos-cita-reservada').hide();
 
 
-        //Poner gifs según el estado de búsqueda
-        if (state_front == 'BUSCANDO') {
-            document.getElementById('gif-radar-buscando').style.display = 'block';
-        } else {
-            document.getElementById('gif-radar-buscando').style.display = 'none';
-        }
-
-        if (state_front == 'RESERVADO') {
-            document.getElementById('gif-pagar-reservado').style.display = 'block';
-        } else {
-            document.getElementById('gif-pagar-reservado').style.display = 'none';
-        }
 
 
-        
-        // Mostrar diferentes items dependiendo del estado
-        if (state_front == 'BUSCANDO') {
-            botonCancelarLinkUnico.show();
-            divCaducidadBusqueda.show();
-            divUltimaBusqueda.show();
-            $('#form_block_modificar_datos_personales').show();
-            $('#texto-info-modificar-datos-personales').hide();
-            $('#form_block_modificar_datos_busqueda').show();
-            $('#texto-info-modificar-datos-personales-2').hide();            
-        }
-        if (state_front == 'RESERVADO') {
-            cuadradoPagoCita20.show();
-            divDatosCitaReservada.show();
-        }
-        if (state_front == 'PAGADO') {
-            divDatosCitaReservada.show();
-            estadoPagoCitaReservada.text('Pagado');
-            cuadradoPagoCita20.hide();
-        }
 
 
-        if (state_front == 'BUSCANDO' && flag_loading_text == false) {
-            $('#texto-dinamico-debajoestado').show();
-            flag_loading_text = true;
-            var loadList = [
-                "Cargando información de la búsqueda",
-                "Cargando datos del servidor",
-                "Codificando datos personales",
-                "Cargando página principal",
-                "Indexando menús",
-                "Analizando web",
-                "Rellenando información",
-                "Cargando datos",
-                "Completando formulario",
-                "Introduciendo datos usuario",
-                "Esperando respuesta del servidor",
-                "Cargando respuesta",
-                "Analizando respuesta",
-                "Buscando posibles citas",
-                "Buscando citas en el calendario",
-                "Comprobando disponibilidad",
-                "Analizando horarios",
-                "Buscando citas según fechas indicadas",
-                "Calculando resultados",
-                "Ninguna cita disponible",
-                "Cargando resultados",
-                "Reinicio de búsqueda",
-            ];
-        
-            var i = 0;
-            var textarea = $('#text-loop-link-unico');
-        
-            // Generate a random index to start from
-            var randomIndex = Math.floor(Math.random() * loadList.length);
-            textarea.text(loadList[randomIndex]); // Set initial text
-        
-            // Adjust i to start from the random index
-            i = (randomIndex * 4) + 1;
-        
-            var loadTimer = setInterval(function () {
-                if (i % 4 === 0) {
-                    var index = Math.floor(i / 4) % loadList.length;
-                    textarea.text(loadList[index]);
-                } else {
-                    // If not at the end of the text cycle, remove existing dots
-                    textarea.text(loadList[Math.floor(i / 4)]); 
-                    // Add dots corresponding to the current step
-                    for (var j = 0; j < i % 4; j++) {
-                        textarea.append('.');
+            // --> Mostrar cosas según estado
+            // Email aún no verificado
+            if (!EmailVerified && !(state_front == 'EMAIL-NO-VERIFICADO')) {
+                $('#block-email-verify').show();
+                $('#boton_estado_busqueda').text('Email pendiente verificar');
+            }
+
+            // Estados de inicialización   
+            if (state_front == 'CLIENTE-CREADO') {
+                $('#boton_estado_busqueda').text('Verificando datos cliente...');
+            }
+            if (state_front == 'COLA-CREADA') {
+                $('#boton_estado_busqueda').text('Verificando datos búsqueda...');
+            }
+            if (state_front == 'VALIDANDO-COLA') {
+                $('#boton_estado_busqueda').text('Validando primera búsqueda...');
+            }
+
+            // Estados normales
+            if (state_front == 'BUSCANDO') {
+                $('#boton_estado_busqueda').text('Buscando cita');
+                $('#boton_estado_busqueda').addClass('boton_busqueda_verde');
+                $('#gif-radar-buscando').css('display', 'block');
+                $('#boton-cancelar-link-unico').show();
+                $('#div_caducidad_busqueda').show();
+                $('#div-ultima-busqueda').show();
+                $('#form_block_modificar_datos_personales').show();
+                $('#form_block_modificar_datos_busqueda').show();
+                $('#texto-info-modificar-datos-personales').hide();
+                $('#texto-info-modificar-datos-personales-2').hide();
+            }
+
+            if (state_front == 'RESERVADO') {
+                $('#boton_estado_busqueda').text('Cita reservada, pendiente de pagar');
+                $('#boton_estado_busqueda').addClass('boton_busqueda_naranja');
+                $('#gif-pagar-reservado').css('display', 'block');
+                $('#cuadrado-pago-cita20').show();
+                $('#div-datos-cita-reservada').show();
+                //Caso excepcional de texto en sección cita reservada
+                $('#texto-pago-cita-aun-buscando').hide();
+            }
+
+            if (state_front == 'PAGADO') {
+                $('#boton_estado_busqueda').text('Pagado y confirmado');
+                $('#boton_estado_busqueda').addClass('boton_busqueda_azul');
+                $('#div-datos-cita-reservada').show();
+                $('#estado-pago-cita-reservada').text('Pagado');
+            }
+
+            if (state_front == 'CANCELADO') {
+                $('#boton_estado_busqueda').text('Búsqueda cancelada');
+                $('#boton_estado_busqueda').addClass('boton_busqueda_rojo');
+            }
+
+            if (state_front == 'ANULADO') {
+                $('#boton_estado_busqueda').text('Cita reservada anulada');
+                $('#texto-pago-cita-aun-buscando').text('Cita reservada anulada');
+                $('#boton_estado_busqueda').addClass('boton_busqueda_rojo');
+            }
+            if (state_front == 'ANULANDO-COLA') {
+                $('#boton_estado_busqueda').text('Anulando cita...');
+                $('#texto-pago-cita-aun-buscando').text('Anulando cita...');
+                $('#boton_estado_busqueda').addClass('boton_busqueda_rojo');
+            }
+            if (state_front == 'EXPIRADO') {
+                $('#boton_estado_busqueda').text('Búsqueda caducada');
+                $('#texto-pago-cita-aun-buscando').text('Su cita no se está buscando debido a que ha caducado');
+                $('#boton_estado_busqueda').addClass('boton_busqueda_rojo');
+            }
+
+            
+            // Estados pendientes
+            // ***Debido límite de búsquedas diarias
+            if (state_front == 'PENDIENTE') {
+                $('#boton_estado_busqueda').text('Pendiente de validación');
+            }
+            if (StatePendienteReason == 'LIMITE-BUSQUEDAS-DIARIAS' && state_front == 'PENDIENTE') {
+                $('#div-sub-estado').show();
+                $('#texto-sub-estado').text('No se puede continuar debido a que se ha excedido el límite máximo diario de búsquedas para esta cita y oficina. Se seguirá reintentando la validación durante cada hora durante los siguientes 3 días.');
+            }
+
+            // Estados pausados que requieren acción del usuario
+            // ***Cita ya reservada con DocID
+            if (state_front == 'PAUSADO-REQUIERE-ACCION') {
+                $('#boton_estado_busqueda').text('Pausado, acción necesaria');
+            }
+            if (StatePausadoReason == 'CITA-ALREADY-BOOKED-WITH-ID' && state_front == 'PAUSADO-REQUIERE-ACCION') {
+                $('#form_block_modificar_datos_personales').show();
+                $('#texto-info-modificar-datos-personales').hide();
+                $('#form_block_modificar_datos_busqueda').show();
+                $('#texto-info-modificar-datos-personales-2').hide();
+                $('#div-sub-estado').show();
+                $('#texto-sub-estado').text('Ya existe una cita reservada con su documento de identidad. Sólo es posible reservar una cita con un documento. Si tienes una cita con el NIE introduce tu Pasaporte o viceversa. Actualiza el documento en Ajustes > Modificar datos personales');
+            }
+
+            // Estados de errores
+            if (state_front == 'NO_VALIDADO') {
+                $('#boton_estado_busqueda').text('Error al procesar la solicitud');
+            }
+            if (state_front == 'EMAIL-NO-VERIFICADO') {
+                $('#boton_estado_busqueda').text('Email no verificado, solicitud rechazada');
+            }
+            if (state_front == 'ERROR-NO-CONSIGUE-BUSCAR') {
+                $('#boton_estado_busqueda').text('Error al procesar la solicitud');
+            }
+            
+            //Mostrar texto dinamico debajo del estado en la que indica que está cargando
+            if (state_front == 'BUSCANDO' && flag_loading_text == false) {
+                $('#texto-dinamico-debajoestado').show();
+                flag_loading_text = true;
+                var loadList = [
+                    "Cargando información de la búsqueda",
+                    "Cargando datos del servidor",
+                    "Codificando datos personales",
+                    "Cargando página principal",
+                    "Indexando menús",
+                    "Analizando web",
+                    "Rellenando información",
+                    "Cargando datos",
+                    "Completando formulario",
+                    "Introduciendo datos usuario",
+                    "Esperando respuesta del servidor",
+                    "Cargando respuesta",
+                    "Analizando respuesta",
+                    "Buscando posibles citas",
+                    "Buscando citas en el calendario",
+                    "Comprobando disponibilidad",
+                    "Analizando horarios",
+                    "Buscando citas según fechas indicadas",
+                    "Calculando resultados",
+                    "Ninguna cita disponible",
+                    "Cargando resultados",
+                    "Reinicio de búsqueda",
+                ];
+            
+                var i = 0;
+                var textarea = $('#text-loop-link-unico');
+            
+                // Generate a random index to start from
+                var randomIndex = Math.floor(Math.random() * loadList.length);
+                textarea.text(loadList[randomIndex]); // Set initial text
+            
+                // Adjust i to start from the random index
+                i = (randomIndex * 4) + 1;
+            
+                var loadTimer = setInterval(function () {
+                    if (i % 4 === 0) {
+                        var index = Math.floor(i / 4) % loadList.length;
+                        textarea.text(loadList[index]);
+                    } else {
+                        // If not at the end of the text cycle, remove existing dots
+                        textarea.text(loadList[Math.floor(i / 4)]); 
+                        // Add dots corresponding to the current step
+                        for (var j = 0; j < i % 4; j++) {
+                            textarea.append('.');
+                        }
                     }
-                }
-        
-                if (i % (4 * loadList.length) === 0) {
-                    i = 0; // Reset when all texts have been shown once
-                } else {
-                    i++; // Increment i for the next iteration
-                }
-            }, 2500); // 5 seconds timer
+            
+                    if (i % (4 * loadList.length) === 0) {
+                        i = 0; // Reset when all texts have been shown once
+                    } else {
+                        i++; // Increment i for the next iteration
+                    }
+                }, 2500); // 5 seconds timer
+            }
+    
+        } 
+
+        //IF para comprobar si ha cambiado el estado y ejecutar función
+        if (state_front != previousState) {
+            MostrarOcultarItemsSegunEstado();
+            previousState = state_front;
+                    
+
         }
-        
+
+
+
+
 
 
 
@@ -1094,22 +1151,27 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 
-        //Cosas relacionadas con la verificación del correo
-        //Mostrar bloque pidiendo codigo verificacion email y cambiar texto estado
-        if (!EmailVerified && !(state_front == 'EMAIL-NO-VERIFICADO')) {
-            $('#block-email-verify').show(); // Show the block
-            $('#boton_estado_busqueda').text('Email pendiente verificar');
-        }
 
-        //Petición para verificar correo
 
 
 
         //Inicializar operacion de tiempo para cargar datos dinámicos y peticion http
         GetTimeIntervalDynamic();
+        
     }
     
-    
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -1134,7 +1196,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 
-    //crear variables locales del tiempo
+
+
+
+    //Cosas con los cambios de estado
+    //crear variables locales del tiempo para actualizar datos dinámicos
     let intervalId;
 
     //obtener tiempo necessario para ejecutar la petición de datos dinámicos
@@ -1150,7 +1216,7 @@ document.addEventListener('DOMContentLoaded', function () {
             intervalId = 5000;
             fetchDataStateDynamicInterval();
         } 
-        if (state_front == 'VALIDANDO-COLA') {
+        if (state_front == 'VALIDANDO-COLA' || state_front == 'PAUSADO-REQUIERE-ACCION' || state_front == 'ERROR-NO-CONSIGUE-BUSCAR' ) {
             // Call fetchData() initially (optional)
             intervalId = 15000;
             fetchDataStateDynamicInterval();
@@ -1174,6 +1240,27 @@ document.addEventListener('DOMContentLoaded', function () {
             document.getElementById('cargando-datos-link-unico').style.display = 'none';
         }
     }
+
+
+
+
+
+    //-->Finaliza todo lo relacionado con la petición de datos dinámicos/estaticos o cambios de estado
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -1397,8 +1484,6 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
 
-
-
     //Formularios modificar datos personales
     $('#form_block_modificar_datos_personales').submit(function (event) {
         // Prevent the default form submission behavior
@@ -1486,24 +1571,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     });
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     
-
-
     //Formularios modificar fechas de búsqueda
     $('#form_block_modificar_datos_busqueda').submit(function (event) {
         // Prevent the default form submission behavior
