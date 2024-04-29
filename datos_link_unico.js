@@ -486,12 +486,7 @@ document.addEventListener('DOMContentLoaded', function () {
             
 
 
-
-            //Crear get para verificar correo
-            if (EmailVerified == 'false') {
-                document.getElementById('correo_usuario_verify').textContent = 'Correo no verificado';
-            }
-                    
+    
 
 
         });
@@ -1205,7 +1200,7 @@ document.addEventListener('DOMContentLoaded', function () {
             intervalId = 45000;
             fetchDataStateDynamicInterval();
         } 
-        if (state_front == 'CLIENTE-CREADO' || state_front == 'COLA-CREADA') {
+        if (state_front == 'CLIENTE-CREADO' || state_front == 'COLA-CREADA' || state_front == 'EMAIL-NO-VERIFICADO') {
             // Call fetchData() initially (optional)
             intervalId = 5000;
             fetchDataStateDynamicInterval();
