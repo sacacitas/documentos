@@ -247,7 +247,6 @@ document.addEventListener('DOMContentLoaded', function () {
         var fecha_caducidad_date = new Date(fecha_caducidad_front);
         var fecha_cita_reservada = new Date(fecha_cita_reservada_front);
         var fecha_limite_pago = new Date(fecha_limite_pago_front);
-        var date_clienteFechaNacimiento = new Date(clienteFechaNacimiento);
 
 
         //contar hacía atrás del tiempo que falta para pagar
@@ -303,12 +302,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
         //Fecha nacimiento a DD.MM.YYYY
-        var formatted_date_clienteFechaNacimiento = date_clienteFechaNacimiento.toLocaleDateString('es-ES', {
-            year: 'numeric',
-            month: '2-digit', // Use '2-digit' to ensure leading zeros for single-digit months
-            day: '2-digit', // Use '2-digit' to ensure leading zeros for single-digit days
-        }).replace(/\./g, '/'); // Replace dots with slashes if needed
-
+        var formatted_date_clienteFechaNacimiento = formatDateFromISOToDMY(clienteFechaNacimiento);
 
 
 
@@ -1277,12 +1271,9 @@ document.addEventListener('DOMContentLoaded', function () {
         //--> Primer formulario 
 
         //Datos personales cliente
-        var date_clienteFechaNacimiento = new Date(clienteFechaNacimiento);
-        var formatted_date_clienteFechaNacimiento = date_clienteFechaNacimiento.toLocaleDateString('es-ES', {
-            year: 'numeric',
-            month: '2-digit', // Use '2-digit' to ensure leading zeros for single-digit months
-            day: '2-digit', // Use '2-digit' to ensure leading zeros for single-digit days
-        }).replace(/\./g, '/'); // Replace dots with slashes if needed
+
+        var formatted_date_clienteFechaNacimiento = formatDateFromISOToDMY(clienteFechaNacimiento);
+
 
         //Seleccionar botones de selección de tipo de documento. DNI, NIE, Pasaporte
         var selectFormDocPasaporte = $('#select-pasaporte-form');
