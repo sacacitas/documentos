@@ -38,6 +38,7 @@ document.addEventListener('DOMContentLoaded', function () {
     var clienteEmail = null;
     var clienteNacionalidad = null;
     var clienteFechaNacimiento = null;
+    var clienteResolucionNacionalidad = null;
     
     //Verify email
     var EmailVerified = null;
@@ -86,6 +87,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
     //Date now
     var DateNow = Date.now().toString(36);
+
+    //Default hide
+    $('#div-link-cliente-resolucion-nacionalidad').hide();
 
 
 
@@ -148,6 +152,7 @@ document.addEventListener('DOMContentLoaded', function () {
             clienteEmail = data.cliente_email;
             clienteNacionalidad = data.cliente_nacionalidad;
             clienteFechaNacimiento = data.cliente_fecha_nacimiento;
+            clienteResolucionNacionalidad = data.cliente_resolucion_nacionalidad;
 
             //Verify email
             EmailVerified = data.cliente_correo_validated;
@@ -351,7 +356,11 @@ document.addEventListener('DOMContentLoaded', function () {
         //Comprobar si está null o no el apellido 2
         var fullName = clienteNombre + ' ' + clienteApellido1 + (clienteApellido2 ? ' ' + clienteApellido2 : '');
         document.getElementById('link-cliente-nombre-completo').textContent = fullName;
-
+        //Mostrar resolución nacionalidad si no es null
+        if (clienteResolucionNacionalidad) {
+            $('#div-link-cliente-resolucion-nacionalidad').show();
+            $('#link-cliente-resolucion-nacionalidad').text(clienteResolucionNacionalidad);
+        }
 
 
 
@@ -938,8 +947,9 @@ document.addEventListener('DOMContentLoaded', function () {
         var horas_busqueda_front = Math.floor((last_checked - date_added) / (60 * 60 * 1000));
 
         //Poner a 0 el número de horas si es menor a 0
-        if (horas_busqueda_front < 0) {
+        if (horas_busqueda_front < 0 || horas_busqueda_front === 0) {
             horas_busqueda_front = 0;
+            $('#date_last_checked_front').text('Iniciando primera búsqueda...');
         }
         //Si no es una fecha válida mostrar otro texto para la fecha de la búsqueda de inicio
         if (isNaN(horas_busqueda_front)) {
