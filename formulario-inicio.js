@@ -57,6 +57,7 @@ $(document).ready(function () {
         var InputTelef = $('#input-telefono');
         var InputTelefVerf = $('#input-confirmar-telefono');
         var InputNacionalidad = $('#input-lista-paises');
+        var InputRNacionalidad = $('#input-resolucion-nacionalidad');
 
         //Divs del formulario
         var DivJuraNacionalidad = $('#clientes-jura-nacionalidad');
@@ -112,12 +113,14 @@ $(document).ready(function () {
                 console.error("Error:", errorThrown);
             }
         });
+        console.log('CONFIG_FORM', CONFIG_FORM);
     } else {
         alert('Hubo un problema al procesar la solicitud, acceda al formulario desde el buscador de https://sacacitas.es, Si el problema persiste, contacte con nosotros.');
     }
     //Mostrar secciones dinámicas
     function execute_parte_dinamica_form() {
         // Parte dinámica del formulario
+        //Resolucion nacionalidad
         DivJuraNacionalidad.toggle(CONFIG_FORM.resolucion_nacionalidad || false);
         //$('#input-resolucion-nacionalidad').prop('required', CONFIG_FORM.resolucion_nacionalidad || false);
 
@@ -580,17 +583,42 @@ $(document).ready(function () {
 
             //5.Comprobar nacionalidad. R Nacionalidad y caducidad tarjeta
             $(NextButon5).click(function () {
-                let inputsToCheck = [InputNacionalidad];
+                
+                let inputsToCheck; // Declare inputsToCheck variable outside the if statement
+
+                if (CONFIG_FORM.resolucion_nacionalidad === true) {
+                    inputsToCheck = [InputNacionalidad, InputRNacionalidad];
+                } else {
+                    // If input is not empty, remove the error message
+                    inputsToCheck = [InputNacionalidad];
+                }                
+                   
                 // Array de inputs que verificar
                 let allInputsValid = true;
                 // Si todo OK pasa a la siguiente
 
                 // Check each input
                 inputsToCheck.forEach(function (input) {
+
+                    //Validar regex campos individuales
+                    var func_validate = function (text_input) {
+                        return true
+                    };
+                    //Comprobar si RNacionalidad se ha seleccionado
+                    if (input === InputRNacionalidad) {
+                        func_validate = validateRNacionalidad
+                    }
+
+                    //Hacer validación de los campos
                     if (input.val().trim() === '') {
                         displayErrorMessage(input, 'Este campo es obligatorio');
                         // Muestra mensaje de error en la funcion displayErrorMessage donde inputElement = input
                         allInputsValid = false;
+                    } else if (!func_validate(input.val())) {
+                        displayErrorMessage(input, 'Resolución de nacionalidad incorrecta');
+                        // Muestra mensaje de error en la funcion displayErrorMessage donde inputElement = input
+                        allInputsValid = false;
+
                     } else {
                         // If input is not empty, remove the error message
                         $(input).next('.error-message-form').remove();
@@ -718,4 +746,18 @@ function validateNIE(nie) {
     letra = letra.substring(numero, numero + 1);
 
     return letra === lett;
+}
+
+
+//Validar Resolución de nacionalidad
+function validateRNacionalidad(RN) {
+    // Define regular expression for RN validation
+    var expresion_regular_rn = /^R\S{0,13}20\d{2}$/;
+
+    // Check if RN matches the regular expression and has a maximum length of 14 characters
+    if (!expresion_regular_rn.test(RN) || RN.length > 14) {
+        return false; // RN format is invalid
+    }
+
+    return true; // RN format is valid
 }
