@@ -45,8 +45,8 @@ $(document).ready(function () {
 
         //Variables de los inputs del formulario
         var InputDivFMinMax = $('#div-block-f-min-max');
-        var InputFMin = $('#checkin');
-        var InputFMax = $('#checkout');
+        var InputFMin = $('#start-date');
+        var InputFMax = $('#end-date');
         //var InputFechaExclusion = $('#input-fecha-exclusion');
         var InputNombre = $('#input-nombre');
         var InputApellido1 = $('#input-apellido1');
@@ -136,48 +136,53 @@ $(document).ready(function () {
     //Funcionalidades de cada sección del formulario 
     {
         //SECTION: 1 - Escoger fechas máx min
-        //Easepicker fechas max min
-        const PickerRangoBusqueda = new easepick.create({
-            element: "#checkin",
-            css: ["https://cdn.jsdelivr.net/npm/@easepick/bundle@1.2.1/dist/index.css", 'https://documentos.sacacitas.es/formulario-inicio.css',],
-            zIndex: 999999999,
-            lang: "es-ES",
-            format: "DD MMMM YYYY",
-            grid: 2,
-            calendars: 2,
-            readonly: false,
-            inline: false,
-            header: "",
-            AmpPlugin: {
-                dropdown: {
-                    months: true,
-                    minYear: 2024,
-                    maxYear: 2026
-                },
-                resetButton: false,
-                darkMode: false
-            },
-            RangePlugin: {
-                elementEnd: "#checkout",
-                repick: false,
-                delimiter: "-",
-                locale: {
-                    zero: "cero",
-                    one: "días",
-                    two: "dos",
-                    few: "unos cuantos",
-                    many: "muchos",
-                    other: "días"
+        //Inicializar datepickers
+        $(function() {
+            var dateFormat = "dd/mm/yy";
+        
+            // Define Spanish localization directly in JavaScript
+            $.datepicker.setDefaults($.datepicker.regional['es'] = {
+              closeText: "Cerrar",
+              prevText: "Anterior",
+              nextText: "Siguiente",
+              currentText: "Hoy",
+              monthNames: ["enero", "febrero", "marzo", "abril", "mayo", "junio",
+                "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"
+              ],
+              monthNamesShort: ["ene", "feb", "mar", "abr", "may", "jun",
+                "jul", "ago", "sep", "oct", "nov", "dic"
+              ],
+              dayNames: ["domingo", "lunes", "martes", "miércoles", "jueves", "viernes", "sábado"],
+              dayNamesShort: ["dom", "lun", "mar", "mié", "jue", "vie", "sáb"],
+              dayNamesMin: ["D", "L", "M", "X", "J", "V", "S"],
+              weekHeader: "Sm",
+              dateFormat: "dd/mm/yy",
+              firstDay: 1,
+              isRTL: false,
+              showMonthAfterYear: false,
+              yearSuffix: ""
+            });
+        
+            $("#start-date").datepicker({
+              dateFormat: dateFormat,
+              minDate: 0,
+              onSelect: function(selectedDate) {
+                $("#end-date").datepicker("option", "minDate", selectedDate);
+              }
+            });
+        
+            $("#end-date").datepicker({
+              dateFormat: dateFormat,
+              minDate: 0,
+              onSelect: function(selectedDate) {
+                var startDate = $("#start-date").datepicker("getDate");
+                if (startDate && startDate > new Date(selectedDate)) {
+                  $("#start-date").datepicker("setDate", selectedDate);
                 }
-            },
-            LockPlugin: {
-                minDate: (DateNow),
-                selectForward: true,
-                minDays: 3
-            },
-            plugins: ["AmpPlugin", "RangePlugin", "LockPlugin"]
+              }
+            });
+          });
 
-        })
 
         //Días de exclusión
         PickerExcluidosDias = new Litepicker({
@@ -214,29 +219,23 @@ $(document).ready(function () {
         });
 
         //SECTION: 2 - Datos cliente
-        //Easepicker fecha nacimiento
-        const PickerNacimiento = new easepick.create({
-            element: "#input-fecha-nacimiento",
-            css: ["https://cdn.jsdelivr.net/npm/@easepick/bundle@1.2.1/dist/index.css", 'https://documentos.sacacitas.es/formulario-inicio.css',],
-            zIndex: 999999999,
-            lang: "es-ES",
-            format: "DD MMMM YYYY",
-            readonly: false,
-            AmpPlugin: {
-                dropdown: {
-                    months: true,
-                    years: true,
-                    minYear: 1930,
-                    maxYear: 2028
-                },
-                resetButton: false,
-                darkMode: false
-            },
-            LockPlugin: {
-                maxDate: (DateNow)
-            },
-            plugins: ["AmpPlugin", "LockPlugin"]
-        })
+        //Date picker jquery
+        $(function() {
+            var dateFormat = "dd/mm/yy";
+        
+            $("#input-fecha-nacimiento").datepicker({
+              dateFormat: dateFormat,
+              maxDate: 0, // Maximum date is today (no future dates allowed)
+              changeMonth: true, // Show month dropdown
+              changeYear: true, // Show year dropdown
+              yearRange: "c-100:c", // Display 100 years before and after the current year
+              dayNamesMin: ["Do", "Lu", "Ma", "Mi", "Ju", "Vi", "Sá"],
+              monthNames: [
+                "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
+                "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"
+              ]
+            });
+          });
 
         //SECTION: 3 - Documento identidad
         //Seleccionar botones de selección de tipo de documento. DNI, NIE, Pasaporte
@@ -344,8 +343,8 @@ $(document).ready(function () {
             // Gather form data
             var formData = {
                 idbuscadores: INPUT_JSON.idbuscadores,
-                Fmin: $('#checkin').val(),
-                Fmax: $('#checkout').val(),
+                Fmin: $('#start-date').val(),
+                Fmax: $('#end-date').val(),
                 dias_excluidos: PickerExcluidosDias.multipleDatesToString() === '' ? [] : PickerExcluidosDias.multipleDatesToString().split(','),
                 Nombre: $('#input-nombre').val(),
                 Apellido1: $('#input-apellido1').val(),
@@ -640,8 +639,8 @@ $(document).ready(function () {
                     $('#resumen-nacionalidad').text($('#input-lista-paises').val());
                     $('#resumen-telefono').text($('#input-telefono').val());
                     $('#resumen-correo').text($('#input-correo').val());
-                    $('#resumen-Fmin').text($('#checkin').val());
-                    $('#resumen-Fmax').text($('#checkout').val());
+                    $('#resumen-Fmin').text($('#start-date').val());
+                    $('#resumen-Fmax').text($('#end-date').val());
                     // Convert cents to dollars and format with commas and two decimal places
                     var formatted_price = ((CONFIG_FORM.precio) / 100).toLocaleString('es-ES', {
                         minimumFractionDigits: 2,
@@ -686,8 +685,8 @@ $(document).ready(function () {
         //Poner read only al input de fecha max para que no salga el teclado en el movil
         $(document).ready(function () {
             // Select the input field by its ID and make it readonly
-            $('#checkin').prop('readonly', true);
-            $('#checkout').prop('readonly', true);
+            $('#start-date').prop('readonly', true);
+            $('#end-date').prop('readonly', true);
             $('#exclude-days').prop('readonly', true);
             $('#input-fecha-nacimiento').prop('readonly', true);
         });
