@@ -219,11 +219,11 @@ $(document).ready(function () {
         });
 
         //SECTION: 2 - Datos cliente
-        //Date picker jquery
+        //Date picker jquery fecha nacimiento
         $(function() {
             var dateFormat = "dd/mm/yy";
         
-            $("#selected-date").datepicker({
+            $("#input-fecha-nacimiento").datepicker({
               dateFormat: dateFormat,
               maxDate: 0, // Maximum date is today (no future dates allowed)
               changeMonth: true, // Show month dropdown
