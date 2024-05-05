@@ -752,7 +752,7 @@ function validateNIE(nie) {
 //Validar Resolución de nacionalidad
 function validateRNacionalidad(RN) {
     // Define regular expression for RN validation
-    var expresion_regular_rn = /^R\S{0,13}20\d{2}$/;
+    var expresion_regular_rn = /^R\d{4,9}\/20\d{2}$/;
 
     // Check if RN matches the regular expression and has a maximum length of 14 characters
     if (!expresion_regular_rn.test(RN) || RN.length > 14) {
@@ -761,3 +761,4 @@ function validateRNacionalidad(RN) {
 
     return true; // RN format is valid
 }
+9,13 pues 
