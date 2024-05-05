@@ -761,4 +761,3 @@ function validateRNacionalidad(RN) {
 
     return true; // RN format is valid
 }
-9,13 pues 
