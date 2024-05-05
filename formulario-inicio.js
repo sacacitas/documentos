@@ -223,7 +223,7 @@ $(document).ready(function () {
         $(function() {
             var dateFormat = "dd/mm/yy";
         
-            $("#input-fecha-nacimiento").datepicker({
+            $("#selected-date").datepicker({
               dateFormat: dateFormat,
               maxDate: 0, // Maximum date is today (no future dates allowed)
               changeMonth: true, // Show month dropdown
@@ -760,3 +760,4 @@ function validateRNacionalidad(RN) {
 
     return true; // RN format is valid
 }
+
