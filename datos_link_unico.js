@@ -1453,24 +1453,6 @@ document.addEventListener('DOMContentLoaded', function () {
           });
 
 
-        $(function() {
-            // Customize CSS for date picker elements
-            $(".ui-datepicker").css({
-                "font-size": "14px", // Change font size
-                "color": "#333", // Change text color
-                "background-color": "#fff", // Change background color
-                // Add more CSS properties as needed
-            });
-        
-            $(".ui-datepicker-header").css({
-                "background-color": "#f0f0f0", // Change header background color
-                // Add more CSS properties as needed
-            });
-        
-        // You can target other date picker elements similarly
-        });
-        
-
 
 
 
