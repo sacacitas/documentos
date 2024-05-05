@@ -1346,29 +1346,23 @@ document.addEventListener('DOMContentLoaded', function () {
         }
         );
 
-        //Easepicker fecha nacimiento
-        const PickerNacimiento = new easepick.create({
-            element: "#input-fecha-nacimiento",
-            css: ["https://cdn.jsdelivr.net/npm/@easepick/bundle@1.2.1/dist/index.css", 'https://documentos.sacacitas.es/formulario-inicio.css',],
-            zIndex: 999999999,
-            lang: "es-ES",
-            format: "DD/MM/YYYY",
-            readonly: false,
-            AmpPlugin: {
-                dropdown: {
-                    months: true,
-                    years: true,
-                    minYear: 1930,
-                    maxYear: 2028
-                },
-                resetButton: false,
-                darkMode: false
-            },
-            LockPlugin: {
-                maxDate: (DateNow)
-            },
-            plugins: ["AmpPlugin", "LockPlugin"]
-        })
+        //Date picker jquery fecha nacimiento
+        $(function() {
+            var dateFormat = "dd/mm/yy";
+        
+            $("#input-fecha-nacimiento").datepicker({
+              dateFormat: dateFormat,
+              maxDate: 0, // Maximum date is today (no future dates allowed)
+              changeMonth: true, // Show month dropdown
+              changeYear: true, // Show year dropdown
+              yearRange: "c-100:c", // Display 100 years before and after the current year
+              dayNamesMin: ["Do", "Lu", "Ma", "Mi", "Ju", "Vi", "Sá"],
+              monthNames: [
+                "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
+                "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"
+              ]
+            });
+          });
 
         
 
