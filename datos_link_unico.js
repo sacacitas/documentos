@@ -153,7 +153,6 @@ document.addEventListener('DOMContentLoaded', function () {
             clienteNacionalidad = data.cliente_nacionalidad;
             clienteFechaNacimiento = data.cliente_fecha_nacimiento;
             clienteResolucionNacionalidad = data.cliente_resolucion_nacionalidad;
-
             //Verify email
             EmailVerified = data.cliente_correo_validated;
             
@@ -361,7 +360,6 @@ document.addEventListener('DOMContentLoaded', function () {
             $('#div-link-cliente-resolucion-nacionalidad').show();
             $('#link-cliente-resolucion-nacionalidad').text(clienteResolucionNacionalidad);
         }
-
 
 
 
@@ -1382,48 +1380,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
         //--> Segundo formulario 
 
-        //Easepicker rango de fechas de búsqueda
-        const PickerRangoBusqueda = new easepick.create({
-            element: "#checkin",
-            css: ["https://cdn.jsdelivr.net/npm/@easepick/bundle@1.2.1/dist/index.css", 'https://documentos.sacacitas.es/formulario-inicio.css',],
-            zIndex: 999999999,
-            lang: "es-ES",
-            format: "DD MMMM YYYY",
-            grid: 2,
-            calendars: 2,
-            readonly: false,
-            inline: false,
-            header: "",
-            AmpPlugin: {
-                dropdown: {
-                    months: true,
-                    minYear: 2024,
-                    maxYear: 2026
-                },
-                resetButton: false,
-                darkMode: false
-            },
-            RangePlugin: {
-                elementEnd: "#checkout",
-                repick: false,
-                delimiter: "-",
-                locale: {
-                    zero: "cero",
-                    one: "días",
-                    two: "dos",
-                    few: "unos cuantos",
-                    many: "muchos",
-                    other: "días"
-                }
-            },
-            LockPlugin: {
-                minDate: (DateNow),
-                selectForward: true,
-                minDays: 3
-            },
-            plugins: ["AmpPlugin", "RangePlugin", "LockPlugin"]
-
-        })
 
         //Días de exclusión
         PickerExcluidosDias = new Litepicker({
@@ -1448,11 +1404,82 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
 
+
+        //Inicializar datepickers
+        $(function() {
+            var dateFormat = "dd/mm/yy";
+        
+            // Define Spanish localization directly in JavaScript
+            $.datepicker.setDefaults($.datepicker.regional['es'] = {
+              closeText: "Cerrar",
+              prevText: "Anterior",
+              nextText: "Siguiente",
+              currentText: "Hoy",
+              monthNames: ["enero", "febrero", "marzo", "abril", "mayo", "junio",
+                "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"
+              ],
+              monthNamesShort: ["ene", "feb", "mar", "abr", "may", "jun",
+                "jul", "ago", "sep", "oct", "nov", "dic"
+              ],
+              dayNames: ["domingo", "lunes", "martes", "miércoles", "jueves", "viernes", "sábado"],
+              dayNamesShort: ["dom", "lun", "mar", "mié", "jue", "vie", "sáb"],
+              dayNamesMin: ["D", "L", "M", "X", "J", "V", "S"],
+              weekHeader: "Sm",
+              dateFormat: "dd/mm/yy",
+              firstDay: 1,
+              isRTL: false,
+              showMonthAfterYear: false,
+              yearSuffix: ""
+            });
+        
+            $("#start-date").datepicker({
+              dateFormat: dateFormat,
+              minDate: 0,
+              onSelect: function(selectedDate) {
+                $("#end-date").datepicker("option", "minDate", selectedDate);
+              }
+            });
+        
+            $("#end-date").datepicker({
+              dateFormat: dateFormat,
+              minDate: 0,
+              onSelect: function(selectedDate) {
+                var startDate = $("#start-date").datepicker("getDate");
+                if (startDate && startDate > new Date(selectedDate)) {
+                  $("#start-date").datepicker("setDate", selectedDate);
+                }
+              }
+            });
+          });
+
+
+        $(function() {
+            // Customize CSS for date picker elements
+            $(".ui-datepicker").css({
+                "font-size": "14px", // Change font size
+                "color": "#333", // Change text color
+                "background-color": "#fff", // Change background color
+                // Add more CSS properties as needed
+            });
+        
+            $(".ui-datepicker-header").css({
+                "background-color": "#f0f0f0", // Change header background color
+                // Add more CSS properties as needed
+            });
+        
+        // You can target other date picker elements similarly
+        });
+        
+
+
+
+
+
         //Poner read only al input de fecha max para que no salga el teclado en el movil
         $(document).ready(function () {
             // Select the input field by its ID and make it readonly
-            $('#checkin').prop('readonly', true);
-            $('#checkout').prop('readonly', true);
+            $('#start-date').prop('readonly', true);
+            $('#end-date').prop('readonly', true);
             $('#exclude-days').prop('readonly', true);
             $('#input-fecha-nacimiento').prop('readonly', true);
         });
@@ -1460,8 +1487,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
         // Formatear fechas
-        var formattedDate1 = formatDateToSpanishLocale(date_min_front);
-        var formattedDate2 = formatDateToSpanishLocale(limit_max_front);
+        var formattedDate1 = formatDateFromISOToDMY(date_min_front);
+        var formattedDate2 = formatDateFromISOToDMY(limit_max_front);
 
 
         //Reemplazar values existentes del cliente a los inputs
@@ -1473,8 +1500,8 @@ document.addEventListener('DOMContentLoaded', function () {
         $('#input-telefono').val(clienteTelefono);
         $('#input-lista-paises').val(clienteNacionalidad);
         //Value fechas de búsuqueda
-        $('#checkin').val(formattedDate1);
-        $('#checkout').val(formattedDate2);
+        $('#start-date').val(formattedDate1);
+        $('#end-date').val(formattedDate2);
         $('#exclude-days').val(cola_dias_excluidos);
 
     }
@@ -1545,7 +1572,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 // Redirect to a new page after a delay
                 setTimeout(function() {
                     // Redirect to a new page
-                    window.location.href = 'https://sacacitas.webflow.io/link?r='+publicItemId;
+                    window.location.href = 'https://sacacitas.es/link?r='+publicItemId;
                 }, 1000);
             },
             error: function (xhr, status, error) {
@@ -1585,8 +1612,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
         // Gather form data
         var formData = {
-            FMax: $('#checkout').val(),
-            FMin: $('#checkin').val(),
+            FMax: $('#end-date').val(),
+            FMin: $('#start-date').val(),
             DiasExclusion: PickerExcluidosDias.multipleDatesToString() === '' ? [] : PickerExcluidosDias.multipleDatesToString().split(','),
             referencia: referencia
         };
