@@ -175,6 +175,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         });
 
+        console.log(state_front);
     }
 
 
@@ -835,6 +836,14 @@ document.addEventListener('DOMContentLoaded', function () {
                 $('#texto-info-modificar-datos-personales-2').hide();
                 $('#div-sub-estado').show();
                 $('#texto-sub-estado').text('Ya existe una cita reservada con su documento de identidad. Sólo es posible reservar una cita con un documento. Si tienes una cita con el NIE introduce tu Pasaporte o viceversa. Actualiza el documento en Ajustes > Modificar datos personales');
+            }
+            if (StatePausadoReason == 'REQUIERE-ID-NIE' && state_front == 'PAUSADO-REQUIERE-ACCION') {
+                $('#form_block_modificar_datos_personales').show();
+                $('#texto-info-modificar-datos-personales').hide();
+                $('#form_block_modificar_datos_busqueda').show();
+                $('#texto-info-modificar-datos-personales-2').hide();
+                $('#div-sub-estado').show();
+                $('#texto-sub-estado').text('La cita que intenta buscar obliga a que se realice con su NIE. Actualiza el documento en Ajustes > Modificar datos personales');
             }
 
             // Estados de errores
