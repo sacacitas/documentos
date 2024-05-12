@@ -726,6 +726,7 @@ document.addEventListener('DOMContentLoaded', function () {
             //Botones acciones relacionadas con el estado
             $('#boton_estado_busqueda').text('Cargando...');
             $('#boton-cancelar-link-unico').hide();
+            $('#boton-renovar-busqueda-cita').hide();
             //CSS botones del estado
             $('#boton_estado_busqueda').removeClass('boton_busqueda_verde');
             $('#boton_estado_busqueda').removeClass('boton_busqueda_naranja');
@@ -736,8 +737,12 @@ document.addEventListener('DOMContentLoaded', function () {
             $('#div-ultima-busqueda').hide();
             $('#cuadrado-pago-cita20').hide();
             $('#div-datos-cita-reservada').hide();
-            $('#div-datos-cita-reservada').hide();
-
+            //Colas pausadas/pendientes que requieren acción. Ocultar datos innecesarios para mostrar botones ajustes
+            $('#div-contenido-inside-bloque-busqueda').show();
+            //Botones dentro del popup de ajustes
+            $('#select-pasaporte-form-ajustes').show();
+            $('#select-nie-form-ajustes').show();
+            $('#select-dni-form-ajustes').show();
 
 
 
@@ -825,27 +830,32 @@ document.addEventListener('DOMContentLoaded', function () {
             }
 
             // Estados pausados que requieren acción del usuario
-            // ***Cita ya reservada con DocID
             if (state_front == 'PAUSADO-REQUIERE-ACCION') {
                 $('#boton_estado_busqueda').text('Pausado, acción necesaria');
+                //Cosas fuera del popup
+                $('#div-contenido-inside-bloque-busqueda').hide();
+                $('#boton-renovar-busqueda-cita').show();
+                $('#div-sub-estado').show();                
             }
+            // ***Cita ya está resercada con DocID
             if (StatePausadoReason == 'CITA-ALREADY-BOOKED-WITH-ID' && state_front == 'PAUSADO-REQUIERE-ACCION') {
-                $('#form_block_modificar_datos_personales').show();
-                $('#texto-info-modificar-datos-personales').hide();
-                $('#form_block_modificar_datos_busqueda').show();
-                $('#texto-info-modificar-datos-personales-2').hide();
-                $('#div-sub-estado').show();
-                $('#texto-sub-estado').text('Ya existe una cita reservada con su documento de identidad. Sólo es posible reservar una cita con un documento. Si tienes una cita con el NIE introduce tu Pasaporte o viceversa. Actualiza el documento en Ajustes > Modificar datos personales');
-            }
-            if (StatePausadoReason == 'REQUIERE-ID-NIE' && state_front == 'PAUSADO-REQUIERE-ACCION') {
-                $('#form_block_modificar_datos_personales').show();
-                $('#texto-info-modificar-datos-personales').hide();
-                $('#form_block_modificar_datos_busqueda').show();
-                $('#texto-info-modificar-datos-personales-2').hide();
-                $('#div-sub-estado').show();
-                $('#texto-sub-estado').text('La cita que intenta buscar obliga a que se realice con su NIE. Actualiza el documento en Ajustes > Modificar datos personales');
-            }
+                $('#texto-sub-estado').text('Ya existe una cita reservada con su documento' + ' ' + clienteIdType + '. Introducta otro documento para continuar con la búsqueda o cancele la cita que ya tiene reservada, haciendo click en "Renovar búsqueda".');
+                //Ocultar botones dentro popup ajustes
 
+            }
+            // ***Cita obligatorio buscar con NIE
+            if (StatePausadoReason == 'REQUIERE-ID-NIE' && state_front == 'PAUSADO-REQUIERE-ACCION') {
+                $('#texto-sub-estado').text('La cita que intenta buscar sólo se puede tramitar con el NIE. Actualiza el documento haciendo click en "Renovar búsqueda"');
+                //Ocultar botones dentro popup ajustes
+                $('#select-pasaporte-form-ajustes').hide();
+                $('#select-dni-form-ajustes').hide();
+                $('#select-pasaporte-form-ajustes').removeClass('boton-documento-selected');
+                $('#div-popup-ajustes-question-cita-is-cancelada').hide();
+                //Mostrar solo NIE
+                $('#select-nie-form-ajustes').addClass('boton-documento-selected');
+            }
+            console.log(state_front);
+            console.log(StatePausadoReason);
             // Estados de errores
             if (state_front == 'NO_VALIDADO') {
                 $('#boton_estado_busqueda').text('Error al procesar la solicitud');
@@ -1309,6 +1319,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         toggleDocumentosAdmitibles();   
 
+        //Selector del docucment type
         //Quitar clase predeterminada
         selectFormDocPasaporte.removeClass('boton-documento-selected');
         //Preseleccionar botones
@@ -1408,7 +1419,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
 
 
-        //Inicializar datepickers
+        //Inicializar datepickersf
         $(function() {
             var dateFormat = "dd/mm/yy";
         
@@ -1585,7 +1596,7 @@ document.addEventListener('DOMContentLoaded', function () {
         // Prevent the default form submission behavior
         event.preventDefault();
         //Desactivar boton enviar peticion 
-        $('#finalizar-form-datos-busqueda').prop('disabled', true);
+        $('#finalizar-form-datos-busqueda-2').prop('disabled', true);
         
         // Show loading spinner
         $('#gif-cargando-boton-finalizar-2').show();
@@ -1626,7 +1637,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 // Redirect to a new page after a delay
                 setTimeout(function() {
                     // Redirect to a new page
-                    window.location.href = 'https://sacacitas.webflow.io/link?r='+publicItemId;
+                    window.location.href = 'https://sacacitas.es/link?r='+publicItemId;
                 }, 1000);
             },
             error: function (xhr, status, error) {
@@ -1635,10 +1646,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 $('#div-error-enviar-datos').show();
                 // Show loading spinner
-                $('#gif-cargando-boton-finalizar').hide();
-                $('#gif-error-boton-finalizar').show();   
+                $('#gif-cargando-boton-finalizar-2').hide();
+                $('#gif-error-boton-finalizar-2').show();   
                 // Enable submit button
-                $('#finalizar-form-datos-personales').prop('disabled', false);        
+                $('#finalizar-form-datos-busqueda-2').prop('disabled', false);        
             }
         });
 
@@ -1649,7 +1660,93 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
 
+    //Estado búsqueda pausada. Formularios modificar datos personales (re-validar)
+    $('#pop-up-datos-personales-form').submit(function (event) {
+        // Prevent the default form submission behavior
+        event.preventDefault();
+        //Desactivar boton enviar peticion 
+        $('#finalizar-form-popup-datos-personales').prop('disabled', true);
+        
+        // Show loading spinner
+        $('#gif-cargando-boton-finalizar3').show();
+        $('#gif-error-boton-finalizar3').hide();
 
+
+
+
+
+
+
+        //Capturar tipo documento seleccionado
+        var selected_document3 = $('#div-input-popup-ajustes-n-documento').find('.boton-documento-selected').attr('id');
+        if (selected_document3 === 'select-pasaporte-form-ajustes') {
+            var NiceSelected_document3 = 'PASAPORTE'
+        } else if (selected_document3 === 'select-dni-form-ajustes') {
+            var NiceSelected_document3 = 'DNI'
+        } else if (selected_document3 === 'select-nie-form-ajustes') {
+            var NiceSelected_document3 = 'NIE'
+        }
+
+
+        console.log(selected_document3);
+        console.log(NiceSelected_document3);
+        //Checkbox si está marcado o no
+        if ($('#checkbox_popup-ajustes-datos-personales').is(':checked')) {
+            var checkboxpersonales = true;
+        }
+
+        // Gather form data
+        var formData = {
+            SelectedDocument: NiceSelected_document3,
+            NDocumento: $('#input-ndocumento-ajustes-popup').val(),
+            checkboxpersonales: checkboxpersonales,
+            referencia: referencia
+        };
+
+        // Send POST request
+        $.ajax({
+            type: 'POST',
+            url: 'https://n8n.sacacitas.es/webhook/69aba9e4-c06c-450e-9b50-69ec9b0782a5-estado-pausado-actualizar-datos-personales',
+            data: JSON.stringify(formData),
+            // Send form data using the 'data' property
+            dataType: 'json',
+            contentType: 'application/json',
+            success: function (response) {
+                // Show your loading GIF 
+                $('#gif-success-boton-finalizar3').show();
+                //$('#gif-cargando-boton-finalizar').hide();
+
+                // Check if ID_publico exists in the response
+                if (response.ID_publico) {
+                    // Use the ID_publico property
+                    var publicItemId = response.ID_publico;
+                }
+
+
+                // Redirect to a new page after a delay
+                setTimeout(function() {
+                    // Redirect to a new page
+                    window.location.href = 'https://sacacitas.es/link?r='+publicItemId;
+                }, 1000);
+            },
+            error: function (xhr, status, error) {
+                // Handle error response
+                console.error('Form submission failed');
+
+                $('#div-error-enviar-datos').show();
+                // Show loading spinner
+                $('#gif-cargando-boton-finalizar3').hide();
+                $('#gif-error-boton-finalizar3').show();   
+                // Enable submit button
+                $('#finalizar-form-popup-datos-personales').prop('disabled', false);        
+            }
+        });
+
+
+        // Prevent default form submission in Webflow
+        return false;
+
+    });
 
 
 
