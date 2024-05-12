@@ -749,6 +749,14 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
             // --> Mostrar cosas según estado
+            // Bloques de la página de Ajustes. Datos personales y búsqueda
+            if (state_front == 'BUSCANDO' || state_front == 'COLA-CREADA' || state_front == 'VALIDANDO-COLA') {
+                $('#form_block_modificar_datos_personales').show();
+                $('#form_block_modificar_datos_busqueda').show();
+                $('#texto-info-modificar-datos-personales').hide();
+                $('#texto-info-modificar-datos-personales-2').hide();
+            }
+
             // Email aún no verificado
             if (!EmailVerified && !(state_front == 'EMAIL-NO-VERIFICADO')) {
                 $('#block-email-verify').show();
@@ -774,10 +782,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 $('#boton-cancelar-link-unico').show();
                 $('#div_caducidad_busqueda').show();
                 $('#div-ultima-busqueda').show();
-                $('#form_block_modificar_datos_personales').show();
-                $('#form_block_modificar_datos_busqueda').show();
-                $('#texto-info-modificar-datos-personales').hide();
-                $('#texto-info-modificar-datos-personales-2').hide();
             }
 
             if (state_front == 'RESERVADO') {
@@ -854,8 +858,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 //Mostrar solo NIE
                 $('#select-nie-form-ajustes').addClass('boton-documento-selected');
             }
-            console.log(state_front);
-            console.log(StatePausadoReason);
+
             // Estados de errores
             if (state_front == 'NO_VALIDADO') {
                 $('#boton_estado_busqueda').text('Error al procesar la solicitud');
