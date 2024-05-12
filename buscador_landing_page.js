@@ -123,11 +123,15 @@ $(document).ready(function () {
 
         //Obtener valor de gclid de la UrL y crear variable con GCLID
         var leadIdFromUrl = getUrlParameter('gclid');
+        var IDretargeting = getUrlParameter('retargeting');
 
         //Si existe gclid en la URL crear cookie
         if (leadIdFromUrl !== '') {
             document.cookie = "lead_id_cookie=" + leadIdFromUrl + "; path=/";
         }
+        if (IDretargeting !== '') {
+            document.cookie = "retargeting_id_cookie=" + IDretargeting + "; path=/";
+        }        
 
         //Obtener valor de la cookie
         function getLeadIdCookie() {
@@ -143,8 +147,24 @@ $(document).ready(function () {
             return "";
         }
 
+        function getRetargetingIdCookie() {
+            var name = "retargeting_id_cookie=";
+            var decodedCookie = decodeURIComponent(document.cookie);
+            var cookieArray = decodedCookie.split(';');
+            for (var i = 0; i < cookieArray.length; i++) {
+                var cookie = cookieArray[i].trim();
+                if (cookie.indexOf(name) === 0) {
+                    return cookie.substring(name.length, cookie.length);
+                }
+            }
+            return "";
+        }
+
+
+
         //Obtener valor cookie Lead ID y meterlo en una variable
         var leadIdFromUrl = getLeadIdCookie();
+        var IDretargeting = getRetargetingIdCookie();
     }//Ocultar seccion
 
 
@@ -739,7 +759,8 @@ $(document).ready(function () {
     function updateHiddentInputForms() {
         // reset?
         INPUT_JSON = {
-            'gclid': leadIdFromUrl
+            'gclid': leadIdFromUrl,
+            'retargeting_id': IDretargeting
 
         }
         console.log(INPUT_JSON)
@@ -784,3 +805,8 @@ $(document).ready(function () {
 
 
 });
+
+
+
+
+
