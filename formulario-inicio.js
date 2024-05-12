@@ -360,7 +360,8 @@ $(document).ready(function () {
                 CaducidadTarjeta: $('#input-caducidad-tarjeta').val(),
                 RandomStringID: RandomStringID,
                 LangBrowser: LangBrowser,
-                gclid: INPUT_JSON.gclid
+                gclid: INPUT_JSON.gclid,
+                retargetingSource: INPUT_JSON.retargeting_id
             };
 
             // Send POST request
