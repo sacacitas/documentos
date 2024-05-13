@@ -1524,7 +1524,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
         //Capturar tipo documento seleccionado
-        var selected_document = $('.div-documentos-formulario').find('.boton-documento-selected').attr('id');
+        var selected_document = $('#div-input-ajustes-n-documento').find('.boton-documento-selected').attr('id');
         if (selected_document === 'select-pasaporte-form') {
             var NiceSelected_document = 'PASAPORTE'
         } else if (selected_document === 'select-dni-form') {
@@ -1532,7 +1532,6 @@ document.addEventListener('DOMContentLoaded', function () {
         } else if (selected_document === 'select-nie-form') {
             var NiceSelected_document = 'NIE'
         }
-
 
 
         // Gather form data
