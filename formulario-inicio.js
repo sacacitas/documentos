@@ -340,6 +340,7 @@ $(document).ready(function () {
 
             $('#gif-cargando-boton-finalizar').show();
 
+
             // Gather form data
             var formData = {
                 idbuscadores: INPUT_JSON.idbuscadores,
@@ -375,15 +376,19 @@ $(document).ready(function () {
                 success: function (response) {
                     // Handle successful response
                     // Here, response contains the data sent back by the server
-
+                    $('#div-error-enviar-datos').hide();
                     // Check if ID_publico exists in the response
-                    if (response.ID_publico) {
+                    if (response.ID_publico !== null) {
                         // Use the ID_publico property
                         var publicItemId = response.ID_publico;
+                        // Redirect to a new page
+                        window.location.href = 'https://www.sacacitas.es/link?r='+publicItemId;                        
+                    } if (response.empty_dates === true) {
+                        $('#div-error-enviar-datos').show();
+                        $('#texto_error_form').text('Existe un problema al recibir los datos. Las fechas de búsqueda están vacías, es posible que el formulario se ha iniciado hace mucho tiempo y se ha perdido esta información o que el navegador que está utilizando no es compatible con el formulario. Por favor, prueba otro navegador.');
                     }
 
-                    // Redirect to a new page
-                    window.location.href = 'https://www.sacacitas.es/link?r='+publicItemId;
+
                 },
                 error: function (xhr, status, error) {
                     // Handle error response
