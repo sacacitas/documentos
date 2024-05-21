@@ -768,3 +768,5 @@ function validateRNacionalidad(RN) {
     return true; // RN format is valid
 }
 
+
+
