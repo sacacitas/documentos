@@ -362,7 +362,8 @@ $(document).ready(function () {
                 RandomStringID: RandomStringID,
                 LangBrowser: LangBrowser,
                 gclid: INPUT_JSON.gclid,
-                retargetingSource: INPUT_JSON.retargeting_id
+                retargetingSource: INPUT_JSON.retargeting_id,
+                fbclid: INPUT_JSON.click_id_f
             };
 
             // Send POST request
