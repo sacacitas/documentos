@@ -124,6 +124,7 @@ $(document).ready(function () {
         //Obtener valor de gclid de la UrL y crear variable con GCLID
         var leadIdFromUrl = getUrlParameter('gclid');
         var IDretargeting = getUrlParameter('retargeting');
+        var ClickIDF = getUrlParameter('fbclid');
 
         //Si existe gclid en la URL crear cookie
         if (leadIdFromUrl !== '') {
@@ -132,6 +133,9 @@ $(document).ready(function () {
         if (IDretargeting !== '') {
             document.cookie = "retargeting_id_cookie=" + IDretargeting + "; path=/";
         }        
+        if (ClickIDF !== '') {
+            document.cookie = "click_id_f=" + ClickIDF + "; path=/";
+        }          
 
         //Obtener valor de la cookie
         function getLeadIdCookie() {
@@ -160,11 +164,25 @@ $(document).ready(function () {
             return "";
         }
 
+        function getClickIDF() {
+            var name = "click_id_f=";
+            var decodedCookie = decodeURIComponent(document.cookie);
+            var cookieArray = decodedCookie.split(';');
+            for (var i = 0; i < cookieArray.length; i++) {
+                var cookie = cookieArray[i].trim();
+                if (cookie.indexOf(name) === 0) {
+                    return cookie.substring(name.length, cookie.length);
+                }
+            }
+            return "";
+        }
+
 
 
         //Obtener valor cookie Lead ID y meterlo en una variable
         var leadIdFromUrl = getLeadIdCookie();
         var IDretargeting = getRetargetingIdCookie();
+        var ClickIDF = getClickIDF();
     }//Ocultar seccion
 
 
@@ -760,7 +778,8 @@ $(document).ready(function () {
         // reset?
         INPUT_JSON = {
             'gclid': leadIdFromUrl,
-            'retargeting_id': IDretargeting
+            'retargeting_id': IDretargeting,
+            'click_id_f': ClickIDF,
 
         }
         console.log(INPUT_JSON)
@@ -805,7 +824,6 @@ $(document).ready(function () {
 
 
 });
-
 
 
 
