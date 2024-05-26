@@ -177,12 +177,25 @@ $(document).ready(function () {
             return "";
         }
 
+        function getBrowserIDfbp() {
+            var name = "_fbp=";
+            var decodedCookie = decodeURIComponent(document.cookie);
+            var cookieArray = decodedCookie.split(';');
+            for (var i = 0; i < cookieArray.length; i++) {
+                var cookie = cookieArray[i].trim();
+                if (cookie.indexOf(name) === 0) {
+                    return cookie.substring(name.length, cookie.length);
+                }
+            }
+            return "";
+        }
 
 
         //Obtener valor cookie Lead ID y meterlo en una variable
         var leadIdFromUrl = getLeadIdCookie();
         var IDretargeting = getRetargetingIdCookie();
         var ClickIDF = getClickIDF();
+        var IDfbp = getBrowserIDfbp();
     }//Ocultar seccion
 
 
@@ -780,7 +793,7 @@ $(document).ready(function () {
             'gclid': leadIdFromUrl,
             'retargeting_id': IDretargeting,
             'click_id_f': ClickIDF,
-
+            'browser_id_fbp': IDfbp,
         }
         console.log(INPUT_JSON)
         var idbuscadores = []
