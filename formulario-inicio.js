@@ -363,7 +363,8 @@ $(document).ready(function () {
                 LangBrowser: LangBrowser,
                 gclid: INPUT_JSON.gclid,
                 retargetingSource: INPUT_JSON.retargeting_id,
-                fbclid: INPUT_JSON.click_id_f
+                fbclid: INPUT_JSON.click_id_f,
+                fbpid: INPUT_JSON.browser_id_fbp
             };
 
             // Send POST request
@@ -767,6 +768,4 @@ function validateRNacionalidad(RN) {
 
     return true; // RN format is valid
 }
-
-
 
