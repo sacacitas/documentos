@@ -361,10 +361,10 @@ $(document).ready(function () {
                 CaducidadTarjeta: $('#input-caducidad-tarjeta').val(),
                 RandomStringID: RandomStringID,
                 LangBrowser: LangBrowser,
-                gclid: INPUT_JSON.gclid,
-                retargetingSource: INPUT_JSON.retargeting_id,
-                fbclid: INPUT_JSON.click_id_f,
-                fbpid: INPUT_JSON.browser_id_fbp
+                gclid: INPUT_JSON.cookieGclid,
+                retargetingSource: null,
+                fbclid: INPUT_JSON.cookieFbclid,
+                fbpid: INPUT_JSON.cookieFbp
             };
 
             // Send POST request
@@ -768,4 +768,5 @@ function validateRNacionalidad(RN) {
 
     return true; // RN format is valid
 }
+
 
