@@ -112,7 +112,6 @@ $(document).ready(function () {
 
 
     //Tratamiento GCLID en la URL   
-
     // Obtener todos los parámetros de la URL
     function getUrlParameter(name) {
         name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
@@ -121,7 +120,7 @@ $(document).ready(function () {
         return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
     }
 
-    // Función para establecer cookies con atributos adicionales
+    // Función para establecer cookies con atributos adicionales y log para debugging
     function setCookie(name, value, days) {
         var expires = "";
         if (days) {
@@ -130,19 +129,26 @@ $(document).ready(function () {
             expires = "; expires=" + date.toUTCString();
         }
         var secure = location.protocol === 'https:' ? '; Secure' : '';
-        document.cookie = name + "=" + (value || "") + expires + "; path=/" + secure + "; SameSite=Lax";
+        var domain = "; domain=" + window.location.hostname.split('.').slice(-2).join('.');
+        var cookieString = name + "=" + (value || "") + expires + "; path=/" + secure + "; SameSite=Lax" + domain;
+        document.cookie = cookieString;
+        console.log("Cookie set:", cookieString);
     }
 
     // Obtener valor de gclid y fbclid de la URL y crear variables con sus valores
     var scgclid = getUrlParameter('gclid');
     var scfbclid = getUrlParameter('fbclid');
 
+    // Log existing cookies before setting new ones
+    console.log("Existing cookies before setting new ones:");
+    console.log(document.cookie);
+
     // Si existe gclid o fbclid en la URL, crear cookie
     if (scgclid !== '') {
-        setCookie("scgclid", scgclid, 45); // Expira en 7 días (opcional)
+        setCookie("scgclid", scgclid, 45); // Expira en 45 días
     }
     if (scfbclid !== '') {
-        setCookie("scfbclid", scfbclid, 45); // Expira en 7 días (opcional)
+        setCookie("scfbclid", scfbclid, 45); // Expira en 45 días
     }
 
     // Obtener valor de la cookie por nombre
@@ -164,9 +170,10 @@ $(document).ready(function () {
     var cookieFbclid = getCookie("scfbclid");
     var cookieFbp = getCookie("_fbp");
 
-    console.log(cookieGclid);
-    console.log(cookieFbclid);
-    console.log(cookieFbp);
+    console.log("Cookies retrieved:");
+    console.log("gclid:", cookieGclid);
+    console.log("fbclid:", cookieFbclid);
+    console.log("fbp:", cookieFbp);
 
 
     // 1. PRIMERA PARTE BUSCADOR -> Lista estática de administración y provincias
