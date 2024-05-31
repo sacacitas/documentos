@@ -112,93 +112,61 @@ $(document).ready(function () {
 
 
     //Tratamiento GCLID en la URL   
-    {
-        //Obtener todos los parametros de la URL
-        function getUrlParameter(name) {
-            name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
-            var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
-            var results = regex.exec(location.search);
-            return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+
+    // Obtener todos los parámetros de la URL
+    function getUrlParameter(name) {
+        name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+        var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+        var results = regex.exec(location.search);
+        return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+    }
+
+    // Función para establecer cookies con atributos adicionales
+    function setCookie(name, value, days) {
+        var expires = "";
+        if (days) {
+            var date = new Date();
+            date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+            expires = "; expires=" + date.toUTCString();
         }
+        var secure = location.protocol === 'https:' ? '; Secure' : '';
+        document.cookie = name + "=" + (value || "") + expires + "; path=/" + secure + "; SameSite=Lax";
+    }
 
-        //Obtener valor de gclid de la UrL y crear variable con GCLID
-        var leadIdFromUrl = getUrlParameter('gclid');
-        var IDretargeting = getUrlParameter('retargeting');
-        var ClickIDF = getUrlParameter('fbclid');
+    // Obtener valor de gclid y fbclid de la URL y crear variables con sus valores
+    var scgclid = getUrlParameter('gclid');
+    var scfbclid = getUrlParameter('fbclid');
 
-        //Si existe gclid en la URL crear cookie
-        if (leadIdFromUrl !== '') {
-            document.cookie = "lead_id_cookie=" + leadIdFromUrl + "; path=/";
-        }
-        if (IDretargeting !== '') {
-            document.cookie = "retargeting_id_cookie=" + IDretargeting + "; path=/";
-        }        
-        if (ClickIDF !== '') {
-            document.cookie = "click_id_f=" + ClickIDF + "; path=/";
-        }          
+    // Si existe gclid o fbclid en la URL, crear cookie
+    if (scgclid !== '') {
+        setCookie("scgclid", scgclid, 45); // Expira en 7 días (opcional)
+    }
+    if (scfbclid !== '') {
+        setCookie("scfbclid", scfbclid, 45); // Expira en 7 días (opcional)
+    }
 
-        //Obtener valor de la cookie
-        function getLeadIdCookie() {
-            var name = "lead_id_cookie=";
-            var decodedCookie = decodeURIComponent(document.cookie);
-            var cookieArray = decodedCookie.split(';');
-            for (var i = 0; i < cookieArray.length; i++) {
-                var cookie = cookieArray[i].trim();
-                if (cookie.indexOf(name) === 0) {
-                    return cookie.substring(name.length, cookie.length);
-                }
+    // Obtener valor de la cookie por nombre
+    function getCookie(name) {
+        var nameEQ = name + "=";
+        var decodedCookie = decodeURIComponent(document.cookie);
+        var cookieArray = decodedCookie.split(';');
+        for (var i = 0; i < cookieArray.length; i++) {
+            var cookie = cookieArray[i].trim();
+            if (cookie.indexOf(nameEQ) === 0) {
+                return cookie.substring(nameEQ.length, cookie.length);
             }
-            return "";
         }
+        return "";
+    }
 
-        function getRetargetingIdCookie() {
-            var name = "retargeting_id_cookie=";
-            var decodedCookie = decodeURIComponent(document.cookie);
-            var cookieArray = decodedCookie.split(';');
-            for (var i = 0; i < cookieArray.length; i++) {
-                var cookie = cookieArray[i].trim();
-                if (cookie.indexOf(name) === 0) {
-                    return cookie.substring(name.length, cookie.length);
-                }
-            }
-            return "";
-        }
+    // Obtener valor cookie gclid, fbclid y fbp y meterlo en variables
+    var cookieGclid = getCookie("scgclid");
+    var cookieFbclid = getCookie("scfbclid");
+    var cookieFbp = getCookie("_fbp");
 
-        function getClickIDF() {
-            var name = "click_id_f=";
-            var decodedCookie = decodeURIComponent(document.cookie);
-            var cookieArray = decodedCookie.split(';');
-            for (var i = 0; i < cookieArray.length; i++) {
-                var cookie = cookieArray[i].trim();
-                if (cookie.indexOf(name) === 0) {
-                    return cookie.substring(name.length, cookie.length);
-                }
-            }
-            return "";
-        }
-
-        function getBrowserIDfbp() {
-            var name = "_fbp=";
-            var decodedCookie = decodeURIComponent(document.cookie);
-            var cookieArray = decodedCookie.split(';');
-            for (var i = 0; i < cookieArray.length; i++) {
-                var cookie = cookieArray[i].trim();
-                if (cookie.indexOf(name) === 0) {
-                    return cookie.substring(name.length, cookie.length);
-                }
-            }
-            return "";
-        }
-
-
-        //Obtener valor cookie Lead ID y meterlo en una variable
-        var leadIdFromUrl = getLeadIdCookie();
-        var IDretargeting = getRetargetingIdCookie();
-        var ClickIDF = getClickIDF();
-        var IDfbp = getBrowserIDfbp();
-    }//Ocultar seccion
-
-
+    console.log(cookieGclid);
+    console.log(cookieFbclid);
+    console.log(cookieFbp);
 
 
     // 1. PRIMERA PARTE BUSCADOR -> Lista estática de administración y provincias
@@ -790,10 +758,9 @@ $(document).ready(function () {
     function updateHiddentInputForms() {
         // reset?
         INPUT_JSON = {
-            'gclid': leadIdFromUrl,
-            'retargeting_id': IDretargeting,
-            'click_id_f': ClickIDF,
-            'browser_id_fbp': IDfbp,
+            'cookieGclid': cookieGclid,
+            'cookieFbclid': cookieFbclid,
+            'cookieFbp': cookieFbp
         }
         console.log(INPUT_JSON)
         var idbuscadores = []
@@ -837,7 +804,6 @@ $(document).ready(function () {
 
 
 });
-
 
 
 
