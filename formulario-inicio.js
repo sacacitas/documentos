@@ -367,6 +367,8 @@ $(document).ready(function () {
                 fbpid: INPUT_JSON.cookieFbp
             };
 
+            console.log('INPUT_JSON', INPUT_JSON);
+
             // Send POST request
             $.ajax({
                 type: 'POST',
@@ -768,5 +770,4 @@ function validateRNacionalidad(RN) {
 
     return true; // RN format is valid
 }
-
 
