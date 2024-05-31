@@ -171,17 +171,10 @@ $(document).ready(function () {
     var cookieFbp = getCookie("_fbp");
     var originalFbclid = getCookie("_fbc");
 
-    console.log(originalFbclid);
 
     if (originalFbclid !== '') {
-        cookieFbp = originalFbclid;
+        cookieFbclid = originalFbclid;
     }
-
-
-    console.log("Cookies retrieved:");
-    console.log("gclid:", cookieGclid);
-    console.log("fbclid:", cookieFbclid);
-    console.log("fbp:", cookieFbp);
 
 
     // 1. PRIMERA PARTE BUSCADOR -> Lista estática de administración y provincias
