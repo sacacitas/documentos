@@ -171,6 +171,8 @@ $(document).ready(function () {
     var cookieFbp = getCookie("_fbp");
     var originalFbclid = getCookie("_fbc");
 
+    console.log(originalFbclid);
+
     if (originalFbclid !== '') {
         cookieFbp = originalFbclid;
     }
