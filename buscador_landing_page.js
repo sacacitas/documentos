@@ -169,6 +169,12 @@ $(document).ready(function () {
     var cookieGclid = getCookie("scgclid");
     var cookieFbclid = getCookie("scfbclid");
     var cookieFbp = getCookie("_fbp");
+    var originalFbclid = getCookie("_fbc");
+
+    if (originalFbclid !== '') {
+        cookieFbp = originalFbclid;
+    }
+
 
     console.log("Cookies retrieved:");
     console.log("gclid:", cookieGclid);
