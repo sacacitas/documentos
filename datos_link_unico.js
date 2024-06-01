@@ -1797,26 +1797,25 @@ document.addEventListener('DOMContentLoaded', function () {
         return formattedDate;
     }
 
-    // Function to transform an ISO date string to DD/MM/YYYY format, interpreting it in UTC
+    //Funcion transformar a DD/MM/YYYY
     function formatDateFromISOToDMY(dateString) {
-        // Create a Date object from the ISO format date string, interpreted as UTC
-        var date = new Date(dateString + 'Z');
-        
-        // Get day, month, and year from the Date object using UTC methods
-        var day = date.getUTCDate();
-        var month = date.getUTCMonth() + 1; // Month is zero-based, so we add 1
-        var year = date.getUTCFullYear();
-        
+        // Create a Date object from the ISO format date string
+        var date = new Date(dateString);
+
+        // Get day, month, and year from the Date object
+        var day = date.getDate();
+        var month = date.getMonth() + 1; // Month is zero-based, so we add 1
+        var year = date.getFullYear();
+
         // Pad day and month with leading zeros if necessary
         var paddedDay = day < 10 ? '0' + day : day;
         var paddedMonth = month < 10 ? '0' + month : month;
-        
+
         // Construct the formatted date string in DD/MM/YYYY format
         var formattedDate = paddedDay + '/' + paddedMonth + '/' + year;
-        
+
         return formattedDate;
     }
-
 
 
 
