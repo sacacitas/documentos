@@ -1797,26 +1797,21 @@ document.addEventListener('DOMContentLoaded', function () {
         return formattedDate;
     }
 
-    //Funcion transformar a DD/MM/YYYY
+    // Function to transform YYYY-MM-DD format to DD/MM/YYYY format
     function formatDateFromISOToDMY(dateString) {
-        // Create a Date object from the ISO format date string
-        var date = new Date(dateString);
-
-        // Get day, month, and year from the Date object
-        var day = date.getDate();
-        var month = date.getMonth() + 1; // Month is zero-based, so we add 1
-        var year = date.getFullYear();
-
-        // Pad day and month with leading zeros if necessary
-        var paddedDay = day < 10 ? '0' + day : day;
-        var paddedMonth = month < 10 ? '0' + month : month;
-
+        // Split the input string by the dash
+        var parts = dateString.split('-');
+        
+        // Extract year, month, and day
+        var year = parts[0];
+        var month = parts[1];
+        var day = parts[2];
+        
         // Construct the formatted date string in DD/MM/YYYY format
-        var formattedDate = paddedDay + '/' + paddedMonth + '/' + year;
-
+        var formattedDate = day + '/' + month + '/' + year;
+        
         return formattedDate;
     }
-
 
 
 
