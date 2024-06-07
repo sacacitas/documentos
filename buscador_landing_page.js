@@ -167,14 +167,10 @@ $(document).ready(function () {
 
     // Obtener valor cookie gclid, fbclid y fbp y meterlo en variables
     var cookieGclid = getCookie("scgclid");
-    var cookieFbclid = getCookie("scfbclid");
+    var originalFbclid = getCookie("scfbclid");
     var cookieFbp = getCookie("_fbp");
-    var originalFbclid = getCookie("_fbc");
+    var cookieFbclid = getCookie("_fbc");
 
-
-    if (originalFbclid !== '') {
-        cookieFbclid = originalFbclid;
-    }
 
 
     // 1. PRIMERA PARTE BUSCADOR -> Lista estática de administración y provincias
@@ -812,7 +808,6 @@ $(document).ready(function () {
 
 
 });
-
 
 
 
