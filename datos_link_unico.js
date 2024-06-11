@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // Get the 'referencia' parameter from the URL
     const urlParams = new URLSearchParams(window.location.search);
     const referencia = urlParams.get('r');
-  
+
 
 
 
@@ -24,6 +24,7 @@ document.addEventListener('DOMContentLoaded', function () {
     var oficina_nombre_front = null;
     var provincia_front = null;
     var codigo_reserva_cita_front = null;
+    var resumen_reserva = null;
     var fecha_cita_reservada_front = null;
     var fecha_limite_pago_front = null;
 
@@ -39,10 +40,10 @@ document.addEventListener('DOMContentLoaded', function () {
     var clienteNacionalidad = null;
     var clienteFechaNacimiento = null;
     var clienteResolucionNacionalidad = null;
-    
+
     //Verify email
     var EmailVerified = null;
-    
+
     //Estados de la búsqueda
     var state_front = null;
     let previousState = null;
@@ -70,7 +71,7 @@ document.addEventListener('DOMContentLoaded', function () {
     var botonAjustesLinkUnico = $('#boton-link-unico-ajustes');
     var botonEstadoBusqueda = document.getElementById('boton_estado_busqueda');
 
-    
+
     //Grids y divs
     var divLinkUnicoBusqueda = $('#div-busqueda-link-unico');
     var divPagoYReserva = $('#div-pago-y-reserva');
@@ -104,7 +105,7 @@ document.addEventListener('DOMContentLoaded', function () {
     function fetchDataStatic() {
         // Construct the URL with the referencia parameter
         var apiUrl = `https://n8n.sacacitas.es/webhook/38d7fbd6-0a86-4e8d-9d3b-f90b01a6923d-link-unico-data-request?id_publico=${referencia}`;
-        
+
 
 
 
@@ -115,65 +116,66 @@ document.addEventListener('DOMContentLoaded', function () {
                     document.getElementById('error-message-parameter2').style.display = 'block';
                     document.getElementById('cargando-datos-link-unico').style.display = 'none';
                     throw new Error('Network response was not ok');
-                }      
+                }
                 return response.json();
             })
-        .then(data => {
-            // IDs del JSON
-            id_oficina_front = data.ID_buscadores[0].id_oficina;
-            date_added_front = data.fecha_cliente_creado;
-            date_last_checked_front = data.date_last_checked;
-            retries_front = data.retries;
-            limit_max_front = data.fecha_maxima_cola;
-            date_min_front = data.fecha_minima_cola;
-            cola_dias_excluidos = data.cola_dias_excluidos;
-            fecha_caducidad_front = data.fecha_caducidad_cola;
-            precio_eur_cent_front = data.precio_centimos;
-            public_id_front = data.ID_publico;
-            servicio_nombre_front = data.servicio_nombre;
-            oficina_nombre_front = data.oficina_nombre;
-            provincia_front = data.provincia;
-            codigo_reserva_cita_front = data.referencia_reserva;
-            fecha_cita_reservada_front = data.fecha_cita_reservada;
-            fecha_limite_pago_front = data.fecha_limite_pago;
-            //Estados
-            state_front = data.state_backend;
-            StatePendienteReason = data.cola_pendiente_reason;
-            StatePausadoReason = data.cola_pausado_reason;
-            
+            .then(data => {
+                // IDs del JSON
+                id_oficina_front = data.ID_buscadores[0].id_oficina;
+                date_added_front = data.fecha_cliente_creado;
+                date_last_checked_front = data.date_last_checked;
+                retries_front = data.retries;
+                limit_max_front = data.fecha_maxima_cola;
+                date_min_front = data.fecha_minima_cola;
+                cola_dias_excluidos = data.cola_dias_excluidos;
+                fecha_caducidad_front = data.fecha_caducidad_cola;
+                precio_eur_cent_front = data.precio_centimos;
+                public_id_front = data.ID_publico;
+                servicio_nombre_front = data.servicio_nombre;
+                oficina_nombre_front = data.oficina_nombre;
+                provincia_front = data.provincia;
+                codigo_reserva_cita_front = data.referencia_reserva;
+                resumen_reserva = data.reserva
+                fecha_cita_reservada_front = data.fecha_cita_reservada;
+                fecha_limite_pago_front = data.fecha_limite_pago;
+                //Estados
+                state_front = data.state_backend;
+                StatePendienteReason = data.cola_pendiente_reason;
+                StatePausadoReason = data.cola_pausado_reason;
 
-            //Datos del cliente
-            clienteIdDocumento = data.cliente_numero_documento;
-            clienteIdType = data.cliente_tipo_documento;
-            clienteNombre = data.cliente_nombre;
-            clienteApellido1 = data.cliente_apellido1;
-            clienteApellido2 = data.cliente_apellido2;
-            clienteTelefono = data.cliente_telefono;
-            clienteEmail = data.cliente_email;
-            clienteNacionalidad = data.cliente_nacionalidad;
-            clienteFechaNacimiento = data.cliente_fecha_nacimiento;
-            clienteResolucionNacionalidad = data.cliente_resolucion_nacionalidad;
-            //Verify email
-            EmailVerified = data.cliente_correo_validated;
-            
-            
 
-            
-            
-        })
-        .then(() => {
-            //Inyectar datos fijos y dinamicos al principio
-            ReplaceItemsStatic ();
-            ReplaceDynamicItems ();
-            //Ejecutar timer para cargar datos dinámicos
-        })
-        .catch(error => {
-            console.error('Error fetching data:', error);
-            // Handle errors and show an error message if needed
-            document.getElementById('error-message-parameter2').style.display = 'block';
-            document.getElementById('cargando-datos-link-unico').style.display = 'none';
+                //Datos del cliente
+                clienteIdDocumento = data.cliente_numero_documento;
+                clienteIdType = data.cliente_tipo_documento;
+                clienteNombre = data.cliente_nombre;
+                clienteApellido1 = data.cliente_apellido1;
+                clienteApellido2 = data.cliente_apellido2;
+                clienteTelefono = data.cliente_telefono;
+                clienteEmail = data.cliente_email;
+                clienteNacionalidad = data.cliente_nacionalidad;
+                clienteFechaNacimiento = data.cliente_fecha_nacimiento;
+                clienteResolucionNacionalidad = data.cliente_resolucion_nacionalidad;
+                //Verify email
+                EmailVerified = data.cliente_correo_validated;
 
-        });
+
+
+
+
+            })
+            .then(() => {
+                //Inyectar datos fijos y dinamicos al principio
+                ReplaceItemsStatic();
+                ReplaceDynamicItems();
+                //Ejecutar timer para cargar datos dinámicos
+            })
+            .catch(error => {
+                console.error('Error fetching data:', error);
+                // Handle errors and show an error message if needed
+                document.getElementById('error-message-parameter2').style.display = 'block';
+                document.getElementById('cargando-datos-link-unico').style.display = 'none';
+
+            });
 
         console.log(state_front);
     }
@@ -191,7 +193,7 @@ document.addEventListener('DOMContentLoaded', function () {
     function fetchDataStateDynamic() {
         // Construct the URL with the referencia parameter
         var apiUrl = `https://n8n.sacacitas.es/webhook/38d7fbd6-0a86-4e8d-9d3b-f90b01a6923d-link-unico-data-request?id_publico=${referencia}`;
-        
+
 
         fetch(apiUrl)
             .then(response => {
@@ -199,30 +201,30 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
                 return response.json();
             })
-        .then(data => {
-            //Variables
-            date_last_checked_front = data.date_last_checked;
-            retries_front = data.retries;
-            //Estados
-            state_front = data.state_backend;
-            StatePendienteReason = data.cola_pendiente_reason;
-            StatePausadoReason = data.cola_pausado_reason;
-            
-            //Verify email
-            EmailVerified = data.cliente_correo_validated;
-            
-        })
-        .then(() => {
-            ReplaceDynamicItems ();
+            .then(data => {
+                //Variables
+                date_last_checked_front = data.date_last_checked;
+                retries_front = data.retries;
+                //Estados
+                state_front = data.state_backend;
+                StatePendienteReason = data.cola_pendiente_reason;
+                StatePausadoReason = data.cola_pausado_reason;
 
-        })
-        .catch(error => {
-            console.error('Error fetching data:', error);
-            // Handle errors and show an error message if needed
-            document.getElementById('error-message-parameter2').style.display = 'block';
-            document.getElementById('cargando-datos-link-unico').style.display = 'none';
+                //Verify email
+                EmailVerified = data.cliente_correo_validated;
 
-        });
+            })
+            .then(() => {
+                ReplaceDynamicItems();
+
+            })
+            .catch(error => {
+                console.error('Error fetching data:', error);
+                // Handle errors and show an error message if needed
+                document.getElementById('error-message-parameter2').style.display = 'block';
+                document.getElementById('cargando-datos-link-unico').style.display = 'none';
+
+            });
 
     }
 
@@ -234,7 +236,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 
-      
+
     //Reemplazar items más fijos
     function ReplaceItemsStatic() {
 
@@ -288,7 +290,7 @@ document.addEventListener('DOMContentLoaded', function () {
         var formattedDateAdded = date_added.toLocaleString('es-ES', options).replace(/,/g, ' -');
         var formattedDate_cita_reservada = fecha_cita_reservada.toLocaleString('es-ES', options).replace(/,/g, ' -');
         var formattedDate_fecha_limite_pago = fecha_limite_pago.toLocaleString('es-ES', options).replace(/,/g, ' -');
-        
+
         //Fecha max y min formateada
         var formattedLimitMax = formatDateFromISOToDMY(limit_max_front);
         var formattedLimitMin = formatDateFromISOToDMY(date_min_front);
@@ -325,9 +327,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
         //Cambiar textos del link único
         document.getElementById('link-busqueda-fechas-min-max').textContent = 'Desde ' + formattedLimitMin + ' hasta ' + formattedLimitMax;
-        
+
         //Si no es una fecha válida mostrar otro texto para la fecha de la búsqueda de inicio
-        if ( formattedDateAdded === 'Invalid Date') {
+        if (formattedDateAdded === 'Invalid Date') {
             formattedDateAdded = 'Búsqueda aún no iniciada';
         }
         document.getElementById('date_added_front').textContent = formattedDateAdded;
@@ -337,8 +339,12 @@ document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('fecha-cita-reservada').textContent = formattedDate_cita_reservada;
         document.getElementById('boton-fecha-limite-pago').textContent = formattedDate_fecha_limite_pago;
         document.getElementById('correo_usuario_verify').textContent = clienteEmail;
-        // Comprobar si nº referencia es= 'referencia N/A'
-        if (codigo_reserva_cita_front === 'referencia N/A') {
+
+        var bloque_reserva = document.getElementById('codigo-reserva-cita-reservada')
+        if (resumen_reserva && resumen_reserva.pdf) {
+            bloque_reserva.innerHTML = `<a download="Justificante" style="color: rgb(44, 100, 227);" href="data:application/pdf;base64,${resumen_reserva.pdf}">DESCARGAR</a>`
+        } else if (codigo_reserva_cita_front === 'referencia N/A') {
+            // Comprobar si nº referencia es= 'referencia N/A'
             document.getElementById('codigo-reserva-cita-reservada').textContent = "Esta cita no requiere número de reserva";
         } else {
             // If it's not 'referencia N/A', set the text content as the value of codigo_reserva_cita_front
@@ -372,7 +378,7 @@ document.addEventListener('DOMContentLoaded', function () {
         cuadradoPagoCita20.hide();
         divDatosCitaReservada.hide();
         botonRenovarBusquedaCita.hide();
-        
+
         //Ocultrar inciio busqueda si aún no se ha iniciado
         if (state_front == 'Formulario-Recibido' || state_front == 'CLIENTE-CREADO' || state_front == 'COLA-CREADA' || state_front == 'VALIDANDO-COLA' || state_front == 'ERROR-NO-CONSIGUE-BUSCAR') {
             $('#div-fecha-inicio-busqueda').hide();
@@ -403,15 +409,15 @@ document.addEventListener('DOMContentLoaded', function () {
             botonLinkUnicoBusqueda.addClass('boton-datos-link-unico-selected');
 
 
-            
+
             //Si la cita está reservada o pagada, mostrar el botón de reserva y datos pago
-            if (state_front == 'RESERVADO' || state_front == 'PAGADO') { 
+            if (state_front == 'RESERVADO' || state_front == 'PAGADO') {
                 botonLinkUnicoBusqueda.removeClass('boton-datos-link-unico-selected');
                 divLinkUnicoBusqueda.hide();
                 botonLinkUnicoReserva.addClass('boton-datos-link-unico-selected');
                 divPagoYReserva.show();
                 textoCitaAunBuscando.hide();
-                
+
 
             }
 
@@ -429,8 +435,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 botonLinkUnicoOficina.removeClass('boton-datos-link-unico-selected');
                 botonLinkUnicoDatos.removeClass('boton-datos-link-unico-selected');
                 botonAjustesLinkUnico.removeClass('boton-datos-link-unico-selected');
-            });                    
-        
+            });
+
             // Click event for botonLinkUnicoBusqueda
             botonLinkUnicoReserva.click(function () {
                 divLinkUnicoBusqueda.hide();
@@ -444,8 +450,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 botonLinkUnicoOficina.removeClass('boton-datos-link-unico-selected');
                 botonLinkUnicoDatos.removeClass('boton-datos-link-unico-selected');
                 botonAjustesLinkUnico.removeClass('boton-datos-link-unico-selected');
-            });                    
-        
+            });
+
             // Click event for botonLinkUnicoBusqueda
             botonLinkUnicoOficina.click(function () {
                 divLinkUnicoBusqueda.hide();
@@ -459,8 +465,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 botonLinkUnicoOficina.addClass('boton-datos-link-unico-selected');
                 botonLinkUnicoDatos.removeClass('boton-datos-link-unico-selected');
                 botonAjustesLinkUnico.removeClass('boton-datos-link-unico-selected');
-            });                                   
-        
+            });
+
 
             // Click event for botonLinkUnicoBusqueda
             botonLinkUnicoDatos.click(function () {
@@ -475,8 +481,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 botonLinkUnicoOficina.removeClass('boton-datos-link-unico-selected');
                 botonLinkUnicoDatos.addClass('boton-datos-link-unico-selected');
                 botonAjustesLinkUnico.removeClass('boton-datos-link-unico-selected');
-            });                    
-            
+            });
+
             // Click event for botonAjustesLinkUnico
             botonAjustesLinkUnico.click(function () {
                 divLinkUnicoBusqueda.hide();
@@ -490,11 +496,11 @@ document.addEventListener('DOMContentLoaded', function () {
                 botonLinkUnicoOficina.removeClass('boton-datos-link-unico-selected');
                 botonLinkUnicoDatos.removeClass('boton-datos-link-unico-selected');
                 botonAjustesLinkUnico.addClass('boton-datos-link-unico-selected');
-            });                    
-            
+            });
 
 
-    
+
+
 
 
         });
@@ -505,14 +511,14 @@ document.addEventListener('DOMContentLoaded', function () {
         //Datos para empresa factura
         var razon_social = document.getElementById('nombre_razon_social_link_unico-2').value;
         var datosEmpresaField = document.querySelector('[data-form-datos-empresa]');
-        
+
         $("[ms-code-checkbox-input]").click(function () {
             // Get the value of the 'ms-code-checkbox-input' attribute
             var checkboxVal = $(this).attr('ms-code-checkbox-input');
-        
+
             // Find the corresponding element with the 'ms-code-checkbox-display' attribute and the same value
             var displayElement = $("[ms-code-checkbox-display=" + checkboxVal + "]");
-        
+
             // If this checkbox is checked, show the corresponding element
             if ($(this).is(":checked")) {
                 displayElement.show();
@@ -525,7 +531,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 document.getElementById('codigo_postal__link_unico-2').setAttribute('required', true);
                 document.getElementById('poblacion_link_unico').setAttribute('required', true);
                 document.getElementById('provincia_link_unico-2').setAttribute('required', true);
-    
+
             } else {
                 // If this checkbox is unchecked, hide the corresponding element
                 displayElement.hide();
@@ -537,7 +543,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 document.getElementById('codigo_postal__link_unico-2').removeAttribute('required');
                 document.getElementById('poblacion_link_unico').removeAttribute('required');
                 document.getElementById('provincia_link_unico-2').removeAttribute('required');
-                
+
             }
         });
 
@@ -552,7 +558,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     return false;
                 }
             }
-        });            
+        });
 
         //URL administracion dinamico
         var backendWebOficialElement = document.getElementById('backend-web-oficial')
@@ -568,7 +574,7 @@ document.addEventListener('DOMContentLoaded', function () {
         } else if (id_oficina_front.startsWith("gencat")) {
             backendWebOficialElement.innerHTML = '<a href="https://seujudicial.gencat.cat/ca/que_cal_fer/registre-civil/" target="_blank">https://seujudicial.gencat.cat/ca/que_cal_fer/registre-civil/</a>';
         } else if (id_oficina_front.startsWith("andrc")) {
-            backendWebOficialElement.innerHTML = '<a href="https://www.juntadeandalucia.es/justicia/citaprevia/?idCliente=4" target="_blank">https://www.juntadeandalucia.es/justicia/citaprevia/?idCliente=4</a>';            
+            backendWebOficialElement.innerHTML = '<a href="https://www.juntadeandalucia.es/justicia/citaprevia/?idCliente=4" target="_blank">https://www.juntadeandalucia.es/justicia/citaprevia/?idCliente=4</a>';               
         } else {
             backendWebOficialElement.innerHTML = 'No hay datos de esta oficina';
         }
@@ -650,48 +656,48 @@ document.addEventListener('DOMContentLoaded', function () {
         // Petición cancelar cita reservada
         document.getElementById('boton-cancelar-cita-reservada').addEventListener('click', function () {
             const apiUrl = 'https://n8n.sacacitas.es/webhook/0ab8f72e-48fa-4b5a-9f33-2dcb5d9a81d7';
-            
+
             //Obtener datos del mensaje al cancelar la cita reservada
             var msgBusquedaAnulada = document.getElementById('input-razon-cancelar-cita-reservada').value;
 
 
             // Include data in the request body
             const requestBody = {
-            public_id_front: public_id_front,
-            msgBusquedaAnulada: msgBusquedaAnulada,
-            // Add any other data properties as needed
+                public_id_front: public_id_front,
+                msgBusquedaAnulada: msgBusquedaAnulada,
+                // Add any other data properties as needed
             };
 
             const requestOptions = {
-            method: 'POST', // or 'PUT', 'GET', etc.
-            headers: {
-                'Content-Type': 'application/json',
-                // Add any other headers as needed
-            },
-            body: JSON.stringify(requestBody),
+                method: 'POST', // or 'PUT', 'GET', etc.
+                headers: {
+                    'Content-Type': 'application/json',
+                    // Add any other headers as needed
+                },
+                body: JSON.stringify(requestBody),
             };
 
             // Using the fetch API to send the HTTP request
             fetch(apiUrl, requestOptions)
-            .then(response => {
-                if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
-                }
-                return response.json();
-            })
-            .then(data => {
-                // Handle the successful response data here
-                console.log('Response data:', data);
-            })
-            .catch(error => {
-                // Handle errors here
-                console.error('Error:', error);
-            });
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! Status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    // Handle the successful response data here
+                    console.log('Response data:', data);
+                })
+                .catch(error => {
+                    // Handle errors here
+                    console.error('Error:', error);
+                });
         });
 
 
         ReplaceAjustesDatosLinkUnico();
-    }                
+    }
 
 
 
@@ -704,11 +710,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
     //Reemplazar items que tienen que ver con el estado de la búsqueda
     function ReplaceDynamicItems() {
- 
+
 
         //Función para actualizar mostrar/ocultar items si cambia el estado de la búsqueda
         function MostrarOcultarItemsSegunEstado() {
- 
+
             //--> Reestablecer config original
             //Cosas de verificar email
             $('#block-email-verify').hide();
@@ -765,7 +771,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 $('#boton_estado_busqueda').text('Email pendiente verificar');
             }
 
-            // Estados de inicialización   
+            // Estados de inicialización
             if (state_front == 'CLIENTE-CREADO') {
                 $('#boton_estado_busqueda').text('Verificando datos cliente...');
             }
@@ -824,7 +830,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 $('#boton_estado_busqueda').addClass('boton_busqueda_rojo');
             }
 
-            
+
             // Estados pendientes
             // ***Debido límite de búsquedas diarias
             if (state_front == 'PENDIENTE') {
@@ -841,7 +847,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 //Cosas fuera del popup
                 $('#div-contenido-inside-bloque-busqueda').hide();
                 $('#boton-renovar-busqueda-cita').show();
-                $('#div-sub-estado').show();                
+                $('#div-sub-estado').show();
             }
             // ***Cita ya está resercada con DocID
             if (StatePausadoReason == 'CITA-ALREADY-BOOKED-WITH-ID' && state_front == 'PAUSADO-REQUIERE-ACCION') {
@@ -871,7 +877,7 @@ document.addEventListener('DOMContentLoaded', function () {
             if (state_front == 'ERROR-NO-CONSIGUE-BUSCAR') {
                 $('#boton_estado_busqueda').text('Error al procesar la solicitud');
             }
-            
+
             //Mostrar texto dinamico debajo del estado en la que indica que está cargando
             if (state_front == 'BUSCANDO' && flag_loading_text == false) {
                 $('#texto-dinamico-debajoestado').show();
@@ -900,30 +906,30 @@ document.addEventListener('DOMContentLoaded', function () {
                     "Cargando resultados",
                     "Reinicio de búsqueda",
                 ];
-            
+
                 var i = 0;
                 var textarea = $('#text-loop-link-unico');
-            
+
                 // Generate a random index to start from
                 var randomIndex = Math.floor(Math.random() * loadList.length);
                 textarea.text(loadList[randomIndex]); // Set initial text
-            
+
                 // Adjust i to start from the random index
                 i = (randomIndex * 4) + 1;
-            
+
                 var loadTimer = setInterval(function () {
                     if (i % 4 === 0) {
                         var index = Math.floor(i / 4) % loadList.length;
                         textarea.text(loadList[index]);
                     } else {
                         // If not at the end of the text cycle, remove existing dots
-                        textarea.text(loadList[Math.floor(i / 4)]); 
+                        textarea.text(loadList[Math.floor(i / 4)]);
                         // Add dots corresponding to the current step
                         for (var j = 0; j < i % 4; j++) {
                             textarea.append('.');
                         }
                     }
-            
+
                     if (i % (4 * loadList.length) === 0) {
                         i = 0; // Reset when all texts have been shown once
                     } else {
@@ -931,14 +937,14 @@ document.addEventListener('DOMContentLoaded', function () {
                     }
                 }, 2500); // 5 seconds timer
             }
-    
-        } 
+
+        }
 
         //IF para comprobar si ha cambiado el estado y ejecutar función
         if (state_front != previousState) {
             MostrarOcultarItemsSegunEstado();
             previousState = state_front;
-                    
+
 
         }
 
@@ -980,7 +986,7 @@ document.addEventListener('DOMContentLoaded', function () {
             document.getElementById('horas_busqueda_front').textContent = horas_busqueda_front + ' h.';
         }
         //Cambiar textos del link único
-        
+
         document.getElementById('date_last_checked_front').textContent = date_last_checked_front_utc;
 
 
@@ -1008,7 +1014,7 @@ document.addEventListener('DOMContentLoaded', function () {
         } else {
             document.getElementById('retries_front').textContent = 'Sin datos';
         }
-        
+
 
 
 
@@ -1024,7 +1030,7 @@ document.addEventListener('DOMContentLoaded', function () {
         let button = document.getElementById("boton_completar_verify_correo");
         let isRequestPending = false;
 
-        button.addEventListener("click", function() {
+        button.addEventListener("click", function () {
             if (!isRequestPending) {
                 // Set flag to indicate request is pending
                 isRequestPending = true;
@@ -1052,35 +1058,35 @@ document.addEventListener('DOMContentLoaded', function () {
                     },
                     body: JSON.stringify(requestData)
                 })
-                .then(response => {
-                    // Check if the request was successful (status 200)
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    // Parse the JSON response
-                    return response.json();
-                })
-                .then(data => {
-                    // Handle the response data
-                    // Check if the response contains "cliente_correo_validated" set to true
-                    if (data[0].cliente_correo_validated === true) {
-                        // Redirect to a new URL
-                        window.location.href = "https://sacacitas.es/link?r="+public_id_front;
-                    } else {
-                        console.log("Client email not validated.");
-                        // Show error message
-                        document.getElementById("texto-error-validar-correo").style.display = 'block';
-                    }
-                })
-                .catch(error => {
-                    // Handle any errors that occurred during the fetch
-                    console.error('There was a problem with the fetch operation:', error);
-                })
-                .finally(() => {
-                    // Reset flag and enable the button
-                    isRequestPending = false;
-                    button.disabled = false;
-                });
+                    .then(response => {
+                        // Check if the request was successful (status 200)
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        // Parse the JSON response
+                        return response.json();
+                    })
+                    .then(data => {
+                        // Handle the response data
+                        // Check if the response contains "cliente_correo_validated" set to true
+                        if (data[0].cliente_correo_validated === true) {
+                            // Redirect to a new URL
+                            window.location.href = "https://sacacitas.es/link?r=" + public_id_front;
+                        } else {
+                            console.log("Client email not validated.");
+                            // Show error message
+                            document.getElementById("texto-error-validar-correo").style.display = 'block';
+                        }
+                    })
+                    .catch(error => {
+                        // Handle any errors that occurred during the fetch
+                        console.error('There was a problem with the fetch operation:', error);
+                    })
+                    .finally(() => {
+                        // Reset flag and enable the button
+                        isRequestPending = false;
+                        button.disabled = false;
+                    });
             }
         });
 
@@ -1091,7 +1097,7 @@ document.addEventListener('DOMContentLoaded', function () {
         let resendButton = document.getElementById("boton-reenviar-codigo");
         let isResendRequestPending = false;
 
-        resendButton.addEventListener("click", function() {
+        resendButton.addEventListener("click", function () {
             if (!isResendRequestPending) {
                 // Set flag to indicate request is pending
                 isResendRequestPending = true;
@@ -1134,38 +1140,38 @@ document.addEventListener('DOMContentLoaded', function () {
                     },
                     body: JSON.stringify(requestData),
                 })
-                .then(response => {
-                    // Check if the request was successful (status 200)
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    // Optionally, you can handle the response if needed
-                    // return response.json();
-                })
-                .then(() => {
-                    // Optionally, handle the response data if needed
-                    // Perform any actions after successful resend
+                    .then(response => {
+                        // Check if the request was successful (status 200)
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        // Optionally, you can handle the response if needed
+                        // return response.json();
+                    })
+                    .then(() => {
+                        // Optionally, handle the response data if needed
+                        // Perform any actions after successful resend
 
-                    // Start the timer after successful resend
-                    updateTimer();
-                })
-                .catch(error => {
-                    // Handle any errors that occurred during the fetch
-                    console.error('There was a problem with the resend operation:', error);
-                    // Enable the button in case of error
-                    isResendRequestPending = false;
-                    resendButton.disabled = false;
-                })
-                .finally(() => {
-                    // Enable the button after 2 minutes
-                    setTimeout(() => {
+                        // Start the timer after successful resend
+                        updateTimer();
+                    })
+                    .catch(error => {
+                        // Handle any errors that occurred during the fetch
+                        console.error('There was a problem with the resend operation:', error);
+                        // Enable the button in case of error
                         isResendRequestPending = false;
                         resendButton.disabled = false;
-                        // Reset timer
-                        countdown = 120;
-                        timerElement.textContent = "2:00";
-                    }, 120000); // 2 minutes in milliseconds
-                });
+                    })
+                    .finally(() => {
+                        // Enable the button after 2 minutes
+                        setTimeout(() => {
+                            isResendRequestPending = false;
+                            resendButton.disabled = false;
+                            // Reset timer
+                            countdown = 120;
+                            timerElement.textContent = "2:00";
+                        }, 120000); // 2 minutes in milliseconds
+                    });
             }
         });
 
@@ -1178,9 +1184,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
         //Inicializar operacion de tiempo para cargar datos dinámicos y peticion http
         GetTimeIntervalDynamic();
-        
+
     }
-    
+
 
 
 
@@ -1231,22 +1237,22 @@ document.addEventListener('DOMContentLoaded', function () {
             // Call fetchData() initially (optional)
             intervalId = 45000;
             fetchDataStateDynamicInterval();
-        } 
+        }
         if (state_front == 'CLIENTE-CREADO' || state_front == 'COLA-CREADA' || state_front == 'EMAIL-NO-VERIFICADO') {
             // Call fetchData() initially (optional)
             intervalId = 5000;
             fetchDataStateDynamicInterval();
-        } 
+        }
         if (state_front == 'VALIDANDO-COLA' || state_front == 'PAUSADO-REQUIERE-ACCION') {
             // Call fetchData() initially (optional)
             intervalId = 15000;
             fetchDataStateDynamicInterval();
-        }         
+        }
         if (state_front == 'ANULANDO-COLA') {
             // Call fetchData() initially (optional)
             intervalId = 10000;
             fetchDataStateDynamicInterval();
-        }             
+        }
     }
     //Ejecutar peticion datos dinamicos
     function fetchDataStateDynamicInterval() {
@@ -1293,9 +1299,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 
-    //Reemplazar datos en los campos de ajustes 
+    //Reemplazar datos en los campos de ajustes
     function ReplaceAjustesDatosLinkUnico() {
-        //--> Primer formulario 
+        //--> Primer formulario
 
         //Datos personales cliente
 
@@ -1322,7 +1328,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         }
 
-        toggleDocumentosAdmitibles();   
+        toggleDocumentosAdmitibles();
 
         //Selector del docucment type
         //Quitar clase predeterminada
@@ -1372,24 +1378,22 @@ document.addEventListener('DOMContentLoaded', function () {
         );
 
         //Date picker jquery fecha nacimiento
-        $(function() {
+        $(function () {
             var dateFormat = "dd/mm/yy";
-        
+
             $("#input-fecha-nacimiento").datepicker({
-              dateFormat: dateFormat,
-              maxDate: 0, // Maximum date is today (no future dates allowed)
-              changeMonth: true, // Show month dropdown
-              changeYear: true, // Show year dropdown
-              yearRange: "c-100:c", // Display 100 years before and after the current year
-              dayNamesMin: ["Do", "Lu", "Ma", "Mi", "Ju", "Vi", "Sá"],
-              monthNames: [
-                "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
-                "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"
-              ]
+                dateFormat: dateFormat,
+                maxDate: 0, // Maximum date is today (no future dates allowed)
+                changeMonth: true, // Show month dropdown
+                changeYear: true, // Show year dropdown
+                yearRange: "c-100:c", // Display 100 years before and after the current year
+                dayNamesMin: ["Do", "Lu", "Ma", "Mi", "Ju", "Vi", "Sá"],
+                monthNames: [
+                    "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
+                    "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"
+                ]
             });
-          });
-
-        
+        });
 
 
 
@@ -1397,7 +1401,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 
-        //--> Segundo formulario 
+
+
+        //--> Segundo formulario
 
 
         //Días de exclusión
@@ -1409,12 +1415,12 @@ document.addEventListener('DOMContentLoaded', function () {
             numberOfMonths: 2,
             lang: 'es-ES',
             buttonText: {
-            apply: 'Aplicar',
-            cancel: 'Borrar',
+                apply: 'Aplicar',
+                cancel: 'Borrar',
             },
             tooltipText: {
-            one: 'día',
-            other: 'días'
+                one: 'día',
+                other: 'días'
             },
             setup: function (picker) {
                 picker.on('button:apply', function () {
@@ -1425,51 +1431,51 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
         //Inicializar datepickersf
-        $(function() {
+        $(function () {
             var dateFormat = "dd/mm/yy";
-        
+
             // Define Spanish localization directly in JavaScript
             $.datepicker.setDefaults($.datepicker.regional['es'] = {
-              closeText: "Cerrar",
-              prevText: "Anterior",
-              nextText: "Siguiente",
-              currentText: "Hoy",
-              monthNames: ["enero", "febrero", "marzo", "abril", "mayo", "junio",
-                "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"
-              ],
-              monthNamesShort: ["ene", "feb", "mar", "abr", "may", "jun",
-                "jul", "ago", "sep", "oct", "nov", "dic"
-              ],
-              dayNames: ["domingo", "lunes", "martes", "miércoles", "jueves", "viernes", "sábado"],
-              dayNamesShort: ["dom", "lun", "mar", "mié", "jue", "vie", "sáb"],
-              dayNamesMin: ["D", "L", "M", "X", "J", "V", "S"],
-              weekHeader: "Sm",
-              dateFormat: "dd/mm/yy",
-              firstDay: 1,
-              isRTL: false,
-              showMonthAfterYear: false,
-              yearSuffix: ""
+                closeText: "Cerrar",
+                prevText: "Anterior",
+                nextText: "Siguiente",
+                currentText: "Hoy",
+                monthNames: ["enero", "febrero", "marzo", "abril", "mayo", "junio",
+                    "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"
+                ],
+                monthNamesShort: ["ene", "feb", "mar", "abr", "may", "jun",
+                    "jul", "ago", "sep", "oct", "nov", "dic"
+                ],
+                dayNames: ["domingo", "lunes", "martes", "miércoles", "jueves", "viernes", "sábado"],
+                dayNamesShort: ["dom", "lun", "mar", "mié", "jue", "vie", "sáb"],
+                dayNamesMin: ["D", "L", "M", "X", "J", "V", "S"],
+                weekHeader: "Sm",
+                dateFormat: "dd/mm/yy",
+                firstDay: 1,
+                isRTL: false,
+                showMonthAfterYear: false,
+                yearSuffix: ""
             });
-        
+
             $("#start-date").datepicker({
-              dateFormat: dateFormat,
-              minDate: 0,
-              onSelect: function(selectedDate) {
-                $("#end-date").datepicker("option", "minDate", selectedDate);
-              }
-            });
-        
-            $("#end-date").datepicker({
-              dateFormat: dateFormat,
-              minDate: 0,
-              onSelect: function(selectedDate) {
-                var startDate = $("#start-date").datepicker("getDate");
-                if (startDate && startDate > new Date(selectedDate)) {
-                  $("#start-date").datepicker("setDate", selectedDate);
+                dateFormat: dateFormat,
+                minDate: 0,
+                onSelect: function (selectedDate) {
+                    $("#end-date").datepicker("option", "minDate", selectedDate);
                 }
-              }
             });
-          });
+
+            $("#end-date").datepicker({
+                dateFormat: dateFormat,
+                minDate: 0,
+                onSelect: function (selectedDate) {
+                    var startDate = $("#start-date").datepicker("getDate");
+                    if (startDate && startDate > new Date(selectedDate)) {
+                        $("#start-date").datepicker("setDate", selectedDate);
+                    }
+                }
+            });
+        });
 
 
 
@@ -1512,9 +1518,9 @@ document.addEventListener('DOMContentLoaded', function () {
     $('#form_block_modificar_datos_personales').submit(function (event) {
         // Prevent the default form submission behavior
         event.preventDefault();
-        //Desactivar boton enviar peticion 
+        //Desactivar boton enviar peticion
         $('#finalizar-form-datos-personales').prop('disabled', true);
-        
+
         // Show loading spinner
         $('#gif-cargando-boton-finalizar').show();
         $('#gif-error-boton-finalizar').hide();
@@ -1558,7 +1564,7 @@ document.addEventListener('DOMContentLoaded', function () {
             dataType: 'json',
             contentType: 'application/json',
             success: function (response) {
-                // Show your loading GIF 
+                // Show your loading GIF
                 $('#gif-success-boton-finalizar').show();
                 //$('#gif-cargando-boton-finalizar').hide();
 
@@ -1570,9 +1576,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
                 // Redirect to a new page after a delay
-                setTimeout(function() {
+                setTimeout(function () {
                     // Redirect to a new page
-                    window.location.href = 'https://sacacitas.es/link?r='+publicItemId;
+                    window.location.href = 'https://sacacitas.es/link?r=' + publicItemId;
                 }, 1000);
             },
             error: function (xhr, status, error) {
@@ -1582,9 +1588,9 @@ document.addEventListener('DOMContentLoaded', function () {
                 $('#div-error-enviar-datos').show();
                 // Show loading spinner
                 $('#gif-cargando-boton-finalizar').hide();
-                $('#gif-error-boton-finalizar').show();   
+                $('#gif-error-boton-finalizar').show();
                 // Enable submit button
-                $('#finalizar-form-datos-personales').prop('disabled', false);        
+                $('#finalizar-form-datos-personales').prop('disabled', false);
             }
         });
 
@@ -1594,14 +1600,14 @@ document.addEventListener('DOMContentLoaded', function () {
 
     });
 
-    
+
     //Formularios modificar fechas de búsqueda
     $('#form_block_modificar_datos_busqueda').submit(function (event) {
         // Prevent the default form submission behavior
         event.preventDefault();
-        //Desactivar boton enviar peticion 
+        //Desactivar boton enviar peticion
         $('#finalizar-form-datos-busqueda-2').prop('disabled', true);
-        
+
         // Show loading spinner
         $('#gif-cargando-boton-finalizar-2').show();
         $('#gif-error-boton-finalizar-2').hide();
@@ -1627,7 +1633,7 @@ document.addEventListener('DOMContentLoaded', function () {
             dataType: 'json',
             contentType: 'application/json',
             success: function (response) {
-                // Show your loading GIF 
+                // Show your loading GIF
                 $('#gif-success-boton-finalizar-2').show();
                 //$('#gif-cargando-boton-finalizar').hide();
 
@@ -1639,9 +1645,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
                 // Redirect to a new page after a delay
-                setTimeout(function() {
+                setTimeout(function () {
                     // Redirect to a new page
-                    window.location.href = 'https://sacacitas.es/link?r='+publicItemId;
+                    window.location.href = 'https://sacacitas.es/link?r=' + publicItemId;
                 }, 1000);
             },
             error: function (xhr, status, error) {
@@ -1651,9 +1657,9 @@ document.addEventListener('DOMContentLoaded', function () {
                 $('#div-error-enviar-datos').show();
                 // Show loading spinner
                 $('#gif-cargando-boton-finalizar-2').hide();
-                $('#gif-error-boton-finalizar-2').show();   
+                $('#gif-error-boton-finalizar-2').show();
                 // Enable submit button
-                $('#finalizar-form-datos-busqueda-2').prop('disabled', false);        
+                $('#finalizar-form-datos-busqueda-2').prop('disabled', false);
             }
         });
 
@@ -1668,9 +1674,9 @@ document.addEventListener('DOMContentLoaded', function () {
     $('#pop-up-datos-personales-form').submit(function (event) {
         // Prevent the default form submission behavior
         event.preventDefault();
-        //Desactivar boton enviar peticion 
+        //Desactivar boton enviar peticion
         $('#finalizar-form-popup-datos-personales').prop('disabled', true);
-        
+
         // Show loading spinner
         $('#gif-cargando-boton-finalizar3').show();
         $('#gif-error-boton-finalizar3').hide();
@@ -1716,7 +1722,7 @@ document.addEventListener('DOMContentLoaded', function () {
             dataType: 'json',
             contentType: 'application/json',
             success: function (response) {
-                // Show your loading GIF 
+                // Show your loading GIF
                 $('#gif-success-boton-finalizar3').show();
                 //$('#gif-cargando-boton-finalizar').hide();
 
@@ -1728,9 +1734,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
                 // Redirect to a new page after a delay
-                setTimeout(function() {
+                setTimeout(function () {
                     // Redirect to a new page
-                    window.location.href = 'https://sacacitas.es/link?r='+publicItemId;
+                    window.location.href = 'https://sacacitas.es/link?r=' + publicItemId;
                 }, 1000);
             },
             error: function (xhr, status, error) {
@@ -1740,9 +1746,9 @@ document.addEventListener('DOMContentLoaded', function () {
                 $('#div-error-enviar-datos').show();
                 // Show loading spinner
                 $('#gif-cargando-boton-finalizar3').hide();
-                $('#gif-error-boton-finalizar3').show();   
+                $('#gif-error-boton-finalizar3').show();
                 // Enable submit button
-                $('#finalizar-form-popup-datos-personales').prop('disabled', false);        
+                $('#finalizar-form-popup-datos-personales').prop('disabled', false);
             }
         });
 
@@ -1762,7 +1768,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 
-//Otros / varios
+    //Otros / varios
     //Funcionalidad varias de ajustes y modificar datos
     //Bloquear zoom al darle doble click en los moviles
     const input = document.getElementById('myInput');
@@ -1784,18 +1790,18 @@ document.addEventListener('DOMContentLoaded', function () {
     function formatDateToSpanishLocale(dateString) {
         // Create a Date object
         var date = new Date(dateString);
-    
+
         // Get the day, month, and year parts
         var day = date.getDate();
         var month = date.getMonth() + 1; // Month is zero-based, so we add 1
         var year = date.getFullYear();
-    
+
         // Get the full month name using toLocaleDateString with locale "es-ES"
         var monthName = date.toLocaleDateString('es-ES', { month: 'long' });
-    
+
         // Format the date with the full month name
         var formattedDate = day + ' ' + monthName + ' ' + year;
-    
+
         return formattedDate;
     }
 
@@ -1803,15 +1809,15 @@ document.addEventListener('DOMContentLoaded', function () {
     function formatDateFromISOToDMY(dateString) {
         // Split the input string by the dash
         var parts = dateString.split('-');
-        
+
         // Extract year, month, and day
         var year = parts[0];
         var month = parts[1];
         var day = parts[2];
-        
+
         // Construct the formatted date string in DD/MM/YYYY format
         var formattedDate = day + '/' + month + '/' + year;
-        
+
         return formattedDate;
     }
 
@@ -1819,7 +1825,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 
-  });
-  
+});
 
 
