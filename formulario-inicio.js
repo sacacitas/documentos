@@ -177,17 +177,50 @@ $(document).ready(function () {
               minDate: 0,
               onSelect: function(selectedDate) {
                 var startDate = $("#start-date").datepicker("getDate");
-                var endDate = new Date(selectedDate);
-                // Check if start date is greater than end date and not in the same month/year
-                if (startDate && (startDate.getTime() > endDate.getTime() && 
-                  (startDate.getMonth() !== endDate.getMonth() || startDate.getFullYear() !== endDate.getFullYear()))) {
+                var endDate = $.datepicker.parseDate(dateFormat, selectedDate);
+                // Check if start date is greater than end date
+                if (startDate && startDate.getTime() > endDate.getTime()) {
                   $("#start-date").datepicker("setDate", selectedDate);
                 }
                 calculateDateDifference();
               }
             });
-          });
+        
+            function calculateDateDifference() {
+                var startDate = $("#start-date").datepicker("getDate");
+                var endDate = $("#end-date").datepicker("getDate");
+                if (startDate && endDate) {
+                    var timeDiff = endDate - startDate;
+                    var daysDiff = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
+                    $("#texto-dias-de-busqueda").text(daysDiff);
+                } else {
+                    $("#texto-dias-de-busqueda").text("-");
+                }
+            }
+        });
 
+        //Días de exclusión
+        PickerExcluidosDias = new Litepicker({
+            element: document.getElementById('exclude-days'),
+            plugins: ['multiselect', 'mobilefriendly'],
+            minDate: new Date(),
+            numberOfColumns: 2,
+            numberOfMonths: 2,
+            lang: 'es-ES',
+            buttonText: {
+            apply: 'Aplicar',
+            cancel: 'Borrar',
+            },
+            tooltipText: {
+            one: 'día',
+            other: 'días'
+            },
+            setup: function (picker) {
+                picker.on('button:apply', function () {
+                    document.getElementById('exclude-days').value = picker.multipleDatesToString();
+                });
+            }
+        });
         //Calcular días de margen de búsqueda y reemplazarlo en frontend
         function calculateDateDifference() {
             var startDate = $("#start-date").datepicker("getDate");
