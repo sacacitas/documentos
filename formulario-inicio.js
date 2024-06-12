@@ -196,7 +196,7 @@ $(document).ready(function () {
               var daysDiff = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
               $("#texto-dias-de-busqueda").text( daysDiff + " días");
             } else {
-              $("#texto-dias-de-busqueda").text("No se han seleccionado fechas");
+              $("#texto-dias-de-busqueda").text("-");
             }
         }
 
