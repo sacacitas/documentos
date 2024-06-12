@@ -177,15 +177,16 @@ $(document).ready(function () {
               minDate: 0,
               onSelect: function(selectedDate) {
                 var startDate = $("#start-date").datepicker("getDate");
-                if (startDate && startDate > new Date(selectedDate)) {
+                var endDate = new Date(selectedDate);
+                // Check if start date is greater than end date and not in the same month/year
+                if (startDate && (startDate.getTime() > endDate.getTime() && 
+                  (startDate.getMonth() !== endDate.getMonth() || startDate.getFullYear() !== endDate.getFullYear()))) {
                   $("#start-date").datepicker("setDate", selectedDate);
                 }
                 calculateDateDifference();
               }
             });
           });
-
-
 
         //Calcular días de margen de búsqueda y reemplazarlo en frontend
         function calculateDateDifference() {
@@ -194,7 +195,7 @@ $(document).ready(function () {
             if (startDate && endDate) {
               var timeDiff = endDate - startDate;
               var daysDiff = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
-              $("#texto-dias-de-busqueda").text( daysDiff );
+              $("#texto-dias-de-busqueda").text(daysDiff);
             } else {
               $("#texto-dias-de-busqueda").text("-");
             }
@@ -787,5 +788,4 @@ function validateRNacionalidad(RN) {
 
     return true; // RN format is valid
 }
-
 
