@@ -194,7 +194,7 @@ $(document).ready(function () {
             if (startDate && endDate) {
               var timeDiff = endDate - startDate;
               var daysDiff = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
-              $("#texto-dias-de-busqueda").text( daysDiff + " días");
+              $("#texto-dias-de-busqueda").text( daysDiff );
             } else {
               $("#texto-dias-de-busqueda").text("-");
             }
