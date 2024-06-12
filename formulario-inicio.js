@@ -168,6 +168,7 @@ $(document).ready(function () {
               minDate: 0,
               onSelect: function(selectedDate) {
                 $("#end-date").datepicker("option", "minDate", selectedDate);
+                calculateDateDifference();
               }
             });
         
@@ -179,9 +180,25 @@ $(document).ready(function () {
                 if (startDate && startDate > new Date(selectedDate)) {
                   $("#start-date").datepicker("setDate", selectedDate);
                 }
+                calculateDateDifference();
               }
             });
           });
+
+
+
+        //Calcular días de margen de búsqueda y reemplazarlo en frontend
+        function calculateDateDifference() {
+            var startDate = $("#start-date").datepicker("getDate");
+            var endDate = $("#end-date").datepicker("getDate");
+            if (startDate && endDate) {
+              var timeDiff = endDate - startDate;
+              var daysDiff = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
+              $("#texto-dias-de-busqueda").text( daysDiff + " días");
+            } else {
+              $("#texto-dias-de-busqueda").text("No se han seleccionado fechas");
+            }
+        }
 
 
         //Días de exclusión
