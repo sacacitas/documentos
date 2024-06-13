@@ -1431,49 +1431,53 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
         //Inicializar datepickersf
-        $(function () {
+        $(function() {
             var dateFormat = "dd/mm/yy";
-
+        
             // Define Spanish localization directly in JavaScript
             $.datepicker.setDefaults($.datepicker.regional['es'] = {
-                closeText: "Cerrar",
-                prevText: "Anterior",
-                nextText: "Siguiente",
-                currentText: "Hoy",
-                monthNames: ["enero", "febrero", "marzo", "abril", "mayo", "junio",
-                    "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"
-                ],
-                monthNamesShort: ["ene", "feb", "mar", "abr", "may", "jun",
-                    "jul", "ago", "sep", "oct", "nov", "dic"
-                ],
-                dayNames: ["domingo", "lunes", "martes", "miércoles", "jueves", "viernes", "sábado"],
-                dayNamesShort: ["dom", "lun", "mar", "mié", "jue", "vie", "sáb"],
-                dayNamesMin: ["D", "L", "M", "X", "J", "V", "S"],
-                weekHeader: "Sm",
-                dateFormat: "dd/mm/yy",
-                firstDay: 1,
-                isRTL: false,
-                showMonthAfterYear: false,
-                yearSuffix: ""
+              closeText: "Cerrar",
+              prevText: "Anterior",
+              nextText: "Siguiente",
+              currentText: "Hoy",
+              monthNames: ["enero", "febrero", "marzo", "abril", "mayo", "junio",
+                "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"
+              ],
+              monthNamesShort: ["ene", "feb", "mar", "abr", "may", "jun",
+                "jul", "ago", "sep", "oct", "nov", "dic"
+              ],
+              dayNames: ["domingo", "lunes", "martes", "miércoles", "jueves", "viernes", "sábado"],
+              dayNamesShort: ["dom", "lun", "mar", "mié", "jue", "vie", "sáb"],
+              dayNamesMin: ["D", "L", "M", "X", "J", "V", "S"],
+              weekHeader: "Sm",
+              dateFormat: "dd/mm/yy",
+              firstDay: 1,
+              isRTL: false,
+              showMonthAfterYear: false,
+              yearSuffix: ""
             });
-
+        
             $("#start-date").datepicker({
-                dateFormat: dateFormat,
-                minDate: 0,
-                onSelect: function (selectedDate) {
-                    $("#end-date").datepicker("option", "minDate", selectedDate);
-                }
+              dateFormat: dateFormat,
+              minDate: 0,
+              onSelect: function(selectedDate) {
+                $("#end-date").datepicker("option", "minDate", selectedDate);
+                calculateDateDifference();
+              }
             });
-
+        
             $("#end-date").datepicker({
-                dateFormat: dateFormat,
-                minDate: 0,
-                onSelect: function (selectedDate) {
-                    var startDate = $("#start-date").datepicker("getDate");
-                    if (startDate && startDate > new Date(selectedDate)) {
-                        $("#start-date").datepicker("setDate", selectedDate);
-                    }
+              dateFormat: dateFormat,
+              minDate: 0,
+              onSelect: function(selectedDate) {
+                var startDate = $("#start-date").datepicker("getDate");
+                var endDate = $.datepicker.parseDate(dateFormat, selectedDate);
+                // Check if start date is greater than end date
+                if (startDate && startDate.getTime() > endDate.getTime()) {
+                  $("#start-date").datepicker("setDate", selectedDate);
                 }
+                calculateDateDifference();
+              }
             });
         });
 
