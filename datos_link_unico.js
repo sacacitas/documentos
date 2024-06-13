@@ -1462,7 +1462,6 @@ document.addEventListener('DOMContentLoaded', function () {
               minDate: 0,
               onSelect: function(selectedDate) {
                 $("#end-date").datepicker("option", "minDate", selectedDate);
-                calculateDateDifference();
               }
             });
         
@@ -1476,7 +1475,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 if (startDate && startDate.getTime() > endDate.getTime()) {
                   $("#start-date").datepicker("setDate", selectedDate);
                 }
-                calculateDateDifference();
               }
             });
         });
