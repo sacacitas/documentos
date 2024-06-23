@@ -172,7 +172,6 @@ $(document).ready(function () {
     var cookieFbclid = getCookie("_fbc");
 
 
-
     // 1. PRIMERA PARTE BUSCADOR -> Lista estática de administración y provincias
     // Crear valores en el select de la Administración
     var values_select_administracion = [
@@ -188,58 +187,58 @@ $(document).ready(function () {
 
     // Crear valores en el select de la Provincia
     var lista_provincias_espana = {
-        "Alava": "Alava",
-        "Albacete": "Albacete",
-        "Alicante": "Alicante",
-        "Almería": "Almería",
-        "Asturias": "Asturias",
-        "Avila": "Avila",
-        "Badajoz": "Badajoz",
-        "Barcelona": "Barcelona",
-        "Burgos": "Burgos",
-        "Cáceres": "Cáceres",
-        "Cádiz": "Cádiz",
-        "Cantabria": "Cantabria",
-        "Castellón": "Castellón",
-        "Ceuta": "Ceuta",
-        "Ciudad Real": "CiudadReal",
-        "Córdoba": "Córdoba",
-        "La Coruña": "LaCoruña",
-        "Cuenca": "Cuenca",
-        "Gerona": "Gerona",
-        "Granada": "Granada",
-        "Guadalajara": "Guadalajara",
-        "Guipúzcoa": "Guipúzcoa",
-        "Huelva": "Huelva",
-        "Huesca": "Huesca",
-        "Islas Baleares": "IslasBaleares",
-        "Jaén": "Jaén",
-        "León": "León",
-        "Lérida": "Lérida",
-        "Lugo": "Lugo",
-        "Madrid": "Madrid",
-        "Málaga": "Málaga",
-        "Melilla": "Melilla",
-        "Murcia": "Murcia",
-        "Navarra": "Navarra",
-        "Orense": "Orense",
-        "Palencia": "Palencia",
-        "Las Palmas": "LasPalmas",
-        "Pontevedra": "Pontevedra",
-        "La Rioja": "LaRioja",
-        "Salamanca": "Salamanca",
-        "Segovia": "Segovia",
-        "Sevilla": "Sevilla",
-        "Soria": "Soria",
-        "Tarragona": "Tarragona",
-        "Santa Cruz De Tenerife": "SantaCruzDeTenerife",
-        "Teruel": "Teruel",
-        "Toledo": "Toledo",
-        "Valencia": "Valencia",
-        "Valladolid": "Valladolid",
-        "Vizcaya": "Vizcaya",
-        "Zamora": "Zamora",
-        "Zaragoza": "Zaragoza"
+        "Alava": "ES-VI",
+        "Albacete": "ES-AB",
+        "Alicante": "ES-A",
+        "Almería": "ES-AL",
+        "Asturias": "ES-O",
+        "Avila": "ES-AV",
+        "Badajoz": "ES-BA",
+        "Barcelona": "ES-B",
+        "Burgos": "ES-BU",
+        "Cáceres": "ES-CC",
+        "Cádiz": "ES-CA",
+        "Cantabria": "ES-S",
+        "Castellón": "ES-CS",
+        "Ceuta": "ES-CE",
+        "Ciudad Real": "ES-CR",
+        "Córdoba": "ES-CO",
+        "La Coruña": "ES-C",
+        "Cuenca": "ES-CU",
+        "Gerona": "ES-GI",
+        "Granada": "ES-GR",
+        "Guadalajara": "ES-GU",
+        "Guipúzcoa": "ES-SS",
+        "Huelva": "ES-H",
+        "Huesca": "ES-HU",
+        "Islas Baleares": "ES-PM",
+        "Jaén": "ES-J",
+        "León": "ES-LE",
+        "Lérida": "ES-L",
+        "Lugo": "ES-LU",
+        "Madrid": "ES-M",
+        "Málaga": "ES-MA",
+        "Melilla": "ES-ML",
+        "Murcia": "ES-MU",
+        "Navarra": "ES-NA",
+        "Orense": "ES-OR",
+        "Palencia": "ES-P",
+        "Las Palmas": "ES-GC",
+        "Pontevedra": "ES-PO",
+        "La Rioja": "ES-LO",
+        "Salamanca": "ES-SA",
+        "Segovia": "ES-SG",
+        "Sevilla": "ES-SE",
+        "Soria": "ES-SO",
+        "Tarragona": "ES-T",
+        "Santa Cruz De Tenerife": "ES-TF",
+        "Teruel": "ES-TE",
+        "Toledo": "ES-TO",
+        "Valencia": "ES-V",
+        "Valladolid": "ES-VA",
+        "Vizcaya": "ES-BI",
+        "Zamora": "ES-ZA",
+        "Zaragoza": "ES-Z"    
     };
 
     // Populate select provincias con la lista de provincias
@@ -257,7 +256,7 @@ $(document).ready(function () {
     const precios_citas_categorias_json = 'https://documentos.sacacitas.es/precios_citas.json';
 
     // Variables backend
-    var apiBaseUrl = 'https://panelaws.sacacitas.es/public/oficina/';
+    var apiBaseUrl = 'https://panelaws.sacacitas.es/public/oficina_iso3166/';
 
 
     //Contador número de citas seleccionadas
@@ -286,7 +285,7 @@ $(document).ready(function () {
             console.log(selectedProvincia);
             // Build the API URL with the selected provincia
             var apiUrl = apiBaseUrl + selectedProvincia;
-
+            console.log(apiUrl);
             // API call para descargar el JSON de oficinas y servicios del backend
             $.ajax({
                 url: apiUrl,
@@ -784,13 +783,15 @@ $(document).ready(function () {
             nombre_oficina = ofi.nombre
             nombre_servicio = ofi.servicios.find((e) => e.id_servicio == id_ser).nombre;
 
+            var selectedProvincia = select_provincia.val();
+
             //Crear var con los objetos 
             idbuscadores.push({
                 'id_oficina': id_ofi,
                 'id_servicio': id_ser,
                 'nombre_oficina': nombre_oficina,
                 'nombre_servicio': nombre_servicio,
-                'nombre_provincia': nombre_provincia
+                'nombre_provincia': selectedProvincia
             })
 
         })
