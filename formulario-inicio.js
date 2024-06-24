@@ -115,7 +115,7 @@ $(document).ready(function () {
         });
         console.log('CONFIG_FORM', CONFIG_FORM);
     } else {
-        alert('Hubo un problema al procesar la solicitud, acceda al formulario desde el buscador de https://sacacitas.es, Si el problema persiste, contacte con nosotros.');
+        alert('Hubo un problema al procesar la solicitud, acceda al formulario desde el buscador de https://sacacitas.com, Si el problema persiste, contacte con nosotros.');
     }
     //Mostrar secciones dinámicas
     function execute_parte_dinamica_form() {
@@ -437,7 +437,7 @@ $(document).ready(function () {
                         // Use the ID_publico property
                         var publicItemId = response.ID_publico;
                         // Redirect to a new page
-                        window.location.href = 'https://www.sacacitas.es/link?r='+publicItemId;                        
+                        window.location.href = 'https://www.sacacitas.com/link?r='+publicItemId;                        
                     } if (response.empty_dates === true) {
                         $('#div-error-enviar-datos').show();
                         $('#texto_error_form').text('Existe un problema al recibir los datos. Las fechas de búsqueda están vacías, es posible que el formulario se ha iniciado hace mucho tiempo y se ha perdido esta información o que el navegador que está utilizando no es compatible con el formulario. Por favor, prueba otro navegador.');
