@@ -572,7 +572,7 @@ document.addEventListener('DOMContentLoaded', function () {
         } else if (id_oficina_front.startsWith("g7mad")) {
             backendWebOficialElement.innerHTML = '<a href="https://gestiona7.madrid.org/CTAC_CITA/registro" target="_blank">https://gestiona7.madrid.org/CTAC_CITA/registro</a>';
         } else if (id_oficina_front.startsWith("gencat")) {
-            backendWebOficialElement.innerHTML = '<a href="https://seujudicial.gencat.cat/ca/que_cal_fer/registre-civil/" target="_blank">https://seujudicial.gencat.cat/ca/que_cal_fer/registre-civil/</a>';
+            backendWebOficialElement.innerHTML = '<a href="https://ovt.gencat.cat/carpetaciutadana360/mfe-main-app/#/consulta" target="_blank">https://ovt.gencat.cat/carpetaciutadana360/mfe-main-app/#/consulta</a>';
         } else if (id_oficina_front.startsWith("andrc")) {
             backendWebOficialElement.innerHTML = '<a href="https://www.juntadeandalucia.es/justicia/citaprevia/?idCliente=4" target="_blank">https://www.juntadeandalucia.es/justicia/citaprevia/?idCliente=4</a>';               
         } else {
