@@ -14,6 +14,20 @@ var PickerExcluidosDias = null
 
 $(document).ready(function () {
 
+    function calculateDateDifference() {
+        var startDate = $("#start-date").datepicker("getDate");
+        var endDate = $("#end-date").datepicker("getDate");
+        var daysDiff = 0;
+        if (startDate && endDate) {
+            var timeDiff = endDate - startDate;
+            daysDiff = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
+            $("#texto-dias-de-busqueda").text(daysDiff);
+        } else {
+            $("#texto-dias-de-busqueda").text("-");
+        }
+        return daysDiff;
+    }
+
 
     //Variables del fornulario
     {
@@ -133,70 +147,60 @@ $(document).ready(function () {
         }
     }
 
-    //Funcionalidades de cada sección del formulario 
+    //Funcionalidades de cada sección del formulario
     {
         //SECTION: 1 - Escoger fechas máx min
         //Inicializar datepickers
-        $(function() {
+        $(function () {
             var dateFormat = "dd/mm/yy";
-        
+
             // Define Spanish localization directly in JavaScript
             $.datepicker.setDefaults($.datepicker.regional['es'] = {
-              closeText: "Cerrar",
-              prevText: "Anterior",
-              nextText: "Siguiente",
-              currentText: "Hoy",
-              monthNames: ["enero", "febrero", "marzo", "abril", "mayo", "junio",
-                "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"
-              ],
-              monthNamesShort: ["ene", "feb", "mar", "abr", "may", "jun",
-                "jul", "ago", "sep", "oct", "nov", "dic"
-              ],
-              dayNames: ["domingo", "lunes", "martes", "miércoles", "jueves", "viernes", "sábado"],
-              dayNamesShort: ["dom", "lun", "mar", "mié", "jue", "vie", "sáb"],
-              dayNamesMin: ["D", "L", "M", "X", "J", "V", "S"],
-              weekHeader: "Sm",
-              dateFormat: "dd/mm/yy",
-              firstDay: 1,
-              isRTL: false,
-              showMonthAfterYear: false,
-              yearSuffix: ""
+                closeText: "Cerrar",
+                prevText: "Anterior",
+                nextText: "Siguiente",
+                currentText: "Hoy",
+                monthNames: ["enero", "febrero", "marzo", "abril", "mayo", "junio",
+                    "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"
+                ],
+                monthNamesShort: ["ene", "feb", "mar", "abr", "may", "jun",
+                    "jul", "ago", "sep", "oct", "nov", "dic"
+                ],
+                dayNames: ["domingo", "lunes", "martes", "miércoles", "jueves", "viernes", "sábado"],
+                dayNamesShort: ["dom", "lun", "mar", "mié", "jue", "vie", "sáb"],
+                dayNamesMin: ["D", "L", "M", "X", "J", "V", "S"],
+                weekHeader: "Sm",
+                dateFormat: "dd/mm/yy",
+                firstDay: 1,
+                isRTL: false,
+                showMonthAfterYear: false,
+                yearSuffix: ""
             });
-        
+
             $("#start-date").datepicker({
-              dateFormat: dateFormat,
-              minDate: 0,
-              onSelect: function(selectedDate) {
-                $("#end-date").datepicker("option", "minDate", selectedDate);
-                calculateDateDifference();
-              }
+                dateFormat: dateFormat,
+                minDate: 0,
+                onSelect: function (selectedDate) {
+                    $("#end-date").datepicker("option", "minDate", selectedDate);
+                    calculateDateDifference();
+                }
             });
-        
+
             $("#end-date").datepicker({
-              dateFormat: dateFormat,
-              minDate: 0,
-              onSelect: function(selectedDate) {
-                var startDate = $("#start-date").datepicker("getDate");
-                var endDate = $.datepicker.parseDate(dateFormat, selectedDate);
-                // Check if start date is greater than end date
-                if (startDate && startDate.getTime() > endDate.getTime()) {
-                  $("#start-date").datepicker("setDate", selectedDate);
+                dateFormat: dateFormat,
+                minDate: 0,
+                onSelect: function (selectedDate) {
+                    var startDate = $("#start-date").datepicker("getDate");
+                    var endDate = $.datepicker.parseDate(dateFormat, selectedDate);
+                    // Check if start date is greater than end date
+                    if (startDate && startDate.getTime() > endDate.getTime()) {
+                        $("#start-date").datepicker("setDate", selectedDate);
+                    }
+                    calculateDateDifference();
                 }
-                calculateDateDifference();
-              }
             });
-        
-            function calculateDateDifference() {
-                var startDate = $("#start-date").datepicker("getDate");
-                var endDate = $("#end-date").datepicker("getDate");
-                if (startDate && endDate) {
-                    var timeDiff = endDate - startDate;
-                    var daysDiff = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
-                    $("#texto-dias-de-busqueda").text(daysDiff);
-                } else {
-                    $("#texto-dias-de-busqueda").text("-");
-                }
-            }
+
+
         });
 
         //Días de exclusión
@@ -208,12 +212,12 @@ $(document).ready(function () {
             numberOfMonths: 2,
             lang: 'es-ES',
             buttonText: {
-            apply: 'Aplicar',
-            cancel: 'Borrar',
+                apply: 'Aplicar',
+                cancel: 'Borrar',
             },
             tooltipText: {
-            one: 'día',
-            other: 'días'
+                one: 'día',
+                other: 'días'
             },
             setup: function (picker) {
                 picker.on('button:apply', function () {
@@ -221,18 +225,7 @@ $(document).ready(function () {
                 });
             }
         });
-        //Calcular días de margen de búsqueda y reemplazarlo en frontend
-        function calculateDateDifference() {
-            var startDate = $("#start-date").datepicker("getDate");
-            var endDate = $("#end-date").datepicker("getDate");
-            if (startDate && endDate) {
-              var timeDiff = endDate - startDate;
-              var daysDiff = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
-              $("#texto-dias-de-busqueda").text(daysDiff);
-            } else {
-              $("#texto-dias-de-busqueda").text("-");
-            }
-        }
+
 
 
         //Días de exclusión
@@ -244,12 +237,12 @@ $(document).ready(function () {
             numberOfMonths: 2,
             lang: 'es-ES',
             buttonText: {
-            apply: 'Aplicar',
-            cancel: 'Borrar',
+                apply: 'Aplicar',
+                cancel: 'Borrar',
             },
             tooltipText: {
-            one: 'día',
-            other: 'días'
+                one: 'día',
+                other: 'días'
             },
             setup: function (picker) {
                 picker.on('button:apply', function () {
@@ -257,7 +250,7 @@ $(document).ready(function () {
                 });
             }
         });
-        
+
         //Poner read only al input de fecha max para que no salga el teclado en el movil
         function makeReadonly() {
             document.getElementById('readonly-field').setAttribute("readonly", "");
@@ -271,22 +264,22 @@ $(document).ready(function () {
 
         //SECTION: 2 - Datos cliente
         //Date picker jquery fecha nacimiento
-        $(function() {
+        $(function () {
             var dateFormat = "dd/mm/yy";
-        
+
             $("#input-fecha-nacimiento").datepicker({
-              dateFormat: dateFormat,
-              maxDate: 0, // Maximum date is today (no future dates allowed)
-              changeMonth: true, // Show month dropdown
-              changeYear: true, // Show year dropdown
-              yearRange: "c-100:c", // Display 100 years before and after the current year
-              dayNamesMin: ["Do", "Lu", "Ma", "Mi", "Ju", "Vi", "Sá"],
-              monthNames: [
-                "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
-                "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"
-              ]
+                dateFormat: dateFormat,
+                maxDate: 0, // Maximum date is today (no future dates allowed)
+                changeMonth: true, // Show month dropdown
+                changeYear: true, // Show year dropdown
+                yearRange: "c-100:c", // Display 100 years before and after the current year
+                dayNamesMin: ["Do", "Lu", "Ma", "Mi", "Ju", "Vi", "Sá"],
+                monthNames: [
+                    "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
+                    "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"
+                ]
             });
-          });
+        });
 
         //SECTION: 3 - Documento identidad
         //Seleccionar botones de selección de tipo de documento. DNI, NIE, Pasaporte
@@ -379,7 +372,7 @@ $(document).ready(function () {
             var selected_document = $('.div-documentos-formulario').find('.boton-documento-selected').attr('id')
 
             //Dejar bonito el document type
-            //Poner datos del selected document bonito 
+            //Poner datos del selected document bonito
             if (selected_document === 'select-pasaporte-form') {
                 var NiceSelected_document = 'PASAPORTE'
             } else if (selected_document === 'select-dni-form') {
@@ -437,7 +430,7 @@ $(document).ready(function () {
                         // Use the ID_publico property
                         var publicItemId = response.ID_publico;
                         // Redirect to a new page
-                        window.location.href = 'https://www.sacacitas.com/link?r='+publicItemId;                        
+                        window.location.href = 'https://www.sacacitas.com/link?r=' + publicItemId;
                     } if (response.empty_dates === true) {
                         $('#div-error-enviar-datos').show();
                         $('#texto_error_form').text('Existe un problema al recibir los datos. Las fechas de búsqueda están vacías, es posible que el formulario se ha iniciado hace mucho tiempo y se ha perdido esta información o que el navegador que está utilizando no es compatible con el formulario. Por favor, prueba otro navegador.');
@@ -453,7 +446,7 @@ $(document).ready(function () {
                     $.ajax({
                         type: 'POST',
                         url: 'https://n8n.sacacitas.es/webhook-test/1273a5d4-5b9e-4826-94ab-04c5bbeedfad-error-formulario',
-                        data: JSON.stringify({error: error}),
+                        data: JSON.stringify({ error: error }),
                         dataType: 'json',
                         contentType: 'application/json',
                         success: function (response) {
@@ -477,7 +470,7 @@ $(document).ready(function () {
     }
     //Ocultrar seccion
 
-    //Logica de los botones de siguiente y atrás        
+    //Logica de los botones de siguiente y atrás
     {
         // Funcion de mostrar mensaje de error debajo de los inputs
         function displayErrorMessage(inputElement, message) {
@@ -487,7 +480,7 @@ $(document).ready(function () {
             // Create error message element if input is empty
             const errorMessage = $('<div>').addClass('error-message-form').text(message);
 
-            // Insert error message after the input element        
+            // Insert error message after the input element
             $(inputElement).after(errorMessage);
 
         }
@@ -512,6 +505,17 @@ $(document).ready(function () {
                         $(InputDivFMinMax).next('.error-message-form').remove();
                     }
                 });
+
+
+                var MIN_DIAS = 4
+                if (calculateDateDifference() < MIN_DIAS) {
+                    displayErrorMessage(InputDivFMinMax, `Se necesitan al menos ${MIN_DIAS} de busqueda`);
+                    // Muestra mensaje de error en la funcion displayErrorMessage donde inputElement = input
+                    allInputsValid = false;
+                } else {
+                    // If input is not empty, remove the error message
+                    $(InputDivFMinMax).next('.error-message-form').remove();
+                }
 
                 // Si todo OK pasa a la siguiente
                 if (allInputsValid) {
@@ -643,7 +647,7 @@ $(document).ready(function () {
 
             //5.Comprobar nacionalidad. R Nacionalidad y caducidad tarjeta
             $(NextButon5).click(function () {
-                
+
                 let inputsToCheck; // Declare inputsToCheck variable outside the if statement
 
                 if (CONFIG_FORM.resolucion_nacionalidad === true) {
@@ -651,8 +655,8 @@ $(document).ready(function () {
                 } else {
                     // If input is not empty, remove the error message
                     inputsToCheck = [InputNacionalidad];
-                }                
-                   
+                }
+
                 // Array de inputs que verificar
                 let allInputsValid = true;
                 // Si todo OK pasa a la siguiente
@@ -741,7 +745,7 @@ $(document).ready(function () {
     }
     //Ocultrar seccion
 
-    //Funcionalidades varias 
+    //Funcionalidades varias
     {
         //Poner read only al input de fecha max para que no salga el teclado en el movil
         $(document).ready(function () {
