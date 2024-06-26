@@ -228,29 +228,6 @@ $(document).ready(function () {
 
 
 
-        //Días de exclusión
-        PickerExcluidosDias = new Litepicker({
-            element: document.getElementById('exclude-days'),
-            plugins: ['multiselect', 'mobilefriendly'],
-            minDate: new Date(),
-            numberOfColumns: 2,
-            numberOfMonths: 2,
-            lang: 'es-ES',
-            buttonText: {
-                apply: 'Aplicar',
-                cancel: 'Borrar',
-            },
-            tooltipText: {
-                one: 'día',
-                other: 'días'
-            },
-            setup: function (picker) {
-                picker.on('button:apply', function () {
-                    document.getElementById('exclude-days').value = picker.multipleDatesToString();
-                });
-            }
-        });
-
         //Poner read only al input de fecha max para que no salga el teclado en el movil
         function makeReadonly() {
             document.getElementById('readonly-field').setAttribute("readonly", "");
