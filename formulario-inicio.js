@@ -10,7 +10,7 @@ var CONFIG_FORM = {
 
 
 var PickerExcluidosDias = null
-
+var MIN_DIAS = 4
 
 $(document).ready(function () {
 
@@ -151,6 +151,32 @@ $(document).ready(function () {
     {
         //SECTION: 1 - Escoger fechas máx min
         //Inicializar datepickers
+
+
+
+        //Días de exclusión
+        PickerExcluidosDias = new Litepicker({
+            element: document.getElementById('exclude-days'),
+            plugins: ['multiselect', 'mobilefriendly'],
+            minDate: new Date(),
+            numberOfColumns: 2,
+            numberOfMonths: 2,
+            lang: 'es-ES',
+            buttonText: {
+                apply: 'Aplicar',
+                cancel: 'Borrar',
+            },
+            tooltipText: {
+                one: 'día',
+                other: 'días'
+            },
+            setup: function (picker) {
+                picker.on('button:apply', function () {
+                    document.getElementById('exclude-days').value = picker.multipleDatesToString();
+                });
+            }
+        });
+
         $(function () {
             var dateFormat = "dd/mm/yy";
 
@@ -181,8 +207,15 @@ $(document).ready(function () {
                 dateFormat: dateFormat,
                 minDate: 0,
                 onSelect: function (selectedDate) {
+                    var dateObj = $(this).datepicker('getDate')
                     $("#end-date").datepicker("option", "minDate", selectedDate);
-                    calculateDateDifference();
+                    var newMargin = calculateDateDifference();
+
+                    PickerExcluidosDias.setOptions({ minDate: dateObj })
+                    PickerExcluidosDias.gotoDate(dateObj)
+                    PickerExcluidosDias.clearSelection()
+
+
                 }
             });
 
@@ -190,40 +223,22 @@ $(document).ready(function () {
                 dateFormat: dateFormat,
                 minDate: 0,
                 onSelect: function (selectedDate) {
+                    var dateObj = $(this).datepicker('getDate')
+
                     var startDate = $("#start-date").datepicker("getDate");
                     var endDate = $.datepicker.parseDate(dateFormat, selectedDate);
                     // Check if start date is greater than end date
                     if (startDate && startDate.getTime() > endDate.getTime()) {
                         $("#start-date").datepicker("setDate", selectedDate);
                     }
-                    calculateDateDifference();
+                    var newMargin = calculateDateDifference();
+                    PickerExcluidosDias.setOptions({ maxDate: dateObj })
+                    PickerExcluidosDias.clearSelection()
+
                 }
             });
 
 
-        });
-
-        //Días de exclusión
-        PickerExcluidosDias = new Litepicker({
-            element: document.getElementById('exclude-days'),
-            plugins: ['multiselect', 'mobilefriendly'],
-            minDate: new Date(),
-            numberOfColumns: 2,
-            numberOfMonths: 2,
-            lang: 'es-ES',
-            buttonText: {
-                apply: 'Aplicar',
-                cancel: 'Borrar',
-            },
-            tooltipText: {
-                one: 'día',
-                other: 'días'
-            },
-            setup: function (picker) {
-                picker.on('button:apply', function () {
-                    document.getElementById('exclude-days').value = picker.multipleDatesToString();
-                });
-            }
         });
 
 
@@ -484,7 +499,7 @@ $(document).ready(function () {
                 });
 
 
-                var MIN_DIAS = 4
+
                 if (calculateDateDifference() < MIN_DIAS) {
                     displayErrorMessage(InputDivFMinMax, `Se necesitan al menos ${MIN_DIAS} días de búsqueda`);
                     // Muestra mensaje de error en la funcion displayErrorMessage donde inputElement = input
