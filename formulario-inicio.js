@@ -509,7 +509,7 @@ $(document).ready(function () {
 
                 var MIN_DIAS = 4
                 if (calculateDateDifference() < MIN_DIAS) {
-                    displayErrorMessage(InputDivFMinMax, `Se necesitan al menos ${MIN_DIAS} de busqueda`);
+                    displayErrorMessage(InputDivFMinMax, `Se necesitan al menos ${MIN_DIAS} días de búsqueda`);
                     // Muestra mensaje de error en la funcion displayErrorMessage donde inputElement = input
                     allInputsValid = false;
                 } else {
