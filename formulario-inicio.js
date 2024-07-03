@@ -5,7 +5,8 @@ var CONFIG_FORM = {
     'resolucion_nacionalidad': false,
     'caducidad_tarjeta': false,
     'documentos_admitibles': ['pasaporte', 'dni', 'nie'],
-    'servicio_blocked': false
+    'servicio_blocked': false,
+    'csv_doc': false
 };
 
 
@@ -72,9 +73,11 @@ $(document).ready(function () {
         var InputTelefVerf = $('#input-confirmar-telefono');
         var InputNacionalidad = $('#input-lista-paises');
         var InputRNacionalidad = $('#input-resolucion-nacionalidad');
+        var InputCSVdoc = $('#input-csv-doc');
 
         //Divs del formulario
         var DivJuraNacionalidad = $('#clientes-jura-nacionalidad');
+        var DivCSVdoc = $('#clientes-csv-doc');
         var DivCaducidadTarjeta = $('#clientes-caducidad-tarjeta');
 
         //Fecha exclusion
@@ -137,6 +140,10 @@ $(document).ready(function () {
         //Resolucion nacionalidad
         DivJuraNacionalidad.toggle(CONFIG_FORM.resolucion_nacionalidad || false);
         //$('#input-resolucion-nacionalidad').prop('required', CONFIG_FORM.resolucion_nacionalidad || false);
+
+        //CSV
+        DivCSVdoc.toggle(CONFIG_FORM.csv_doc || false);
+        
 
         DivCaducidadTarjeta.toggle(CONFIG_FORM.caducidad_tarjeta || false);
         //$('#input-caducidad-tarjeta').prop('required', CONFIG_FORM.caducidad_tarjeta || false);
@@ -394,6 +401,7 @@ $(document).ready(function () {
                 Telefono: $('#input-telefono').val(),
                 Pais: $('#input-lista-paises').val(),
                 RNacionalidad: $('#input-resolucion-nacionalidad').val(),
+                csv_doc: $('#input-csv-doc').val(),
                 CaducidadTarjeta: $('#input-caducidad-tarjeta').val(),
                 RandomStringID: RandomStringID,
                 LangBrowser: LangBrowser,
@@ -644,6 +652,8 @@ $(document).ready(function () {
 
                 if (CONFIG_FORM.resolucion_nacionalidad === true) {
                     inputsToCheck = [InputNacionalidad, InputRNacionalidad];
+                } else if (CONFIG_FORM.csv_doc === true) {
+                    inputsToCheck = [InputNacionalidad, InputCSVdoc];
                 } else {
                     // If input is not empty, remove the error message
                     inputsToCheck = [InputNacionalidad];
@@ -665,13 +675,18 @@ $(document).ready(function () {
                         func_validate = validateRNacionalidad
                     }
 
+                    //Comprobar si CSV doc se ha seleccionado
+                    if (input === InputCSVdoc) {
+                        func_validate = ValidateCSVdoc
+                    }
+
                     //Hacer validación de los campos
                     if (input.val().trim() === '') {
                         displayErrorMessage(input, 'Este campo es obligatorio');
                         // Muestra mensaje de error en la funcion displayErrorMessage donde inputElement = input
                         allInputsValid = false;
                     } else if (!func_validate(input.val())) {
-                        displayErrorMessage(input, 'Resolución de nacionalidad incorrecta');
+                        displayErrorMessage(input, 'El formato es incorrecto');
                         // Muestra mensaje de error en la funcion displayErrorMessage donde inputElement = input
                         allInputsValid = false;
 
@@ -816,5 +831,20 @@ function validateRNacionalidad(RN) {
     }
 
     return true; // RN format is valid
+}
+
+
+
+// Validar Resolución de nacionalidad
+function ValidateCSVdoc(CSVd) {
+    // Define regular expression for PF validation
+    var expresion_regular_pf = /^PF:[^\s]*?-.*?-.*?-.*$/;
+
+    // Check if PF matches the regular expression and has a minimum length of 16 characters
+    if (!expresion_regular_pf.test(CSVd) || CSVd.length < 16) {
+        return false; // PF format is invalid
+    }
+
+    return true; // PF format is valid
 }
 
