@@ -40,6 +40,7 @@ document.addEventListener('DOMContentLoaded', function () {
     var clienteNacionalidad = null;
     var clienteFechaNacimiento = null;
     var clienteResolucionNacionalidad = null;
+    var clienteCSVdoc = null;
 
     //Verify email
     var EmailVerified = null;
@@ -91,7 +92,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     //Default hide
     $('#div-link-cliente-resolucion-nacionalidad').hide();
-
+    $('#div-link-cliente-csv-doc').hide();
 
 
 
@@ -155,6 +156,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 clienteNacionalidad = data.cliente_nacionalidad;
                 clienteFechaNacimiento = data.cliente_fecha_nacimiento;
                 clienteResolucionNacionalidad = data.cliente_resolucion_nacionalidad;
+                clienteCSVdoc = data.csv_nacionalidad;
                 //Verify email
                 EmailVerified = data.cliente_correo_validated;
 
@@ -366,6 +368,11 @@ document.addEventListener('DOMContentLoaded', function () {
         if (clienteResolucionNacionalidad) {
             $('#div-link-cliente-resolucion-nacionalidad').show();
             $('#link-cliente-resolucion-nacionalidad').text(clienteResolucionNacionalidad);
+        }
+        //Mostrar CSV doc si no es null
+        if (clienteCSVdoc) {
+            $('#div-link-cliente-csv-doc').show();
+            $('#link-cliente-csv-doc').text(clienteCSVdoc);
         }
 
 
@@ -1828,5 +1835,4 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 });
-
 
