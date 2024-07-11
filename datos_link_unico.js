@@ -105,7 +105,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // Function to fetch the data from the API
     function fetchDataStatic() {
         // Construct the URL with the referencia parameter
-        var apiUrl = `https://n8n.sacacitas.es/webhook/38d7fbd6-0a86-4e8d-9d3b-f90b01a6923d-link-unico-data-request?id_publico=${referencia}`;
+        var apiUrl = `https://n8n.sacacitas.com/webhook/38d7fbd6-0a86-4e8d-9d3b-f90b01a6923d-link-unico-data-request?id_publico=${referencia}`;
 
 
 
@@ -194,7 +194,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // Function to fetch the data from the API
     function fetchDataStateDynamic() {
         // Construct the URL with the referencia parameter
-        var apiUrl = `https://n8n.sacacitas.es/webhook/38d7fbd6-0a86-4e8d-9d3b-f90b01a6923d-link-unico-data-request?id_publico=${referencia}`;
+        var apiUrl = `https://n8n.sacacitas.com/webhook/38d7fbd6-0a86-4e8d-9d3b-f90b01a6923d-link-unico-data-request?id_publico=${referencia}`;
 
 
         fetch(apiUrl)
@@ -581,7 +581,7 @@ document.addEventListener('DOMContentLoaded', function () {
         } else if (id_oficina_front.startsWith("gencat")) {
             backendWebOficialElement.innerHTML = '<a href="https://ovt.gencat.cat/carpetaciutadana360/mfe-main-app/#/consulta" target="_blank">https://ovt.gencat.cat/carpetaciutadana360/mfe-main-app/#/consulta</a>';
         } else if (id_oficina_front.startsWith("andrc")) {
-            backendWebOficialElement.innerHTML = '<a href="https://www.juntadeandalucia.es/justicia/citaprevia/?idCliente=4" target="_blank">https://www.juntadeandalucia.es/justicia/citaprevia/?idCliente=4</a>';               
+            backendWebOficialElement.innerHTML = '<a href="https://www.juntadeandalucia.es/justicia/citaprevia/?idCliente=4" target="_blank">https://www.juntadeandalucia.es/justicia/citaprevia/?idCliente=4</a>';
         } else {
             backendWebOficialElement.innerHTML = 'No hay datos de esta oficina';
         }
@@ -622,7 +622,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         // Function to make the second HTTP request
         const makeSecondRequest = (public_id_front, msgBusquedaCancelada) => {
-            const apiUrlSecond = 'https://n8n.sacacitas.es/webhook/32a8b1d9-05dd-4ee0-a1c7-323fec2e26d1';
+            const apiUrlSecond = 'https://n8n.sacacitas.com/webhook/32a8b1d9-05dd-4ee0-a1c7-323fec2e26d1';
 
             const requestOptionsSecond = {
                 method: 'POST',
@@ -662,7 +662,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         // Petición cancelar cita reservada
         document.getElementById('boton-cancelar-cita-reservada').addEventListener('click', function () {
-            const apiUrl = 'https://n8n.sacacitas.es/webhook/0ab8f72e-48fa-4b5a-9f33-2dcb5d9a81d7';
+            const apiUrl = 'https://n8n.sacacitas.com/webhook/0ab8f72e-48fa-4b5a-9f33-2dcb5d9a81d7';
 
             //Obtener datos del mensaje al cancelar la cita reservada
             var msgBusquedaAnulada = document.getElementById('input-razon-cancelar-cita-reservada').value;
@@ -1046,7 +1046,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 button.disabled = true;
 
                 // URL to which the request will be sent
-                const url = "https://n8n.sacacitas.es/webhook/verify-email";
+                const url = "https://n8n.sacacitas.com/webhook/verify-email";
 
                 // Check if public_id_front is defined and contains the correct value
                 const codigo_confirmacion = document.getElementById("codigo_confirmacion").value;
@@ -1113,7 +1113,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 resendButton.disabled = true;
 
                 // URL for resending email verification
-                const resendUrl = "https://n8n.sacacitas.es/webhook/resend-verification";
+                const resendUrl = "https://n8n.sacacitas.com/webhook/resend-verification";
 
                 // Data to be sent in the request body
                 const requestData = {
@@ -1438,51 +1438,51 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
         //Inicializar datepickersf
-        $(function() {
+        $(function () {
             var dateFormat = "dd/mm/yy";
-        
+
             // Define Spanish localization directly in JavaScript
             $.datepicker.setDefaults($.datepicker.regional['es'] = {
-              closeText: "Cerrar",
-              prevText: "Anterior",
-              nextText: "Siguiente",
-              currentText: "Hoy",
-              monthNames: ["enero", "febrero", "marzo", "abril", "mayo", "junio",
-                "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"
-              ],
-              monthNamesShort: ["ene", "feb", "mar", "abr", "may", "jun",
-                "jul", "ago", "sep", "oct", "nov", "dic"
-              ],
-              dayNames: ["domingo", "lunes", "martes", "miércoles", "jueves", "viernes", "sábado"],
-              dayNamesShort: ["dom", "lun", "mar", "mié", "jue", "vie", "sáb"],
-              dayNamesMin: ["D", "L", "M", "X", "J", "V", "S"],
-              weekHeader: "Sm",
-              dateFormat: "dd/mm/yy",
-              firstDay: 1,
-              isRTL: false,
-              showMonthAfterYear: false,
-              yearSuffix: ""
+                closeText: "Cerrar",
+                prevText: "Anterior",
+                nextText: "Siguiente",
+                currentText: "Hoy",
+                monthNames: ["enero", "febrero", "marzo", "abril", "mayo", "junio",
+                    "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"
+                ],
+                monthNamesShort: ["ene", "feb", "mar", "abr", "may", "jun",
+                    "jul", "ago", "sep", "oct", "nov", "dic"
+                ],
+                dayNames: ["domingo", "lunes", "martes", "miércoles", "jueves", "viernes", "sábado"],
+                dayNamesShort: ["dom", "lun", "mar", "mié", "jue", "vie", "sáb"],
+                dayNamesMin: ["D", "L", "M", "X", "J", "V", "S"],
+                weekHeader: "Sm",
+                dateFormat: "dd/mm/yy",
+                firstDay: 1,
+                isRTL: false,
+                showMonthAfterYear: false,
+                yearSuffix: ""
             });
-        
+
             $("#start-date").datepicker({
-              dateFormat: dateFormat,
-              minDate: 0,
-              onSelect: function(selectedDate) {
-                $("#end-date").datepicker("option", "minDate", selectedDate);
-              }
-            });
-        
-            $("#end-date").datepicker({
-              dateFormat: dateFormat,
-              minDate: 0,
-              onSelect: function(selectedDate) {
-                var startDate = $("#start-date").datepicker("getDate");
-                var endDate = $.datepicker.parseDate(dateFormat, selectedDate);
-                // Check if start date is greater than end date
-                if (startDate && startDate.getTime() > endDate.getTime()) {
-                  $("#start-date").datepicker("setDate", selectedDate);
+                dateFormat: dateFormat,
+                minDate: 0,
+                onSelect: function (selectedDate) {
+                    $("#end-date").datepicker("option", "minDate", selectedDate);
                 }
-              }
+            });
+
+            $("#end-date").datepicker({
+                dateFormat: dateFormat,
+                minDate: 0,
+                onSelect: function (selectedDate) {
+                    var startDate = $("#start-date").datepicker("getDate");
+                    var endDate = $.datepicker.parseDate(dateFormat, selectedDate);
+                    // Check if start date is greater than end date
+                    if (startDate && startDate.getTime() > endDate.getTime()) {
+                        $("#start-date").datepicker("setDate", selectedDate);
+                    }
+                }
             });
         });
 
@@ -1567,7 +1567,7 @@ document.addEventListener('DOMContentLoaded', function () {
         // Send POST request
         $.ajax({
             type: 'POST',
-            url: 'https://n8n.sacacitas.es/webhook/69aba9e4-c06c-450e-9b50-69ec9b0782a5-actualizar-datos-personales',
+            url: 'https://n8n.sacacitas.com/webhook/69aba9e4-c06c-450e-9b50-69ec9b0782a5-actualizar-datos-personales',
             data: JSON.stringify(formData),
             // Send form data using the 'data' property
             dataType: 'json',
@@ -1636,7 +1636,7 @@ document.addEventListener('DOMContentLoaded', function () {
         // Send POST request
         $.ajax({
             type: 'POST',
-            url: 'https://n8n.sacacitas.es/webhook/69aba9e4-c06c-450e-9b50-69ec9b0782a5-actualizar-fechas-busqueda',
+            url: 'https://n8n.sacacitas.com/webhook/69aba9e4-c06c-450e-9b50-69ec9b0782a5-actualizar-fechas-busqueda',
             data: JSON.stringify(formData),
             // Send form data using the 'data' property
             dataType: 'json',
@@ -1725,7 +1725,7 @@ document.addEventListener('DOMContentLoaded', function () {
         // Send POST request
         $.ajax({
             type: 'POST',
-            url: 'https://n8n.sacacitas.es/webhook/69aba9e4-c06c-450e-9b50-69ec9b0782a5-estado-pausado-actualizar-datos-personales',
+            url: 'https://n8n.sacacitas.com/webhook/69aba9e4-c06c-450e-9b50-69ec9b0782a5-estado-pausado-actualizar-datos-personales',
             data: JSON.stringify(formData),
             // Send form data using the 'data' property
             dataType: 'json',

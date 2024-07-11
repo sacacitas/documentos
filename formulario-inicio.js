@@ -112,7 +112,7 @@ $(document).ready(function () {
 
         //GET INPUT_JSON para mostrar secciones
         $.ajax({
-            url: "https://n8n.sacacitas.es/webhook/0a372cab-4efe-4fa0-b471-545e93719107",
+            url: "https://n8n.sacacitas.com/webhook/0a372cab-4efe-4fa0-b471-545e93719107",
             type: "POST",
             contentType: "application/json",
             // Specify content type as JSON
@@ -143,7 +143,7 @@ $(document).ready(function () {
 
         //CSV
         DivCSVdoc.toggle(CONFIG_FORM.csv_doc || false);
-        
+
 
         DivCaducidadTarjeta.toggle(CONFIG_FORM.caducidad_tarjeta || false);
         //$('#input-caducidad-tarjeta').prop('required', CONFIG_FORM.caducidad_tarjeta || false);
@@ -416,7 +416,7 @@ $(document).ready(function () {
             // Send POST request
             $.ajax({
                 type: 'POST',
-                url: 'https://n8n.sacacitas.es/webhook/d34bf08d-32d8-4956-8dc4-9e1d676bb5fa434-formulario-recibido-new-form',
+                url: 'https://n8n.sacacitas.com/webhook/d34bf08d-32d8-4956-8dc4-9e1d676bb5fa434-formulario-recibido-new-form',
                 data: JSON.stringify(formData),
                 // Send form data using the 'data' property
                 dataType: 'json',
@@ -445,7 +445,7 @@ $(document).ready(function () {
                     // Send logs or data if HTTP request fails
                     $.ajax({
                         type: 'POST',
-                        url: 'https://n8n.sacacitas.es/webhook-test/1273a5d4-5b9e-4826-94ab-04c5bbeedfad-error-formulario',
+                        url: 'https://n8n.sacacitas.com/webhook-test/1273a5d4-5b9e-4826-94ab-04c5bbeedfad-error-formulario',
                         data: JSON.stringify({ error: error }),
                         dataType: 'json',
                         contentType: 'application/json',
