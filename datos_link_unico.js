@@ -570,21 +570,32 @@ document.addEventListener('DOMContentLoaded', function () {
         //URL administracion dinamico
         var backendWebOficialElement = document.getElementById('backend-web-oficial')
 
+        var siteURL = null
+
         if (id_oficina_front.startsWith("gobrc")) {
-            backendWebOficialElement.innerHTML = '<a href="https://sede.administracionespublicas.gob.es/icpplustiej/" target="_blank">https://sede.administracionespublicas.gob.es/icpplustiej/</a>';
+            siteURL = "https://sede.administracionespublicas.gob.es/icpplustiej/"
         } else if (id_oficina_front.startsWith("gvarc")) {
-            backendWebOficialElement.innerHTML = '<a href="https://registrocivil.gva.es/es/cita-previa" target="_blank">https://registrocivil.gva.es/es/cita-previa</a>';
+            siteURL = "https://registrocivil.gva.es/es/cita-previa"
         } else if (id_oficina_front.startsWith("gobext")) {
-            backendWebOficialElement.innerHTML = '<a href="https://sede.administracionespublicas.gob.es/pagina/index/directorio/icpplus" target="_blank">https://sede.administracionespublicas.gob.es/pagina/index/directorio/icpplus</a>';
+            siteURL = "https://sede.administracionespublicas.gob.es/pagina/index/directorio/icpplus"
         } else if (id_oficina_front.startsWith("g7mad")) {
-            backendWebOficialElement.innerHTML = '<a href="https://gestiona7.madrid.org/CTAC_CITA/registro" target="_blank">https://gestiona7.madrid.org/CTAC_CITA/registro</a>';
+            siteURL = "https://gestiona7.madrid.org/CTAC_CITA/registro"
         } else if (id_oficina_front.startsWith("gencat")) {
-            backendWebOficialElement.innerHTML = '<a href="https://ovt.gencat.cat/carpetaciutadana360/mfe-main-app/#/consulta" target="_blank">https://ovt.gencat.cat/carpetaciutadana360/mfe-main-app/#/consulta</a>';
+            siteURL = "https://ovt.gencat.cat/carpetaciutadana360/mfe-main-app/#/consulta"
         } else if (id_oficina_front.startsWith("andrc")) {
-            backendWebOficialElement.innerHTML = '<a href="https://www.juntadeandalucia.es/justicia/citaprevia/?idCliente=4" target="_blank">https://www.juntadeandalucia.es/justicia/citaprevia/?idCliente=4</a>';
+            siteURL = "https://www.juntadeandalucia.es/justicia/citaprevia/?idCliente=4"
+        } else if (id_oficina_front.startsWith("eusrc")) {
+            siteURL = "https://www.euskadi.eus/web01-citaregc/es/aa14aUIWar/justizia/aa14aRegistroCivilInit.jsp?lang=es"
+        } else if (id_oficina_front.startsWith("euscityrc")) {
+            siteURL = "https://www.justizia.eus/qmaticwebbooking/#/search"
+        }
+
+        if (siteURL) {
+            backendWebOficialElement.innerHTML = `<a href="${siteURL}" target="_blank">${siteURL}</a>`;
         } else {
             backendWebOficialElement.innerHTML = 'No hay datos de esta oficina';
         }
+
         //cambiar color al link
         var linkElement = document.getElementById('backend-web-oficial').querySelector('a');
         if (linkElement) {
