@@ -34,7 +34,24 @@ function isTargetTitle(element) {
 	return element.tagName === 'title'
 }
 function isTargetMetaDesc(element) {
-	return element.tagName === 'meta' && (['description', 'og:description', 'twitter:description'].includes(element.getAttribute('name')))
+	var list_metas = {
+		'description': "name",
+		'og:description': 'property',
+		'twitter:description': 'property'
+	}
+
+	if (element.tagName !== 'meta') {
+		return false
+	}
+
+	for (const [val, keyName] of Object.entries(list_metas)) {
+		if (element.getAttribute(keyName) == val) {
+			return true
+		}
+	}
+
+	return false
+
 }
 
 
