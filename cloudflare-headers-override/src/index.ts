@@ -8,8 +8,14 @@
  * Learn more at https://developers.cloudflare.com/workers/
  */
 
+import * as localeAr from '../../lang/ar.json';
 import * as localeEn from '../../lang/en.json';
 import * as localeEs from '../../lang/es.json';
+import * as localeFr from '../../lang/fr.json';
+import * as localePt from '../../lang/pt.json';
+import * as localeRo from '../../lang/ro.json';
+import * as localeRu from '../../lang/ru.json';
+import * as localeZh from '../../lang/zh.json';
 
 import { Tolgee, DevTools, FormatSimple, TolgeeInstance } from "@tolgee/web";
 
@@ -83,8 +89,14 @@ async function ParseRequest(req) {
 	tg = tg_base.init({
 		language: SUBDOMAIN,
 		staticData: {
+			ar: localeAr,
 			en: localeEn,
 			es: localeEs,
+			fr: localeFr,
+			pt: localePt,
+			ro: localeRo,
+			ru: localeRu,
+			zh: localeZh,
 		}
 	})
 
