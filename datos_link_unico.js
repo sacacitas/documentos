@@ -90,9 +90,15 @@ document.addEventListener('DOMContentLoaded', function () {
     //Date now
     var DateNow = Date.now().toString(36);
 
-    //Default hide
+    //--> Default hide
     $('#div-link-cliente-resolucion-nacionalidad').hide();
     $('#div-link-cliente-csv-doc').hide();
+    //Promo code texts
+    $('#price-promo-text').hide();
+    $('#price-promo-text-left').hide();
+
+    //Default price promo referral
+    var saldo_promo = 0;
 
 
 
@@ -106,7 +112,6 @@ document.addEventListener('DOMContentLoaded', function () {
     function fetchDataStatic() {
         // Construct the URL with the referencia parameter
         var apiUrl = `https://n8n.sacacitas.com/webhook/38d7fbd6-0a86-4e8d-9d3b-f90b01a6923d-link-unico-data-request?id_publico=${referencia}`;
-
 
 
 
@@ -250,6 +255,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
         // Calcular precio en euros de cents
         var precio_cita_backend = (precio_eur_cent_front / 100);
+        ReplacePrice();
+
+
+
 
         // Crear fechas
         var date_added = new Date(date_added_front);
@@ -337,7 +346,6 @@ document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('date_added_front').textContent = formattedDateAdded;
         document.getElementById('caducidad_busqueda').textContent = `Dentro de ${dias_caducidad_restantes} días`;
         document.getElementById('precio_cita_front').textContent = precio_cita_backend.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-        document.getElementById('precio_cita_hay_que_pagar').textContent = precio_cita_backend.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
         document.getElementById('fecha-cita-reservada').textContent = formattedDate_cita_reservada;
         document.getElementById('boton-fecha-limite-pago').textContent = formattedDate_fecha_limite_pago;
         document.getElementById('correo_usuario_verify').textContent = clienteEmail;
@@ -515,10 +523,118 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 
+        //--> Apply promo code
+
+        //Find attribute. Show and hide div
+        $("[ms-promo-checkbox-input]").click(function () {
+            // Get the value of the 'ms-code-checkbox-input' attribute
+            var checkboxVal = $(this).attr('ms-promo-checkbox-input');
+
+            // Find the corresponding element with the 'ms-code-checkbox-display' attribute and the same value
+            var displayElement = $("[ms-promo-checkbox-display=" + checkboxVal + "]");
+
+            // If this checkbox is checked, show the corresponding element
+            if ($(this).is(":checked")) {
+                displayElement.show();
+                document.getElementById('PromoCode-Link-Unico-input').setAttribute('required', true);
+
+            } else {
+                // If this checkbox is unchecked, hide the corresponding element
+                displayElement.hide();
+                document.getElementById('PromoCode-Link-Unico-input').removeAttribute('required');
+
+                $('#PromoCode-Link-Unico-input').text('').val('');
+                saldo_promo = 0;
+                $('#promo-text-saldo').hide();
+                $('#PromoCode-text-below').hide();
+                $('#price-promo-text').hide();
+                $('#price-promo-text-left').hide();
+
+                ReplacePrice();
+
+            }
+        });
+
+        //Send data to check code
+        $('#PromoCode-Link-Unico-button').click(function (event) {
+            //Desactivar boton enviar peticion
+            $('#PromoCode-Link-Unico-button').prop('disabled', true);
+            event.preventDefault();
+
+            $('#promo-text-saldo').hide();
+            $('#PromoCode-text-below').hide();
+            $('#price-promo-text').hide();
+            $('#price-promo-text-left').hide();
+
+            // Gather form data
+            var formData = {
+                promo_code_input: $('#PromoCode-Link-Unico-input').val(),
+                referencia: referencia
+            };
+
+            // Send POST request
+            $.ajax({
+                type: 'POST',
+                url: 'https://n8n.sacacitas.com/webhook/ace576a2-1715-41dd-9ef7-fc8964a2e0dc-check-promo-code',
+                data: JSON.stringify(formData),
+                // Send form data using the 'data' property
+                dataType: 'json',
+                contentType: 'application/json',
+                success: function (response) {
+                    // Show your loading GIF
+                    //$('#gif-success-boton-finalizar-2').show();
+                    //$('#gif-cargando-boton-finalizar').hide();
+
+                    // Check if ID_publico exists in the response
+                    if (response.is_empty_code === true) {
+                        // Use the ID_publico property
+                        $('#PromoCode-text-below').show();
+                        $('#PromoCode-text-below').text('No se ha indicado ningún código');
+                        $('#texto-sub-estado2').hide();
+                        saldo_promo = 0;
+
+                        ReplacePrice();
+
+                    }  else if (response.is_code_wrong === true) {
+                        // Use the ID_publico property
+                        $('#PromoCode-text-below').show();
+                        $('#PromoCode-text-below').text('Este código no es válido');
+                        $('#texto-sub-estado2').hide();
+                        saldo_promo = 0;
+
+                        ReplacePrice();
+
+                    } else {
+                        $('#promo-text-saldo').show();
+                        saldo_promo = response.quantity;
+                        $('#price-promo-text').show();
+                        $('#price-promo-text-left').show();
+
+                        ReplacePrice();
+                    }
+
+                },
+                error: function (xhr, status, error) {
+                    // Handle error response
+                    console.error('Form submission failed');
+                    $('#PromoCode-text-below').text('Error al procesar la solicitud');
+
+                    $('#PromoCode-Link-Unico-button').prop('disabled', false);
+                }
+            });
+
+        });
+
+
+
+
+
+
         //Datos para empresa factura
         var razon_social = document.getElementById('nombre_razon_social_link_unico-2').value;
         var datosEmpresaField = document.querySelector('[data-form-datos-empresa]');
 
+        //Find attribute
         $("[ms-code-checkbox-input]").click(function () {
             // Get the value of the 'ms-code-checkbox-input' attribute
             var checkboxVal = $(this).attr('ms-code-checkbox-input');
@@ -567,6 +683,7 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
 
+    
         //URL administracion dinamico
         var backendWebOficialElement = document.getElementById('backend-web-oficial')
 
@@ -1089,7 +1206,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         // Check if the response contains "cliente_correo_validated" set to true
                         if (data[0].cliente_correo_validated === true) {
                             // Redirect to a new URL
-                            window.location.href = "https://sacacitas.es/link?r=" + public_id_front;
+                            window.location.href = "https://sacacitas.com/link?r=" + public_id_front;
                         } else {
                             console.log("Client email not validated.");
                             // Show error message
@@ -1206,7 +1323,41 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
 
+    //Promo code referral replace texts
+    function ReplacePrice() {
 
+
+
+        saldo_promo = 1800
+        //Precios variables
+        var price_brutto_text = (precio_eur_cent_front / 1.21 / 100);
+        var price_tax_text = ((precio_eur_cent_front - (precio_eur_cent_front / 1.21)) / 100);
+        var price_promo_text = (saldo_promo / 100);
+        var price_total_text = ((precio_eur_cent_front - saldo_promo) / 100);
+        
+        
+        // Calculate final price
+        if (price_total_text > 0 && price_total_text < 0.50 && saldo_promo) {
+            price_total_text = 0.50;
+        } else if (price_total_text < 0 && saldo_promo) {
+            price_total_text = 0;
+        }
+        
+        if  (price_promo_text > precio_eur_cent_front && saldo_promo) {
+            price_total_text = precio_eur_cent_front;
+        }
+
+
+        $('#promo-quantity').text((price_promo_text).toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €');
+
+        $('#price-brutto-text').text((price_brutto_text).toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €');
+        $('#price-tax-text').text((price_tax_text).toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €');
+        $('#price-promo-text').text( '-' + (price_promo_text).toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €');
+        $('#precio_cita_hay_que_pagar').text ((price_total_text).toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €');
+
+
+    }
+    
 
 
 
@@ -1449,9 +1600,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
         //Inicializar datepickersf
-        $(function () {
+        $(function() {
             var dateFormat = "dd/mm/yy";
-
+        
             // Define Spanish localization directly in JavaScript
             $.datepicker.setDefaults($.datepicker.regional['es'] = {
                 closeText: "Cerrar",
@@ -1474,19 +1625,19 @@ document.addEventListener('DOMContentLoaded', function () {
                 showMonthAfterYear: false,
                 yearSuffix: ""
             });
-
+        
             $("#start-date").datepicker({
                 dateFormat: dateFormat,
                 minDate: 0,
-                onSelect: function (selectedDate) {
+                onSelect: function(selectedDate) {
                     $("#end-date").datepicker("option", "minDate", selectedDate);
                 }
             });
-
+        
             $("#end-date").datepicker({
                 dateFormat: dateFormat,
                 minDate: 0,
-                onSelect: function (selectedDate) {
+                onSelect: function(selectedDate) {
                     var startDate = $("#start-date").datepicker("getDate");
                     var endDate = $.datepicker.parseDate(dateFormat, selectedDate);
                     // Check if start date is greater than end date
@@ -1598,7 +1749,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 // Redirect to a new page after a delay
                 setTimeout(function () {
                     // Redirect to a new page
-                    window.location.href = 'https://sacacitas.es/link?r=' + publicItemId;
+                    window.location.href = 'https://sacacitas.com/link?r=' + publicItemId;
                 }, 1000);
             },
             error: function (xhr, status, error) {
@@ -1667,7 +1818,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 // Redirect to a new page after a delay
                 setTimeout(function () {
                     // Redirect to a new page
-                    window.location.href = 'https://sacacitas.es/link?r=' + publicItemId;
+                    window.location.href = 'https://sacacitas.com/link?r=' + publicItemId;
                 }, 1000);
             },
             error: function (xhr, status, error) {
@@ -1756,7 +1907,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 // Redirect to a new page after a delay
                 setTimeout(function () {
                     // Redirect to a new page
-                    window.location.href = 'https://sacacitas.es/link?r=' + publicItemId;
+                    window.location.href = 'https://sacacitas.com/link?r=' + publicItemId;
                 }, 1000);
             },
             error: function (xhr, status, error) {
