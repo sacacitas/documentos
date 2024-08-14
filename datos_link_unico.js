@@ -1328,7 +1328,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 
-        saldo_promo = 1800
         //Precios variables
         var price_brutto_text = (precio_eur_cent_front / 1.21 / 100);
         var price_tax_text = ((precio_eur_cent_front - (precio_eur_cent_front / 1.21)) / 100);
