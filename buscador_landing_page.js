@@ -7,6 +7,10 @@ var MAX_CHECKOUT_ITEMS = 1; //Items máximos que se pueden añadir
 
 var INPUT_JSON = {}
 
+var PAISES = ['ES']
+
+var SELECTED_PAIS = 'ES'
+
 $(document).ready(function () {
 
     $.getJSON('https://documentos.sacacitas.es/categorias_servicios.json', (data) => CATEGORIAS = data);
@@ -111,7 +115,7 @@ $(document).ready(function () {
 
 
 
-    //Tratamiento GCLID en la URL   
+    //Tratamiento GCLID en la URL
     // Obtener todos los parámetros de la URL
     function getUrlParameter(name) {
         name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
@@ -185,67 +189,14 @@ $(document).ready(function () {
         select_administracion.append(optionElement_administracion);
     });
 
-    // Crear valores en el select de la Provincia
-    var lista_provincias_espana = {
-        "Alava": "ES-VI",
-        "Albacete": "ES-AB",
-        "Alicante": "ES-A",
-        "Almería": "ES-AL",
-        "Asturias": "ES-O",
-        "Avila": "ES-AV",
-        "Badajoz": "ES-BA",
-        "Barcelona": "ES-B",
-        "Burgos": "ES-BU",
-        "Cáceres": "ES-CC",
-        "Cádiz": "ES-CA",
-        "Cantabria": "ES-S",
-        "Castellón": "ES-CS",
-        "Ceuta": "ES-CE",
-        "Ciudad Real": "ES-CR",
-        "Córdoba": "ES-CO",
-        "La Coruña": "ES-C",
-        "Cuenca": "ES-CU",
-        "Gerona": "ES-GI",
-        "Granada": "ES-GR",
-        "Guadalajara": "ES-GU",
-        "Guipúzcoa": "ES-SS",
-        "Huelva": "ES-H",
-        "Huesca": "ES-HU",
-        "Islas Baleares": "ES-PM",
-        "Jaén": "ES-J",
-        "León": "ES-LE",
-        "Lérida": "ES-L",
-        "Lugo": "ES-LU",
-        "Madrid": "ES-M",
-        "Málaga": "ES-MA",
-        "Melilla": "ES-ML",
-        "Murcia": "ES-MU",
-        "Navarra": "ES-NA",
-        "Orense": "ES-OR",
-        "Palencia": "ES-P",
-        "Las Palmas": "ES-GC",
-        "Pontevedra": "ES-PO",
-        "La Rioja": "ES-LO",
-        "Salamanca": "ES-SA",
-        "Segovia": "ES-SG",
-        "Sevilla": "ES-SE",
-        "Soria": "ES-SO",
-        "Tarragona": "ES-T",
-        "Santa Cruz De Tenerife": "ES-TF",
-        "Teruel": "ES-TE",
-        "Toledo": "ES-TO",
-        "Valencia": "ES-V",
-        "Valladolid": "ES-VA",
-        "Vizcaya": "ES-BI",
-        "Zamora": "ES-ZA",
-        "Zaragoza": "ES-Z"    
-    };
+    var paisObj = window['country-list-js'].findByIso2(SELECTED_PAIS)
 
-    // Populate select provincias con la lista de provincias
-    $.each(lista_provincias_espana, function (text_lista_provincias, backend_provincia_id) {
-        var optionElement_provincia = $('<option></option>').prop('value', backend_provincia_id).text(text_lista_provincias);
-        select_provincia.append(optionElement_provincia);
-    });
+    paisObj.provinces
+        .sort((a, b) => a.name.localeCompare(b.name))
+        .forEach(prov => {
+            var optionElement_provincia = $('<option></option>').prop('value', `${SELECTED_PAIS}-${prov.short}`).text(prov.name);
+            select_provincia.append(optionElement_provincia);
+        });
 
 
 
@@ -365,7 +316,7 @@ $(document).ready(function () {
             // Find the selected oficina in the external data
             var selectedOficinaData = data.find(item => item.nombre === selectedOficina);
 
-            // Check if data is found and servicios is an array 
+            // Check if data is found and servicios is an array
             if (selectedOficinaData && Array.isArray(selectedOficinaData.servicios)) {
                 // Add a default option if needed
                 // var defaultOption = $('<option>', {
@@ -785,7 +736,7 @@ $(document).ready(function () {
 
             var selectedProvincia = select_provincia.val();
 
-            //Crear var con los objetos 
+            //Crear var con los objetos
             idbuscadores.push({
                 'id_oficina': id_ofi,
                 'id_servicio': id_ser,
