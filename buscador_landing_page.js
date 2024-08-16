@@ -207,7 +207,7 @@ $(document).ready(function () {
     const precios_citas_categorias_json = 'https://documentos.sacacitas.com/precios_citas.json';
 
     // Variables backend
-    var apiBaseUrl = 'https://panelaws.sacacitas.es/public/oficina_iso3166/';
+    var apiBaseUrl = 'https://panelaws.sacacitas.com/public/oficina_iso3166/';
 
 
     //Contador número de citas seleccionadas

@@ -43,7 +43,7 @@ if (redirectParam) {
     }
 
     // Build the redirect URL using all parameters except 'redirect'
-    var redirectUrl = 'https://www.sacacitas.es/operaciones/fin-tramite';
+    var redirectUrl = 'https://es.sacacitas.com/operaciones/fin-tramite';
     if (parametersForRedirect.length > 0) {
         redirectUrl += '?' + parametersForRedirect.join('&');
     }

@@ -683,7 +683,7 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
 
-    
+
         //URL administracion dinamico
         var backendWebOficialElement = document.getElementById('backend-web-oficial')
 
@@ -725,7 +725,7 @@ document.addEventListener('DOMContentLoaded', function () {
         //Cancelar búsqueda
         // Function to make the first HTTP request
         const makeFirstRequest = () => {
-            const apiUrlFirst = 'https://panelaws.sacacitas.es/public/cola/resumen?public_id_front=${public_id_front}';
+            const apiUrlFirst = 'https://panelaws.sacacitas.com/public/cola/resumen?public_id_front=${public_id_front}';
             const requestOptionsFirst = {
                 method: 'PUT',
                 headers: {
@@ -1333,15 +1333,15 @@ document.addEventListener('DOMContentLoaded', function () {
         var price_tax_text = ((precio_eur_cent_front - (precio_eur_cent_front / 1.21)) / 100);
         var price_promo_text = (saldo_promo / 100);
         var price_total_text = ((precio_eur_cent_front - saldo_promo) / 100);
-        
-        
+
+
         // Calculate final price
         if (price_total_text > 0 && price_total_text < 0.50 && saldo_promo) {
             price_total_text = 0.50;
         } else if (price_total_text < 0 && saldo_promo) {
             price_total_text = 0;
         }
-        
+
         if  (price_promo_text > precio_eur_cent_front && saldo_promo) {
             price_total_text = precio_eur_cent_front;
         }
@@ -1356,7 +1356,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
     }
-    
+
 
 
 
@@ -1601,7 +1601,7 @@ document.addEventListener('DOMContentLoaded', function () {
         //Inicializar datepickersf
         $(function() {
             var dateFormat = "dd/mm/yy";
-        
+
             // Define Spanish localization directly in JavaScript
             $.datepicker.setDefaults($.datepicker.regional['es'] = {
                 closeText: "Cerrar",
@@ -1624,7 +1624,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 showMonthAfterYear: false,
                 yearSuffix: ""
             });
-        
+
             $("#start-date").datepicker({
                 dateFormat: dateFormat,
                 minDate: 0,
@@ -1632,7 +1632,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     $("#end-date").datepicker("option", "minDate", selectedDate);
                 }
             });
-        
+
             $("#end-date").datepicker({
                 dateFormat: dateFormat,
                 minDate: 0,
