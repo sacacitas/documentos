@@ -13,8 +13,8 @@ var SELECTED_PAIS = 'ES'
 
 $(document).ready(function () {
 
-    $.getJSON('https://documentos.sacacitas.es/categorias_servicios.json', (data) => CATEGORIAS = data);
-    $.getJSON('https://documentos.sacacitas.es/precios_citas.json', (data) => PRECIOS = data);
+    $.getJSON('https://documentos.sacacitas.com/categorias_servicios.json', (data) => CATEGORIAS = data);
+    $.getJSON('https://documentos.sacacitas.com/precios_citas.json', (data) => PRECIOS = data);
 
 
 
@@ -203,8 +203,8 @@ $(document).ready(function () {
 
     // 2. SEGUNDA PARTE BUSCADOR -> Lista dinámica de oficinas y servicios desde el backend
     // Importar JSON externos de lista oficina_servicios y sus precios por categorías
-    const lista_oficina_servicios_json = 'https://documentos.sacacitas.es/categorias_servicios.json';
-    const precios_citas_categorias_json = 'https://documentos.sacacitas.es/precios_citas.json';
+    const lista_oficina_servicios_json = 'https://documentos.sacacitas.com/categorias_servicios.json';
+    const precios_citas_categorias_json = 'https://documentos.sacacitas.com/precios_citas.json';
 
     // Variables backend
     var apiBaseUrl = 'https://panelaws.sacacitas.es/public/oficina_iso3166/';

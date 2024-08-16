@@ -344,7 +344,7 @@ $(document).ready(function () {
 
         const PickerCadTarjeta = new easepick.create({
             element: "#input-caducidad-tarjeta",
-            css: ["https://cdn.jsdelivr.net/npm/@easepick/bundle@1.2.1/dist/index.css", 'https://documentos.sacacitas.es/formulario-inicio.css',],
+            css: ["https://cdn.jsdelivr.net/npm/@easepick/bundle@1.2.1/dist/index.css", 'https://documentos.sacacitas.com/formulario-inicio.css',],
             zIndex: 999999999,
             lang: "es-ES",
             format: "DD MMMM YYYY",
