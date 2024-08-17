@@ -130,7 +130,6 @@ $(document).ready(function () {
                 console.error("Error:", errorThrown);
             }
         });
-        console.log('CONFIG_FORM', CONFIG_FORM);
     } else {
         alert('Hubo un problema al procesar la solicitud, acceda al formulario desde el buscador de https://sacacitas.com, Si el problema persiste, contacte con nosotros.');
     }
@@ -411,7 +410,6 @@ $(document).ready(function () {
                 fbpid: INPUT_JSON.cookieFbp
             };
 
-            console.log('INPUT_JSON', INPUT_JSON);
 
             // Send POST request
             $.ajax({
@@ -450,7 +448,6 @@ $(document).ready(function () {
                         dataType: 'json',
                         contentType: 'application/json',
                         success: function (response) {
-                            console.log('Log sent successfully');
                         },
                         error: function (xhr, status, error) {
                             console.error('Failed to send logs');
@@ -847,4 +844,3 @@ function ValidateCSVdoc(CSVd) {
 
     return true; // PF format is valid
 }
-
