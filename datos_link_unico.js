@@ -595,7 +595,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
                         ReplacePrice();
 
-                    }  else if (response.is_code_wrong === true) {
+                    } else if (response.is_code_wrong === true) {
                         // Use the ID_publico property
                         $('#PromoCode-text-below').show();
                         $('#PromoCode-text-below').text('Este código no es válido');
@@ -705,6 +705,8 @@ document.addEventListener('DOMContentLoaded', function () {
             siteURL = "https://www.euskadi.eus/web01-citaregc/es/aa14aUIWar/justizia/aa14aRegistroCivilInit.jsp?lang=es"
         } else if (id_oficina_front.startsWith("euscityrc")) {
             siteURL = "https://www.justizia.eus/qmaticwebbooking/#/search"
+        } else if (id_oficina_front.startsWith("canrc")) {
+            siteURL = "https://sede.gobiernodecanarias.org/aplicaciones/citapreviaregistrocivil"
         }
 
         if (siteURL) {
@@ -1342,7 +1344,7 @@ document.addEventListener('DOMContentLoaded', function () {
             price_total_text = 0;
         }
 
-        if  (price_promo_text > precio_eur_cent_front && saldo_promo) {
+        if (price_promo_text > precio_eur_cent_front && saldo_promo) {
             price_total_text = precio_eur_cent_front;
         }
 
@@ -1351,8 +1353,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
         $('#price-brutto-text').text((price_brutto_text).toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €');
         $('#price-tax-text').text((price_tax_text).toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €');
-        $('#price-promo-text').text( '-' + (price_promo_text).toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €');
-        $('#precio_cita_hay_que_pagar').text ((price_total_text).toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €');
+        $('#price-promo-text').text('-' + (price_promo_text).toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €');
+        $('#precio_cita_hay_que_pagar').text((price_total_text).toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €');
 
 
     }
@@ -1599,7 +1601,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
         //Inicializar datepickersf
-        $(function() {
+        $(function () {
             var dateFormat = "dd/mm/yy";
 
             // Define Spanish localization directly in JavaScript
@@ -1628,7 +1630,7 @@ document.addEventListener('DOMContentLoaded', function () {
             $("#start-date").datepicker({
                 dateFormat: dateFormat,
                 minDate: 0,
-                onSelect: function(selectedDate) {
+                onSelect: function (selectedDate) {
                     $("#end-date").datepicker("option", "minDate", selectedDate);
                 }
             });
@@ -1636,7 +1638,7 @@ document.addEventListener('DOMContentLoaded', function () {
             $("#end-date").datepicker({
                 dateFormat: dateFormat,
                 minDate: 0,
-                onSelect: function(selectedDate) {
+                onSelect: function (selectedDate) {
                     var startDate = $("#start-date").datepicker("getDate");
                     var endDate = $.datepicker.parseDate(dateFormat, selectedDate);
                     // Check if start date is greater than end date
