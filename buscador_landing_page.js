@@ -7,9 +7,14 @@ var MAX_CHECKOUT_ITEMS = 1; //Items máximos que se pueden añadir
 
 var INPUT_JSON = {}
 
-var PAISES = ['ES']
 
-var SELECTED_PAIS = 'ES'
+
+
+//Set text i18n
+var TEXTOS_API = {
+    'js-buscador-country-es': 'España',
+}
+
 
 $(document).ready(function () {
 
@@ -19,18 +24,44 @@ $(document).ready(function () {
 
 
     // Variables de los IDs selects de la landing
+    var select_country = $('#select-country-buscador');
     var select_administracion = $('#select-buscador-administracion');
     var select_provincia = $('#select-buscador-provincia');
     var select_oficina = $('#select-buscador-oficina');
     var select_servicio = $('#select-buscador-servicio');
     var numero_citas_contador = $('numero-citas-seleccionadas-buscador');
 
-
-
     // Variables IDs de info secundaria
     var string_precio_buscador = $('#precio-total-buscador-landing');
 
-    // Textos predeterminados en los selects
+
+
+    //--> Default select country value based on website language, ip, or other
+
+
+
+
+
+
+
+    // --> Textos predeterminados en los selects
+    // Selected country default value
+    //Set default country when loading page
+    var SELECTED_PAIS = {
+        value: 'ES',
+        text: '🇪🇸España'
+    };
+
+    var default_select_country = $('<option>', {
+        value: SELECTED_PAIS.value,
+        text: SELECTED_PAIS.text,
+        disabled: false,
+        selected: true
+    });
+    select_country.append(default_select_country);
+
+
+
     // Crear texto predeterminado en ADM
     var default_select_administracion = $('<option>', {
         value: '',
@@ -115,7 +146,7 @@ $(document).ready(function () {
 
 
 
-    //Tratamiento GCLID en la URL
+    //Tratamiento GCLID en la URL   
     // Obtener todos los parámetros de la URL
     function getUrlParameter(name) {
         name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
@@ -136,16 +167,11 @@ $(document).ready(function () {
         var domain = "; domain=" + window.location.hostname.split('.').slice(-2).join('.');
         var cookieString = name + "=" + (value || "") + expires + "; path=/" + secure + "; SameSite=Lax" + domain;
         document.cookie = cookieString;
-        console.log("Cookie set:", cookieString);
     }
 
     // Obtener valor de gclid y fbclid de la URL y crear variables con sus valores
     var scgclid = getUrlParameter('gclid');
     var scfbclid = getUrlParameter('fbclid');
-
-    // Log existing cookies before setting new ones
-    console.log("Existing cookies before setting new ones:");
-    console.log(document.cookie);
 
     // Si existe gclid o fbclid en la URL, crear cookie
     if (scgclid !== '') {
@@ -176,42 +202,82 @@ $(document).ready(function () {
     var cookieFbclid = getCookie("_fbc");
 
 
-    // 1. PRIMERA PARTE BUSCADOR -> Lista estática de administración y provincias
-    // Crear valores en el select de la Administración
-    var values_select_administracion = [
-        //{ value: 'EX1', text: 'Extranjería' },
-        { value: 'RC1', text: 'Registro Civil' }
+    // 1. PRIMERA PARTE BUSCADOR -> Lista estática de países
+    //Create values select country
+    var values_select_country = [
+        { value: 'ES', text: '🇪🇸España' },
     ];
 
-    // Populate select administración
-    values_select_administracion.forEach(option => {
-        var optionElement_administracion = $('<option></option>').prop('value', option.value).text(option.text);
-        select_administracion.append(optionElement_administracion);
+    console.log(values_select_country);
+    // Filter out the default option from the list
+    var filteredOptions = values_select_country.filter(function(option) {
+        return option.value !== SELECTED_PAIS.value;
+    });
+    console.log(filteredOptions);
+
+    // Populate the select element with the remaining options
+    filteredOptions.forEach(function(option) {
+        var optionElement = $('<option>', option);
+        select_country.append(optionElement);
     });
 
-    var paisObj = window['country-list-js'].findByIso2(SELECTED_PAIS)
 
-    paisObj.provinces
-        .sort((a, b) => a.name.localeCompare(b.name))
-        .forEach(prov => {
-            var optionElement_provincia = $('<option></option>').prop('value', `${SELECTED_PAIS}-${prov.short}`).text(prov.name);
-            select_provincia.append(optionElement_provincia);
-        });
-
-
-
-
-    // 2. SEGUNDA PARTE BUSCADOR -> Lista dinámica de oficinas y servicios desde el backend
+    // 2. SEGUNDA PARTE BUSCADOR -> Lista dinámica de Adm, Provincias, oficinas y servicios desde el backend
     // Importar JSON externos de lista oficina_servicios y sus precios por categorías
     const lista_oficina_servicios_json = 'https://documentos.sacacitas.com/categorias_servicios.json';
     const precios_citas_categorias_json = 'https://documentos.sacacitas.com/precios_citas.json';
 
     // Variables backend
-    var apiBaseUrl = 'https://panelaws.sacacitas.com/public/oficina_iso3166/';
+    var apiBaseUrl = 'https://panelaws.sacacitas.es/public/oficina_iso3166/';
 
 
     //Contador número de citas seleccionadas
     var numero_citas_contador = 0;
+
+
+    
+    //Function to populate select Administration
+    function fetchJsonAndPopulateAdministracion() {
+        var selectedCountry = select_country.val();
+        // Create values select administración depending on country
+        if (selectedCountry === 'ES') {
+            var values_select_administracion = [
+                //{ value: 'EX1', text: 'Extranjería' },
+                { value: 'RC1', text: 'Registro Civil' }
+            ];    
+
+        }  else {
+            var values_select_administracion = [
+                {}
+            ];
+        }
+
+        // Populate select administración
+        values_select_administracion.forEach(option => {
+            var optionElement_administracion = $('<option></option>').prop('value', option.value).text(option.text);
+            select_administracion.append(optionElement_administracion);
+        });
+
+
+    }
+
+
+
+
+    //Function to populate select province
+    function fetchJsonAndPopulateProvincia() {
+        // Populate select provincias with the country selected
+        var paisObj = window['country-list-js'].findByIso2(select_country.val());
+        paisObj.provinces
+            .sort((a, b) => a.name.localeCompare(b.name))
+            .forEach(prov => {
+                var optionElement_provincia = $('<option></option>').prop('value', `${select_country.val()}-${prov.short}`).text(prov.name);
+                select_provincia.append(optionElement_provincia);
+            });
+
+
+    }
+
 
 
     //Crear valores y populate select oficina
@@ -219,8 +285,7 @@ $(document).ready(function () {
     function fetchJsonAndPopulateOficina() {
         var selectedAdministracion = select_administracion.val();
         var selectedProvincia = select_provincia.val();
-        console.log(selectedAdministracion);
-        console.log(selectedProvincia);
+
 
         // Comprobar si Adm, provincia y bsucador por oficina está seleccionado
         if (selectedAdministracion && selectedProvincia) {
@@ -232,11 +297,9 @@ $(document).ready(function () {
                 selected: true
             }));
 
-            console.log(selectedAdministracion);
-            console.log(selectedProvincia);
+
             // Build the API URL with the selected provincia
             var apiUrl = apiBaseUrl + selectedProvincia;
-            console.log(apiUrl);
             // API call para descargar el JSON de oficinas y servicios del backend
             $.ajax({
                 url: apiUrl,
@@ -316,7 +379,7 @@ $(document).ready(function () {
             // Find the selected oficina in the external data
             var selectedOficinaData = data.find(item => item.nombre === selectedOficina);
 
-            // Check if data is found and servicios is an array
+            // Check if data is found and servicios is an array 
             if (selectedOficinaData && Array.isArray(selectedOficinaData.servicios)) {
                 // Add a default option if needed
                 // var defaultOption = $('<option>', {
@@ -343,7 +406,6 @@ $(document).ready(function () {
                 select_servicio.trigger('change');
             }
         } else if (selectedAdministracion && selectedProvincia && radio_buscador_por_provincia.prop('checked')) {
-            console.log('Entered the second IF statement.');
 
             // Assuming 'data' is your array of oficinas and 'selectedAdministracion' is your selected administration code
 
@@ -372,13 +434,11 @@ $(document).ready(function () {
             }
 
             // 'allServicios' now contains the array of servicios based on the selected administration
-            console.log('All Servicios:', allServicios);
 
             var filteredServiciosData = allServicios;
 
             // Check if there are no servicios
             if (filteredServiciosData.length === 0) {
-                console.log('No servicios available.');
                 // Display a default message in select_servicio
                 select_servicio.html('').append($('<option>', {
                     value: '',
@@ -461,7 +521,7 @@ $(document).ready(function () {
 
         var checkoutItem = $(`<div class="checkout-item" id_oficina=${id_oficina_elem} id_servicio=${id_servicio_elem} frontend_administracion=${frontend_administracion}>` +
             '<div class="column wide-column">' +
-            '   <span class="item-text">' + obj.provincia + ' | ' + obj.nombre + '</span>' +
+            '   <span class="item-text">' + select_provincia.find(':selected').text() + ' | ' + obj.nombre + '</span>' +
             '   <span class="item-text text-span-5">' + svc_obj.nombre + '</span>' +
             '</div>' +
             '<div class="column narrow-column">' +
@@ -642,6 +702,15 @@ $(document).ready(function () {
 
 
 
+    // Reset Adm when updating country
+    function resetAdministracionAndProvince() {
+        select_administracion.val('').empty().append(default_select_administracion);
+        select_provincia.val('').empty().append(default_select_provincias);
+        select_oficina.val('').empty().append(default_select_oficina);
+        select_servicio.val('').empty().append(default_select_servicio);        
+        fetchJsonAndPopulateAdministracion();
+        fetchJsonAndPopulateProvincia();
+    }
 
     // Reset values and update cita previa function
     function resetValuesAndUpdateCitaPrevia() {
@@ -660,6 +729,15 @@ $(document).ready(function () {
     }
 
 
+    // --> Event listener to change based on search type (currently not in use) --> Multi oficina
+    // Event listener for the 'radio_buscador_por_provincia' element
+    radio_buscador_por_provincia.on('change', function () {
+        if (radio_buscador_por_provincia.prop('checked')) {
+            // Reset the values of the three selects when 'Por Provincia' is selected
+            resetValuesAndUpdateCitaPrevia();
+        }
+    });
+
 
     // Event listener for the 'radio_buscador_con_oficina' element
     radio_buscador_con_oficina.on('change', function () {
@@ -671,16 +749,9 @@ $(document).ready(function () {
         }
     });
 
-    // Event listener for the 'radio_buscador_por_provincia' element
-    radio_buscador_por_provincia.on('change', function () {
-        if (radio_buscador_por_provincia.prop('checked')) {
-            // Reset the values of the three selects when 'Por Provincia' is selected
-            resetValuesAndUpdateCitaPrevia();
-        }
-    });
 
-
-    // Attach the common change listener to select_administracion and select_provincia
+    // Attach the common change listener to selec_country, select_administracion and select_provincia
+    select_country.on('change', resetAdministracionAndProvince);    
     select_administracion.on('change', resetValuesAndUpdateCitaPrevia);
     select_provincia.on('change', resetValuesAndUpdateCitaPrevia);
 
@@ -716,12 +787,14 @@ $(document).ready(function () {
             'cookieFbclid': cookieFbclid,
             'cookieFbp': cookieFbp
         }
-        console.log(INPUT_JSON)
         var idbuscadores = []
 
         checkoutContainer.children('.checkout-item').each((idx, elem) => {
             id_ofi = $(elem).attr('id_oficina')
             id_ser = $(elem).attr('id_servicio')
+            //Texto de la provincia
+            var selectedProvinciaText = select_provincia.find(':selected').text();
+            console.log(selectedProvinciaText)
 
             // frontend_administracion = $(elem).attr('frontend_administracion')
 
@@ -734,15 +807,19 @@ $(document).ready(function () {
             nombre_oficina = ofi.nombre
             nombre_servicio = ofi.servicios.find((e) => e.id_servicio == id_ser).nombre;
 
-            var selectedProvincia = select_provincia.val();
+            //ISO ID de la provincia y pais
+            var iso3166_2_value = select_provincia.val();
+            console.log(iso3166_2_value)
 
-            //Crear var con los objetos
+            console.log(select_administracion.text())
+            //Crear var con los objetos 
             idbuscadores.push({
                 'id_oficina': id_ofi,
                 'id_servicio': id_ser,
+                'iso3166_2': iso3166_2_value,
                 'nombre_oficina': nombre_oficina,
                 'nombre_servicio': nombre_servicio,
-                'nombre_provincia': selectedProvincia
+                'nombre_provincia': selectedProvinciaText
             })
 
         })
@@ -759,6 +836,11 @@ $(document).ready(function () {
     }
 
 
+
+
+    // Set country first task when loading page
+    fetchJsonAndPopulateAdministracion();
+    fetchJsonAndPopulateProvincia();
 });
 
 
