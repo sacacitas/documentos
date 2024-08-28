@@ -93,6 +93,7 @@ document.addEventListener('DOMContentLoaded', function () {
     //--> Default hide
     $('#div-link-cliente-resolucion-nacionalidad').hide();
     $('#div-link-cliente-csv-doc').hide();
+    $('#div-link-cliente-nacionalidad').hide();
     //Promo code texts
     $('#price-promo-text').hide();
     $('#price-promo-text-left').hide();
@@ -365,7 +366,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
         //Sección datos personales del cliente
         document.getElementById('link-cliente-documento-identidad').textContent = clienteIdType + ': ' + clienteIdDocumento;
-        document.getElementById('link-cliente-nacionalidad').textContent = clienteNacionalidad;
         document.getElementById('link-cliente-fecha-nacimiento').textContent = formatted_date_clienteFechaNacimiento;
         document.getElementById('link-cliente-telefono').textContent = clienteTelefono;
         document.getElementById('link-cliente-correo').textContent = clienteEmail;
@@ -382,7 +382,11 @@ document.addEventListener('DOMContentLoaded', function () {
             $('#div-link-cliente-csv-doc').show();
             $('#link-cliente-csv-doc').text(clienteCSVdoc);
         }
-
+        //Mostrar nacionalidad si no es null    
+        if (clienteNacionalidad) {
+            $('#div-link-cliente-nacionalidad').show();
+            $('#link-cliente-nacionalidad').text(clienteNacionalidad);
+        }
 
 
         //Ocultar elementos de manera predeterminada
@@ -595,7 +599,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
                         ReplacePrice();
 
-                    } else if (response.is_code_wrong === true) {
+                    }  else if (response.is_code_wrong === true) {
                         // Use the ID_publico property
                         $('#PromoCode-text-below').show();
                         $('#PromoCode-text-below').text('Este código no es válido');
@@ -683,7 +687,7 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
 
-
+    
         //URL administracion dinamico
         var backendWebOficialElement = document.getElementById('backend-web-oficial')
 
@@ -707,7 +711,7 @@ document.addEventListener('DOMContentLoaded', function () {
             siteURL = "https://www.justizia.eus/qmaticwebbooking/#/search"
         } else if (id_oficina_front.startsWith("canrc")) {
             siteURL = "https://sede.gobiernodecanarias.org/aplicaciones/citapreviaregistrocivil"
-        }
+         }
 
         if (siteURL) {
             backendWebOficialElement.innerHTML = `<a href="${siteURL}" target="_blank">${siteURL}</a>`;
@@ -727,7 +731,7 @@ document.addEventListener('DOMContentLoaded', function () {
         //Cancelar búsqueda
         // Function to make the first HTTP request
         const makeFirstRequest = () => {
-            const apiUrlFirst = 'https://panelaws.sacacitas.com/public/cola/resumen?public_id_front=${public_id_front}';
+            const apiUrlFirst = 'https://panelaws.sacacitas.es/public/cola/resumen?public_id_front=${public_id_front}';
             const requestOptionsFirst = {
                 method: 'PUT',
                 headers: {
@@ -1335,16 +1339,16 @@ document.addEventListener('DOMContentLoaded', function () {
         var price_tax_text = ((precio_eur_cent_front - (precio_eur_cent_front / 1.21)) / 100);
         var price_promo_text = (saldo_promo / 100);
         var price_total_text = ((precio_eur_cent_front - saldo_promo) / 100);
-
-
+        
+        
         // Calculate final price
         if (price_total_text > 0 && price_total_text < 0.50 && saldo_promo) {
             price_total_text = 0.50;
         } else if (price_total_text < 0 && saldo_promo) {
             price_total_text = 0;
         }
-
-        if (price_promo_text > precio_eur_cent_front && saldo_promo) {
+        
+        if  (price_promo_text > precio_eur_cent_front && saldo_promo) {
             price_total_text = precio_eur_cent_front;
         }
 
@@ -1353,12 +1357,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
         $('#price-brutto-text').text((price_brutto_text).toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €');
         $('#price-tax-text').text((price_tax_text).toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €');
-        $('#price-promo-text').text('-' + (price_promo_text).toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €');
-        $('#precio_cita_hay_que_pagar').text((price_total_text).toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €');
+        $('#price-promo-text').text( '-' + (price_promo_text).toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €');
+        $('#precio_cita_hay_que_pagar').text ((price_total_text).toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €');
 
 
     }
-
+    
 
 
 
@@ -1601,9 +1605,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
         //Inicializar datepickersf
-        $(function () {
+        $(function() {
             var dateFormat = "dd/mm/yy";
-
+        
             // Define Spanish localization directly in JavaScript
             $.datepicker.setDefaults($.datepicker.regional['es'] = {
                 closeText: "Cerrar",
@@ -1626,19 +1630,19 @@ document.addEventListener('DOMContentLoaded', function () {
                 showMonthAfterYear: false,
                 yearSuffix: ""
             });
-
+        
             $("#start-date").datepicker({
                 dateFormat: dateFormat,
                 minDate: 0,
-                onSelect: function (selectedDate) {
+                onSelect: function(selectedDate) {
                     $("#end-date").datepicker("option", "minDate", selectedDate);
                 }
             });
-
+        
             $("#end-date").datepicker({
                 dateFormat: dateFormat,
                 minDate: 0,
-                onSelect: function (selectedDate) {
+                onSelect: function(selectedDate) {
                     var startDate = $("#start-date").datepicker("getDate");
                     var endDate = $.datepicker.parseDate(dateFormat, selectedDate);
                     // Check if start date is greater than end date
