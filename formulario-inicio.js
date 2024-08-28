@@ -360,7 +360,7 @@ $(document).ready(function () {
             input.addEventListener('keyup', formatPhoneNumber);
 
             function formatPhoneNumber() {
-                var formattedNumber = iti.getNumber(intlTelInput.Utils.numberFormat.NATIONAL);
+                var formattedNumber = iti.getNumber(intlTelInput.Utils.numberFormat.INTERNATIONAL);
                 input.value = formattedNumber;
             }
 
@@ -585,10 +585,10 @@ $(document).ready(function () {
             };
             // PASAPORTE will be always True because we cant validate it
 
-            if (selected_document === 'select-nie-form') {
+            if (selected_document === 'select-NIE-form') {
                 func_validate = validateNIE
 
-            } else if (selected_document === 'select-dni-form') {
+            } else if (selected_document === 'select-DNI-form') {
                 func_validate = validateDNI
 
             }
