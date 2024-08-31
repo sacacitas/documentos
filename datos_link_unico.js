@@ -731,7 +731,7 @@ document.addEventListener('DOMContentLoaded', function () {
         //Cancelar búsqueda
         // Function to make the first HTTP request
         const makeFirstRequest = () => {
-            const apiUrlFirst = 'https://panelaws.sacacitas.es/public/cola/resumen?public_id_front=${public_id_front}';
+            const apiUrlFirst = 'https://panelaws.sacacitas.com/public/cola/resumen?public_id_front=${public_id_front}';
             const requestOptionsFirst = {
                 method: 'PUT',
                 headers: {
