@@ -5,8 +5,9 @@ var TEXTOS_API = {
     'contact-select-problem-2': '¿Podéis incluir este servicio?',
     'contact-select-problem-3': 'Problemas con mi búsqueda',
     'contact-select-problem-4': 'Hubo un problema con mi cita reservada',
-    'contact-select-problem-5': 'Trabajar con nosotros',
-    'contact-select-problem-6': 'Otro',
+    'contact-select-problem-5': 'Estoy presentando un error',
+    'contact-select-problem-6': 'Trabajar con nosotros',
+    'contact-select-problem-7': 'Otro',
     'contact-selector-placeholdertext': 'Máximo 1000 caracteres',
 };
 
@@ -23,8 +24,9 @@ $(document).ready(function () {
         <option value="ServiceRequest">${TEXTOS_API['contact-select-problem-2']}</option>
         <option value="SearchIssues">${TEXTOS_API['contact-select-problem-3']}</option>
         <option value="AppointmentProblem">${TEXTOS_API['contact-select-problem-4']}</option>
-        <option value="JoinUs">${TEXTOS_API['contact-select-problem-5']}</option>
-        <option value="Other">${TEXTOS_API['contact-select-problem-6']}</option>
+        <option value="ErrorGeneral">${TEXTOS_API['contact-select-problem-5']}</option>
+        <option value="JoinUs">${TEXTOS_API['contact-select-problem-6']}</option>
+        <option value="Other">${TEXTOS_API['contact-select-problem-7']}</option>
     `);
 
     $('#contact-message').attr('placeholder', TEXTOS_API['contact-selector-placeholdertext']);
