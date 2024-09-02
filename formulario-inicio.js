@@ -32,7 +32,6 @@ var CONFIG_FORM = {
 };
 
 
-
 //--> Variables del fornulario
 //Crear variables cogiendo las secciones divs del formulario
 var AsiloPrimeraBloque = $('#bloque-asilo-primera-vez-form');
@@ -124,6 +123,78 @@ var ENABLED_PAGES = {
 }
 
 
+// Set text i18n
+var TEXTOS_API = {
+    'js-form-text-1': 'Hubo un problema al procesar la solicitud, acceda al formulario desde el buscador de https://sacacitas.com, Si el problema persiste, contacte con nosotros.',
+    'js-form-text-2': 'Existe un problema al recibir los datos. Las fechas de búsqueda están vacías, es posible que el formulario se ha iniciado hace mucho tiempo y se ha perdido esta información o que el navegador que está utilizando no es compatible con el formulario. Por favor, prueba otro navegador.',
+    'js-form-text-3': 'Debes seleccionar un rango de fechas',
+    'js-form-text-4': `Se necesitan al menos ${MIN_DIAS} días de búsqueda`,
+    'js-form-text-5': 'Este campo es obligatorio',
+    'js-form-text-6': 'Documento incorrecto',
+    'js-form-text-7': 'Correos no coinciden',
+    'js-form-text-8': 'Telefonos no coinciden',
+    'js-form-text-9': 'El teléfono no es válido',
+    'js-form-text-10': 'El formato es incorrecto',
+    'js-form-text-11': 'Indica tu nacionalidad',
+
+
+    'js-datepicker-lang-1': 'Cerrar',
+    'js-datepicker-lang-2': 'Anterior',
+    'js-datepicker-lang-3': 'Siguiente',
+    'js-datepicker-lang-4': 'Hoy',
+    'js-datepicker-lang-5': 'Aplicar',
+    'js-datepicker-lang-6': 'Borrar',
+    'js-datepicker-lang-7': 'día',
+    'js-datepicker-lang-8': 'días',
+
+    'js-datepicker-month-1': 'enero',
+    'js-datepicker-month-2': 'febrero',
+    'js-datepicker-month-3': 'marzo',
+    'js-datepicker-month-4': 'abril',
+    'js-datepicker-month-5': 'mayo',
+    'js-datepicker-month-6': 'junio',
+    'js-datepicker-month-7': 'julio',
+    'js-datepicker-month-8': 'agosto',
+    'js-datepicker-month-9': 'septiembre',
+    'js-datepicker-month-10': 'octubre',
+    'js-datepicker-month-11': 'noviembre',
+    'js-datepicker-month-12': 'diciembre',
+    'js-datepicker-shortmonth-1': 'ene',
+    'js-datepicker-shortmonth-2': 'feb',
+    'js-datepicker-shortmonth-3': 'mar',
+    'js-datepicker-shortmonth-4': 'abr',
+    'js-datepicker-shortmonth-5': 'may',
+    'js-datepicker-shortmonth-6': 'jun',
+    'js-datepicker-shortmonth-7': 'jul',
+    'js-datepicker-shortmonth-8': 'ago',
+    'js-datepicker-shortmonth-9': 'sep',
+    'js-datepicker-shortmonth-10': 'oct',
+    'js-datepicker-shortmonth-11': 'nov',
+    'js-datepicker-shortmonth-12': 'dic',
+    'js-datepicker-dayweek-1': 'lunes',
+    'js-datepicker-dayweek-2': 'martes',
+    'js-datepicker-dayweek-3': 'miércoles',
+    'js-datepicker-dayweek-4': 'jueves',
+    'js-datepicker-dayweek-5': 'viernes',
+    'js-datepicker-dayweek-6': 'sábado',
+    'js-datepicker-dayweek-7': 'domingo',
+    'js-datepicker-shortdayweek-1': 'lun',
+    'js-datepicker-shortdayweek-2': 'mar',
+    'js-datepicker-shortdayweek-3': 'mié',
+    'js-datepicker-shortdayweek-4': 'jue',
+    'js-datepicker-shortdayweek-5': 'vie',
+    'js-datepicker-shortdayweek-6': 'sáb',
+    'js-datepicker-shortdayweek-7': 'dom',
+    'js-datepicker-ultrashortdayweek-1': 'L',
+    'js-datepicker-ultrashortdayweek-2': 'M',
+    'js-datepicker-ultrashortdayweek-3': 'X',
+    'js-datepicker-ultrashortdayweek-4': 'J',
+    'js-datepicker-ultrashortdayweek-5': 'V',
+    'js-datepicker-ultrashortdayweek-6': 'S',
+    'js-datepicker-ultrashortdayweek-7': 'D',
+
+};
+
 
 
 
@@ -160,7 +231,7 @@ $(document).ready(function () {
             }
         });
     } else {
-        alert('Hubo un problema al procesar la solicitud, acceda al formulario desde el buscador de https://sacacitas.com, Si el problema persiste, contacte con nosotros.');
+        alert(`${TEXTOS_API['js-form-text-1']}`);
     }
     console.log(CONFIG_FORM);
 
@@ -195,12 +266,12 @@ $(document).ready(function () {
         numberOfMonths: 2,
         lang: 'es-ES',
         buttonText: {
-            apply: 'Aplicar',
-            cancel: 'Borrar',
+            apply: TEXTOS_API['js-datepicker-lang-5'],  // "Aplicar"
+            cancel: TEXTOS_API['js-datepicker-lang-6']  // "Borrar"
         },
         tooltipText: {
-            one: 'día',
-            other: 'días'
+            one: TEXTOS_API['js-datepicker-lang-7'],    // "día"
+            other: TEXTOS_API['js-datepicker-lang-8']   // "días"
         },
         setup: function (picker) {
             picker.on('button:apply', function () {
@@ -214,19 +285,65 @@ $(document).ready(function () {
 
         // Define Spanish localization directly in JavaScript
         $.datepicker.setDefaults($.datepicker.regional['es'] = {
-            closeText: "Cerrar",
-            prevText: "Anterior",
-            nextText: "Siguiente",
-            currentText: "Hoy",
-            monthNames: ["enero", "febrero", "marzo", "abril", "mayo", "junio",
-                "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"
+            closeText: TEXTOS_API['js-datepicker-lang-1'], // "Cerrar"
+            prevText: TEXTOS_API['js-datepicker-lang-2'],  // "Anterior"
+            nextText: TEXTOS_API['js-datepicker-lang-3'],  // "Siguiente"
+            currentText: TEXTOS_API['js-datepicker-lang-4'], // "Hoy"
+            monthNames: [
+                TEXTOS_API['js-datepicker-month-1'],  // "enero"
+                TEXTOS_API['js-datepicker-month-2'],  // "febrero"
+                TEXTOS_API['js-datepicker-month-3'],  // "marzo"
+                TEXTOS_API['js-datepicker-month-4'],  // "abril"
+                TEXTOS_API['js-datepicker-month-5'],  // "mayo"
+                TEXTOS_API['js-datepicker-month-6'],  // "junio"
+                TEXTOS_API['js-datepicker-month-7'],  // "julio"
+                TEXTOS_API['js-datepicker-month-8'],  // "agosto"
+                TEXTOS_API['js-datepicker-month-9'],  // "septiembre"
+                TEXTOS_API['js-datepicker-month-10'], // "octubre"
+                TEXTOS_API['js-datepicker-month-11'], // "noviembre"
+                TEXTOS_API['js-datepicker-month-12']  // "diciembre"
             ],
-            monthNamesShort: ["ene", "feb", "mar", "abr", "may", "jun",
-                "jul", "ago", "sep", "oct", "nov", "dic"
+            monthNamesShort: [
+                TEXTOS_API['js-datepicker-shortmonth-1'],  // "ene"
+                TEXTOS_API['js-datepicker-shortmonth-2'],  // "feb"
+                TEXTOS_API['js-datepicker-shortmonth-3'],  // "mar"
+                TEXTOS_API['js-datepicker-shortmonth-4'],  // "abr"
+                TEXTOS_API['js-datepicker-shortmonth-5'],  // "may"
+                TEXTOS_API['js-datepicker-shortmonth-6'],  // "jun"
+                TEXTOS_API['js-datepicker-shortmonth-7'],  // "jul"
+                TEXTOS_API['js-datepicker-shortmonth-8'],  // "ago"
+                TEXTOS_API['js-datepicker-shortmonth-9'],  // "sep"
+                TEXTOS_API['js-datepicker-shortmonth-10'], // "oct"
+                TEXTOS_API['js-datepicker-shortmonth-11'], // "nov"
+                TEXTOS_API['js-datepicker-shortmonth-12']  // "dic"
             ],
-            dayNames: ["domingo", "lunes", "martes", "miércoles", "jueves", "viernes", "sábado"],
-            dayNamesShort: ["dom", "lun", "mar", "mié", "jue", "vie", "sáb"],
-            dayNamesMin: ["D", "L", "M", "X", "J", "V", "S"],
+            dayNames: [
+                TEXTOS_API['js-datepicker-dayweek-7'],  // "domingo"
+                TEXTOS_API['js-datepicker-dayweek-1'],  // "lunes"
+                TEXTOS_API['js-datepicker-dayweek-2'],  // "martes"
+                TEXTOS_API['js-datepicker-dayweek-3'],  // "miércoles"
+                TEXTOS_API['js-datepicker-dayweek-4'],  // "jueves"
+                TEXTOS_API['js-datepicker-dayweek-5'],  // "viernes"
+                TEXTOS_API['js-datepicker-dayweek-6']   // "sábado"
+            ],
+            dayNamesShort: [
+                TEXTOS_API['js-datepicker-shortdayweek-7'], // "dom"
+                TEXTOS_API['js-datepicker-shortdayweek-1'], // "lun"
+                TEXTOS_API['js-datepicker-shortdayweek-2'], // "mar"
+                TEXTOS_API['js-datepicker-shortdayweek-3'], // "mié"
+                TEXTOS_API['js-datepicker-shortdayweek-4'], // "jue"
+                TEXTOS_API['js-datepicker-shortdayweek-5'], // "vie"
+                TEXTOS_API['js-datepicker-shortdayweek-6']  // "sáb"
+            ],
+            dayNamesMin: [
+                TEXTOS_API['js-datepicker-ultrashortdayweek-7'], // "D"
+                TEXTOS_API['js-datepicker-ultrashortdayweek-1'], // "L"
+                TEXTOS_API['js-datepicker-ultrashortdayweek-2'], // "M"
+                TEXTOS_API['js-datepicker-ultrashortdayweek-3'], // "X"
+                TEXTOS_API['js-datepicker-ultrashortdayweek-4'], // "J"
+                TEXTOS_API['js-datepicker-ultrashortdayweek-5'], // "V"
+                TEXTOS_API['js-datepicker-ultrashortdayweek-6']  // "S"
+            ],
             weekHeader: "Sm",
             dateFormat: "dd/mm/yy",
             firstDay: 1,
@@ -234,6 +351,8 @@ $(document).ready(function () {
             showMonthAfterYear: false,
             yearSuffix: ""
         });
+
+
         //Datepcicker First date
         $("#start-date").datepicker({
             dateFormat: dateFormat,
@@ -294,10 +413,28 @@ $(document).ready(function () {
             changeMonth: true, // Show month dropdown
             changeYear: true, // Show year dropdown
             yearRange: "c-100:c", // Display 100 years before and after the current year
-            dayNamesMin: ["Do", "Lu", "Ma", "Mi", "Ju", "Vi", "Sá"],
+            dayNamesMin: [
+                TEXTOS_API['js-datepicker-ultrashortdayweek-7'], // Sunday (D)
+                TEXTOS_API['js-datepicker-ultrashortdayweek-1'], // Monday (L)
+                TEXTOS_API['js-datepicker-ultrashortdayweek-2'], // Tuesday (M)
+                TEXTOS_API['js-datepicker-ultrashortdayweek-3'], // Wednesday (X)
+                TEXTOS_API['js-datepicker-ultrashortdayweek-4'], // Thursday (J)
+                TEXTOS_API['js-datepicker-ultrashortdayweek-5'], // Friday (V)
+                TEXTOS_API['js-datepicker-ultrashortdayweek-6']  // Saturday (S)
+            ],
             monthNames: [
-                "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
-                "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"
+                TEXTOS_API['js-datepicker-month-1'], // January
+                TEXTOS_API['js-datepicker-month-2'], // February
+                TEXTOS_API['js-datepicker-month-3'], // March
+                TEXTOS_API['js-datepicker-month-4'], // April
+                TEXTOS_API['js-datepicker-month-5'], // May
+                TEXTOS_API['js-datepicker-month-6'], // June
+                TEXTOS_API['js-datepicker-month-7'], // July
+                TEXTOS_API['js-datepicker-month-8'], // August
+                TEXTOS_API['js-datepicker-month-9'], // September
+                TEXTOS_API['js-datepicker-month-10'], // October
+                TEXTOS_API['js-datepicker-month-11'], // November
+                TEXTOS_API['js-datepicker-month-12']  // December
             ]
         });
     });
@@ -473,14 +610,14 @@ $(document).ready(function () {
                 }
                 if (response.empty_dates === true) {
                     $('#div-error-enviar-datos').show();
-                    $('#texto_error_form').text('Existe un problema al recibir los datos. Las fechas de búsqueda están vacías, es posible que el formulario se ha iniciado hace mucho tiempo y se ha perdido esta información o que el navegador que está utilizando no es compatible con el formulario. Por favor, prueba otro navegador.');
+                    $('#texto_error_form').text(`${TEXTOS_API['js-form-text-2']}`);
                 }
             },
             error: function (xhr, status, error) {
                 console.error('Form submission failed');
                 $.ajax({
                     type: 'POST',
-                    url: 'https://n8n.sacacitas.com/webhook-test/1273a5d4-5b9e-4826-94ab-04c5bbeedfad-error-formulario',
+                    url: 'https://n8n.sacacitas.com/webhook/1273a5d4-5b9e-4826-94ab-04c5bbeedfad-error-formulario',
                     data: JSON.stringify({ error: error }),
                     dataType: 'json',
                     contentType: 'application/json',
@@ -517,7 +654,7 @@ $(document).ready(function () {
         // Check each input
         inputsToCheck.some(function (input) {
             if (input.val().trim() === '') {
-                displayErrorMessage(InputDivFMinMax, 'Debes seleccionar un rango de fechas');
+                displayErrorMessage(InputDivFMinMax, `${TEXTOS_API['js-form-text-3']}`);
                 // Muestra mensaje de error en la funcion displayErrorMessage donde inputElement = input
                 allInputsValid = false;
             } else {
@@ -529,7 +666,7 @@ $(document).ready(function () {
 
 
         if (calculateDateDifference() < MIN_DIAS) {
-            displayErrorMessage(InputDivFMinMax, `Se necesitan al menos ${MIN_DIAS} días de búsqueda`);
+            displayErrorMessage(InputDivFMinMax, `${TEXTOS_API['js-form-text-4']}`);
             // Muestra mensaje de error en la funcion displayErrorMessage donde inputElement = input
             allInputsValid = false;
         } else {
@@ -554,7 +691,7 @@ $(document).ready(function () {
         // Check each input
         inputsToCheck.forEach(function (input) {
             if (input.val().trim() === '') {
-                displayErrorMessage(input, 'Este campo es obligatorio');
+                displayErrorMessage(input, `${TEXTOS_API['js-form-text-5']}`); // "Este campo es obligatorio"
                 // Muestra mensaje de error en la funcion displayErrorMessage donde inputElement = input
                 allInputsValid = false;
             } else {
@@ -595,11 +732,11 @@ $(document).ready(function () {
             }
 
             if (input.val().trim() === '') {
-                displayErrorMessage(input, 'Este campo es obligatorio');
+                displayErrorMessage(input, `${TEXTOS_API['js-form-text-5']}`); // "Este campo es obligatorio"
                 // Muestra mensaje de error en la funcion displayErrorMessage donde inputElement = input
                 allInputsValid = false;
             } else if (!func_validate(input.val())) {
-                displayErrorMessage(input, 'Documento incorrecto');
+                displayErrorMessage(input, `${TEXTOS_API['js-form-text-6']}`);
                 // Muestra mensaje de error en la funcion displayErrorMessage donde inputElement = input
                 allInputsValid = false;
 
@@ -631,7 +768,7 @@ $(document).ready(function () {
         inputsToCheck.forEach(function (input) {
             if (input.val().trim() === '' || !input[0].checkValidity()) {
                 input[0].reportValidity();
-                displayErrorMessage(input, 'Este campo es obligatorio');
+                displayErrorMessage(input, `${TEXTOS_API['js-form-text-5']}`); // "Este campo es obligatorio"
                 // Muestra mensaje de error en la funcion displayErrorMessage donde inputElement = input
                 allInputsValid = false;
             } else {
@@ -642,14 +779,14 @@ $(document).ready(function () {
 
         //Check both emails match
         if (InputCorreo.val() !== InputCorreoVerf.val()) {
-            displayErrorMessage(InputCorreo, 'Correos no coinciden');
-            displayErrorMessage(InputCorreoVerf, 'Correos no coinciden');
+            displayErrorMessage(InputCorreo, `${TEXTOS_API['js-form-text-7']}`);
+            displayErrorMessage(InputCorreoVerf, `${TEXTOS_API['js-form-text-7']}`);
             allInputsValid = false;
         }
         //Check both phone numbers match
         if (InputTelef.val() !== InputTelefVerf.val()) {
-            displayErrorMessage(DivPhone, 'Telefonos no coinciden');
-            displayErrorMessage(DivVerifyPhone, 'Telefonos no coinciden');
+            displayErrorMessage(DivPhone, `${TEXTOS_API['js-form-text-8']}`);
+            displayErrorMessage(DivVerifyPhone, `${TEXTOS_API['js-form-text-8']}`);
             allInputsValid = false;
         }
 
@@ -658,7 +795,7 @@ $(document).ready(function () {
         if (itiInstanceTelef && itiInstanceTelef.isValidNumber()) {
             // First phone number is valid
         } else {
-            displayErrorMessage(DivPhone, 'El teléfono no es válido');
+            displayErrorMessage(DivPhone, `${TEXTOS_API['js-form-text-9']}`);
             allInputsValid = false;
         }
 
@@ -667,7 +804,7 @@ $(document).ready(function () {
         if (itiInstanceTelefVerf && itiInstanceTelefVerf.isValidNumber()) {
             // Second phone number is valid
         } else {
-            displayErrorMessage(DivVerifyPhone, 'El teléfono no es válido');
+            displayErrorMessage(DivVerifyPhone, `${TEXTOS_API['js-form-text-9']}`);
             allInputsValid = false;
         }
 
@@ -714,11 +851,11 @@ $(document).ready(function () {
 
             //Hacer validación de los campos
             if (input.val().trim() === '') {
-                displayErrorMessage(input, 'Este campo es obligatorio');
+                displayErrorMessage(input, `${TEXTOS_API['js-form-text-5']}`); // "Este campo es obligatorio"
                 // Muestra mensaje de error en la funcion displayErrorMessage donde inputElement = input
                 allInputsValid = false;
             } else if (!func_validate(input.val())) {
-                displayErrorMessage(input, 'El formato es incorrecto');
+                displayErrorMessage(input, `${TEXTOS_API['js-form-text-10']}`); // "El formato es incorrecto"
                 // Muestra mensaje de error en la funcion displayErrorMessage donde inputElement = input
                 allInputsValid = false;
 
@@ -891,7 +1028,7 @@ function InputsToShow() {
         // Añadir un elemento por defecto
         var defaultOption = document.createElement('option');
         defaultOption.value = '';
-        defaultOption.text = 'Indica tu nacionalidad';
+        defaultOption.text = TEXTOS_API['js-form-text-11']; // "Indica tu nacionalidad"
         defaultOption.disabled = true;
         defaultOption.selected = true;
         InputListaPaises.add(defaultOption);
