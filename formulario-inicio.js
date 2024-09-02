@@ -100,7 +100,7 @@ var TextFechaExclusion = $('#texto-fechas-exclusion');
 seccion1.show();
 seccion2.hide();
 seccion3.hide();
-seccion4.show();
+seccion4.hide();
 seccion5.hide();
 seccion6.hide();
 
@@ -348,6 +348,7 @@ $(document).ready(function () {
             let CountryISOselected = "ES";
             if (typeof CountryISOselected !== 'undefined' && CountryISOselected) {
                 iti.setCountry(CountryISOselected);
+
             } else {
                 $.get("https://ipinfo.io", function (response) {
                     var countryCode = response.country;
@@ -360,7 +361,7 @@ $(document).ready(function () {
             input.addEventListener('keyup', formatPhoneNumber);
 
             function formatPhoneNumber() {
-                var formattedNumber = iti.getNumber(intlTelInput.Utils.numberFormat.INTERNATIONAL);
+                var formattedNumber = iti.getNumber(intlTelInput.Utils.numberFormat.NATIONAL);
                 input.value = formattedNumber;
             }
 
