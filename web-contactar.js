@@ -1,14 +1,15 @@
 // Set text i18n
 var TEXTOS_API = {
-    'contact-select-problem-0': 'No encuentro en el buscador lo que necesito',
-    'contact-select-problem-1': 'Sugerencias de mejora',
-    'contact-select-problem-2': '¿Podéis incluir este servicio?',
-    'contact-select-problem-3': 'Problemas con mi búsqueda',
-    'contact-select-problem-4': 'Hubo un problema con mi cita reservada',
-    'contact-select-problem-5': 'Estoy presentando un error',
-    'contact-select-problem-6': 'Trabajar con nosotros',
-    'contact-select-problem-7': 'Otro',
-    'contact-selector-placeholdertext': 'Máximo 1000 caracteres',
+    'js-contact-select-problem-0': 'No encuentro en el buscador lo que necesito',
+    'js-contact-select-problem-1': 'Sugerencias de mejora',
+    'js-contact-select-problem-2': '¿Podéis incluir este servicio?',
+    'js-contact-select-problem-3': 'Problemas con mi búsqueda',
+    'js-contact-select-problem-4': 'Hubo un problema con mi cita reservada',
+    'js-contact-select-problem-5': 'Estoy presentando un error',
+    'js-contact-select-problem-6': 'Trabajar con nosotros',
+    'js-contact-select-problem-7': 'Otro',
+
+    'js-contact-selector-placeholdertext': 'Máximo 1000 caracteres',
 };
 
 $(document).ready(function () {
@@ -19,17 +20,17 @@ $(document).ready(function () {
 
     // Add options to the select element
     $('#contact-select-problem').append(`
-        <option value="NoSearchResults">${TEXTOS_API['contact-select-problem-0']}</option>
-        <option value="ImprovementSuggestions">${TEXTOS_API['contact-select-problem-1']}</option>
-        <option value="ServiceRequest">${TEXTOS_API['contact-select-problem-2']}</option>
-        <option value="SearchIssues">${TEXTOS_API['contact-select-problem-3']}</option>
-        <option value="AppointmentProblem">${TEXTOS_API['contact-select-problem-4']}</option>
-        <option value="ErrorGeneral">${TEXTOS_API['contact-select-problem-5']}</option>
-        <option value="JoinUs">${TEXTOS_API['contact-select-problem-6']}</option>
-        <option value="Other">${TEXTOS_API['contact-select-problem-7']}</option>
+        <option value="NoSearchResults">${TEXTOS_API['js-contact-select-problem-0']}</option>
+        <option value="ImprovementSuggestions">${TEXTOS_API['js-contact-select-problem-1']}</option>
+        <option value="ServiceRequest">${TEXTOS_API['js-contact-select-problem-2']}</option>
+        <option value="SearchIssues">${TEXTOS_API['js-contact-select-problem-3']}</option>
+        <option value="AppointmentProblem">${TEXTOS_API['js-contact-select-problem-4']}</option>
+        <option value="ErrorGeneral">${TEXTOS_API['js-contact-select-problem-5']}</option>
+        <option value="JoinUs">${TEXTOS_API['js-contact-select-problem-6']}</option>
+        <option value="Other">${TEXTOS_API['js-contact-select-problem-7']}</option>
     `);
 
-    $('#contact-message').attr('placeholder', TEXTOS_API['contact-selector-placeholdertext']);
+    $('#contact-message').attr('placeholder', TEXTOS_API['js-contact-selector-placeholdertext']);
 
     // Intercept the form submission
     $('#formulario-boton-finalizar').click(function (e) {
