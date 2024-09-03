@@ -195,7 +195,11 @@ var TEXTOS_API = {
 
 };
 
-
+// Tolgee translate
+for (const [key, value] of Object.entries(TEXTOS_API)) {
+    TEXTOS_API[key] = window['tolgee_instance'].t(key, `${TEXTOS_API[key]} {{${key}}}`)
+}
+// TOLGEE
 
 
 $(document).ready(function () {
