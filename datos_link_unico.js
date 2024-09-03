@@ -1,3 +1,130 @@
+
+
+
+// Set text i18n
+var TEXTOS_API = {
+    'js-linkunico-text-1': 'Desde ',
+    'js-linkunico-text-2': ' hasta ',
+    'js-linkunico-text-3': 'Búsqueda aún no iniciada',
+    'js-linkunico-text-4': 'Dentro de ',
+    'js-linkunico-text-5': ' días',
+    'js-linkunico-text-6': 'Esta cita no requiere número de reserva',
+    'js-linkunico-text-7': 'Por favor, rellena los campos obligatorios',
+    'js-linkunico-text-8': 'No hay datos de esta oficina',
+    'js-linkunico-text-9': 'Cargando...',
+    'js-linkunico-text-10': 'Email pendiente verificar',
+    'js-linkunico-text-11': 'Verificando datos cliente...',
+    'js-linkunico-text-12': 'Verificando datos búsqueda...',
+    'js-linkunico-text-13': 'Validando primera búsqueda...',
+    'js-linkunico-text-14': 'Buscando cita',
+    'js-linkunico-text-15': 'Cita reservada, pendiente de pagar',
+    'js-linkunico-text-16': 'Pagado y confirmado',
+    'js-linkunico-text-17': 'Pagado',
+    'js-linkunico-text-18': 'Búsqueda cancelada',
+    'js-linkunico-text-19': 'Cita reservada anulada',
+    'js-linkunico-text-20': 'Anulando cita...',
+    'js-linkunico-text-21': 'Búsqueda caducada',
+    'js-linkunico-text-22': 'Su cita no se está buscando debido a que ha caducado',
+    'js-linkunico-text-23': 'Pendiente de validación',
+    'js-linkunico-text-24': 'No se puede continuar debido a que se ha excedido el límite máximo diario de búsquedas para esta cita y oficina. Se seguirá reintentando la validación durante cada hora durante los siguientes 3 días.',
+    'js-linkunico-text-25': 'Pausado, acción necesaria',
+    'js-linkunico-text-26': 'Ya existe una cita reservada con su documento',
+    'js-linkunico-text-27': '. Introducta otro documento para continuar con la búsqueda o cancele la cita que ya tiene reservada, haciendo click en "Renovar búsqueda".',
+    'js-linkunico-text-28': 'La cita que intenta buscar sólo se puede tramitar con el NIE. Actualiza el documento haciendo click en "Renovar búsqueda"',
+    'js-linkunico-text-29': 'Error al procesar la solicitud',
+    'js-linkunico-text-30': 'Email no verificado, solicitud rechazada',
+    'js-linkunico-text-31': 'Error al procesar la solicitud',
+
+
+
+    'js-load-1': 'Cargando información de la búsqueda',
+    'js-load-2': 'Cargando datos del servidor',
+    'js-load-3': 'Codificando datos personales',
+    'js-load-4': 'Cargando página principal',
+    'js-load-5': 'Indexando menús',
+    'js-load-6': 'Analizando web',
+    'js-load-7': 'Rellenando información',
+    'js-load-8': 'Cargando datos',
+    'js-load-9': 'Completando formulario',
+    'js-load-10': 'Introduciendo datos usuario',
+    'js-load-11': 'Esperando respuesta del servidor',
+    'js-load-12': 'Cargando respuesta',
+    'js-load-13': 'Analizando respuesta',
+    'js-load-14': 'Buscando posibles citas',
+    'js-load-15': 'Buscando citas en el calendario',
+    'js-load-16': 'Comprobando disponibilidad',
+    'js-load-17': 'Analizando horarios',
+    'js-load-18': 'Buscando citas según fechas indicadas',
+    'js-load-19': 'Calculando resultados',
+    'js-load-20': 'Ninguna cita disponible',
+    'js-load-21': 'Cargando resultados',
+    'js-load-22': 'Reinicio de búsqueda',
+
+
+
+
+    'js-datepicker-lang-1': 'Cerrar',
+    'js-datepicker-lang-2': 'Anterior',
+    'js-datepicker-lang-3': 'Siguiente',
+    'js-datepicker-lang-4': 'Hoy',
+    'js-datepicker-lang-5': 'Aplicar',
+    'js-datepicker-lang-6': 'Borrar',
+    'js-datepicker-lang-7': 'día',
+    'js-datepicker-lang-8': 'días',
+
+    'js-datepicker-month-1': 'enero',
+    'js-datepicker-month-2': 'febrero',
+    'js-datepicker-month-3': 'marzo',
+    'js-datepicker-month-4': 'abril',
+    'js-datepicker-month-5': 'mayo',
+    'js-datepicker-month-6': 'junio',
+    'js-datepicker-month-7': 'julio',
+    'js-datepicker-month-8': 'agosto',
+    'js-datepicker-month-9': 'septiembre',
+    'js-datepicker-month-10': 'octubre',
+    'js-datepicker-month-11': 'noviembre',
+    'js-datepicker-month-12': 'diciembre',
+    'js-datepicker-shortmonth-1': 'ene',
+    'js-datepicker-shortmonth-2': 'feb',
+    'js-datepicker-shortmonth-3': 'mar',
+    'js-datepicker-shortmonth-4': 'abr',
+    'js-datepicker-shortmonth-5': 'may',
+    'js-datepicker-shortmonth-6': 'jun',
+    'js-datepicker-shortmonth-7': 'jul',
+    'js-datepicker-shortmonth-8': 'ago',
+    'js-datepicker-shortmonth-9': 'sep',
+    'js-datepicker-shortmonth-10': 'oct',
+    'js-datepicker-shortmonth-11': 'nov',
+    'js-datepicker-shortmonth-12': 'dic',
+    'js-datepicker-dayweek-1': 'lunes',
+    'js-datepicker-dayweek-2': 'martes',
+    'js-datepicker-dayweek-3': 'miércoles',
+    'js-datepicker-dayweek-4': 'jueves',
+    'js-datepicker-dayweek-5': 'viernes',
+    'js-datepicker-dayweek-6': 'sábado',
+    'js-datepicker-dayweek-7': 'domingo',
+    'js-datepicker-shortdayweek-1': 'lun',
+    'js-datepicker-shortdayweek-2': 'mar',
+    'js-datepicker-shortdayweek-3': 'mié',
+    'js-datepicker-shortdayweek-4': 'jue',
+    'js-datepicker-shortdayweek-5': 'vie',
+    'js-datepicker-shortdayweek-6': 'sáb',
+    'js-datepicker-shortdayweek-7': 'dom',
+    'js-datepicker-ultrashortdayweek-1': 'L',
+    'js-datepicker-ultrashortdayweek-2': 'M',
+    'js-datepicker-ultrashortdayweek-3': 'X',
+    'js-datepicker-ultrashortdayweek-4': 'J',
+    'js-datepicker-ultrashortdayweek-5': 'V',
+    'js-datepicker-ultrashortdayweek-6': 'S',
+    'js-datepicker-ultrashortdayweek-7': 'D',
+
+};
+
+
+
+
+
+
 document.addEventListener('DOMContentLoaded', function () {
 
     // Get the 'referencia' parameter from the URL
@@ -94,6 +221,7 @@ document.addEventListener('DOMContentLoaded', function () {
     $('#div-link-cliente-resolucion-nacionalidad').hide();
     $('#div-link-cliente-csv-doc').hide();
     $('#div-link-cliente-nacionalidad').hide();
+    $('#div-link-cliente-fecha-nacimiento').hide();
     //Promo code texts
     $('#price-promo-text').hide();
     $('#price-promo-text-left').hide();
@@ -160,7 +288,12 @@ document.addEventListener('DOMContentLoaded', function () {
                 clienteTelefono = data.cliente_telefono;
                 clienteEmail = data.cliente_email;
                 clienteNacionalidad = data.cliente_nacionalidad;
-                clienteFechaNacimiento = data.cliente_fecha_nacimiento;
+
+                if (data.cliente_fecha_nacimiento === null || data.cliente_fecha_nacimiento === undefined) {
+                    clienteFechaNacimiento = "1970-01-01";
+                } else {
+                    clienteFechaNacimiento = data.cliente_fecha_nacimiento;
+                }
                 clienteResolucionNacionalidad = data.cliente_resolucion_nacionalidad;
                 clienteCSVdoc = data.csv_nacionalidad;
                 //Verify email
@@ -338,14 +471,14 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
         //Cambiar textos del link único
-        document.getElementById('link-busqueda-fechas-min-max').textContent = 'Desde ' + formattedLimitMin + ' hasta ' + formattedLimitMax;
+        document.getElementById('link-busqueda-fechas-min-max').textContent = `${TEXTOS_API['js-linkunico-text-1']}` + formattedLimitMin + `${TEXTOS_API['js-linkunico-text-2']}` + formattedLimitMax; //"Desde" + "Hasta"
 
         //Si no es una fecha válida mostrar otro texto para la fecha de la búsqueda de inicio
         if (formattedDateAdded === 'Invalid Date') {
-            formattedDateAdded = 'Búsqueda aún no iniciada';
+            formattedDateAdded = `${TEXTOS_API['js-linkunico-text-3']}`; // "Búsqueda aún no iniciada"
         }
         document.getElementById('date_added_front').textContent = formattedDateAdded;
-        document.getElementById('caducidad_busqueda').textContent = `Dentro de ${dias_caducidad_restantes} días`;
+        document.getElementById('caducidad_busqueda').textContent = TEXTOS_API['js-linkunico-text-4'] + dias_caducidad_restantes + TEXTOS_API['js-linkunico-text-5']; // "Dentro de" + " días"
         document.getElementById('precio_cita_front').textContent = precio_cita_backend.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
         document.getElementById('fecha-cita-reservada').textContent = formattedDate_cita_reservada;
         document.getElementById('boton-fecha-limite-pago').textContent = formattedDate_fecha_limite_pago;
@@ -356,7 +489,7 @@ document.addEventListener('DOMContentLoaded', function () {
             bloque_reserva.innerHTML = `<a download="Justificante" style="color: rgb(44, 100, 227);" href="data:application/pdf;base64,${resumen_reserva.pdf}">DESCARGAR</a>`
         } else if (codigo_reserva_cita_front === 'referencia N/A') {
             // Comprobar si nº referencia es= 'referencia N/A'
-            document.getElementById('codigo-reserva-cita-reservada').textContent = "Esta cita no requiere número de reserva";
+            document.getElementById('codigo-reserva-cita-reservada').textContent = TEXTOS_API['js-linkunico-text-6']; // "Esta cita no requiere número de reserva"
         } else {
             // If it's not 'referencia N/A', set the text content as the value of codigo_reserva_cita_front
             document.getElementById('codigo-reserva-cita-reservada').textContent = codigo_reserva_cita_front;
@@ -387,7 +520,10 @@ document.addEventListener('DOMContentLoaded', function () {
             $('#div-link-cliente-nacionalidad').show();
             $('#link-cliente-nacionalidad').text(clienteNacionalidad);
         }
-
+        //Show div birthdate if not null
+        if (clienteFechaNacimiento !== "1970-01-01") {
+            $('#div-link-cliente-fecha-nacimiento').show();
+        }
 
         //Ocultar elementos de manera predeterminada
         divCaducidadBusqueda.hide();
@@ -599,7 +735,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
                         ReplacePrice();
 
-                    }  else if (response.is_code_wrong === true) {
+                    } else if (response.is_code_wrong === true) {
                         // Use the ID_publico property
                         $('#PromoCode-text-below').show();
                         $('#PromoCode-text-below').text('Este código no es válido');
@@ -681,13 +817,13 @@ document.addEventListener('DOMContentLoaded', function () {
             if ($("[ms-code-checkbox-input]").is(":checked")) {
                 // Comprueba si los campos obligatorios están rellenos
                 if (datosEmpresaField.value == "") {
-                    alert("Por favor, rellena los campos obligatorios.");
+                    alert(`${TEXTOS_API['js-linkunico-text-7']}`);  //"Por favor, rellena los campos obligatorios"
                     return false;
                 }
             }
         });
 
-    
+
         //URL administracion dinamico
         var backendWebOficialElement = document.getElementById('backend-web-oficial')
 
@@ -711,12 +847,12 @@ document.addEventListener('DOMContentLoaded', function () {
             siteURL = "https://www.justizia.eus/qmaticwebbooking/#/search"
         } else if (id_oficina_front.startsWith("canrc")) {
             siteURL = "https://sede.gobiernodecanarias.org/aplicaciones/citapreviaregistrocivil"
-         }
+        }
 
         if (siteURL) {
             backendWebOficialElement.innerHTML = `<a href="${siteURL}" target="_blank">${siteURL}</a>`;
         } else {
-            backendWebOficialElement.innerHTML = 'No hay datos de esta oficina';
+            backendWebOficialElement.innerHTML = `${TEXTOS_API['js-linkunico-text-8']}`; // "No hay datos de esta oficina"
         }
 
         //cambiar color al link
@@ -862,7 +998,7 @@ document.addEventListener('DOMContentLoaded', function () {
             //Texto debajo del estado
             $('#texto-dinamico-debajoestado').hide();
             $('#div-sub-estado').hide();
-            $('#texto-sub-estado').text('Cargando...');
+            $('#texto-sub-estado').text(`${TEXTOS_API['js-linkunico-text-9']}`); //"Cargando..."
             $('#texto-sub-estado2').hide();
             //Cosas de sección ajustes
             $('#form_block_modificar_datos_personales').hide();
@@ -873,7 +1009,7 @@ document.addEventListener('DOMContentLoaded', function () {
             $('#gif-radar-buscando').hide();
             $('#gif-pagar-reservado').hide();
             //Botones acciones relacionadas con el estado
-            $('#boton_estado_busqueda').text('Cargando...');
+            $('#boton_estado_busqueda').text(`${TEXTOS_API['js-linkunico-text-9']}`); //"Cargando..."
             $('#boton-cancelar-link-unico').hide();
             $('#boton-renovar-busqueda-cita').hide();
             //CSS botones del estado
@@ -909,23 +1045,23 @@ document.addEventListener('DOMContentLoaded', function () {
             // Email aún no verificado
             if (!EmailVerified && !(state_front == 'EMAIL-NO-VERIFICADO')) {
                 $('#block-email-verify').show();
-                $('#boton_estado_busqueda').text('Email pendiente verificar');
+                $('#boton_estado_busqueda').text(TEXTOS_API['js-linkunico-text-10']); //"Email pendiente verificar"
             }
 
             // Estados de inicialización
             if (state_front == 'CLIENTE-CREADO') {
-                $('#boton_estado_busqueda').text('Verificando datos cliente...');
+                $('#boton_estado_busqueda').text(TEXTOS_API['js-linkunico-text-11']); //"Verificando datos cliente..."
             }
             if (state_front == 'COLA-CREADA') {
-                $('#boton_estado_busqueda').text('Verificando datos búsqueda...');
+                $('#boton_estado_busqueda').text(TEXTOS_API['js-linkunico-text-12']); // "Verificando datos búsqueda..."
             }
             if (state_front == 'VALIDANDO-COLA') {
-                $('#boton_estado_busqueda').text('Validando primera búsqueda...');
+                $('#boton_estado_busqueda').text(TEXTOS_API['js-linkunico-text-13']); // "Validando primera búsqueda..."
             }
 
             // Estados normales
             if (state_front == 'BUSCANDO') {
-                $('#boton_estado_busqueda').text('Buscando cita');
+                $('#boton_estado_busqueda').text(TEXTOS_API['js-linkunico-text-14']); // "Buscando cita"
                 $('#boton_estado_busqueda').addClass('boton_busqueda_verde');
                 $('#gif-radar-buscando').css('display', 'block');
                 $('#boton-cancelar-link-unico').show();
@@ -934,7 +1070,7 @@ document.addEventListener('DOMContentLoaded', function () {
             }
 
             if (state_front == 'RESERVADO') {
-                $('#boton_estado_busqueda').text('Cita reservada, pendiente de pagar');
+                $('#boton_estado_busqueda').text(TEXTOS_API['js-linkunico-text-15']); // "Cita reservada, pendiente de pagar"
                 $('#boton_estado_busqueda').addClass('boton_busqueda_naranja');
                 $('#gif-pagar-reservado').css('display', 'block');
                 $('#cuadrado-pago-cita20').show();
@@ -944,30 +1080,30 @@ document.addEventListener('DOMContentLoaded', function () {
             }
 
             if (state_front == 'PAGADO') {
-                $('#boton_estado_busqueda').text('Pagado y confirmado');
+                $('#boton_estado_busqueda').text(TEXTOS_API['js-linkunico-text-16']); // "Pagado y confirmado"
                 $('#boton_estado_busqueda').addClass('boton_busqueda_azul');
                 $('#div-datos-cita-reservada').show();
-                $('#estado-pago-cita-reservada').text('Pagado');
+                $('#estado-pago-cita-reservada').text(TEXTOS_API['js-linkunico-text-17']); // "Pagado"
             }
 
             if (state_front == 'CANCELADO') {
-                $('#boton_estado_busqueda').text('Búsqueda cancelada');
+                $('#boton_estado_busqueda').text(TEXTOS_API['js-linkunico-text-18']); // "Búsqueda cancelada"
                 $('#boton_estado_busqueda').addClass('boton_busqueda_rojo');
             }
 
             if (state_front == 'ANULADO') {
-                $('#boton_estado_busqueda').text('Cita reservada anulada');
-                $('#texto-pago-cita-aun-buscando').text('Cita reservada anulada');
+                $('#boton_estado_busqueda').text(TEXTOS_API['js-linkunico-text-19']); // "Cita reservada anulada"
+                $('#texto-pago-cita-aun-buscando').text(TEXTOS_API['js-linkunico-text-19']); // "Cita reservada anulada"
                 $('#boton_estado_busqueda').addClass('boton_busqueda_rojo');
             }
             if (state_front == 'ANULANDO-COLA') {
-                $('#boton_estado_busqueda').text('Anulando cita...');
-                $('#texto-pago-cita-aun-buscando').text('Anulando cita...');
+                $('#boton_estado_busqueda').text(TEXTOS_API['js-linkunico-text-20']); // "Anulando cita..."
+                $('#texto-pago-cita-aun-buscando').text(TEXTOS_API['js-linkunico-text-20']); // "Anulando cita..."
                 $('#boton_estado_busqueda').addClass('boton_busqueda_rojo');
             }
             if (state_front == 'EXPIRADO') {
-                $('#boton_estado_busqueda').text('Búsqueda caducada');
-                $('#texto-pago-cita-aun-buscando').text('Su cita no se está buscando debido a que ha caducado');
+                $('#boton_estado_busqueda').text(TEXTOS_API['js-linkunico-text-21']); // "Búsqueda caducada"
+                $('#texto-pago-cita-aun-buscando').text(TEXTOS_API['js-linkunico-text-22']); // "Su cita no se está buscando debido a que ha caducado"
                 $('#boton_estado_busqueda').addClass('boton_busqueda_rojo');
             }
 
@@ -975,16 +1111,16 @@ document.addEventListener('DOMContentLoaded', function () {
             // Estados pendientes
             // ***Debido límite de búsquedas diarias
             if (state_front == 'PENDIENTE') {
-                $('#boton_estado_busqueda').text('Pendiente de validación');
+                $('#boton_estado_busqueda').text(TEXTOS_API['js-linkunico-text-23']); // "Pendiente de validación"
             }
             if (StatePendienteReason == 'LIMITE-BUSQUEDAS-DIARIAS' && state_front == 'PENDIENTE') {
                 $('#div-sub-estado').show();
-                $('#texto-sub-estado').text('No se puede continuar debido a que se ha excedido el límite máximo diario de búsquedas para esta cita y oficina. Se seguirá reintentando la validación durante cada hora durante los siguientes 3 días.');
+                $('#texto-sub-estado').text(TEXTOS_API['js-linkunico-text-24']); // "No se puede continuar debido a que se ha excedido el límite máximo diario de búsquedas para esta cita y oficina. Se seguirá reintentando la validación durante cada hora durante los siguientes 3 días."
             }
 
             // Estados pausados que requieren acción del usuario
             if (state_front == 'PAUSADO-REQUIERE-ACCION') {
-                $('#boton_estado_busqueda').text('Pausado, acción necesaria');
+                $('#boton_estado_busqueda').text(TEXTOS_API['js-linkunico-text-25']); // "Pausado, acción necesaria"
                 //Cosas fuera del popup
                 $('#div-contenido-inside-bloque-busqueda').hide();
                 $('#boton-renovar-busqueda-cita').show();
@@ -992,13 +1128,13 @@ document.addEventListener('DOMContentLoaded', function () {
             }
             // ***Cita ya está resercada con DocID
             if (StatePausadoReason == 'CITA-ALREADY-BOOKED-WITH-ID' && state_front == 'PAUSADO-REQUIERE-ACCION') {
-                $('#texto-sub-estado').text('Ya existe una cita reservada con su documento' + ' ' + clienteIdType + '. Introducta otro documento para continuar con la búsqueda o cancele la cita que ya tiene reservada, haciendo click en "Renovar búsqueda".');
+                $('#texto-sub-estado').text(TEXTOS_API['js-linkunico-text-26'] + ' ' + clienteIdType + TEXTOS_API['js-linkunico-text-27']); // "Ya existe una cita reservada con este documento" + ". Introducta otro documento para continuar con la búsqueda o cancele la cita que ya tiene reservada, haciendo click en "Renovar búsqueda"."
                 //Ocultar botones dentro popup ajustes
 
             }
             // ***Cita obligatorio buscar con NIE
             if (StatePausadoReason == 'REQUIERE-ID-NIE' && state_front == 'PAUSADO-REQUIERE-ACCION') {
-                $('#texto-sub-estado').text('La cita que intenta buscar sólo se puede tramitar con el NIE. Actualiza el documento haciendo click en "Renovar búsqueda"');
+                $('#texto-sub-estado').text(TEXTOS_API['js-linkunico-text-28']); // "La cita que intenta buscar sólo se puede tramitar con el NIE. Actualiza el documento haciendo click en "Renovar búsqueda""
                 //Ocultar botones dentro popup ajustes
                 $('#select-pasaporte-form-ajustes').hide();
                 $('#select-dni-form-ajustes').hide();
@@ -1010,52 +1146,49 @@ document.addEventListener('DOMContentLoaded', function () {
 
             // Estados de errores
             if (state_front == 'NO_VALIDADO') {
-                $('#boton_estado_busqueda').text('Error al procesar la solicitud');
+                $('#boton_estado_busqueda').text(TEXTOS_API['js-linkunico-text-29']); // "Error al procesar la solicitud"
             }
             if (state_front == 'EMAIL-NO-VERIFICADO') {
-                $('#boton_estado_busqueda').text('Email no verificado, solicitud rechazada');
+                $('#boton_estado_busqueda').text(TEXTOS_API['js-linkunico-text-30']); // "Email no verificado, solicitud rechazada"
             }
             if (state_front == 'ERROR-NO-CONSIGUE-BUSCAR') {
-                $('#boton_estado_busqueda').text('Error al procesar la solicitud');
+                $('#boton_estado_busqueda').text(TEXTOS_API['js-linkunico-text-31']); // "Error al procesar la solicitud"
             }
 
-            //Mostrar texto dinamico debajo del estado en la que indica que está cargando
+            // Mostrar texto dinamico debajo del estado en la que indica que está cargando
             if (state_front == 'BUSCANDO' && flag_loading_text == false) {
                 $('#texto-dinamico-debajoestado').show();
                 flag_loading_text = true;
+
                 var loadList = [
-                    "Cargando información de la búsqueda",
-                    "Cargando datos del servidor",
-                    "Codificando datos personales",
-                    "Cargando página principal",
-                    "Indexando menús",
-                    "Analizando web",
-                    "Rellenando información",
-                    "Cargando datos",
-                    "Completando formulario",
-                    "Introduciendo datos usuario",
-                    "Esperando respuesta del servidor",
-                    "Cargando respuesta",
-                    "Analizando respuesta",
-                    "Buscando posibles citas",
-                    "Buscando citas en el calendario",
-                    "Comprobando disponibilidad",
-                    "Analizando horarios",
-                    "Buscando citas según fechas indicadas",
-                    "Calculando resultados",
-                    "Ninguna cita disponible",
-                    "Cargando resultados",
-                    "Reinicio de búsqueda",
+                    TEXTOS_API['js-load-1'],
+                    TEXTOS_API['js-load-2'],
+                    TEXTOS_API['js-load-3'],
+                    TEXTOS_API['js-load-4'],
+                    TEXTOS_API['js-load-5'],
+                    TEXTOS_API['js-load-6'],
+                    TEXTOS_API['js-load-7'],
+                    TEXTOS_API['js-load-8'],
+                    TEXTOS_API['js-load-9'],
+                    TEXTOS_API['js-load-10'],
+                    TEXTOS_API['js-load-11'],
+                    TEXTOS_API['js-load-12'],
+                    TEXTOS_API['js-load-13'],
+                    TEXTOS_API['js-load-14'],
+                    TEXTOS_API['js-load-15'],
+                    TEXTOS_API['js-load-16'],
+                    TEXTOS_API['js-load-17'],
+                    TEXTOS_API['js-load-18'],
+                    TEXTOS_API['js-load-19'],
+                    TEXTOS_API['js-load-20'],
+                    TEXTOS_API['js-load-21'],
+                    TEXTOS_API['js-load-22']
                 ];
 
                 var i = 0;
                 var textarea = $('#text-loop-link-unico');
-
-                // Generate a random index to start from
                 var randomIndex = Math.floor(Math.random() * loadList.length);
                 textarea.text(loadList[randomIndex]); // Set initial text
-
-                // Adjust i to start from the random index
                 i = (randomIndex * 4) + 1;
 
                 var loadTimer = setInterval(function () {
@@ -1063,12 +1196,12 @@ document.addEventListener('DOMContentLoaded', function () {
                         var index = Math.floor(i / 4) % loadList.length;
                         textarea.text(loadList[index]);
                     } else {
-                        // If not at the end of the text cycle, remove existing dots
-                        textarea.text(loadList[Math.floor(i / 4)]);
-                        // Add dots corresponding to the current step
-                        for (var j = 0; j < i % 4; j++) {
-                            textarea.append('.');
-                        }
+                        // Get current text and clear it
+                        var currentText = loadList[Math.floor(i / 4)];
+                        var dotCount = i % 4;
+
+                        // Update the text with the appropriate number of dots
+                        textarea.text(currentText + '.'.repeat(dotCount));
                     }
 
                     if (i % (4 * loadList.length) === 0) {
@@ -1076,8 +1209,9 @@ document.addEventListener('DOMContentLoaded', function () {
                     } else {
                         i++; // Increment i for the next iteration
                     }
-                }, 2500); // 5 seconds timer
+                }, 2500); // 2.5 seconds timer
             }
+
 
         }
 
@@ -1339,16 +1473,16 @@ document.addEventListener('DOMContentLoaded', function () {
         var price_tax_text = ((precio_eur_cent_front - (precio_eur_cent_front / 1.21)) / 100);
         var price_promo_text = (saldo_promo / 100);
         var price_total_text = ((precio_eur_cent_front - saldo_promo) / 100);
-        
-        
+
+
         // Calculate final price
         if (price_total_text > 0 && price_total_text < 0.50 && saldo_promo) {
             price_total_text = 0.50;
         } else if (price_total_text < 0 && saldo_promo) {
             price_total_text = 0;
         }
-        
-        if  (price_promo_text > precio_eur_cent_front && saldo_promo) {
+
+        if (price_promo_text > precio_eur_cent_front && saldo_promo) {
             price_total_text = precio_eur_cent_front;
         }
 
@@ -1357,12 +1491,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
         $('#price-brutto-text').text((price_brutto_text).toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €');
         $('#price-tax-text').text((price_tax_text).toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €');
-        $('#price-promo-text').text( '-' + (price_promo_text).toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €');
-        $('#precio_cita_hay_que_pagar').text ((price_total_text).toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €');
+        $('#price-promo-text').text('-' + (price_promo_text).toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €');
+        $('#precio_cita_hay_que_pagar').text((price_total_text).toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €');
 
 
     }
-    
+
 
 
 
@@ -1605,9 +1739,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
         //Inicializar datepickersf
-        $(function() {
+        $(function () {
             var dateFormat = "dd/mm/yy";
-        
+
             // Define Spanish localization directly in JavaScript
             $.datepicker.setDefaults($.datepicker.regional['es'] = {
                 closeText: "Cerrar",
@@ -1630,19 +1764,19 @@ document.addEventListener('DOMContentLoaded', function () {
                 showMonthAfterYear: false,
                 yearSuffix: ""
             });
-        
+
             $("#start-date").datepicker({
                 dateFormat: dateFormat,
                 minDate: 0,
-                onSelect: function(selectedDate) {
+                onSelect: function (selectedDate) {
                     $("#end-date").datepicker("option", "minDate", selectedDate);
                 }
             });
-        
+
             $("#end-date").datepicker({
                 dateFormat: dateFormat,
                 minDate: 0,
-                onSelect: function(selectedDate) {
+                onSelect: function (selectedDate) {
                     var startDate = $("#start-date").datepicker("getDate");
                     var endDate = $.datepicker.parseDate(dateFormat, selectedDate);
                     // Check if start date is greater than end date
