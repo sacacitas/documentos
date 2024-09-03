@@ -7,13 +7,23 @@ var MAX_CHECKOUT_ITEMS = 1; //Items máximos que se pueden añadir
 
 var INPUT_JSON = {}
 
-
-
-
-//Set text i18n
+// Set text i18n
 var TEXTOS_API = {
-    'js-buscador-country-es': 'España',
-}
+    'js-buscador-text-1': 'España',
+    'js-buscador-text-2': 'Selecciona una Administración',
+    'js-buscador-text-3': '¿Para qué provincia?',
+    'js-buscador-text-4': 'Escoge una oficina',
+    'js-buscador-text-5': 'Escoge tus citas previas',
+    'js-buscador-text-6': 'Cargando...',
+    'js-buscador-text-7': 'No hay oficinas disponibles',
+    'js-buscador-text-8': 'No hay servicios disponibles',
+
+};
+
+
+
+
+
 
 
 $(document).ready(function () {
@@ -49,7 +59,7 @@ $(document).ready(function () {
     //Set default country when loading page
     var SELECTED_PAIS = {
         value: 'ES',
-        text: '🇪🇸España'
+        text: '🇪🇸' + TEXTOS_API['js-buscador-text-1'] // "España"
     };
 
     var default_select_country = $('<option>', {
@@ -65,7 +75,7 @@ $(document).ready(function () {
     // Crear texto predeterminado en ADM
     var default_select_administracion = $('<option>', {
         value: '',
-        text: 'Selecciona una Administración',
+        text: TEXTOS_API['js-buscador-text-2'], // "Selecciona una Administración"
         disabled: true,
         selected: true
     });
@@ -74,7 +84,7 @@ $(document).ready(function () {
     // Crear texto predeterminado en provincias
     var default_select_provincias = $('<option>', {
         value: '',
-        text: '¿Para qué provincia?',
+        text: TEXTOS_API['js-buscador-text-3'], // "¿Para qué provincia?"
         disabled: true,
         selected: true
     });
@@ -83,7 +93,7 @@ $(document).ready(function () {
     // Crear texto predeterminado en oficinas
     var default_select_oficina = $('<option>', {
         value: '',
-        text: 'Escoge una oficina',
+        text: TEXTOS_API['js-buscador-text-4'], // "Escoge una oficina"
         disabled: true,
         selected: true
     });
@@ -92,7 +102,7 @@ $(document).ready(function () {
     // Crear texto predeterminado en citas previas
     var default_select_servicio = $('<option>', {
         value: '',
-        text: 'Escoge tus citas previas',
+        text: TEXTOS_API['js-buscador-text-5'], // "Escoge tus citas previas"
         disabled: true,
         selected: true
     });
@@ -205,7 +215,7 @@ $(document).ready(function () {
     // 1. PRIMERA PARTE BUSCADOR -> Lista estática de países
     //Create values select country
     var values_select_country = [
-        { value: 'ES', text: '🇪🇸España' },
+        { value: 'ES', text: '🇪🇸' + TEXTOS_API['js-buscador-text-1'] }, // "España"
     ];
 
     console.log(values_select_country);
@@ -292,7 +302,7 @@ $(document).ready(function () {
             // Show loading message in select_oficina
             select_oficina.html('').append($('<option>', {
                 value: '',
-                text: 'Cargando...',
+                text: TEXTOS_API['js-buscador-text-6'], // "Cargando..."
                 disabled: true,
                 selected: true
             }));
@@ -335,7 +345,7 @@ $(document).ready(function () {
                         // Display a default message in select_oficina
                         select_oficina.html('').append($('<option>', {
                             value: '',
-                            text: 'No hay oficinas disponibles',
+                            text: TEXTOS_API['js-buscador-text-7'], // "No hay oficinas disponibles"
                             disabled: true,
                             selected: true
                         }));
@@ -442,7 +452,7 @@ $(document).ready(function () {
                 // Display a default message in select_servicio
                 select_servicio.html('').append($('<option>', {
                     value: '',
-                    text: 'No hay servicios disponibles',
+                    text: TEXTOS_API['js-buscador-text-8'], // "No hay servicios disponibles"
                     disabled: true,
                     selected: true
                 }));
