@@ -195,11 +195,11 @@ var TEXTOS_API = {
 
 };
 
-// Tolgee translate
+
+// FIXME: toilgee_instance could be uninitialized here.
 for (const [key, value] of Object.entries(TEXTOS_API)) {
     TEXTOS_API[key] = window['tolgee_instance'].t(key, `${TEXTOS_API[key]} {{${key}}}`)
 }
-// TOLGEE
 
 
 $(document).ready(function () {
