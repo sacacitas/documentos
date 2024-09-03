@@ -3,11 +3,11 @@
 
 // Set text i18n
 var TEXTOS_API = {
-    'js-linkunico-text-1': 'Desde ',
-    'js-linkunico-text-2': ' hasta ',
+    'js-linkunico-text-1': 'Desde',
+    'js-linkunico-text-2': 'hasta',
     'js-linkunico-text-3': 'Búsqueda aún no iniciada',
-    'js-linkunico-text-4': 'Dentro de ',
-    'js-linkunico-text-5': ' días',
+    'js-linkunico-text-4': 'Dentro de',
+    'js-linkunico-text-5': 'días',
     'js-linkunico-text-6': 'Esta cita no requiere número de reserva',
     'js-linkunico-text-7': 'Por favor, rellena los campos obligatorios',
     'js-linkunico-text-8': 'No hay datos de esta oficina',
@@ -29,11 +29,17 @@ var TEXTOS_API = {
     'js-linkunico-text-24': 'No se puede continuar debido a que se ha excedido el límite máximo diario de búsquedas para esta cita y oficina. Se seguirá reintentando la validación durante cada hora durante los siguientes 3 días.',
     'js-linkunico-text-25': 'Pausado, acción necesaria',
     'js-linkunico-text-26': 'Ya existe una cita reservada con su documento',
-    'js-linkunico-text-27': '. Introducta otro documento para continuar con la búsqueda o cancele la cita que ya tiene reservada, haciendo click en "Renovar búsqueda".',
+    'js-linkunico-text-27': 'Introduzca otro documento para continuar con la búsqueda o cancele la cita que ya tiene reservada, haciendo click en "Renovar búsqueda".',
     'js-linkunico-text-28': 'La cita que intenta buscar sólo se puede tramitar con el NIE. Actualiza el documento haciendo click en "Renovar búsqueda"',
     'js-linkunico-text-29': 'Error al procesar la solicitud',
     'js-linkunico-text-30': 'Email no verificado, solicitud rechazada',
-    'js-linkunico-text-31': 'Error al procesar la solicitud',
+    'js-linkunico-text-31': 'No se ha indicado ningún código',
+    'js-linkunico-text-32': 'Este código no es válido',
+    'js-linkunico-text-33': 'Error al procesar la solicitud',
+    'js-linkunico-text-34': 'Iniciando primera búsqueda...',
+    'js-linkunico-text-35': 'Sin datos',
+    'js-linkunico-text-36': 'h.',
+    'js-linkunico-text-37': 'Indica tu nacionalidad',
 
 
 
@@ -471,14 +477,14 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
         //Cambiar textos del link único
-        document.getElementById('link-busqueda-fechas-min-max').textContent = `${TEXTOS_API['js-linkunico-text-1']}` + formattedLimitMin + `${TEXTOS_API['js-linkunico-text-2']}` + formattedLimitMax; //"Desde" + "Hasta"
+        document.getElementById('link-busqueda-fechas-min-max').textContent = `${TEXTOS_API['js-linkunico-text-1']}` + " " + formattedLimitMin + " " + `${TEXTOS_API['js-linkunico-text-2']}` + " " + formattedLimitMax; //"Desde" + "Hasta"
 
         //Si no es una fecha válida mostrar otro texto para la fecha de la búsqueda de inicio
         if (formattedDateAdded === 'Invalid Date') {
             formattedDateAdded = `${TEXTOS_API['js-linkunico-text-3']}`; // "Búsqueda aún no iniciada"
         }
         document.getElementById('date_added_front').textContent = formattedDateAdded;
-        document.getElementById('caducidad_busqueda').textContent = TEXTOS_API['js-linkunico-text-4'] + dias_caducidad_restantes + TEXTOS_API['js-linkunico-text-5']; // "Dentro de" + " días"
+        document.getElementById('caducidad_busqueda').textContent = TEXTOS_API['js-linkunico-text-4'] + " " + dias_caducidad_restantes + " "  + TEXTOS_API['js-linkunico-text-5']; // "Dentro de" + " días"
         document.getElementById('precio_cita_front').textContent = precio_cita_backend.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
         document.getElementById('fecha-cita-reservada').textContent = formattedDate_cita_reservada;
         document.getElementById('boton-fecha-limite-pago').textContent = formattedDate_fecha_limite_pago;
@@ -729,7 +735,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     if (response.is_empty_code === true) {
                         // Use the ID_publico property
                         $('#PromoCode-text-below').show();
-                        $('#PromoCode-text-below').text('No se ha indicado ningún código');
+                        $('#PromoCode-text-below').text(TEXTOS_API['js-linkunico-text-31']); // "No se ha indicado ningún código"
                         $('#texto-sub-estado2').hide();
                         saldo_promo = 0;
 
@@ -738,7 +744,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     } else if (response.is_code_wrong === true) {
                         // Use the ID_publico property
                         $('#PromoCode-text-below').show();
-                        $('#PromoCode-text-below').text('Este código no es válido');
+                        $('#PromoCode-text-below').text(TEXTOS_API['js-linkunico-text-32']); // "Este código no es válido"
                         $('#texto-sub-estado2').hide();
                         saldo_promo = 0;
 
@@ -757,7 +763,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 error: function (xhr, status, error) {
                     // Handle error response
                     console.error('Form submission failed');
-                    $('#PromoCode-text-below').text('Error al procesar la solicitud');
+                    $('#PromoCode-text-below').text(TEXTOS_API['js-linkunico-text-33']); // "Error al procesar la solicitud"
 
                     $('#PromoCode-Link-Unico-button').prop('disabled', false);
                 }
@@ -1128,7 +1134,7 @@ document.addEventListener('DOMContentLoaded', function () {
             }
             // ***Cita ya está resercada con DocID
             if (StatePausadoReason == 'CITA-ALREADY-BOOKED-WITH-ID' && state_front == 'PAUSADO-REQUIERE-ACCION') {
-                $('#texto-sub-estado').text(TEXTOS_API['js-linkunico-text-26'] + ' ' + clienteIdType + TEXTOS_API['js-linkunico-text-27']); // "Ya existe una cita reservada con este documento" + ". Introducta otro documento para continuar con la búsqueda o cancele la cita que ya tiene reservada, haciendo click en "Renovar búsqueda"."
+                $('#texto-sub-estado').text(TEXTOS_API['js-linkunico-text-26'] + ' ' + clienteIdType + ". " + TEXTOS_API['js-linkunico-text-27']); // "Ya existe una cita reservada con su documento" + "Introduzca otro documento para continuar con la búsqueda o cancele la cita que ya tiene reservada, haciendo click en "Renovar búsqueda"."
                 //Ocultar botones dentro popup ajustes
 
             }
@@ -1252,13 +1258,13 @@ document.addEventListener('DOMContentLoaded', function () {
         //Poner a 0 el número de horas si es menor a 0
         if (horas_busqueda_front < 0 || horas_busqueda_front === 0) {
             horas_busqueda_front = 0;
-            $('#date_last_checked_front').text('Iniciando primera búsqueda...');
+            $('#date_last_checked_front').text(TEXTOS_API['js-linkunico-text-34']); //"Iniciando primera búsqueda..."
         }
         //Si no es una fecha válida mostrar otro texto para la fecha de la búsqueda de inicio
         if (isNaN(horas_busqueda_front)) {
-            document.getElementById('horas_busqueda_front').textContent = 'Sin datos';
+            document.getElementById('horas_busqueda_front').textContent = TEXTOS_API['js-linkunico-text-35']; // "Sin datos"
         } else {
-            document.getElementById('horas_busqueda_front').textContent = horas_busqueda_front + ' h.';
+            document.getElementById('horas_busqueda_front').textContent = horas_busqueda_front + " " + TEXTOS_API['js-linkunico-text-36']; // "h."
         }
         //Cambiar textos del link único
 
@@ -1287,7 +1293,7 @@ document.addEventListener('DOMContentLoaded', function () {
         if (retries_front !== null) {
             document.getElementById('retries_front').textContent = formatNumberWithDots(retries_front);
         } else {
-            document.getElementById('retries_front').textContent = 'Sin datos';
+            document.getElementById('retries_front').textContent = TEXTOS_API['js-linkunico-text-35']; // "Sin datos"
         }
 
 
@@ -1664,7 +1670,7 @@ document.addEventListener('DOMContentLoaded', function () {
         var defaultOption = document.createElement('option');
         defaultOption.value = '';
         // Set the value to an empty string or a value that is not present in the array
-        defaultOption.text = 'Indica tu nacionalidad';
+        defaultOption.text = TEXTOS_API['js-linkunico-text-37']; // "Indica tu nacionalidad"
         defaultOption.disabled = true;
         // Make this option disabled
         defaultOption.selected = true;
@@ -1695,10 +1701,28 @@ document.addEventListener('DOMContentLoaded', function () {
                 changeMonth: true, // Show month dropdown
                 changeYear: true, // Show year dropdown
                 yearRange: "c-100:c", // Display 100 years before and after the current year
-                dayNamesMin: ["Do", "Lu", "Ma", "Mi", "Ju", "Vi", "Sá"],
+                dayNamesMin: [
+                    TEXTOS_API['js-datepicker-ultrashortdayweek-7'], // Sunday (D)
+                    TEXTOS_API['js-datepicker-ultrashortdayweek-1'], // Monday (L)
+                    TEXTOS_API['js-datepicker-ultrashortdayweek-2'], // Tuesday (M)
+                    TEXTOS_API['js-datepicker-ultrashortdayweek-3'], // Wednesday (X)
+                    TEXTOS_API['js-datepicker-ultrashortdayweek-4'], // Thursday (J)
+                    TEXTOS_API['js-datepicker-ultrashortdayweek-5'], // Friday (V)
+                    TEXTOS_API['js-datepicker-ultrashortdayweek-6']  // Saturday (S)
+                ],
                 monthNames: [
-                    "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
-                    "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"
+                    TEXTOS_API['js-datepicker-month-1'], // January
+                    TEXTOS_API['js-datepicker-month-2'], // February
+                    TEXTOS_API['js-datepicker-month-3'], // March
+                    TEXTOS_API['js-datepicker-month-4'], // April
+                    TEXTOS_API['js-datepicker-month-5'], // May
+                    TEXTOS_API['js-datepicker-month-6'], // June
+                    TEXTOS_API['js-datepicker-month-7'], // July
+                    TEXTOS_API['js-datepicker-month-8'], // August
+                    TEXTOS_API['js-datepicker-month-9'], // September
+                    TEXTOS_API['js-datepicker-month-10'], // October
+                    TEXTOS_API['js-datepicker-month-11'], // November
+                    TEXTOS_API['js-datepicker-month-12']  // December
                 ]
             });
         });
@@ -1723,12 +1747,12 @@ document.addEventListener('DOMContentLoaded', function () {
             numberOfMonths: 2,
             lang: 'es-ES',
             buttonText: {
-                apply: 'Aplicar',
-                cancel: 'Borrar',
+                apply: TEXTOS_API['js-datepicker-lang-5'],  // "Aplicar"
+                cancel: TEXTOS_API['js-datepicker-lang-6']  // "Borrar"
             },
             tooltipText: {
-                one: 'día',
-                other: 'días'
+                one: TEXTOS_API['js-datepicker-lang-7'],    // "día"
+                other: TEXTOS_API['js-datepicker-lang-8']   // "días"
             },
             setup: function (picker) {
                 picker.on('button:apply', function () {
@@ -1744,19 +1768,65 @@ document.addEventListener('DOMContentLoaded', function () {
 
             // Define Spanish localization directly in JavaScript
             $.datepicker.setDefaults($.datepicker.regional['es'] = {
-                closeText: "Cerrar",
-                prevText: "Anterior",
-                nextText: "Siguiente",
-                currentText: "Hoy",
-                monthNames: ["enero", "febrero", "marzo", "abril", "mayo", "junio",
-                    "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"
+                closeText: TEXTOS_API['js-datepicker-lang-1'], // "Cerrar"
+                prevText: TEXTOS_API['js-datepicker-lang-2'],  // "Anterior"
+                nextText: TEXTOS_API['js-datepicker-lang-3'],  // "Siguiente"
+                currentText: TEXTOS_API['js-datepicker-lang-4'], // "Hoy"
+                monthNames: [
+                    TEXTOS_API['js-datepicker-month-1'],  // "enero"
+                    TEXTOS_API['js-datepicker-month-2'],  // "febrero"
+                    TEXTOS_API['js-datepicker-month-3'],  // "marzo"
+                    TEXTOS_API['js-datepicker-month-4'],  // "abril"
+                    TEXTOS_API['js-datepicker-month-5'],  // "mayo"
+                    TEXTOS_API['js-datepicker-month-6'],  // "junio"
+                    TEXTOS_API['js-datepicker-month-7'],  // "julio"
+                    TEXTOS_API['js-datepicker-month-8'],  // "agosto"
+                    TEXTOS_API['js-datepicker-month-9'],  // "septiembre"
+                    TEXTOS_API['js-datepicker-month-10'], // "octubre"
+                    TEXTOS_API['js-datepicker-month-11'], // "noviembre"
+                    TEXTOS_API['js-datepicker-month-12']  // "diciembre"
                 ],
-                monthNamesShort: ["ene", "feb", "mar", "abr", "may", "jun",
-                    "jul", "ago", "sep", "oct", "nov", "dic"
+                monthNamesShort: [
+                    TEXTOS_API['js-datepicker-shortmonth-1'],  // "ene"
+                    TEXTOS_API['js-datepicker-shortmonth-2'],  // "feb"
+                    TEXTOS_API['js-datepicker-shortmonth-3'],  // "mar"
+                    TEXTOS_API['js-datepicker-shortmonth-4'],  // "abr"
+                    TEXTOS_API['js-datepicker-shortmonth-5'],  // "may"
+                    TEXTOS_API['js-datepicker-shortmonth-6'],  // "jun"
+                    TEXTOS_API['js-datepicker-shortmonth-7'],  // "jul"
+                    TEXTOS_API['js-datepicker-shortmonth-8'],  // "ago"
+                    TEXTOS_API['js-datepicker-shortmonth-9'],  // "sep"
+                    TEXTOS_API['js-datepicker-shortmonth-10'], // "oct"
+                    TEXTOS_API['js-datepicker-shortmonth-11'], // "nov"
+                    TEXTOS_API['js-datepicker-shortmonth-12']  // "dic"
                 ],
-                dayNames: ["domingo", "lunes", "martes", "miércoles", "jueves", "viernes", "sábado"],
-                dayNamesShort: ["dom", "lun", "mar", "mié", "jue", "vie", "sáb"],
-                dayNamesMin: ["D", "L", "M", "X", "J", "V", "S"],
+                dayNames: [
+                    TEXTOS_API['js-datepicker-dayweek-7'],  // "domingo"
+                    TEXTOS_API['js-datepicker-dayweek-1'],  // "lunes"
+                    TEXTOS_API['js-datepicker-dayweek-2'],  // "martes"
+                    TEXTOS_API['js-datepicker-dayweek-3'],  // "miércoles"
+                    TEXTOS_API['js-datepicker-dayweek-4'],  // "jueves"
+                    TEXTOS_API['js-datepicker-dayweek-5'],  // "viernes"
+                    TEXTOS_API['js-datepicker-dayweek-6']   // "sábado"
+                ],
+                dayNamesShort: [
+                    TEXTOS_API['js-datepicker-shortdayweek-7'], // "dom"
+                    TEXTOS_API['js-datepicker-shortdayweek-1'], // "lun"
+                    TEXTOS_API['js-datepicker-shortdayweek-2'], // "mar"
+                    TEXTOS_API['js-datepicker-shortdayweek-3'], // "mié"
+                    TEXTOS_API['js-datepicker-shortdayweek-4'], // "jue"
+                    TEXTOS_API['js-datepicker-shortdayweek-5'], // "vie"
+                    TEXTOS_API['js-datepicker-shortdayweek-6']  // "sáb"
+                ],
+                dayNamesMin: [
+                    TEXTOS_API['js-datepicker-ultrashortdayweek-7'], // "D"
+                    TEXTOS_API['js-datepicker-ultrashortdayweek-1'], // "L"
+                    TEXTOS_API['js-datepicker-ultrashortdayweek-2'], // "M"
+                    TEXTOS_API['js-datepicker-ultrashortdayweek-3'], // "X"
+                    TEXTOS_API['js-datepicker-ultrashortdayweek-4'], // "J"
+                    TEXTOS_API['js-datepicker-ultrashortdayweek-5'], // "V"
+                    TEXTOS_API['js-datepicker-ultrashortdayweek-6']  // "S"
+                ],
                 weekHeader: "Sm",
                 dateFormat: "dd/mm/yy",
                 firstDay: 1,
