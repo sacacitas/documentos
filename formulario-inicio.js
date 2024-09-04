@@ -506,7 +506,7 @@ $(document).ready(function () {
             // Format phone number on form submission
             var form = $(input).closest('form');
             form.submit(function () {
-                var formattedNumber = iti.getNumber(intlTelInput.utils.numberFormat.INTERNATIONAL);
+                var formattedNumber = iti.getNumber(intlTelInput.utils.numberFormat.E164);
                 input.value = formattedNumber;
             });
         });
