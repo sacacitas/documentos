@@ -494,13 +494,13 @@ $(document).ready(function () {
             }
 
             // Format phone number as user types
-            input.addEventListener('change', formatPhoneNumber);
-            input.addEventListener('keyup', formatPhoneNumber);
+            // input.addEventListener('change', formatPhoneNumber);
+            // input.addEventListener('keyup', formatPhoneNumber);
 
-            function formatPhoneNumber() {
-                var formattedNumber = iti.getNumber(intlTelInput.utils.numberFormat.NATIONAL);
-                input.value = formattedNumber;
-            }
+            // function formatPhoneNumber() {
+            //     var formattedNumber = iti.getNumber(intlTelInput.utils.numberFormat.NATIONAL);
+            //     input.value = formattedNumber;
+            // }
 
 
             // Format phone number on form submission
