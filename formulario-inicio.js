@@ -498,7 +498,7 @@ $(document).ready(function () {
             input.addEventListener('keyup', formatPhoneNumber);
 
             function formatPhoneNumber() {
-                var formattedNumber = iti.getNumber(intlTelInput.Utils.numberFormat.NATIONAL);
+                var formattedNumber = iti.getNumber(intlTelInput.utils.numberFormat.NATIONAL);
                 input.value = formattedNumber;
             }
 
@@ -506,7 +506,7 @@ $(document).ready(function () {
             // Format phone number on form submission
             var form = $(input).closest('form');
             form.submit(function () {
-                var formattedNumber = iti.getNumber(intlTelInput.Utils.numberFormat.INTERNATIONAL);
+                var formattedNumber = iti.getNumber(intlTelInput.utils.numberFormat.INTERNATIONAL);
                 input.value = formattedNumber;
             });
         });
