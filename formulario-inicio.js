@@ -618,7 +618,7 @@ $(document).ready(function () {
                 const inputData = JSON.stringify({ error: error.message });
 
                 $.ajax({
-                    url: "https://n8n.sacacitas.com/webhook/didn't-create-country-list-correctly",
+                    url: "https://n8n.sacacitas.com/webhook/didnt-create-country-list-correctly",
                     type: "POST",
                     contentType: "application/json",
                     dataType: 'json',
@@ -736,7 +736,7 @@ $(document).ready(function () {
                 console.error('Form submission failed');
                 $.ajax({
                     type: 'POST',
-                    url: 'https://n8n.sacacitas.com/webhook/1273a5d4-5b9e-4826-94ab-04c5bbeedfad-error-formulario',
+                    url: 'https://n8n.sacacitas.com/webhook/error-send-form',
                     data: JSON.stringify({ error: error }),
                     dataType: 'json',
                     contentType: 'application/json',
