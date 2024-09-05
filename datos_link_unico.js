@@ -171,6 +171,7 @@ document.addEventListener('DOMContentLoaded', function () {
     var clienteTelefono = null;
     var clienteEmail = null;
     var clienteNacionalidad = null;
+    var clienteNacionalidadISO = null;
     var clienteFechaNacimiento = null;
     var clienteResolucionNacionalidad = null;
     var clienteCSVdoc = null;
@@ -294,6 +295,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 clienteTelefono = data.cliente_telefono;
                 clienteEmail = data.cliente_email;
                 clienteNacionalidad = data.cliente_nacionalidad;
+                clienteNacionalidadISO = data.cliente_nacionalidad_iso;
 
                 if (data.cliente_fecha_nacimiento === null || data.cliente_fecha_nacimiento === undefined) {
                     clienteFechaNacimiento = "1970-01-01";
@@ -521,11 +523,45 @@ document.addEventListener('DOMContentLoaded', function () {
             $('#div-link-cliente-csv-doc').show();
             $('#link-cliente-csv-doc').text(clienteCSVdoc);
         }
-        //Mostrar nacionalidad si no es null    
-        if (clienteNacionalidad) {
+
+
+
+        // Mostrar nacionalidad si no es null y también reemplazar ISO por texto si existe
+        if (clienteNacionalidadISO) {
+            $('#div-link-cliente-nacionalidad').show();
+
+            fetch('https://cdn.jsdelivr.net/npm/i18n-iso-countries/langs/es.json')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`Network response was not ok: ${response.statusText}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                // Get the countries object from the response
+                const countries = data.countries;
+
+                // Replace ISO code with the country name
+                const countryName = countries[clienteNacionalidadISO];
+                
+                // If it's an array of names (like CN, RU, etc.), pick the first one
+                const displayName = Array.isArray(countryName) ? countryName[0] : countryName;
+
+                // Update the text content in the DOM
+                $('#link-cliente-nacionalidad').text(displayName || clienteNacionalidadISO); // Fallback to ISO if not found
+            })
+            .catch(error => {
+                console.error('Error fetching country names:', error);
+                // Fallback: Use the ISO code if the fetch fails
+                $('#link-cliente-nacionalidad').text(clienteNacionalidadISO);
+            });
+
+        } else if (clienteNacionalidad) {
+            // If no ISO code but there's a text representation, show it
             $('#div-link-cliente-nacionalidad').show();
             $('#link-cliente-nacionalidad').text(clienteNacionalidad);
         }
+
         //Show div birthdate if not null
         if (clienteFechaNacimiento !== "1970-01-01") {
             $('#div-link-cliente-fecha-nacimiento').show();
