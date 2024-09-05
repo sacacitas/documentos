@@ -11,7 +11,7 @@ var CONFIG_FORM = {
     "fecha_nacimiento": true,
     "email": true,
     "phone_number": [
-        "ES", "US"
+        "ES"
     ],
     "documentos_admitidos": [
         {
@@ -23,12 +23,13 @@ var CONFIG_FORM = {
     "resolucion_nacionalidad": false,
     "csv_nacionalidad": false,
     "caducidad_documento": false,
-    "nacionalidad": ["AFGANISTAN", "ALBANIA", "ALEMANIA", "ANDORRA", "ANGOLA", "ANGUILLA", "ANTIGUA Y BARBUDA", "ANTILLAS NL.", "APATRIDA", "ARABIA SAUDI", "ARGELIA", "ARGENTINA", "ARMENIA", "ARUBA", "AUSTRALIA", "AUSTRIA", "AZERBAYAN", "BAHAMAS", "BAHREIN", "BANGLADESH", "BARBADOS", "BELGICA", "BELICE", "BENIN", "BHUTAN", "BIELORRUSIA O BELARUS", "BOLIVIA", "BOSNIA-HERZEGOVINA", "BOTSWANA", "BRASIL", "BRUNEI DARUSSALAM", "BULGARIA", "BURKINA FASO", "BURUNDI", "CABO VERDE", "CAMBOYA", "CAMERUN", "CANADA", "CENTROAFRICA REPUBLICA", "CHAD", "CHILE", "CHINA", "CHIPRE", "COLOMBIA", "COMORES", "CONGO BRAZZAVILLE", "COREA, REP. POP. DEMOC.", "COREA, REPUBLICA", "COSTA DE MARFIL", "COSTA RICA", "CROACIA", "CUBA", "DINAMARCA", "DJIBOUTI", "DOMINICA", "DOMINICANA REPUBLICA", "ECUADOR", "EEUU", "EGIPTO", "EL SALVADOR", "EL VATICANO", "EMIRATOS ARABES UNIDOS", "ERITREA", "ESLOVAQUIA", "ESLOVENIA", "ESPAÑA", "ESTONIA", "ETIOPIA", "FIDJI", "FILIPINAS", "FINLANDIA", "FRANCIA", "GABON", "GAMBIA", "GEORGIA", "GHANA", "GRANADA REPUBLICA", "GRECIA", "GUATEMALA", "GUAYANA", "GUINEA ECUATORIAL", "GUINEA REPUBLICA", "GUINEA-BISSAU", "HAITI", "HOLANDA", "HONDURAS", "HUNGRIA", "INDIA", "INDONESIA", "IRAK", "IRAN", "IRLANDA", "ISLANDIA", "ISLAS MARSCHALL", "ISRAEL", "ITALIA", "JAMAICA", "JAPON", "JORDANIA", "KAZAJSTAN", "KENIA", "KIRGUISTAN", "KIRIBATI", "KUWAIT", "LAOS", "LAS MALDIVAS", "LESOTHO", "LETONIA", "LIBANO", "LIBERIA", "LIBIA", "LIECHTENSTEIN", "LITUANIA", "LUXEMBURGO", "MACAO", "MACEDONIA", "MADAGASCAR", "MALASIA", "MALASIA - GRAN BRETAÑA", "MALAWI", "MALI", "MALTA", "MARRUECOS", "MAURICIO", "MAURITANIA", "MEJICO", "MICRONESIA", "MOLDAVIA", "MONACO", "MONGOLIA", "MONTENEGRO", "MOZAMBIQUE", "MYANMAR", "NAMIBIA", "NAURU", "NEPAL", "NICARAGUA", "NIGER", "NIGERIA", "NORUEGA", "NUEVA ZELANDA", "OMAN", "PAKISTAN", "PALESTINA EONU", "PANAMA", "PAPUA NUEVA GUINEA", "PARAGUAY", "PERU", "POLONIA", "PORTUGAL", "PUERTO RICO", "QATAR", "REINO UNIDO", "REP. DEMOCRATICA DEL CONGO (EX-ZAIRE)", "REPUBLICA CHECA", "REUNION-COMO", "RUANDA", "RUMANIA", "RUSIA", "SALOMON", "SAMOA OCCIDENTAL", "SAN CRISTOBAL Y NEVIS", "SAN MARINO", "SAN VICENTE", "SANTA LUCIA", "SANTO TOME Y PRINCIPE", "SEICHELLES", "SENEGAL", "SENEGAMBIA", "SERBIA", "SIERRA LEONA", "SINGAPUR", "SIRIA", "SOMALIA", "SRI LANKA", "SUDAFRICA", "SUDAN", "SUECIA", "SUIZA", "SURINAM", "SWAZILANDIA", "TADJIKISTAN", "TAIWAN", "TANZANIA", "THAILANDIA", "TIMOR ORIENTAL", "TOGO", "TONGA", "TRINIDAD Y TOBAGO", "TUNEZ", "TURKMENIA", "TURQUIA", "TUVALU", "UCRANIA", "UGANDA", "URUGUAY", "UZBEKISTAN", "VANUATU", "VENEZUELA", "VIETNAM", "YEMEN", "ZAMBIA", "ZIMBABWE"],
     "motivo_cita": false,
+    "nacionalidad": [],
     "inconsistent": true,
     "unknown_elements": []
 
 };
+
 
 
 //--> Variables del fornulario
@@ -92,6 +93,8 @@ var inputsToCheckButton5 = [];
 //Fecha exclusion
 var TextFechaExclusion = $('#texto-fechas-exclusion');
 
+//Set config form not completed
+var config_completed = false;
 
 
 //Hide sections by default
@@ -134,7 +137,7 @@ var TEXTOS_API = {
     'js-form-text-8': 'Telefonos no coinciden',
     'js-form-text-9': 'El teléfono no es válido',
     'js-form-text-10': 'El formato es incorrecto',
-    'js-form-text-11': 'Indica tu nacionalidad',
+    'js-form-text-11': 'País de nacionalidad',
 
 
     'js-datepicker-lang-1': 'Cerrar',
@@ -199,6 +202,9 @@ var TEXTOS_API = {
 
 $(document).ready(function () {
 
+    //Set default input to check
+    DetermineInputsToCheck();
+
     //--> Load config FORM
     var urlParams = new URLSearchParams(window.location.search);
     if (urlParams.has('INPUT_JSON')) {
@@ -219,20 +225,46 @@ $(document).ready(function () {
             success: function (response) {
                 // merge two dict
                 CONFIG_FORM = Object.assign(CONFIG_FORM, response);
-
+                //load items
                 DetermineInputsToCheck();
                 InputsToShow();
                 ExecuteitiPhoneLibrary();
+                InjectCountryList();
+
+                config_completed = true;
 
             },
             error: function (jqXHR, textStatus, errorThrown) {
-                console.error("Error:", errorThrown);
+                //Load default items
+                DetermineInputsToCheck();
+                InputsToShow();
+                ExecuteitiPhoneLibrary();
+                InjectCountryList();
+
+                config_completed = true;
+
+
+                //if error call to webhook
+                $.ajax({
+                    url: "https://n8n.sacacitas.com/webhook/error-load-config-form",
+                    type: "POST",
+                    contentType: "application/json",
+                    // Specify content type as JSON
+                    dataType: 'json',
+                    data: inputData,
+                    // Send the JSON data
+                    success: function (response) {
+                        console.log("Error:", response);
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        console.error("Error:", errorThrown);
+                    }
+                });
             }
         });
     } else {
         alert(`${TEXTOS_API['js-form-text-1']}`);
     }
-    console.log(CONFIG_FORM);
 
 
 
@@ -515,6 +547,94 @@ $(document).ready(function () {
 
     //SECTION: 5 - Specific search itmes. Nacionalidad, R Nacionalidad y caducidad tarjeta
 
+
+    // Inject country list
+    // Function to fetch country data and populate the dropdown
+    function InjectCountryList() {
+        // Determine the list of countries to use
+        let country_array_final;
+        if (CONFIG_FORM.nacionalidad && CONFIG_FORM.nacionalidad.length > 0) {
+            country_array_final = CONFIG_FORM.iso3166;
+            console.log('1');
+        } else {
+            // Use default iso31661 array from the window object
+            const isoCountries = window.iso3166.iso31661;
+            country_array_final = isoCountries.map(country => country.alpha2);
+            console.log('2');
+
+        }
+
+        // Fetch the country data from the provided URL
+        fetch('https://cdn.jsdelivr.net/npm/i18n-iso-countries/langs/es.json')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`Network response was not ok: ${response.statusText}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                // Get the countries object from the response
+                const countries = data.countries;
+
+                // Create an array to hold country options
+                let countryOptions = [];
+
+                // Loop through the country_array_final and check if the country code exists in the fetched data
+                country_array_final.forEach(code => {
+                    if (countries[code]) {
+                        const countryName = Array.isArray(countries[code]) ? countries[code][0] : countries[code];
+                        // Push the code and country name to the array
+                        countryOptions.push({ code: code, name: countryName });
+                    }
+                });
+
+                // Sort the country options array alphabetically by country name
+                countryOptions.sort((a, b) => a.name.localeCompare(b.name));
+
+                // Get the dropdown element by its ID
+                const dropdown = document.getElementById('input-lista-paises');
+
+                // Create and add the default option
+                const defaultOption = document.createElement('option');
+                defaultOption.value = '';
+                defaultOption.text = TEXTOS_API['js-form-text-11']; // "País de nacionalidad"
+                defaultOption.disabled = true; // Prevents selection
+                defaultOption.selected = true; // Sets as the default selected option
+                dropdown.appendChild(defaultOption);
+
+                console.log($('#input-lista-paises').val()); // Log the current value to verify
+
+                // Append each country option to the dropdown
+                countryOptions.forEach(optionData => {
+                    const option = document.createElement('option');
+                    option.value = optionData.code;
+                    option.textContent = optionData.name;
+                    dropdown.appendChild(option);
+                });
+            })
+
+            .catch(error => {
+                // Send an error to the webhook in case of failure
+                const inputData = JSON.stringify({ error: error.message });
+
+                $.ajax({
+                    url: "https://n8n.sacacitas.com/webhook/didn't-create-country-list-correctly",
+                    type: "POST",
+                    contentType: "application/json",
+                    dataType: 'json',
+                    data: inputData,
+                    success: function (response) {
+                        console.log("Error reported successfully:", response);
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        console.error("Error reporting failed:", errorThrown);
+                    }
+                });
+            });
+    }
+
+
+
     const PickerCadTarjeta = new easepick.create({
         element: "#input-caducidad-tarjeta",
         css: ["https://cdn.jsdelivr.net/npm/@easepick/bundle@1.2.1/dist/index.css", 'https://documentos.sacacitas.com/formulario-inicio.css',],
@@ -581,13 +701,13 @@ $(document).ready(function () {
             NDocumento: $('#input-documento').val(),
             Correo: $('#input-correo').val(),
             Telefono: $('#input-telefono').val(),
-            Pais: $('#input-lista-paises').val(),
+            Pais: $('#input-lista-paises option:selected').text(),
+            Pais_iso: $('#input-lista-paises').val(),
             RNacionalidad: $('#input-resolucion-nacionalidad').val(),
             csv_doc: $('#input-csv-doc').val(),
             CaducidadTarjeta: $('#input-caducidad-tarjeta').val(),
             RandomStringID: RandomStringID,
             LangBrowser: LangBrowser,
-            iso3166: CONFIG_FORM.iso3166,
             gclid: INPUT_JSON.cookieGclid,
             retargetingSource: null,
             fbclid: INPUT_JSON.cookieFbclid,
@@ -699,11 +819,62 @@ $(document).ready(function () {
             }
         });
 
-        // Si todo OK pasa a la siguiente
-        if (allInputsValid) {
-            seccion2.hide();
-            seccion3.show();
+
+
+
+
+        // Function to check if config is completed
+        function isConfigCompleted() {
+            return new Promise((resolve) => {
+                // Polling function to check the status
+                const interval = setInterval(() => {
+                    if (config_completed === true) {
+                        clearInterval(interval);
+                        resolve(true);
+
+                        //if error call to webhook
+                        $.ajax({
+                            url: "https://n8n.sacacitas.com/webhook/too-much-time-loading-config-form",
+                            type: "POST",
+                            contentType: "application/json",
+                            // Specify content type as JSON
+                            dataType: 'json',
+                            data: inputData,
+                            // Send the JSON data
+                            success: function (response) {
+                                console.log("Error:", response);
+                            },
+                            error: function (jqXHR, textStatus, errorThrown) {
+                                console.error("Error:", errorThrown);
+                            }
+                        });
+
+
+                    }
+                }, 1000); // Check every 1 second
+            });
         }
+        // Function to handle the transition --> From isConfigCompleted
+        async function handleTransition() {
+            // If all inputs are valid
+            if (allInputsValid) {
+                // Show the loading GIF
+                $('#gif-cargando-boton-config-form').show();
+
+                // Wait for the config to be completed
+                if (config_completed === false) {
+                    await isConfigCompleted();
+                }
+                // Once completed, hide the loading GIF and move to the next section
+                seccion2.hide();
+                seccion3.show();
+                $('#gif-cargando-boton-config-form').hide();
+            }
+        }
+
+        // Call the transition handler --> From isConfigCompleted
+        handleTransition();
+
     });
 
     //Button 3: Comprobar numero de documento
@@ -947,19 +1118,37 @@ $(document).ready(function () {
 function DetermineInputsToCheck() {
 
 
+    $('#asterisk-apellido2').hide();
+    $('#asterisk-fecha-nacimiento').hide();
+    $('#asterisk-lista-paises').hide();
+    $('#asterisk-resolucion-nacionalidad').hide();
+    $('#asterisk-csv-doc').hide();
+    $('#asterisk-caducidad-tarjeta').hide();
+
+    // Function to remove specific items from the array
+    function removeItemsFromArray(array, itemsToRemove) {
+        itemsToRemove.forEach(item => {
+            const index = array.indexOf(item);
+            if (index !== -1) {
+                array.splice(index, 1);
+            }
+        });
+    }
+    // Remove specific items
+    removeItemsFromArray(inputsToCheckButton2, [InputApellido2, InputFNacimiento]);
+
+
     // -> Button 2
     inputsToCheckButton2.push(InputNombre, InputApellido1);
     //If second name is true
     if (CONFIG_FORM.lastname2 === true) {
         inputsToCheckButton2.push(InputApellido2);
-        $('#input-apellido2').attr('required', true);
         $('#asterisk-apellido2').show();
 
     }
     //If birth date is true
     if (CONFIG_FORM.fecha_nacimiento === true) {
         inputsToCheckButton2.push(InputFNacimiento);
-        $('#input-fecha-nacimiento').attr('required', true);
         $('#asterisk-fecha-nacimiento').show();
 
     }
@@ -968,23 +1157,25 @@ function DetermineInputsToCheck() {
     // -> Button 5
     if (CONFIG_FORM.nacionalidad.length > 0) {
         inputsToCheckButton5.push(InputListaPaises);
-        $('#input-lista-paises').attr('required', true);
         $('#asterisk-lista-paises').show();
     }
 
     if (CONFIG_FORM.resolucion_nacionalidad === true) {
         inputsToCheckButton5.push(InputRNacionalidad);
-        $('#input-resolucion-nacionalidad').attr('required', true);
+        $('#asterisk-resolucion-nacionalidad').show();
+
     }
 
     if (CONFIG_FORM.csv_nacionalidad === true) {
         inputsToCheckButton5.push(InputCSVdoc);
-        $('#input-csv-doc').attr('required', true);
+        $('#asterisk-csv-doc').show();
+
     }
 
     if (CONFIG_FORM.caducidad_documento === true) {
         inputsToCheckButton5.push(CaducidadTarjeta);
-        $('#input-caducidad-tarjeta').attr('required', true);
+        $('#asterisk-caducidad-tarjeta').show();
+
     }
 
 
@@ -1005,7 +1196,6 @@ function InputsToShow() {
     const iso3166 = CONFIG_FORM.iso3166;
     // Filter the documentos_admitidos array to find the matching iso3166_1_alpha2
     const matchedDocumentos = CONFIG_FORM.documentos_admitidos.filter(doc => doc.iso3166_1_alpha2 === iso3166);
-    console.log(matchedDocumentos);
     // Iterate over the matched documents and show the elements based on their type
     matchedDocumentos.forEach(doc => {
         const type = doc.type;
@@ -1019,40 +1209,11 @@ function InputsToShow() {
     DivCSVdoc.toggle(CONFIG_FORM.csv_nacionalidad || false);
     DivCaducidadTarjeta.toggle(CONFIG_FORM.caducidad_documento || false);
 
-    //Nationality list
-    DivListaPaises.toggle(CONFIG_FORM.nacionalidad.length > 0 || false);
-    //Country list inject items
-    if (CONFIG_FORM.nacionalidad.length > 0) {
-        let list_paises = CONFIG_FORM.nacionalidad;
-        // Añadir un elemento por defecto
-        var defaultOption = document.createElement('option');
-        defaultOption.value = '';
-        defaultOption.text = TEXTOS_API['js-form-text-11']; // "Indica tu nacionalidad"
-        defaultOption.disabled = true;
-        defaultOption.selected = true;
-        InputListaPaises.add(defaultOption);
-
-        //Inject countries
-        list_paises.sort((a, b) => a.localeCompare(b)).forEach(elem => {
-            var optionElement = document.createElement('option');
-
-            // Assuming `list_paises` is an array of strings
-            optionElement.value = elem;
-            optionElement.text = elem;
-
-            // If `list_paises` contains objects, use the properties:
-            // optionElement.value = elem.alpha3;
-            // optionElement.text = elem.name;
-
-            InputListaPaises.add(optionElement);
-        }); // Close the forEach and sort methods
-    }
 
 
-    ShowPagesCalculate();
 
 }
-
+// --> Not in use at the moment
 //Decide which pages to show depending on config form 
 function ShowPagesCalculate() {
 
@@ -1068,7 +1229,7 @@ function ShowPagesCalculate() {
     //Change page numeration based on quantity of pages
     PageNumerationCalculation();
 }
-
+// --> Not in use at the moment
 //Recalculate page numeration based on ShowPagesCalculate()
 function PageNumerationCalculation() {
     $("#pagecount1").text("1/" + PageCountingTotal);
@@ -1088,6 +1249,14 @@ function PageNumerationCalculation() {
 
 // --> Build last page resume
 function ResumenPage() {
+
+    //Reset to default show all
+    $('#text-resume-birthdate').show();
+    $('#text-resumen-nacionalidad').show();
+    $('#text-resumen-resolucion-nacionalidad').show();
+    $('#text-resumen-csv').show();
+
+
     //Crear texto resumen
     $('#resumen-servicio').text(INPUT_JSON.idbuscadores[0].nombre_servicio);
     $('#resumen-oficina').text(INPUT_JSON.idbuscadores[0].nombre_oficina);
@@ -1095,7 +1264,7 @@ function ResumenPage() {
     $('#resumen-nombre-completo').text($('#input-nombre').val() + ' ' + $('#input-apellido1').val() + ' ' + $('#input-apellido2').val());
     $('#resumen-documento-identidad').text($('#input-documento').val());
     $('#resumen-fecha-nacimiento').text($('#input-fecha-nacimiento').val());
-    $('#resumen-nacionalidad').text($('#input-lista-paises').val());
+    $('#resumen-nacionalidad').text($('#input-lista-paises option:selected').text());
     $('#resumen-resolucion-nacionalidad').text($('#input-resolucion-nacionalidad').val());
     $('#resumen-csv').text($('#input-csv-doc').val());
     $('#resumen-telefono').text($('#input-telefono').val());
@@ -1113,7 +1282,7 @@ function ResumenPage() {
     if ($('#input-fecha-nacimiento').val() === '') {
         $('#text-resume-birthdate').hide();
     }
-    if ($('#input-lista-paises').val() === '') {
+    if ($('#input-lista-paises').val() === null) {
         $('#text-resumen-nacionalidad').hide();
     }
     if ($('#input-resolucion-nacionalidad').val() === '') {
