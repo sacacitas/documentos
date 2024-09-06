@@ -211,7 +211,6 @@ $(document).ready(function () {
         INPUT_JSON = JSON.parse(decodeURIComponent(atob(urlParams.get('INPUT_JSON'))));
         // Stringify the JSON data
         var inputData = JSON.stringify(INPUT_JSON.idbuscadores);
-        console.log(INPUT_JSON.idbuscadores);
 
         //GET INPUT_JSON para mostrar secciones
         $.ajax({
@@ -554,13 +553,12 @@ $(document).ready(function () {
         // Determine the list of countries to use
         let country_array_final;
         if (CONFIG_FORM.nacionalidad && CONFIG_FORM.nacionalidad.length > 0) {
-            country_array_final = CONFIG_FORM.iso3166;
-            console.log('1');
+            country_array_final = CONFIG_FORM.nacionalidad;
+
         } else {
             // Use default iso31661 array from the window object
             const isoCountries = window.iso3166.iso31661;
             country_array_final = isoCountries.map(country => country.alpha2);
-            console.log('2');
 
         }
 
@@ -602,7 +600,6 @@ $(document).ready(function () {
                 defaultOption.selected = true; // Sets as the default selected option
                 dropdown.appendChild(defaultOption);
 
-                console.log($('#input-lista-paises').val()); // Log the current value to verify
 
                 // Append each country option to the dropdown
                 countryOptions.forEach(optionData => {
@@ -1200,7 +1197,6 @@ function InputsToShow() {
     matchedDocumentos.forEach(doc => {
         const type = doc.type;
         $(`#select-${type}-form`).show();
-        console.log(type);
     });
 
 
