@@ -215,18 +215,15 @@ $(document).ready(function () {
     var urlParams = new URLSearchParams(window.location.search);
     if (urlParams.has('INPUT_JSON')) {
         INPUT_JSON = JSON.parse(decodeURIComponent(atob(urlParams.get('INPUT_JSON'))));
-        // Stringify the JSON data
+        // Stringify and compress the data using Base64 encoding
         var inputData = JSON.stringify(INPUT_JSON.idbuscadores);
+        var encodedData = btoa(inputData); // Encode inputData to Base64
 
-        //GET INPUT_JSON para mostrar secciones
+        // Send as a query parameter, but now compressed
         $.ajax({
-            url: "https://n8n.sacacitas.com/webhook/config-form",
-            type: "POST",
-            contentType: "application/json",
-            // Specify content type as JSON
+            url: `https://n8n.sacacitas.com/webhook/config-form?data=${encodedData}`,
+            type: "GET",
             dataType: 'json',
-            data: inputData,
-            // Send the JSON data
             success: function (response) {
                 // merge two dict
                 CONFIG_FORM = Object.assign(CONFIG_FORM, response);
@@ -270,7 +267,6 @@ $(document).ready(function () {
     } else {
         alert(`${TEXTOS_API['js-form-text-1']}`);
     }
-
 
 
 
