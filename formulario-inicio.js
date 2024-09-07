@@ -77,6 +77,12 @@ var InputRNacionalidad = $('#input-resolucion-nacionalidad');
 var InputCSVdoc = $('#input-csv-doc');
 var InputListaPaises = $('#input-lista-paises');
 
+//Buttons documents
+var selectFormDocPasaporte = $('#select-PASAPORTE-form');
+var selectFormDocNIE = $('#select-NIE-form');
+var selectFormDocDNI = $('#select-DNI-form');
+
+
 //Divs del formulario
 var DivListaPaises = $('#div-lista-paises');
 var DivJuraNacionalidad = $('#div-resolucion-nacionalidad');
@@ -471,13 +477,8 @@ $(document).ready(function () {
 
     //SECTION: 3 - Documento identidad
     //Seleccionar botones de selección de tipo de documento. DNI, NIE, Pasaporte
-    var selectFormDocPasaporte = $('#select-PASAPORTE-form');
-    var selectFormDocNIE = $('#select-NIE-form');
-    var selectFormDocDNI = $('#select-DNI-form');
-
     selectFormDocPasaporte.add(selectFormDocNIE).add(selectFormDocDNI).hide();
-    //Add selected css to button 
-    selectFormDocPasaporte.addClass('boton-documento-selected');
+    selectFormDocPasaporte.removeClass('boton-documento-selected')
 
     var options_documento = $('.div-documentos-formulario').children('a')
 
@@ -1193,6 +1194,17 @@ function InputsToShow() {
     const iso3166 = CONFIG_FORM.iso3166;
     // Filter the documentos_admitidos array to find the matching iso3166_1_alpha2
     const matchedDocumentos = CONFIG_FORM.documentos_admitidos.filter(doc => doc.iso3166_1_alpha2 === iso3166);
+
+    const firstDocumentadmted = matchedDocumentos[0].type;
+
+    if (firstDocumentadmted === 'PASAPORTE') {
+        selectFormDocPasaporte.addClass('boton-documento-selected');
+    } else if (firstDocumentadmted === 'NIE') {
+        selectFormDocNIE.addClass('boton-documento-selected');
+    } else if (firstDocumentadmted === 'DNI') {
+        selectFormDocDNI.addClass('boton-documento-selected');
+    }
+
     // Iterate over the matched documents and show the elements based on their type
     matchedDocumentos.forEach(doc => {
         const type = doc.type;
