@@ -1,4 +1,4 @@
-
+var CONFIG_FORM = CONFIG_FORM || {};
 
 
 // Set text i18n
@@ -168,7 +168,9 @@ document.addEventListener('DOMContentLoaded', function () {
     var clienteNombre = null;
     var clienteApellido1 = null;
     var clienteApellido2 = null;
-    var clienteTelefono = null;
+    var clientphone = null;
+    var clientphoneISO = null;
+    var clientphoneCode = null;     
     var clienteEmail = null;
     var clienteNacionalidad = null;
     var clienteNacionalidadISO = null;
@@ -243,7 +245,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 
-
     // Function to fetch the data from the API
     function fetchDataStatic() {
         // Construct the URL with the referencia parameter
@@ -262,6 +263,9 @@ document.addEventListener('DOMContentLoaded', function () {
                 return response.json();
             })
             .then(data => {
+                //Set global scope ID buscadores
+                idbuscadores = data.ID_buscadores
+
                 // IDs del JSON
                 id_oficina_front = data.ID_buscadores[0].id_oficina;
                 date_added_front = data.fecha_cliente_creado;
@@ -292,7 +296,9 @@ document.addEventListener('DOMContentLoaded', function () {
                 clienteNombre = data.cliente_nombre;
                 clienteApellido1 = data.cliente_apellido1;
                 clienteApellido2 = data.cliente_apellido2;
-                clienteTelefono = data.cliente_telefono;
+                clientphone = data.cliente_telefono.phone_number;
+                clientphoneISO = data.cliente_telefono.phone_iso;
+                clientphoneCode = data.cliente_telefono.phone_code;
                 clienteEmail = data.cliente_email;
                 clienteNacionalidad = data.cliente_nacionalidad;
                 clienteNacionalidadISO = data.cliente_nacionalidad_iso;
@@ -316,7 +322,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 //Inyectar datos fijos y dinamicos al principio
                 ReplaceItemsStatic();
                 ReplaceDynamicItems();
-                //Ejecutar timer para cargar datos dinámicos
+                callconfigform();
             })
             .catch(error => {
                 console.error('Error fetching data:', error);
@@ -326,17 +332,112 @@ document.addEventListener('DOMContentLoaded', function () {
 
             });
 
+
+
         console.log(state_front);
     }
 
 
+    function callconfigform() {
+        //Cargar config form
+        var inputData = JSON.stringify(idbuscadores);
+        var encodedData = btoa(inputData); // Encode inputData to Base64
+                
 
+        // Send as a query parameter, but now compressed
+        $.ajax({
+            url: `https://n8n.sacacitas.com/webhook/config-form?data=${encodedData}`,
+            type: "GET",
+            dataType: 'json',
+            success: function (response) {
+                 console.log("Success:", response);
+                // merge two dict
+                CONFIG_FORM = Object.assign(CONFIG_FORM, response);
+                //load items
+                ExecuteitiPhoneLibrary();
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                //if error call to webhook
+                $.ajax({
+                    url: "https://n8n.sacacitas.com/webhook/error-load-config-form",
+                    type: "POST",
+                    contentType: "application/json",
+                    // Specify content type as JSON
+                    dataType: 'json',
+                    data: inputData,
+                    // Send the JSON data
+                    success: function (response) {
+                        console.log("Error:", response);
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        console.error("Error:", errorThrown);
+                    }
+                });
+            }
+        });
 
+    }
 
+    function ExecuteitiPhoneLibrary() {
+        // Add country code to phone number input
+        $('input[ms-code-phone-number]').each(function () {
+            var input = this;
+    
+            // Initialize intlTelInput with your configuration
+            const iti = window.intlTelInput(input, {
+                onlyCountries: ["US", "ES"], // The list of allowed country ISO codes
+                separateDialCode: true,
+                strictMode: true,
+                utilsScript: "https://cdn.jsdelivr.net/npm/intl-tel-input@23.9.3/build/js/utils.js"
+            });
+    
+            // Attach iti instance to the input element for later use
+            $(input).data('itiInstance', iti);
 
+    
+            // Set the user's country based on predefined or IP-based location
+            let CountryISOselected = CONFIG_FORM.phone_number[0];
+            if (typeof CountryISOselected !== 'undefined' && CountryISOselected) {
+                iti.setCountry(CountryISOselected);
+            } else {
+                $.get("https://ipinfo.io", function (response) {
+                    var countryCode = response.country;
+                    iti.setCountry(countryCode);
+    
+                    // Update the saved ISO and dial code if changed by IP-based detection
+                    var ipBasedCountryData = iti.getSelectedCountryData();
+                    countryISO = ipBasedCountryData.iso2;
+                    dialCode = ipBasedCountryData.dialCode;
+    
+                    console.log("IP-Based Country ISO:", countryISO);
+                    console.log("IP-Based Dial Code:", dialCode);
+    
+                    // Update the hidden fields or variables
+                    $('input[name="country_iso"]').val(countryISO);
+                    $('input[name="dial_code"]').val(dialCode);
+                }, "jsonp");
+            }
+    
+    
+            // Retrieve the predefined country ISO and dial code
+            var selectedCountryData = iti.getSelectedCountryData();
+            var countryISO = selectedCountryData.iso2;   // Get the ISO2 code (e.g., "US")
+            var dialCode = selectedCountryData.dialCode; // Get the dial code (e.g., "1" for US)
+            $('#phone-dial-iso').val(countryISO); // Assuming you have hidden inputs for this
+            $('#phone-dial-code').val(dialCode);
 
-
-
+            // Retrieve just the country ISO and dial code on input change
+            input.addEventListener('countrychange', function () {
+                var selectedCountryData = iti.getSelectedCountryData();
+                var countryISO = selectedCountryData.iso2;   // Get the ISO2 code (e.g., "US")
+                var dialCode = selectedCountryData.dialCode; // Get the dial code (e.g., "1" for US)
+                $('#phone-dial-iso').val(countryISO); // Assuming you have hidden inputs for this
+                $('#phone-dial-code').val(dialCode);
+            });
+    
+        });
+    }
+    
 
     // Function to fetch the data from the API
     function fetchDataStateDynamic() {
@@ -508,8 +609,9 @@ document.addEventListener('DOMContentLoaded', function () {
         //Sección datos personales del cliente
         document.getElementById('link-cliente-documento-identidad').textContent = clienteIdType + ': ' + clienteIdDocumento;
         document.getElementById('link-cliente-fecha-nacimiento').textContent = formatted_date_clienteFechaNacimiento;
-        document.getElementById('link-cliente-telefono').textContent = clienteTelefono;
+        document.getElementById('link-cliente-telefono').textContent = "+" + clientphoneCode + " " + clientphone;
         document.getElementById('link-cliente-correo').textContent = clienteEmail;
+
         //Comprobar si está null o no el apellido 2
         var fullName = clienteNombre + ' ' + clienteApellido1 + (clienteApellido2 ? ' ' + clienteApellido2 : '');
         document.getElementById('link-cliente-nombre-completo').textContent = fullName;
@@ -1920,7 +2022,7 @@ document.addEventListener('DOMContentLoaded', function () {
         $('#input-apellido2').val(clienteApellido2);
         $('#input-fecha-nacimiento').val(formatted_date_clienteFechaNacimiento);
         $('#input-ndocumento').val(clienteIdDocumento);
-        $('#input-telefono').val(clienteTelefono);
+        $('#input-telefono').val("+" + clientphoneCode + clientphone);
         $('#input-lista-paises').val(clienteNacionalidad);
         //Value fechas de búsuqueda
         $('#start-date').val(formattedDate1);
@@ -1967,6 +2069,8 @@ document.addEventListener('DOMContentLoaded', function () {
             SelectedDocument: NiceSelected_document,
             NDocumento: $('#input-ndocumento').val(),
             Telefono: $('#input-telefono').val(),
+            TelefonoDialISO: $('#phone-dial-iso').val(),
+            TelefonoDiaCode: $('#phone-dial-code').val(),            
             Pais: $('#input-lista-paises').val(),
             referencia: referencia
         };
