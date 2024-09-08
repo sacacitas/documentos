@@ -385,7 +385,7 @@ document.addEventListener('DOMContentLoaded', function () {
     
             // Initialize intlTelInput with your configuration
             const iti = window.intlTelInput(input, {
-                onlyCountries: ["US", "ES"], // The list of allowed country ISO codes
+                onlyCountries: CONFIG_FORM.phone_number, // The list of allowed country ISO codes
                 separateDialCode: true,
                 strictMode: true,
                 utilsScript: "https://cdn.jsdelivr.net/npm/intl-tel-input@23.9.3/build/js/utils.js"
