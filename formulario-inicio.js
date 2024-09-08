@@ -491,7 +491,6 @@ $(document).ready(function () {
     });
 
     //SECTION: 4 - Contact items. Email and Phone number
-
     function ExecuteitiPhoneLibrary() {
         // Add country code to phone number input
         $('input[ms-code-phone-number]').each(function () {
@@ -508,37 +507,51 @@ $(document).ready(function () {
             // Attach iti instance to the input element for later use
             $(input).data('itiInstance', iti);
 
-            // Set the user's country based on CountryISOselected or fallback to IP-based location
-            let CountryISOselected = "ES";
+            // Set the user's country based on predefined or IP-based location
+            let CountryISOselected = CONFIG_FORM.phone_number[0];
             if (typeof CountryISOselected !== 'undefined' && CountryISOselected) {
                 iti.setCountry(CountryISOselected);
-
             } else {
                 $.get("https://ipinfo.io", function (response) {
                     var countryCode = response.country;
                     iti.setCountry(countryCode);
+
+                    // Update the saved ISO and dial code if changed by IP-based detection
+                    var ipBasedCountryData = iti.getSelectedCountryData();
+                    countryISO = ipBasedCountryData.iso2;
+                    dialCode = ipBasedCountryData.dialCode;
+
+                    console.log("IP-Based Country ISO:", countryISO);
+                    console.log("IP-Based Dial Code:", dialCode);
+
+                    // Update the hidden fields or variables
+                    $('input[name="country_iso"]').val(countryISO);
+                    $('input[name="dial_code"]').val(dialCode);
                 }, "jsonp");
             }
 
-            // Format phone number as user types
-            // input.addEventListener('change', formatPhoneNumber);
-            // input.addEventListener('keyup', formatPhoneNumber);
 
-            // function formatPhoneNumber() {
-            //     var formattedNumber = iti.getNumber(intlTelInput.utils.numberFormat.NATIONAL);
-            //     input.value = formattedNumber;
-            // }
+            // Retrieve the predefined country ISO and dial code
+            var selectedCountryData = iti.getSelectedCountryData();
+            var countryISO = selectedCountryData.iso2;   // Get the ISO2 code (e.g., "US")
+            var dialCode = selectedCountryData.dialCode; // Get the dial code (e.g., "1" for US)
+            $('#phone-dial-iso').val(countryISO); // Assuming you have hidden inputs for this
+            $('#phone-dial-code').val(dialCode);
 
-
-            // Format phone number on form submission
-            var form = $(input).closest('form');
-            form.submit(function () {
-                var formattedNumber = iti.getNumber(intlTelInput.utils.numberFormat.E164);
-                input.value = formattedNumber;
+            // Retrieve just the country ISO and dial code on input change
+            input.addEventListener('countrychange', function () {
+                var selectedCountryData = iti.getSelectedCountryData();
+                var countryISO = selectedCountryData.iso2;   // Get the ISO2 code (e.g., "US")
+                var dialCode = selectedCountryData.dialCode; // Get the dial code (e.g., "1" for US)
+                $('#phone-dial-iso').val(countryISO); // Assuming you have hidden inputs for this
+                $('#phone-dial-code').val(dialCode);
             });
-        });
 
+        });
+  
     }
+
+
 
 
     //SECTION: 5 - Specific search itmes. Nacionalidad, R Nacionalidad y caducidad tarjeta
@@ -695,6 +708,8 @@ $(document).ready(function () {
             NDocumento: $('#input-documento').val(),
             Correo: $('#input-correo').val(),
             Telefono: $('#input-telefono').val(),
+            TelefonoDialISO: $('#phone-dial-iso').val(),
+            TelefonoDiaCode: $('#phone-dial-code').val(),  
             Pais: $('#input-lista-paises option:selected').text(),
             Pais_iso: $('#input-lista-paises').val(),
             RNacionalidad: $('#input-resolucion-nacionalidad').val(),
