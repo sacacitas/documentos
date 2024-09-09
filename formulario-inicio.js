@@ -283,9 +283,9 @@ $(document).ready(function () {
         if (startDate && endDate) {
             var timeDiff = endDate - startDate;
             daysDiff = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
-            $("#texto-dias-de-busqueda").text(daysDiff);
+            $("#texto-dias-de-busqueda").text(' ' + daysDiff);
         } else {
-            $("#texto-dias-de-busqueda").text("-");
+            $("#texto-dias-de-busqueda").text(' ' + "-");
         }
         return daysDiff;
     }
@@ -1277,19 +1277,19 @@ function ResumenPage() {
 
 
     //Crear texto resumen
-    $('#resumen-servicio').text(INPUT_JSON.idbuscadores[0].nombre_servicio);
-    $('#resumen-oficina').text(INPUT_JSON.idbuscadores[0].nombre_oficina);
-    $('#resumen-provincia').text(INPUT_JSON.idbuscadores[0].nombre_provincia);
-    $('#resumen-nombre-completo').text($('#input-nombre').val() + ' ' + $('#input-apellido1').val() + ' ' + $('#input-apellido2').val());
-    $('#resumen-documento-identidad').text($('#input-documento').val());
-    $('#resumen-fecha-nacimiento').text($('#input-fecha-nacimiento').val());
-    $('#resumen-nacionalidad').text($('#input-lista-paises option:selected').text());
-    $('#resumen-resolucion-nacionalidad').text($('#input-resolucion-nacionalidad').val());
-    $('#resumen-csv').text($('#input-csv-doc').val());
-    $('#resumen-telefono').text($('#input-telefono').val());
-    $('#resumen-correo').text($('#input-correo').val());
-    $('#resumen-Fmin').text($('#start-date').val());
-    $('#resumen-Fmax').text($('#end-date').val());
+    $('#resumen-servicio').text(' ' + INPUT_JSON.idbuscadores[0].nombre_servicio);
+    $('#resumen-oficina').text(' ' + INPUT_JSON.idbuscadores[0].nombre_oficina);
+    $('#resumen-provincia').text(' ' + INPUT_JSON.idbuscadores[0].nombre_provincia);
+    $('#resumen-nombre-completo').text(' ' + $('#input-nombre').val() + ' ' + $('#input-apellido1').val() + ' ' + $('#input-apellido2').val());
+    $('#resumen-documento-identidad').text(' ' + $('#input-documento').val());
+    $('#resumen-fecha-nacimiento').text(' ' + $('#input-fecha-nacimiento').val());
+    $('#resumen-nacionalidad').text(' ' + $('#input-lista-paises option:selected').text());
+    $('#resumen-resolucion-nacionalidad').text(' ' + $('#input-resolucion-nacionalidad').val());
+    $('#resumen-csv').text(' ' + $('#input-csv-doc').val());
+    $('#resumen-telefono').text(' ' + $('#input-telefono').val());
+    $('#resumen-correo').text(' ' + $('#input-correo').val());
+    $('#resumen-Fmin').text(' ' + $('#start-date').val());
+    $('#resumen-Fmax').text(' ' + $('#end-date').val());
     // Convert cents to dollars and format with commas and two decimal places
     var formatted_price = ((CONFIG_FORM.precio) / 100).toLocaleString('es-ES', {
         minimumFractionDigits: 2,
