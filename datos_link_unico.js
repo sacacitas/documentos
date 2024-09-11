@@ -359,20 +359,24 @@ document.addEventListener('DOMContentLoaded', function () {
             error: function (jqXHR, textStatus, errorThrown) {
                 //if error call to webhook
                 $.ajax({
-                    url: "https://n8n.sacacitas.com/webhook/error-load-config-form",
+                    url: "https://n8n.sacacitas.com/webhook/error-alerts",
                     type: "POST",
-                    contentType: "application/json",
-                    // Specify content type as JSON
+                    contentType: "application/json", // Specify content type as JSON
                     dataType: 'json',
-                    data: inputData,
-                    // Send the JSON data
+                    data: JSON.stringify({
+                        inputData: inputData, // Assuming inputData is an object or data you want to send
+                        LocalisationError: "datos_link_unico-function-callconfigform",
+                        Extrainfo: "Llamada config form para obtener cosas admitidas para cambiar los datos personales", // Add extra text or data
+                        errorCode: 500 // Example of sending an additional error code
+                    }),
                     success: function (response) {
-                        console.log("Error:", response);
+                        console.log("Success:", response);
                     },
                     error: function (jqXHR, textStatus, errorThrown) {
                         console.error("Error:", errorThrown);
                     }
                 });
+
             }
         });
 
