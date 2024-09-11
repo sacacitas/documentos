@@ -248,20 +248,24 @@ $(document).ready(function () {
 
                 //if error call to webhook
                 $.ajax({
-                    url: "https://n8n.sacacitas.com/webhook/error-load-config-form",
+                    url: "https://n8n.sacacitas.com/webhook/error-alerts",
                     type: "POST",
-                    contentType: "application/json",
-                    // Specify content type as JSON
+                    contentType: "application/json", // Specify content type as JSON
                     dataType: 'json',
-                    data: inputData,
-                    // Send the JSON data
+                    data: JSON.stringify({
+                        inputData: inputData, // Assuming inputData is an object or data you want to send
+                        LocalisationError: "formulario_inicio-load-config-form",
+                        Extrainfo: "Llamada al config form desde el formulario", // Add extra text or data
+                        errorCode: 500 // Example of sending an additional error code
+                    }),
                     success: function (response) {
-                        console.log("Error:", response);
+                        console.log("Success:", response);
                     },
                     error: function (jqXHR, textStatus, errorThrown) {
                         console.error("Error:", errorThrown);
                     }
                 });
+
             }
         });
     } else {
@@ -743,16 +747,23 @@ $(document).ready(function () {
             },
             error: function (xhr, status, error) {
                 console.error('Form submission failed');
+                //if error call to webhook
                 $.ajax({
-                    type: 'POST',
-                    url: 'https://n8n.sacacitas.com/webhook/error-send-form',
-                    data: JSON.stringify({ error: error }),
+                    url: "https://n8n.sacacitas.com/webhook/error-alerts",
+                    type: "POST",
+                    contentType: "application/json", // Specify content type as JSON
                     dataType: 'json',
-                    contentType: 'application/json',
+                    data: JSON.stringify({
+                        inputData: inputData, // Assuming inputData is an object or data you want to send
+                        LocalisationError: "formulario_inicio-send-final-form",
+                        Extrainfo: "Ha fallado completar el formulario final", // Add extra text or data
+                        errorCode: 500 // Example of sending an additional error code
+                    }),
                     success: function (response) {
+                        console.log("Success:", response);
                     },
-                    error: function (xhr, status, error) {
-                        console.error('Failed to send logs');
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        console.error("Error:", errorThrown);
                     }
                 });
                 $('#div-error-enviar-datos').show();
