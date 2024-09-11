@@ -81,6 +81,28 @@ $(document).ready(function () {
 
                     $('#gif-cargando-boton-finalizar-2').hide();
                     $('#gif-error-boton-finalizar-2').show();
+
+
+                    //if error call to webhook
+                    $.ajax({
+                        url: "https://n8n.sacacitas.com/webhook/error-alerts",
+                        type: "POST",
+                        contentType: "application/json", // Specify content type as JSON
+                        dataType: 'json',
+                        data: JSON.stringify({
+                            LocalisationError: "web_contactar-send-form",
+                            Extrainfo: "Llamar a n8n para enviar el formulario", // Add extra text or data
+                            errorCode: 500 // Example of sending an additional error code
+                        }),
+                        success: function (response) {
+                            console.log("Success:", response);
+                        },
+                        error: function (jqXHR, textStatus, errorThrown) {
+                            console.error("Error:", errorThrown);
+                        }
+                    });
+
+
                 });        
 
         } else {
