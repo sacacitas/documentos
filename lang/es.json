@@ -1,5 +1,6 @@
 {
   "DNI" : "DNI",
+  "Inicio-Boton-1" : "Continuar",
   "Inicio-Boton-2" : "Ver precios",
   "Inicio-Boton-2-2" : "Contactar",
   "Inicio-Header-1" : "BUSCAMOS TU",
@@ -247,6 +248,7 @@
   "footer-8" : "Para empresas",
   "footer-9" : "Sobre nosotros",
   "form-button-continue" : "Continuar ->",
+  "form-button-finish" : "Finalizar",
   "form-button-goback" : "<- Volver",
   "form-header-1" : "Introduce tus fechas de búsqueda",
   "form-header-2" : "Datos para reservar tu cita",
@@ -368,7 +370,7 @@
   "inicio-63" : "03 /¿Las citas previas están a mi nombre?",
   "inicio-65" : "04 /‍¿Tengo que pagar por adelantado? ¿Existe algún coste incial?",
   "inicio-67" : "05 /‍¿Qué cita necesito buscar para mi trámite? Necesito ayuda con mi trámite ",
-  "inicio-help-header-1" : "01 /¿Es seguro usar SacaCitas? ¿Cómo funciona vuestro servicio?",
+  "inicio-help-header-1" : "¿Es seguro usar SacaCitas? ¿Cómo funciona vuestro servicio?",
   "inicio-help-header-2" : "Necesito una cita, ¿Cómo buscar una cita? ¿Cuánto cuesta?",
   "inicio-help-header-3" : "¿Las citas previas están a mi nombre?",
   "inicio-help-header-4" : "¿Tengo que pagar por adelantado? ¿Existe algún coste incial?",
