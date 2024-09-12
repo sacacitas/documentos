@@ -456,7 +456,7 @@
   "js-form-text-11" : "País de nacionalidad",
   "js-form-text-2" : "Existe un problema al recibir los datos. Las fechas de búsqueda están vacías, es posible que el formulario se ha iniciado hace mucho tiempo y se ha perdido esta información o que el navegador que está utilizando no es compatible con el formulario. Por favor, prueba otro navegador.",
   "js-form-text-3" : "Debes seleccionar un rango de fechas",
-  "js-form-text-4" : "Se necesitan al menos {MIN_DIAS} días de búsqueda",
+  "js-form-text-4" : "Se necesitan al menos 4 días de búsqueda",
   "js-form-text-5" : "Este campo es obligatorio",
   "js-form-text-6" : "Documento incorrecto",
   "js-form-text-7" : "Correos no coinciden",
