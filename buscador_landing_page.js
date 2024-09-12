@@ -220,13 +220,13 @@ $(document).ready(function () {
 
     console.log(values_select_country);
     // Filter out the default option from the list
-    var filteredOptions = values_select_country.filter(function(option) {
+    var filteredOptions = values_select_country.filter(function (option) {
         return option.value !== SELECTED_PAIS.value;
     });
     console.log(filteredOptions);
 
     // Populate the select element with the remaining options
-    filteredOptions.forEach(function(option) {
+    filteredOptions.forEach(function (option) {
         var optionElement = $('<option>', option);
         select_country.append(optionElement);
     });
@@ -245,7 +245,7 @@ $(document).ready(function () {
     var numero_citas_contador = 0;
 
 
-    
+
     //Function to populate select Administration
     function fetchJsonAndPopulateAdministracion() {
         var selectedCountry = select_country.val();
@@ -254,9 +254,9 @@ $(document).ready(function () {
             var values_select_administracion = [
                 //{ value: 'EX1', text: 'Extranjería' },
                 { value: 'RC1', text: 'Registro Civil' }
-            ];    
+            ];
 
-        }  else {
+        } else {
             var values_select_administracion = [
                 {}
             ];
@@ -278,6 +278,12 @@ $(document).ready(function () {
     function fetchJsonAndPopulateProvincia() {
         // Populate select provincias with the country selected
         var paisObj = window['country-list-js'].findByIso2(select_country.val());
+
+        // Fix Baleares
+        if (!paisObj.provinces.find((p) => p.short == "PM")) {
+            paisObj.provinces.push({ name: "Baleares", short: "PM", alias: null })
+        }
+
         paisObj.provinces
             .sort((a, b) => a.name.localeCompare(b.name))
             .forEach(prov => {
@@ -717,7 +723,7 @@ $(document).ready(function () {
         select_administracion.val('').empty().append(default_select_administracion);
         select_provincia.val('').empty().append(default_select_provincias);
         select_oficina.val('').empty().append(default_select_oficina);
-        select_servicio.val('').empty().append(default_select_servicio);        
+        select_servicio.val('').empty().append(default_select_servicio);
         fetchJsonAndPopulateAdministracion();
         fetchJsonAndPopulateProvincia();
     }
@@ -761,7 +767,7 @@ $(document).ready(function () {
 
 
     // Attach the common change listener to selec_country, select_administracion and select_provincia
-    select_country.on('change', resetAdministracionAndProvince);    
+    select_country.on('change', resetAdministracionAndProvince);
     select_administracion.on('change', resetValuesAndUpdateCitaPrevia);
     select_provincia.on('change', resetValuesAndUpdateCitaPrevia);
 
