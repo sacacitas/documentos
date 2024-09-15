@@ -7,6 +7,8 @@ var MAX_CHECKOUT_ITEMS = 1; //Items máximos que se pueden añadir
 
 var INPUT_JSON = {}
 
+
+
 // Set text i18n
 var TEXTOS_API = {
     'js-buscador-text-1': 'España',
@@ -18,9 +20,25 @@ var TEXTOS_API = {
     'js-buscador-text-7': 'No hay oficinas disponibles',
     'js-buscador-text-8': 'No hay servicios disponibles',
 
+    'Inicio-Boton-1-placeholder': 'Continuar',
+
 };
 
+// Check if tolgee_instance is initialized
+if (window['tolgee_instance']) {
+    console.log('tolgee_instance found, starting translation...');
 
+    // Iterate over TEXTOS_API and replace values with translations
+    for (const [key, value] of Object.entries(TEXTOS_API)) {
+        const translation = window['tolgee_instance'].t(key, `${TEXTOS_API[key]} {{${key}}}`);
+        TEXTOS_API[key] = translation;
+    }
+} else {
+    console.error('tolgee_instance is not initialized');
+}
+
+//Set placeholder text for butotn
+$('#inicio-search-button-end').val(TEXTOS_API['Inicio-Boton-1-placeholder']);
 
 
 
