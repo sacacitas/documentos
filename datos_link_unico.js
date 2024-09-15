@@ -46,6 +46,7 @@ var TEXTOS_API = {
     'js-linkunico-text-38': 'Indica la razón por la que cancelas tu cita previa reservada*',
     'js-linkunico-text-39': 'Indica la razón por la que cancelas tu búsqueda',
     'linkunico-button-confirm': 'Confirmar',
+    'linkunico-button-8': 'Pagar',
 
 
 
@@ -153,6 +154,9 @@ $('#input-razon-cancelar-cita-reservada').attr('placeholder', TEXTOS_API['js-lin
 $('#finalizar-form-datos-personales').val(TEXTOS_API['linkunico-button-confirm']);
 $('#finalizar-form-datos-busqueda-2').val(TEXTOS_API['linkunico-button-confirm']);
 $('#finalizar-form-popup-datos-personales').val(TEXTOS_API['linkunico-button-confirm']);
+$('#boton_pagar_link_unico').val(TEXTOS_API['linkunico-button-8']);
+
+
 
 
 document.addEventListener('DOMContentLoaded', function () {
