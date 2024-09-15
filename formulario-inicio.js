@@ -32,6 +32,14 @@ var CONFIG_FORM = {
 
 
 
+
+
+//Current subdomain
+var host = window.location.hostname;  // Get the full hostname (e.g., subdomain.example.com)
+var subdomain = host.split('.')[0];   // Get the first part of the hostname
+
+
+
 //--> Variables del fornulario
 //Crear variables cogiendo las secciones divs del formulario
 var AsiloPrimeraBloque = $('#bloque-asilo-primera-vez-form');
@@ -133,10 +141,16 @@ var ENABLED_PAGES = {
 
 // Set text i18n
 var TEXTOS_API = {
+
+    'js-form-placeholder-1': 'Fecha mínima',
+    'js-form-placeholder-2': 'Fecha máxima',
+    'js-form-placeholder-3': 'Seleccionar días',
+
+
     'js-form-text-1': 'Hubo un problema al procesar la solicitud, acceda al formulario desde el buscador de https://sacacitas.com, Si el problema persiste, contacte con nosotros.',
     'js-form-text-2': 'Existe un problema al recibir los datos. Las fechas de búsqueda están vacías, es posible que el formulario se ha iniciado hace mucho tiempo y se ha perdido esta información o que el navegador que está utilizando no es compatible con el formulario. Por favor, prueba otro navegador.',
     'js-form-text-3': 'Debes seleccionar un rango de fechas',
-    'js-form-text-4': `Se necesitan al menos ${MIN_DIAS} días de búsqueda`,
+    'js-form-text-4': `Se necesitan al menos 4 días de búsqueda`,
     'js-form-text-5': 'Este campo es obligatorio',
     'js-form-text-6': 'Documento incorrecto',
     'js-form-text-7': 'Correos no coinciden',
@@ -202,6 +216,27 @@ var TEXTOS_API = {
     'js-datepicker-ultrashortdayweek-7': 'D',
 
 };
+
+
+
+
+// Check if tolgee_instance is initialized
+if (window['tolgee_instance']) {
+    console.log('tolgee_instance found, starting translation...');
+
+    // Iterate over TEXTOS_API and replace values with translations
+    for (const [key, value] of Object.entries(TEXTOS_API)) {
+        const translation = window['tolgee_instance'].t(key, `${TEXTOS_API[key]} {{${key}}}`);
+        TEXTOS_API[key] = translation;
+    }
+} else {
+    console.error('tolgee_instance is not initialized');
+}
+
+//Replace text in placeholders, buttons, etc
+$('#start-date').attr('placeholder', TEXTOS_API['js-form-placeholder-1']);
+$('#end-date').attr('placeholder', TEXTOS_API['js-form-placeholder-2']);
+$('#exclude-days').attr('placeholder', TEXTOS_API['js-form-placeholder-3']);
 
 
 
@@ -552,7 +587,7 @@ $(document).ready(function () {
             });
 
         });
-  
+
     }
 
 
@@ -577,7 +612,7 @@ $(document).ready(function () {
         }
 
         // Fetch the country data from the provided URL
-        fetch('https://cdn.jsdelivr.net/npm/i18n-iso-countries/langs/es.json')
+        fetch(`https://cdn.jsdelivr.net/npm/i18n-iso-countries/langs/${subdomain}.json`)
             .then(response => {
                 if (!response.ok) {
                     throw new Error(`Network response was not ok: ${response.statusText}`);
@@ -713,7 +748,7 @@ $(document).ready(function () {
             Correo: $('#input-correo').val(),
             Telefono: $('#input-telefono').val(),
             TelefonoDialISO: $('#phone-dial-iso').val(),
-            TelefonoDiaCode: $('#phone-dial-code').val(),  
+            TelefonoDiaCode: $('#phone-dial-code').val(),
             Pais: $('#input-lista-paises option:selected').text(),
             Pais_iso: $('#input-lista-paises').val(),
             RNacionalidad: $('#input-resolucion-nacionalidad').val(),
