@@ -3,6 +3,9 @@ var CONFIG_FORM = CONFIG_FORM || {};
 
 // Set text i18n
 var TEXTOS_API = {
+    'js-linkunico-button-1': 'Verificar',
+
+
     'js-linkunico-text-1': 'Desde',
     'js-linkunico-text-2': 'hasta',
     'js-linkunico-text-3': 'Búsqueda aún no iniciada',
@@ -40,6 +43,10 @@ var TEXTOS_API = {
     'js-linkunico-text-35': 'Sin datos',
     'js-linkunico-text-36': 'h.',
     'js-linkunico-text-37': 'Indica tu nacionalidad',
+    'js-linkunico-text-38': 'Indica la razón por la que cancelas tu cita previa reservada*',
+    'js-linkunico-text-39': 'Indica la razón por la que cancelas tu búsqueda',
+    'linkunico-button-confirm': 'Confirmar',
+
 
 
 
@@ -126,9 +133,26 @@ var TEXTOS_API = {
 
 };
 
+// Check if tolgee_instance is initialized
+if (window['tolgee_instance']) {
+    console.log('tolgee_instance found, starting translation...');
 
+    // Iterate over TEXTOS_API and replace values with translations
+    for (const [key, value] of Object.entries(TEXTOS_API)) {
+        const translation = window['tolgee_instance'].t(key, `${TEXTOS_API[key]} {{${key}}}`);
+        TEXTOS_API[key] = translation;
+    }
+} else {
+    console.error('tolgee_instance is not initialized');
+}
 
-
+//Set placeholder text for butotn
+$('#boton_completar_verify_correo').val(TEXTOS_API['js-linkunico-button-1']);
+$('#input-cancelar-busqueda-link-unico').attr('placeholder', TEXTOS_API['js-linkunico-text-39']);
+$('#input-razon-cancelar-cita-reservada').attr('placeholder', TEXTOS_API['js-linkunico-text-38']);
+$('#finalizar-form-datos-personales').val(TEXTOS_API['linkunico-button-confirm']);
+$('#finalizar-form-datos-busqueda-2').val(TEXTOS_API['linkunico-button-confirm']);
+$('#finalizar-form-popup-datos-personales').val(TEXTOS_API['linkunico-button-confirm']);
 
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -170,7 +194,7 @@ document.addEventListener('DOMContentLoaded', function () {
     var clienteApellido2 = null;
     var clientphone = null;
     var clientphoneISO = null;
-    var clientphoneCode = null;     
+    var clientphoneCode = null;
     var clienteEmail = null;
     var clienteNacionalidad = null;
     var clienteNacionalidadISO = null;
@@ -342,7 +366,7 @@ document.addEventListener('DOMContentLoaded', function () {
         //Cargar config form
         var inputData = JSON.stringify(idbuscadores);
         var encodedData = btoa(inputData); // Encode inputData to Base64
-                
+
 
         // Send as a query parameter, but now compressed
         $.ajax({
@@ -350,7 +374,7 @@ document.addEventListener('DOMContentLoaded', function () {
             type: "GET",
             dataType: 'json',
             success: function (response) {
-                 console.log("Success:", response);
+                console.log("Success:", response);
                 // merge two dict
                 CONFIG_FORM = Object.assign(CONFIG_FORM, response);
                 //load items
@@ -386,7 +410,7 @@ document.addEventListener('DOMContentLoaded', function () {
         // Add country code to phone number input
         $('input[ms-code-phone-number]').each(function () {
             var input = this;
-    
+
             // Initialize intlTelInput with your configuration
             const iti = window.intlTelInput(input, {
                 onlyCountries: CONFIG_FORM.phone_number, // The list of allowed country ISO codes
@@ -394,11 +418,11 @@ document.addEventListener('DOMContentLoaded', function () {
                 strictMode: true,
                 utilsScript: "https://cdn.jsdelivr.net/npm/intl-tel-input@23.9.3/build/js/utils.js"
             });
-    
+
             // Attach iti instance to the input element for later use
             $(input).data('itiInstance', iti);
 
-    
+
             // Set the user's country based on predefined or IP-based location
             let CountryISOselected = CONFIG_FORM.phone_number[0];
             if (typeof CountryISOselected !== 'undefined' && CountryISOselected) {
@@ -407,22 +431,22 @@ document.addEventListener('DOMContentLoaded', function () {
                 $.get("https://ipinfo.io", function (response) {
                     var countryCode = response.country;
                     iti.setCountry(countryCode);
-    
+
                     // Update the saved ISO and dial code if changed by IP-based detection
                     var ipBasedCountryData = iti.getSelectedCountryData();
                     countryISO = ipBasedCountryData.iso2;
                     dialCode = ipBasedCountryData.dialCode;
-    
+
                     console.log("IP-Based Country ISO:", countryISO);
                     console.log("IP-Based Dial Code:", dialCode);
-    
+
                     // Update the hidden fields or variables
                     $('input[name="country_iso"]').val(countryISO);
                     $('input[name="dial_code"]').val(dialCode);
                 }, "jsonp");
             }
-    
-    
+
+
             // Retrieve the predefined country ISO and dial code
             var selectedCountryData = iti.getSelectedCountryData();
             var countryISO = selectedCountryData.iso2;   // Get the ISO2 code (e.g., "US")
@@ -438,10 +462,10 @@ document.addEventListener('DOMContentLoaded', function () {
                 $('#phone-dial-iso').val(countryISO); // Assuming you have hidden inputs for this
                 $('#phone-dial-code').val(dialCode);
             });
-    
+
         });
     }
-    
+
 
     // Function to fetch the data from the API
     function fetchDataStateDynamic() {
@@ -591,7 +615,7 @@ document.addEventListener('DOMContentLoaded', function () {
             formattedDateAdded = `${TEXTOS_API['js-linkunico-text-3']}`; // "Búsqueda aún no iniciada"
         }
         document.getElementById('date_added_front').textContent = formattedDateAdded;
-        document.getElementById('caducidad_busqueda').textContent = TEXTOS_API['js-linkunico-text-4'] + " " + dias_caducidad_restantes + " "  + TEXTOS_API['js-linkunico-text-5']; // "Dentro de" + " días"
+        document.getElementById('caducidad_busqueda').textContent = TEXTOS_API['js-linkunico-text-4'] + " " + dias_caducidad_restantes + " " + TEXTOS_API['js-linkunico-text-5']; // "Dentro de" + " días"
         document.getElementById('precio_cita_front').textContent = precio_cita_backend.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
         document.getElementById('fecha-cita-reservada').textContent = formattedDate_cita_reservada;
         document.getElementById('boton-fecha-limite-pago').textContent = formattedDate_fecha_limite_pago;
@@ -637,30 +661,30 @@ document.addEventListener('DOMContentLoaded', function () {
             $('#div-link-cliente-nacionalidad').show();
 
             fetch('https://cdn.jsdelivr.net/npm/i18n-iso-countries/langs/es.json')
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error(`Network response was not ok: ${response.statusText}`);
-                }
-                return response.json();
-            })
-            .then(data => {
-                // Get the countries object from the response
-                const countries = data.countries;
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`Network response was not ok: ${response.statusText}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    // Get the countries object from the response
+                    const countries = data.countries;
 
-                // Replace ISO code with the country name
-                const countryName = countries[clienteNacionalidadISO];
-                
-                // If it's an array of names (like CN, RU, etc.), pick the first one
-                const displayName = Array.isArray(countryName) ? countryName[0] : countryName;
+                    // Replace ISO code with the country name
+                    const countryName = countries[clienteNacionalidadISO];
 
-                // Update the text content in the DOM
-                $('#link-cliente-nacionalidad').text(displayName || clienteNacionalidadISO); // Fallback to ISO if not found
-            })
-            .catch(error => {
-                console.error('Error fetching country names:', error);
-                // Fallback: Use the ISO code if the fetch fails
-                $('#link-cliente-nacionalidad').text(clienteNacionalidadISO);
-            });
+                    // If it's an array of names (like CN, RU, etc.), pick the first one
+                    const displayName = Array.isArray(countryName) ? countryName[0] : countryName;
+
+                    // Update the text content in the DOM
+                    $('#link-cliente-nacionalidad').text(displayName || clienteNacionalidadISO); // Fallback to ISO if not found
+                })
+                .catch(error => {
+                    console.error('Error fetching country names:', error);
+                    // Fallback: Use the ISO code if the fetch fails
+                    $('#link-cliente-nacionalidad').text(clienteNacionalidadISO);
+                });
 
         } else if (clienteNacionalidad) {
             // If no ISO code but there's a text representation, show it
@@ -2074,7 +2098,7 @@ document.addEventListener('DOMContentLoaded', function () {
             NDocumento: $('#input-ndocumento').val(),
             Telefono: $('#input-telefono').val(),
             TelefonoDialISO: $('#phone-dial-iso').val(),
-            TelefonoDiaCode: $('#phone-dial-code').val(),            
+            TelefonoDiaCode: $('#phone-dial-code').val(),
             Pais: $('#input-lista-paises').val(),
             referencia: referencia
         };
