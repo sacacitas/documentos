@@ -10,7 +10,32 @@ var TEXTOS_API = {
     'js-contact-select-problem-7': 'Otro',
 
     'js-contact-selector-placeholdertext': 'Máximo 1000 caracteres',
+    'contact-button-1': 'Enviar',
 };
+
+
+
+// Check if tolgee_instance is initialized
+if (window['tolgee_instance']) {
+    console.log('tolgee_instance found, starting translation...');
+
+    // Iterate over TEXTOS_API and replace values with translations
+    for (const [key, value] of Object.entries(TEXTOS_API)) {
+        const translation = window['tolgee_instance'].t(key, `${TEXTOS_API[key]} {{${key}}}`);
+        TEXTOS_API[key] = translation;
+        console.log(`Translated key: ${key} to: ${translation}`);
+    }
+} else {
+    console.error('tolgee_instance is not initialized');
+}
+
+
+//Default placegolder text
+$('#contact-message').attr('placeholder', TEXTOS_API['js-contact-selector-placeholdertext']);
+$('#formulario-boton-finalizar').val(TEXTOS_API['contact-button-1']);
+
+
+
 
 $(document).ready(function () {
 
@@ -30,7 +55,8 @@ $(document).ready(function () {
         <option value="Other">${TEXTOS_API['js-contact-select-problem-7']}</option>
     `);
 
-    $('#contact-message').attr('placeholder', TEXTOS_API['js-contact-selector-placeholdertext']);
+
+
 
     // Intercept the form submission
     $('#formulario-boton-finalizar').click(function (e) {
@@ -43,11 +69,11 @@ $(document).ready(function () {
         var message = $('#contact-message').val();
         var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // Simple email validation regex
 
-        if ($('#contact-name').val() && 
-            email && 
-            emailRegex.test(email) && 
-            $('#contact-select-problem').val() && 
-            message && 
+        if ($('#contact-name').val() &&
+            email &&
+            emailRegex.test(email) &&
+            $('#contact-select-problem').val() &&
+            message &&
             message.length <= 1000) {
 
             $('#gif-cargando-boton-finalizar-2').show();
@@ -65,7 +91,7 @@ $(document).ready(function () {
 
             // Send the POST request
             $.post('https://n8n.sacacitas.com/webhook/contact', formData)
-                .done(function(response) {
+                .done(function (response) {
                     // Handle success
                     console.log('Form successfully submitted:', response);
                     // Optionally, show a success message to the user
@@ -74,7 +100,7 @@ $(document).ready(function () {
                     $('#gif-cargando-boton-finalizar-2').hide();
                     $('#gif-success-boton-finalizar-2').show();
                 })
-                .fail(function(error) {
+                .fail(function (error) {
                     // Handle error
                     console.log('Form submission failed:', error);
                     // Optionally, show an error message to the user
@@ -103,7 +129,7 @@ $(document).ready(function () {
                     });
 
 
-                });        
+                });
 
         } else {
             $('#gif-error-boton-finalizar-2').show(); // Show error gif if validation fails
@@ -111,7 +137,7 @@ $(document).ready(function () {
     });
 
     // Optionally, deactivate the original form submission behavior
-    $('#email-form').submit(function(e) {
+    $('#email-form').submit(function (e) {
         e.preventDefault(); // Prevent the original Webflow form submission
     });
 
