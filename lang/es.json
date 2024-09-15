@@ -474,6 +474,7 @@
   "js-datepicker-ultrashortdayweek-7" : "D",
   "js-form-placeholder-1" : "Fecha mínima",
   "js-form-placeholder-2" : "Fecha máxima",
+  "js-form-placeholder-3" : "Seleccionar días",
   "js-form-text-1" : "Hubo un problema al procesar la solicitud, acceda al formulario desde el buscador de https://sacacitas.com, Si el problema persiste, contacte con nosotros.",
   "js-form-text-10" : "El formato es incorrecto",
   "js-form-text-11" : "País de nacionalidad",
