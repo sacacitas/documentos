@@ -474,6 +474,7 @@
   "js-datepicker-ultrashortdayweek-7" : "D",
   "js-form-placeholder-1" : "Minimum date",
   "js-form-placeholder-2" : "Maximum date",
+  "js-form-placeholder-3" : "Select days",
   "js-form-text-1" : "There was a problem processing the request, access the form from the search engine at https://sacacitas.com. If the problem persists, contact us.",
   "js-form-text-10" : "The format is incorrect",
   "js-form-text-11" : "Country of nationality",
