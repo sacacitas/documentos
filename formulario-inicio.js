@@ -31,12 +31,116 @@ var CONFIG_FORM = {
 };
 
 
+// Set text i18n
+var TEXTOS_API = {
+
+    'js-form-placeholder-1': 'Fecha mínima',
+    'js-form-placeholder-2': 'Fecha máxima',
+    'js-form-placeholder-3': 'Seleccionar días',
+
+
+    'js-form-text-1': 'Hubo un problema al procesar la solicitud, acceda al formulario desde el buscador de https://sacacitas.com, Si el problema persiste, contacte con nosotros.',
+    'js-form-text-2': 'Existe un problema al recibir los datos. Las fechas de búsqueda están vacías, es posible que el formulario se ha iniciado hace mucho tiempo y se ha perdido esta información o que el navegador que está utilizando no es compatible con el formulario. Por favor, prueba otro navegador.',
+    'js-form-text-3': 'Debes seleccionar un rango de fechas',
+    'js-form-text-4': `Se necesitan al menos 4 días de búsqueda`,
+    'js-form-text-5': 'Este campo es obligatorio',
+    'js-form-text-6': 'Documento incorrecto',
+    'js-form-text-7': 'Correos no coinciden',
+    'js-form-text-8': 'Telefonos no coinciden',
+    'js-form-text-9': 'El teléfono no es válido',
+    'js-form-text-10': 'El formato es incorrecto',
+    'js-form-text-11': 'País de nacionalidad',
+    'js-finish-button': 'Finalizar',
+
+
+
+    'js-datepicker-lang-1': 'Cerrar',
+    'js-datepicker-lang-2': 'Anterior',
+    'js-datepicker-lang-3': 'Siguiente',
+    'js-datepicker-lang-4': 'Hoy',
+    'js-datepicker-lang-5': 'Aplicar',
+    'js-datepicker-lang-6': 'Borrar',
+    'js-datepicker-lang-7': 'día',
+    'js-datepicker-lang-8': 'días',
+
+    'js-datepicker-month-1': 'enero',
+    'js-datepicker-month-2': 'febrero',
+    'js-datepicker-month-3': 'marzo',
+    'js-datepicker-month-4': 'abril',
+    'js-datepicker-month-5': 'mayo',
+    'js-datepicker-month-6': 'junio',
+    'js-datepicker-month-7': 'julio',
+    'js-datepicker-month-8': 'agosto',
+    'js-datepicker-month-9': 'septiembre',
+    'js-datepicker-month-10': 'octubre',
+    'js-datepicker-month-11': 'noviembre',
+    'js-datepicker-month-12': 'diciembre',
+    'js-datepicker-shortmonth-1': 'ene',
+    'js-datepicker-shortmonth-2': 'feb',
+    'js-datepicker-shortmonth-3': 'mar',
+    'js-datepicker-shortmonth-4': 'abr',
+    'js-datepicker-shortmonth-5': 'may',
+    'js-datepicker-shortmonth-6': 'jun',
+    'js-datepicker-shortmonth-7': 'jul',
+    'js-datepicker-shortmonth-8': 'ago',
+    'js-datepicker-shortmonth-9': 'sep',
+    'js-datepicker-shortmonth-10': 'oct',
+    'js-datepicker-shortmonth-11': 'nov',
+    'js-datepicker-shortmonth-12': 'dic',
+    'js-datepicker-dayweek-1': 'lunes',
+    'js-datepicker-dayweek-2': 'martes',
+    'js-datepicker-dayweek-3': 'miércoles',
+    'js-datepicker-dayweek-4': 'jueves',
+    'js-datepicker-dayweek-5': 'viernes',
+    'js-datepicker-dayweek-6': 'sábado',
+    'js-datepicker-dayweek-7': 'domingo',
+    'js-datepicker-shortdayweek-1': 'lun',
+    'js-datepicker-shortdayweek-2': 'mar',
+    'js-datepicker-shortdayweek-3': 'mié',
+    'js-datepicker-shortdayweek-4': 'jue',
+    'js-datepicker-shortdayweek-5': 'vie',
+    'js-datepicker-shortdayweek-6': 'sáb',
+    'js-datepicker-shortdayweek-7': 'dom',
+    'js-datepicker-ultrashortdayweek-1': 'L',
+    'js-datepicker-ultrashortdayweek-2': 'M',
+    'js-datepicker-ultrashortdayweek-3': 'X',
+    'js-datepicker-ultrashortdayweek-4': 'J',
+    'js-datepicker-ultrashortdayweek-5': 'V',
+    'js-datepicker-ultrashortdayweek-6': 'S',
+    'js-datepicker-ultrashortdayweek-7': 'D',
+
+};
+
+
+
+
+// Check if tolgee_instance is initialized
+if (window['tolgee_instance']) {
+    console.log('tolgee_instance found, starting translation...');
+
+    // Iterate over TEXTOS_API and replace values with translations
+    for (const [key, value] of Object.entries(TEXTOS_API)) {
+        const translation = window['tolgee_instance'].t(key, `${TEXTOS_API[key]} {{${key}}}`);
+        TEXTOS_API[key] = translation;
+    }
+} else {
+    console.error('tolgee_instance is not initialized');
+}
+
+//Replace text in placeholders, buttons, etc
+$('#start-date').attr('placeholder', TEXTOS_API['js-form-placeholder-1']);
+$('#end-date').attr('placeholder', TEXTOS_API['js-form-placeholder-2']);
+$('#exclude-days').attr('placeholder', TEXTOS_API['js-form-placeholder-3']);
+$('#formulario-boton-finalizar').val(TEXTOS_API['js-finish-button']);
+
+
 
 
 
 //Current subdomain
 var host = window.location.hostname;  // Get the full hostname (e.g., subdomain.example.com)
 var subdomain = host.split('.')[0];   // Get the first part of the hostname
+
 
 
 
@@ -137,106 +241,6 @@ let PageCountingTotal = 5
 var ENABLED_PAGES = {
     'seccion5': true
 }
-
-
-// Set text i18n
-var TEXTOS_API = {
-
-    'js-form-placeholder-1': 'Fecha mínima',
-    'js-form-placeholder-2': 'Fecha máxima',
-    'js-form-placeholder-3': 'Seleccionar días',
-
-
-    'js-form-text-1': 'Hubo un problema al procesar la solicitud, acceda al formulario desde el buscador de https://sacacitas.com, Si el problema persiste, contacte con nosotros.',
-    'js-form-text-2': 'Existe un problema al recibir los datos. Las fechas de búsqueda están vacías, es posible que el formulario se ha iniciado hace mucho tiempo y se ha perdido esta información o que el navegador que está utilizando no es compatible con el formulario. Por favor, prueba otro navegador.',
-    'js-form-text-3': 'Debes seleccionar un rango de fechas',
-    'js-form-text-4': `Se necesitan al menos 4 días de búsqueda`,
-    'js-form-text-5': 'Este campo es obligatorio',
-    'js-form-text-6': 'Documento incorrecto',
-    'js-form-text-7': 'Correos no coinciden',
-    'js-form-text-8': 'Telefonos no coinciden',
-    'js-form-text-9': 'El teléfono no es válido',
-    'js-form-text-10': 'El formato es incorrecto',
-    'js-form-text-11': 'País de nacionalidad',
-
-
-    'js-datepicker-lang-1': 'Cerrar',
-    'js-datepicker-lang-2': 'Anterior',
-    'js-datepicker-lang-3': 'Siguiente',
-    'js-datepicker-lang-4': 'Hoy',
-    'js-datepicker-lang-5': 'Aplicar',
-    'js-datepicker-lang-6': 'Borrar',
-    'js-datepicker-lang-7': 'día',
-    'js-datepicker-lang-8': 'días',
-
-    'js-datepicker-month-1': 'enero',
-    'js-datepicker-month-2': 'febrero',
-    'js-datepicker-month-3': 'marzo',
-    'js-datepicker-month-4': 'abril',
-    'js-datepicker-month-5': 'mayo',
-    'js-datepicker-month-6': 'junio',
-    'js-datepicker-month-7': 'julio',
-    'js-datepicker-month-8': 'agosto',
-    'js-datepicker-month-9': 'septiembre',
-    'js-datepicker-month-10': 'octubre',
-    'js-datepicker-month-11': 'noviembre',
-    'js-datepicker-month-12': 'diciembre',
-    'js-datepicker-shortmonth-1': 'ene',
-    'js-datepicker-shortmonth-2': 'feb',
-    'js-datepicker-shortmonth-3': 'mar',
-    'js-datepicker-shortmonth-4': 'abr',
-    'js-datepicker-shortmonth-5': 'may',
-    'js-datepicker-shortmonth-6': 'jun',
-    'js-datepicker-shortmonth-7': 'jul',
-    'js-datepicker-shortmonth-8': 'ago',
-    'js-datepicker-shortmonth-9': 'sep',
-    'js-datepicker-shortmonth-10': 'oct',
-    'js-datepicker-shortmonth-11': 'nov',
-    'js-datepicker-shortmonth-12': 'dic',
-    'js-datepicker-dayweek-1': 'lunes',
-    'js-datepicker-dayweek-2': 'martes',
-    'js-datepicker-dayweek-3': 'miércoles',
-    'js-datepicker-dayweek-4': 'jueves',
-    'js-datepicker-dayweek-5': 'viernes',
-    'js-datepicker-dayweek-6': 'sábado',
-    'js-datepicker-dayweek-7': 'domingo',
-    'js-datepicker-shortdayweek-1': 'lun',
-    'js-datepicker-shortdayweek-2': 'mar',
-    'js-datepicker-shortdayweek-3': 'mié',
-    'js-datepicker-shortdayweek-4': 'jue',
-    'js-datepicker-shortdayweek-5': 'vie',
-    'js-datepicker-shortdayweek-6': 'sáb',
-    'js-datepicker-shortdayweek-7': 'dom',
-    'js-datepicker-ultrashortdayweek-1': 'L',
-    'js-datepicker-ultrashortdayweek-2': 'M',
-    'js-datepicker-ultrashortdayweek-3': 'X',
-    'js-datepicker-ultrashortdayweek-4': 'J',
-    'js-datepicker-ultrashortdayweek-5': 'V',
-    'js-datepicker-ultrashortdayweek-6': 'S',
-    'js-datepicker-ultrashortdayweek-7': 'D',
-
-};
-
-
-
-
-// Check if tolgee_instance is initialized
-if (window['tolgee_instance']) {
-    console.log('tolgee_instance found, starting translation...');
-
-    // Iterate over TEXTOS_API and replace values with translations
-    for (const [key, value] of Object.entries(TEXTOS_API)) {
-        const translation = window['tolgee_instance'].t(key, `${TEXTOS_API[key]} {{${key}}}`);
-        TEXTOS_API[key] = translation;
-    }
-} else {
-    console.error('tolgee_instance is not initialized');
-}
-
-//Replace text in placeholders, buttons, etc
-$('#start-date').attr('placeholder', TEXTOS_API['js-form-placeholder-1']);
-$('#end-date').attr('placeholder', TEXTOS_API['js-form-placeholder-2']);
-$('#exclude-days').attr('placeholder', TEXTOS_API['js-form-placeholder-3']);
 
 
 
@@ -759,7 +763,8 @@ $(document).ready(function () {
             gclid: INPUT_JSON.cookieGclid,
             retargetingSource: null,
             fbclid: INPUT_JSON.cookieFbclid,
-            fbpid: INPUT_JSON.cookieFbp
+            fbpid: INPUT_JSON.cookieFbp,
+            ISO_language: subdomain
         };
 
         // Send POST request
