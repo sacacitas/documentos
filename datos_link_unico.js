@@ -134,56 +134,32 @@ var TEXTOS_API = {
 
 };
 
-function ReplaceTolgeeJSText() {
-    $('#boton_completar_verify_correo').val(TEXTOS_API['js-linkunico-button-1']);
-    $('#input-cancelar-busqueda-link-unico').attr('placeholder', TEXTOS_API['js-linkunico-text-39']);
-    $('#input-razon-cancelar-cita-reservada').attr('placeholder', TEXTOS_API['js-linkunico-text-38']);
-    $('#finalizar-form-datos-personales').val(TEXTOS_API['linkunico-button-confirm']);
-    $('#finalizar-form-datos-busqueda-2').val(TEXTOS_API['linkunico-button-confirm']);
-    $('#finalizar-form-popup-datos-personales').val(TEXTOS_API['linkunico-button-confirm']);
-    $('#boton_pagar_link_unico').val(TEXTOS_API['linkunico-button-8']);
-
-
-}
-
-//--> Regarding Language
-//Current subdomain
-var host = window.location.hostname;  // Get the full hostname (e.g., subdomain.example.com)
-var subdomain = host.split('.')[0];   // Get the first part of the hostname
-
 // Check if tolgee_instance is initialized
-function checkTolgeeInstance() {
-    if (window['tolgee_instance']) {
-        // Iterate over TEXTOS_API and replace values with translations
-        for (const [key, value] of Object.entries(TEXTOS_API)) {
-            const translation = window['tolgee_instance'].t(key, `${TEXTOS_API[key]} {{${key}}}`);
-            TEXTOS_API[key] = translation;
-        }
-        //Load when dom is loaded
-        document.addEventListener('DOMContentLoaded', function () {
-            StartDocument();
-        });
-    } else {
-        setTimeout(checkTolgeeInstance, 500);
+if (window['tolgee_instance']) {
+    console.log('tolgee_instance found, starting translation...');
+
+    // Iterate over TEXTOS_API and replace values with translations
+    for (const [key, value] of Object.entries(TEXTOS_API)) {
+        const translation = window['tolgee_instance'].t(key, `${TEXTOS_API[key]} {{${key}}}`);
+        TEXTOS_API[key] = translation;
     }
-}
-
-//If not default language
-if (subdomain === 'es') {
-    StartDocument();
 } else {
-    checkTolgeeInstance();
+    console.error('tolgee_instance is not initialized');
 }
 
+//Set placeholder text for butotn
+$('#boton_completar_verify_correo').val(TEXTOS_API['js-linkunico-button-1']);
+$('#input-cancelar-busqueda-link-unico').attr('placeholder', TEXTOS_API['js-linkunico-text-39']);
+$('#input-razon-cancelar-cita-reservada').attr('placeholder', TEXTOS_API['js-linkunico-text-38']);
+$('#finalizar-form-datos-personales').val(TEXTOS_API['linkunico-button-confirm']);
+$('#finalizar-form-datos-busqueda-2').val(TEXTOS_API['linkunico-button-confirm']);
+$('#finalizar-form-popup-datos-personales').val(TEXTOS_API['linkunico-button-confirm']);
+$('#boton_pagar_link_unico').val(TEXTOS_API['linkunico-button-8']);
 
 
-function StartDocument() {
-
-    //Replace text JS
-    ReplaceTolgeeJSText();
 
 
-
+document.addEventListener('DOMContentLoaded', function () {
 
     // Get the 'referencia' parameter from the URL
     const urlParams = new URLSearchParams(window.location.search);
@@ -2401,5 +2377,5 @@ function StartDocument() {
 
 
 
-};
+});
 
