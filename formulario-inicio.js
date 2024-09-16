@@ -113,41 +113,34 @@ var TEXTOS_API = {
 
 
 
-function ReplaceTolgeeJSText() {
-    $('#start-date').attr('placeholder', TEXTOS_API['js-form-placeholder-1']);
-    $('#end-date').attr('placeholder', TEXTOS_API['js-form-placeholder-2']);
-    $('#exclude-days').attr('placeholder', TEXTOS_API['js-form-placeholder-3']);
-    $('#formulario-boton-finalizar').val(TEXTOS_API['js-finish-button']);
+
+// Check if tolgee_instance is initialized
+if (window['tolgee_instance']) {
+    console.log('tolgee_instance found, starting translation...');
+
+    // Iterate over TEXTOS_API and replace values with translations
+    for (const [key, value] of Object.entries(TEXTOS_API)) {
+        const translation = window['tolgee_instance'].t(key, `${TEXTOS_API[key]} {{${key}}}`);
+        TEXTOS_API[key] = translation;
+    }
+} else {
+    console.error('tolgee_instance is not initialized');
 }
 
-//--> Regarding Language
+//Replace text in placeholders, buttons, etc
+$('#start-date').attr('placeholder', TEXTOS_API['js-form-placeholder-1']);
+$('#end-date').attr('placeholder', TEXTOS_API['js-form-placeholder-2']);
+$('#exclude-days').attr('placeholder', TEXTOS_API['js-form-placeholder-3']);
+$('#formulario-boton-finalizar').val(TEXTOS_API['js-finish-button']);
+
+
+
+
+
 //Current subdomain
 var host = window.location.hostname;  // Get the full hostname (e.g., subdomain.example.com)
 var subdomain = host.split('.')[0];   // Get the first part of the hostname
 
-// Check if tolgee_instance is initialized
-function checkTolgeeInstance() {
-    if (window['tolgee_instance']) {
-        // Iterate over TEXTOS_API and replace values with translations
-        for (const [key, value] of Object.entries(TEXTOS_API)) {
-            const translation = window['tolgee_instance'].t(key, `${TEXTOS_API[key]} {{${key}}}`);
-            TEXTOS_API[key] = translation;
-        }
-
-        $(document).ready(function () {
-            StartDocument();
-        });
-    } else {
-        setTimeout(checkTolgeeInstance, 500);
-    }
-}
-
-//If not default language
-if (subdomain === 'es') {
-    StartDocument();
-} else {
-    checkTolgeeInstance();
-}
 
 
 
@@ -252,15 +245,7 @@ var ENABLED_PAGES = {
 
 
 
-
-
-
-
-
-function StartDocument() {
-
-    //Replace text JS
-    ReplaceTolgeeJSText();
+$(document).ready(function () {
 
     //Set default input to check
     DetermineInputsToCheck();
@@ -1183,7 +1168,7 @@ function StartDocument() {
 
 
 
-};
+});
 
 
 
