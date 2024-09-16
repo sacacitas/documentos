@@ -24,27 +24,46 @@ var TEXTOS_API = {
 
 };
 
-// Check if tolgee_instance is initialized
-if (window['tolgee_instance']) {
-    console.log('tolgee_instance found, starting translation...');
-
-    // Iterate over TEXTOS_API and replace values with translations
-    for (const [key, value] of Object.entries(TEXTOS_API)) {
-        const translation = window['tolgee_instance'].t(key, `${TEXTOS_API[key]} {{${key}}}`);
-        TEXTOS_API[key] = translation;
-    }
-} else {
-    console.error('tolgee_instance is not initialized');
+function ReplaceTolgeeJSText() {
+    $('#inicio-search-button-end').val(TEXTOS_API['Inicio-Boton-1-placeholder']);
 }
 
-//Set placeholder text for butotn
-$('#inicio-search-button-end').val(TEXTOS_API['Inicio-Boton-1-placeholder']);
+//--> Regarding Language
+//Current subdomain
+var host = window.location.hostname;  // Get the full hostname (e.g., subdomain.example.com)
+var subdomain = host.split('.')[0];   // Get the first part of the hostname
+
+// Check if tolgee_instance is initialized
+function checkTolgeeInstance() {
+    if (window['tolgee_instance']) {
+        // Iterate over TEXTOS_API and replace values with translations
+        for (const [key, value] of Object.entries(TEXTOS_API)) {
+            const translation = window['tolgee_instance'].t(key, `${TEXTOS_API[key]} {{${key}}}`);
+            TEXTOS_API[key] = translation;
+        }
+
+        $(document).ready(function () {
+            StartDocument();
+        });
+    } else {
+        setTimeout(checkTolgeeInstance, 500);
+    }
+}
+
+//If not default language
+if (subdomain === 'es') {
+    StartDocument();
+} else {
+    checkTolgeeInstance();
+}
 
 
 
+function StartDocument() {
 
+    //Replace text JS
+    ReplaceTolgeeJSText();
 
-$(document).ready(function () {
 
     $.getJSON('https://documentos.sacacitas.com/categorias_servicios.json', (data) => CATEGORIAS = data);
     $.getJSON('https://documentos.sacacitas.com/precios_citas.json', (data) => PRECIOS = data);
@@ -875,7 +894,7 @@ $(document).ready(function () {
     // Set country first task when loading page
     fetchJsonAndPopulateAdministracion();
     fetchJsonAndPopulateProvincia();
-});
+};
 
 
 
