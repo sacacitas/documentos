@@ -133,8 +133,10 @@ function checkTolgeeInstance() {
             const translation = window['tolgee_instance'].t(key, `${TEXTOS_API[key]} {{${key}}}`);
             TEXTOS_API[key] = translation;
         }
-        StartDocument();
 
+        $(document).ready(function () {
+            StartDocument();
+        });
     } else {
         setTimeout(checkTolgeeInstance, 500);
     }
