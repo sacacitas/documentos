@@ -114,32 +114,18 @@ var TEXTOS_API = {
 
 
 
-// Check if tolgee_instance is initialized
-if (window['tolgee_instance']) {
-    console.log('tolgee_instance found, starting translation...');
-
-    // Iterate over TEXTOS_API and replace values with translations
-    for (const [key, value] of Object.entries(TEXTOS_API)) {
-        const translation = window['tolgee_instance'].t(key, `${TEXTOS_API[key]} {{${key}}}`);
-        TEXTOS_API[key] = translation;
-    }
-} else {
-    console.error('tolgee_instance is not initialized');
-}
-
-//Replace text in placeholders, buttons, etc
-$('#start-date').attr('placeholder', TEXTOS_API['js-form-placeholder-1']);
-$('#end-date').attr('placeholder', TEXTOS_API['js-form-placeholder-2']);
-$('#exclude-days').attr('placeholder', TEXTOS_API['js-form-placeholder-3']);
-$('#formulario-boton-finalizar').val(TEXTOS_API['js-finish-button']);
-
-
-
-
+var { Tolgee, BackendFetch } = window['@tolgee/web'];
 
 //Current subdomain
 var host = window.location.hostname;  // Get the full hostname (e.g., subdomain.example.com)
 var subdomain = host.split('.')[0];   // Get the first part of the hostname
+
+
+var tolgee_instance = Tolgee()
+    .use(BackendFetch({ prefix: "https://documentos.sacacitas.com/lang" }))
+    .init({
+        language: subdomain
+    })
 
 
 
@@ -246,930 +232,950 @@ var ENABLED_PAGES = {
 
 
 $(document).ready(function () {
+    tolgee_instance.run().then(() => {
 
-    //Set default input to check
-    DetermineInputsToCheck();
 
-    //--> Load config FORM
-    var urlParams = new URLSearchParams(window.location.search);
-    if (urlParams.has('INPUT_JSON')) {
-        INPUT_JSON = JSON.parse(decodeURIComponent(atob(urlParams.get('INPUT_JSON'))));
-        // Stringify and compress the data using Base64 encoding
-        var inputData = JSON.stringify(INPUT_JSON.idbuscadores);
-        var encodedData = btoa(inputData); // Encode inputData to Base64
+        if (subdomain === "es" || subdomain === "sacacitas") {
+            console.log("default lang ES no auto localised")
+        } else {
+            for (const [key, value] of Object.entries(TEXTOS_API)) {
+                const translation = tolgee_instance.t(key, `${TEXTOS_API[key]} {{${key}}}`);
+                TEXTOS_API[key] = translation;
+            }
+        }
 
-        // Send as a query parameter, but now compressed
-        $.ajax({
-            url: `https://n8n.sacacitas.com/webhook/config-form?data=${encodedData}`,
-            type: "GET",
-            dataType: 'json',
-            success: function (response) {
-                // merge two dict
-                CONFIG_FORM = Object.assign(CONFIG_FORM, response);
-                //load items
-                DetermineInputsToCheck();
-                InputsToShow();
-                ExecuteitiPhoneLibrary();
-                InjectCountryList();
+        //Replace text in placeholders, buttons, etc
+        $('#start-date').attr('placeholder', TEXTOS_API['js-form-placeholder-1']);
+        $('#end-date').attr('placeholder', TEXTOS_API['js-form-placeholder-2']);
+        $('#exclude-days').attr('placeholder', TEXTOS_API['js-form-placeholder-3']);
+        $('#formulario-boton-finalizar').val(TEXTOS_API['js-finish-button']);
 
-                config_completed = true;
 
+        //Set default input to check
+        DetermineInputsToCheck();
+
+        //--> Load config FORM
+        var urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.has('INPUT_JSON')) {
+            INPUT_JSON = JSON.parse(decodeURIComponent(atob(urlParams.get('INPUT_JSON'))));
+            // Stringify and compress the data using Base64 encoding
+            var inputData = JSON.stringify(INPUT_JSON.idbuscadores);
+            var encodedData = btoa(inputData); // Encode inputData to Base64
+
+            // Send as a query parameter, but now compressed
+            $.ajax({
+                url: `https://n8n.sacacitas.com/webhook/config-form?data=${encodedData}`,
+                type: "GET",
+                dataType: 'json',
+                success: function (response) {
+                    // merge two dict
+                    CONFIG_FORM = Object.assign(CONFIG_FORM, response);
+                    //load items
+                    DetermineInputsToCheck();
+                    InputsToShow();
+                    ExecuteitiPhoneLibrary();
+                    InjectCountryList();
+
+                    config_completed = true;
+
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    //Load default items
+                    DetermineInputsToCheck();
+                    InputsToShow();
+                    ExecuteitiPhoneLibrary();
+                    InjectCountryList();
+
+                    config_completed = true;
+
+
+                    //if error call to webhook
+                    $.ajax({
+                        url: "https://n8n.sacacitas.com/webhook/error-alerts",
+                        type: "POST",
+                        contentType: "application/json", // Specify content type as JSON
+                        dataType: 'json',
+                        data: JSON.stringify({
+                            inputData: inputData, // Assuming inputData is an object or data you want to send
+                            LocalisationError: "formulario_inicio-load-config-form",
+                            Extrainfo: "Llamada al config form desde el formulario", // Add extra text or data
+                            errorCode: 500 // Example of sending an additional error code
+                        }),
+                        success: function (response) {
+                            console.log("Success:", response);
+                        },
+                        error: function (jqXHR, textStatus, errorThrown) {
+                            console.error("Error:", errorThrown);
+                        }
+                    });
+
+                }
+            });
+        } else {
+            alert(`${TEXTOS_API['js-form-text-1']}`);
+        }
+
+
+
+
+        //--> Add html elements dinamically and import libraries
+
+        //SECTION: 1 - Escoger fechas máx min
+        //Datepicker things
+        //Difference between days in datepicker, first page
+        function calculateDateDifference() {
+            var startDate = $("#start-date").datepicker("getDate");
+            var endDate = $("#end-date").datepicker("getDate");
+            var daysDiff = 0;
+            if (startDate && endDate) {
+                var timeDiff = endDate - startDate;
+                daysDiff = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
+                $("#texto-dias-de-busqueda").text(' ' + daysDiff);
+            } else {
+                $("#texto-dias-de-busqueda").text(' ' + "-");
+            }
+            return daysDiff;
+        }
+        //Días de exclusión
+        PickerExcluidosDias = new Litepicker({
+            element: document.getElementById('exclude-days'),
+            plugins: ['multiselect', 'mobilefriendly'],
+            minDate: new Date(),
+            numberOfColumns: 2,
+            numberOfMonths: 2,
+            lang: 'es-ES',
+            buttonText: {
+                apply: TEXTOS_API['js-datepicker-lang-5'],  // "Aplicar"
+                cancel: TEXTOS_API['js-datepicker-lang-6']  // "Borrar"
             },
-            error: function (jqXHR, textStatus, errorThrown) {
-                //Load default items
-                DetermineInputsToCheck();
-                InputsToShow();
-                ExecuteitiPhoneLibrary();
-                InjectCountryList();
+            tooltipText: {
+                one: TEXTOS_API['js-datepicker-lang-7'],    // "día"
+                other: TEXTOS_API['js-datepicker-lang-8']   // "días"
+            },
+            setup: function (picker) {
+                picker.on('button:apply', function () {
+                    document.getElementById('exclude-days').value = picker.multipleDatesToString();
+                });
+            }
+        });
+        //Datepicker localisation
+        $(function () {
+            var dateFormat = "dd/mm/yy";
 
-                config_completed = true;
+            // Define Spanish localization directly in JavaScript
+            $.datepicker.setDefaults($.datepicker.regional['es'] = {
+                closeText: TEXTOS_API['js-datepicker-lang-1'], // "Cerrar"
+                prevText: TEXTOS_API['js-datepicker-lang-2'],  // "Anterior"
+                nextText: TEXTOS_API['js-datepicker-lang-3'],  // "Siguiente"
+                currentText: TEXTOS_API['js-datepicker-lang-4'], // "Hoy"
+                monthNames: [
+                    TEXTOS_API['js-datepicker-month-1'],  // "enero"
+                    TEXTOS_API['js-datepicker-month-2'],  // "febrero"
+                    TEXTOS_API['js-datepicker-month-3'],  // "marzo"
+                    TEXTOS_API['js-datepicker-month-4'],  // "abril"
+                    TEXTOS_API['js-datepicker-month-5'],  // "mayo"
+                    TEXTOS_API['js-datepicker-month-6'],  // "junio"
+                    TEXTOS_API['js-datepicker-month-7'],  // "julio"
+                    TEXTOS_API['js-datepicker-month-8'],  // "agosto"
+                    TEXTOS_API['js-datepicker-month-9'],  // "septiembre"
+                    TEXTOS_API['js-datepicker-month-10'], // "octubre"
+                    TEXTOS_API['js-datepicker-month-11'], // "noviembre"
+                    TEXTOS_API['js-datepicker-month-12']  // "diciembre"
+                ],
+                monthNamesShort: [
+                    TEXTOS_API['js-datepicker-shortmonth-1'],  // "ene"
+                    TEXTOS_API['js-datepicker-shortmonth-2'],  // "feb"
+                    TEXTOS_API['js-datepicker-shortmonth-3'],  // "mar"
+                    TEXTOS_API['js-datepicker-shortmonth-4'],  // "abr"
+                    TEXTOS_API['js-datepicker-shortmonth-5'],  // "may"
+                    TEXTOS_API['js-datepicker-shortmonth-6'],  // "jun"
+                    TEXTOS_API['js-datepicker-shortmonth-7'],  // "jul"
+                    TEXTOS_API['js-datepicker-shortmonth-8'],  // "ago"
+                    TEXTOS_API['js-datepicker-shortmonth-9'],  // "sep"
+                    TEXTOS_API['js-datepicker-shortmonth-10'], // "oct"
+                    TEXTOS_API['js-datepicker-shortmonth-11'], // "nov"
+                    TEXTOS_API['js-datepicker-shortmonth-12']  // "dic"
+                ],
+                dayNames: [
+                    TEXTOS_API['js-datepicker-dayweek-7'],  // "domingo"
+                    TEXTOS_API['js-datepicker-dayweek-1'],  // "lunes"
+                    TEXTOS_API['js-datepicker-dayweek-2'],  // "martes"
+                    TEXTOS_API['js-datepicker-dayweek-3'],  // "miércoles"
+                    TEXTOS_API['js-datepicker-dayweek-4'],  // "jueves"
+                    TEXTOS_API['js-datepicker-dayweek-5'],  // "viernes"
+                    TEXTOS_API['js-datepicker-dayweek-6']   // "sábado"
+                ],
+                dayNamesShort: [
+                    TEXTOS_API['js-datepicker-shortdayweek-7'], // "dom"
+                    TEXTOS_API['js-datepicker-shortdayweek-1'], // "lun"
+                    TEXTOS_API['js-datepicker-shortdayweek-2'], // "mar"
+                    TEXTOS_API['js-datepicker-shortdayweek-3'], // "mié"
+                    TEXTOS_API['js-datepicker-shortdayweek-4'], // "jue"
+                    TEXTOS_API['js-datepicker-shortdayweek-5'], // "vie"
+                    TEXTOS_API['js-datepicker-shortdayweek-6']  // "sáb"
+                ],
+                dayNamesMin: [
+                    TEXTOS_API['js-datepicker-ultrashortdayweek-7'], // "D"
+                    TEXTOS_API['js-datepicker-ultrashortdayweek-1'], // "L"
+                    TEXTOS_API['js-datepicker-ultrashortdayweek-2'], // "M"
+                    TEXTOS_API['js-datepicker-ultrashortdayweek-3'], // "X"
+                    TEXTOS_API['js-datepicker-ultrashortdayweek-4'], // "J"
+                    TEXTOS_API['js-datepicker-ultrashortdayweek-5'], // "V"
+                    TEXTOS_API['js-datepicker-ultrashortdayweek-6']  // "S"
+                ],
+                weekHeader: "Sm",
+                dateFormat: "dd/mm/yy",
+                firstDay: 1,
+                isRTL: false,
+                showMonthAfterYear: false,
+                yearSuffix: ""
+            });
 
 
-                //if error call to webhook
-                $.ajax({
-                    url: "https://n8n.sacacitas.com/webhook/error-alerts",
-                    type: "POST",
-                    contentType: "application/json", // Specify content type as JSON
-                    dataType: 'json',
-                    data: JSON.stringify({
-                        inputData: inputData, // Assuming inputData is an object or data you want to send
-                        LocalisationError: "formulario_inicio-load-config-form",
-                        Extrainfo: "Llamada al config form desde el formulario", // Add extra text or data
-                        errorCode: 500 // Example of sending an additional error code
-                    }),
-                    success: function (response) {
-                        console.log("Success:", response);
-                    },
-                    error: function (jqXHR, textStatus, errorThrown) {
-                        console.error("Error:", errorThrown);
+            //Datepcicker First date
+            $("#start-date").datepicker({
+                dateFormat: dateFormat,
+                minDate: 0,
+                onSelect: function (selectedDate) {
+                    var dateObj = $(this).datepicker('getDate')
+                    $("#end-date").datepicker("option", "minDate", selectedDate);
+                    var newMargin = calculateDateDifference();
+
+                    PickerExcluidosDias.setOptions({ minDate: dateObj })
+                    PickerExcluidosDias.gotoDate(dateObj)
+                    PickerExcluidosDias.clearSelection()
+
+
+                }
+            });
+            //Datepcicker Last date
+            $("#end-date").datepicker({
+                dateFormat: dateFormat,
+                minDate: 0,
+                onSelect: function (selectedDate) {
+                    var dateObj = $(this).datepicker('getDate')
+
+                    var startDate = $("#start-date").datepicker("getDate");
+                    var endDate = $.datepicker.parseDate(dateFormat, selectedDate);
+                    // Check if start date is greater than end date
+                    if (startDate && startDate.getTime() > endDate.getTime()) {
+                        $("#start-date").datepicker("setDate", selectedDate);
                     }
+                    var newMargin = calculateDateDifference();
+                    PickerExcluidosDias.setOptions({ maxDate: dateObj })
+                    PickerExcluidosDias.clearSelection()
+
+                }
+            });
+
+
+        });
+        //Poner read only al input de fecha max para que no salga el teclado en el movil
+        function makeReadonly() {
+            document.getElementById('readonly-field').setAttribute("readonly", "");
+        }
+
+        //Mostrar y ocultar input fechas exclusión
+        TextFechaExclusion.click(function () {
+            // Toggle the visibility of InputFechaExclusion
+            $('#div-fecha-exclusion').toggle();
+        });
+
+        //SECTION: 2 - Datos cliente
+        //Date picker jquery fecha nacimiento
+        $(function () {
+            var dateFormat = "dd/mm/yy";
+
+            $("#input-fecha-nacimiento").datepicker({
+                dateFormat: dateFormat,
+                maxDate: 0, // Maximum date is today (no future dates allowed)
+                changeMonth: true, // Show month dropdown
+                changeYear: true, // Show year dropdown
+                yearRange: "c-100:c", // Display 100 years before and after the current year
+                dayNamesMin: [
+                    TEXTOS_API['js-datepicker-ultrashortdayweek-7'], // Sunday (D)
+                    TEXTOS_API['js-datepicker-ultrashortdayweek-1'], // Monday (L)
+                    TEXTOS_API['js-datepicker-ultrashortdayweek-2'], // Tuesday (M)
+                    TEXTOS_API['js-datepicker-ultrashortdayweek-3'], // Wednesday (X)
+                    TEXTOS_API['js-datepicker-ultrashortdayweek-4'], // Thursday (J)
+                    TEXTOS_API['js-datepicker-ultrashortdayweek-5'], // Friday (V)
+                    TEXTOS_API['js-datepicker-ultrashortdayweek-6']  // Saturday (S)
+                ],
+                monthNames: [
+                    TEXTOS_API['js-datepicker-month-1'], // January
+                    TEXTOS_API['js-datepicker-month-2'], // February
+                    TEXTOS_API['js-datepicker-month-3'], // March
+                    TEXTOS_API['js-datepicker-month-4'], // April
+                    TEXTOS_API['js-datepicker-month-5'], // May
+                    TEXTOS_API['js-datepicker-month-6'], // June
+                    TEXTOS_API['js-datepicker-month-7'], // July
+                    TEXTOS_API['js-datepicker-month-8'], // August
+                    TEXTOS_API['js-datepicker-month-9'], // September
+                    TEXTOS_API['js-datepicker-month-10'], // October
+                    TEXTOS_API['js-datepicker-month-11'], // November
+                    TEXTOS_API['js-datepicker-month-12']  // December
+                ]
+            });
+        });
+
+        //SECTION: 3 - Documento identidad
+        //Seleccionar botones de selección de tipo de documento. DNI, NIE, Pasaporte
+        selectFormDocPasaporte.add(selectFormDocNIE).add(selectFormDocDNI).hide();
+        selectFormDocPasaporte.removeClass('boton-documento-selected')
+
+        var options_documento = $('.div-documentos-formulario').children('a')
+
+        //Logic when clicking button document
+        options_documento.click(function () {
+            options_documento.removeClass('boton-documento-selected')
+            $(this).addClass('boton-documento-selected');
+        });
+
+        //Mostrar y ocultar input fechas exclusión
+        $('#texto-documentos-identidad').click(function () {
+            // Toggle the visibility of InputFechaExclusion
+            $('#texto-more-info-variosdocs').toggle();
+        });
+
+        //SECTION: 4 - Contact items. Email and Phone number
+        function ExecuteitiPhoneLibrary() {
+            // Add country code to phone number input
+            $('input[ms-code-phone-number]').each(function () {
+                var input = this;
+
+                // Initialize intlTelInput with your configuration
+                const iti = window.intlTelInput(input, {
+                    onlyCountries: CONFIG_FORM.phone_number,
+                    separateDialCode: true,
+                    strictMode: true,
+                    utilsScript: "https://cdn.jsdelivr.net/npm/intl-tel-input@23.9.3/build/js/utils.js"
                 });
 
-            }
-        });
-    } else {
-        alert(`${TEXTOS_API['js-form-text-1']}`);
-    }
+                // Attach iti instance to the input element for later use
+                $(input).data('itiInstance', iti);
 
+                // Set the user's country based on predefined or IP-based location
+                let CountryISOselected = CONFIG_FORM.phone_number[0];
+                if (typeof CountryISOselected !== 'undefined' && CountryISOselected) {
+                    iti.setCountry(CountryISOselected);
+                } else {
+                    $.get("https://ipinfo.io", function (response) {
+                        var countryCode = response.country;
+                        iti.setCountry(countryCode);
 
+                        // Update the saved ISO and dial code if changed by IP-based detection
+                        var ipBasedCountryData = iti.getSelectedCountryData();
+                        countryISO = ipBasedCountryData.iso2;
+                        dialCode = ipBasedCountryData.dialCode;
 
+                        console.log("IP-Based Country ISO:", countryISO);
+                        console.log("IP-Based Dial Code:", dialCode);
 
-    //--> Add html elements dinamically and import libraries
-
-    //SECTION: 1 - Escoger fechas máx min
-    //Datepicker things
-    //Difference between days in datepicker, first page
-    function calculateDateDifference() {
-        var startDate = $("#start-date").datepicker("getDate");
-        var endDate = $("#end-date").datepicker("getDate");
-        var daysDiff = 0;
-        if (startDate && endDate) {
-            var timeDiff = endDate - startDate;
-            daysDiff = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
-            $("#texto-dias-de-busqueda").text(' ' + daysDiff);
-        } else {
-            $("#texto-dias-de-busqueda").text(' ' + "-");
-        }
-        return daysDiff;
-    }
-    //Días de exclusión
-    PickerExcluidosDias = new Litepicker({
-        element: document.getElementById('exclude-days'),
-        plugins: ['multiselect', 'mobilefriendly'],
-        minDate: new Date(),
-        numberOfColumns: 2,
-        numberOfMonths: 2,
-        lang: 'es-ES',
-        buttonText: {
-            apply: TEXTOS_API['js-datepicker-lang-5'],  // "Aplicar"
-            cancel: TEXTOS_API['js-datepicker-lang-6']  // "Borrar"
-        },
-        tooltipText: {
-            one: TEXTOS_API['js-datepicker-lang-7'],    // "día"
-            other: TEXTOS_API['js-datepicker-lang-8']   // "días"
-        },
-        setup: function (picker) {
-            picker.on('button:apply', function () {
-                document.getElementById('exclude-days').value = picker.multipleDatesToString();
-            });
-        }
-    });
-    //Datepicker localisation
-    $(function () {
-        var dateFormat = "dd/mm/yy";
-
-        // Define Spanish localization directly in JavaScript
-        $.datepicker.setDefaults($.datepicker.regional['es'] = {
-            closeText: TEXTOS_API['js-datepicker-lang-1'], // "Cerrar"
-            prevText: TEXTOS_API['js-datepicker-lang-2'],  // "Anterior"
-            nextText: TEXTOS_API['js-datepicker-lang-3'],  // "Siguiente"
-            currentText: TEXTOS_API['js-datepicker-lang-4'], // "Hoy"
-            monthNames: [
-                TEXTOS_API['js-datepicker-month-1'],  // "enero"
-                TEXTOS_API['js-datepicker-month-2'],  // "febrero"
-                TEXTOS_API['js-datepicker-month-3'],  // "marzo"
-                TEXTOS_API['js-datepicker-month-4'],  // "abril"
-                TEXTOS_API['js-datepicker-month-5'],  // "mayo"
-                TEXTOS_API['js-datepicker-month-6'],  // "junio"
-                TEXTOS_API['js-datepicker-month-7'],  // "julio"
-                TEXTOS_API['js-datepicker-month-8'],  // "agosto"
-                TEXTOS_API['js-datepicker-month-9'],  // "septiembre"
-                TEXTOS_API['js-datepicker-month-10'], // "octubre"
-                TEXTOS_API['js-datepicker-month-11'], // "noviembre"
-                TEXTOS_API['js-datepicker-month-12']  // "diciembre"
-            ],
-            monthNamesShort: [
-                TEXTOS_API['js-datepicker-shortmonth-1'],  // "ene"
-                TEXTOS_API['js-datepicker-shortmonth-2'],  // "feb"
-                TEXTOS_API['js-datepicker-shortmonth-3'],  // "mar"
-                TEXTOS_API['js-datepicker-shortmonth-4'],  // "abr"
-                TEXTOS_API['js-datepicker-shortmonth-5'],  // "may"
-                TEXTOS_API['js-datepicker-shortmonth-6'],  // "jun"
-                TEXTOS_API['js-datepicker-shortmonth-7'],  // "jul"
-                TEXTOS_API['js-datepicker-shortmonth-8'],  // "ago"
-                TEXTOS_API['js-datepicker-shortmonth-9'],  // "sep"
-                TEXTOS_API['js-datepicker-shortmonth-10'], // "oct"
-                TEXTOS_API['js-datepicker-shortmonth-11'], // "nov"
-                TEXTOS_API['js-datepicker-shortmonth-12']  // "dic"
-            ],
-            dayNames: [
-                TEXTOS_API['js-datepicker-dayweek-7'],  // "domingo"
-                TEXTOS_API['js-datepicker-dayweek-1'],  // "lunes"
-                TEXTOS_API['js-datepicker-dayweek-2'],  // "martes"
-                TEXTOS_API['js-datepicker-dayweek-3'],  // "miércoles"
-                TEXTOS_API['js-datepicker-dayweek-4'],  // "jueves"
-                TEXTOS_API['js-datepicker-dayweek-5'],  // "viernes"
-                TEXTOS_API['js-datepicker-dayweek-6']   // "sábado"
-            ],
-            dayNamesShort: [
-                TEXTOS_API['js-datepicker-shortdayweek-7'], // "dom"
-                TEXTOS_API['js-datepicker-shortdayweek-1'], // "lun"
-                TEXTOS_API['js-datepicker-shortdayweek-2'], // "mar"
-                TEXTOS_API['js-datepicker-shortdayweek-3'], // "mié"
-                TEXTOS_API['js-datepicker-shortdayweek-4'], // "jue"
-                TEXTOS_API['js-datepicker-shortdayweek-5'], // "vie"
-                TEXTOS_API['js-datepicker-shortdayweek-6']  // "sáb"
-            ],
-            dayNamesMin: [
-                TEXTOS_API['js-datepicker-ultrashortdayweek-7'], // "D"
-                TEXTOS_API['js-datepicker-ultrashortdayweek-1'], // "L"
-                TEXTOS_API['js-datepicker-ultrashortdayweek-2'], // "M"
-                TEXTOS_API['js-datepicker-ultrashortdayweek-3'], // "X"
-                TEXTOS_API['js-datepicker-ultrashortdayweek-4'], // "J"
-                TEXTOS_API['js-datepicker-ultrashortdayweek-5'], // "V"
-                TEXTOS_API['js-datepicker-ultrashortdayweek-6']  // "S"
-            ],
-            weekHeader: "Sm",
-            dateFormat: "dd/mm/yy",
-            firstDay: 1,
-            isRTL: false,
-            showMonthAfterYear: false,
-            yearSuffix: ""
-        });
-
-
-        //Datepcicker First date
-        $("#start-date").datepicker({
-            dateFormat: dateFormat,
-            minDate: 0,
-            onSelect: function (selectedDate) {
-                var dateObj = $(this).datepicker('getDate')
-                $("#end-date").datepicker("option", "minDate", selectedDate);
-                var newMargin = calculateDateDifference();
-
-                PickerExcluidosDias.setOptions({ minDate: dateObj })
-                PickerExcluidosDias.gotoDate(dateObj)
-                PickerExcluidosDias.clearSelection()
-
-
-            }
-        });
-        //Datepcicker Last date
-        $("#end-date").datepicker({
-            dateFormat: dateFormat,
-            minDate: 0,
-            onSelect: function (selectedDate) {
-                var dateObj = $(this).datepicker('getDate')
-
-                var startDate = $("#start-date").datepicker("getDate");
-                var endDate = $.datepicker.parseDate(dateFormat, selectedDate);
-                // Check if start date is greater than end date
-                if (startDate && startDate.getTime() > endDate.getTime()) {
-                    $("#start-date").datepicker("setDate", selectedDate);
+                        // Update the hidden fields or variables
+                        $('input[name="country_iso"]').val(countryISO);
+                        $('input[name="dial_code"]').val(dialCode);
+                    }, "jsonp");
                 }
-                var newMargin = calculateDateDifference();
-                PickerExcluidosDias.setOptions({ maxDate: dateObj })
-                PickerExcluidosDias.clearSelection()
-
-            }
-        });
 
 
-    });
-    //Poner read only al input de fecha max para que no salga el teclado en el movil
-    function makeReadonly() {
-        document.getElementById('readonly-field').setAttribute("readonly", "");
-    }
-
-    //Mostrar y ocultar input fechas exclusión
-    TextFechaExclusion.click(function () {
-        // Toggle the visibility of InputFechaExclusion
-        $('#div-fecha-exclusion').toggle();
-    });
-
-    //SECTION: 2 - Datos cliente
-    //Date picker jquery fecha nacimiento
-    $(function () {
-        var dateFormat = "dd/mm/yy";
-
-        $("#input-fecha-nacimiento").datepicker({
-            dateFormat: dateFormat,
-            maxDate: 0, // Maximum date is today (no future dates allowed)
-            changeMonth: true, // Show month dropdown
-            changeYear: true, // Show year dropdown
-            yearRange: "c-100:c", // Display 100 years before and after the current year
-            dayNamesMin: [
-                TEXTOS_API['js-datepicker-ultrashortdayweek-7'], // Sunday (D)
-                TEXTOS_API['js-datepicker-ultrashortdayweek-1'], // Monday (L)
-                TEXTOS_API['js-datepicker-ultrashortdayweek-2'], // Tuesday (M)
-                TEXTOS_API['js-datepicker-ultrashortdayweek-3'], // Wednesday (X)
-                TEXTOS_API['js-datepicker-ultrashortdayweek-4'], // Thursday (J)
-                TEXTOS_API['js-datepicker-ultrashortdayweek-5'], // Friday (V)
-                TEXTOS_API['js-datepicker-ultrashortdayweek-6']  // Saturday (S)
-            ],
-            monthNames: [
-                TEXTOS_API['js-datepicker-month-1'], // January
-                TEXTOS_API['js-datepicker-month-2'], // February
-                TEXTOS_API['js-datepicker-month-3'], // March
-                TEXTOS_API['js-datepicker-month-4'], // April
-                TEXTOS_API['js-datepicker-month-5'], // May
-                TEXTOS_API['js-datepicker-month-6'], // June
-                TEXTOS_API['js-datepicker-month-7'], // July
-                TEXTOS_API['js-datepicker-month-8'], // August
-                TEXTOS_API['js-datepicker-month-9'], // September
-                TEXTOS_API['js-datepicker-month-10'], // October
-                TEXTOS_API['js-datepicker-month-11'], // November
-                TEXTOS_API['js-datepicker-month-12']  // December
-            ]
-        });
-    });
-
-    //SECTION: 3 - Documento identidad
-    //Seleccionar botones de selección de tipo de documento. DNI, NIE, Pasaporte
-    selectFormDocPasaporte.add(selectFormDocNIE).add(selectFormDocDNI).hide();
-    selectFormDocPasaporte.removeClass('boton-documento-selected')
-
-    var options_documento = $('.div-documentos-formulario').children('a')
-
-    //Logic when clicking button document
-    options_documento.click(function () {
-        options_documento.removeClass('boton-documento-selected')
-        $(this).addClass('boton-documento-selected');
-    });
-
-    //Mostrar y ocultar input fechas exclusión
-    $('#texto-documentos-identidad').click(function () {
-        // Toggle the visibility of InputFechaExclusion
-        $('#texto-more-info-variosdocs').toggle();
-    });
-
-    //SECTION: 4 - Contact items. Email and Phone number
-    function ExecuteitiPhoneLibrary() {
-        // Add country code to phone number input
-        $('input[ms-code-phone-number]').each(function () {
-            var input = this;
-
-            // Initialize intlTelInput with your configuration
-            const iti = window.intlTelInput(input, {
-                onlyCountries: CONFIG_FORM.phone_number,
-                separateDialCode: true,
-                strictMode: true,
-                utilsScript: "https://cdn.jsdelivr.net/npm/intl-tel-input@23.9.3/build/js/utils.js"
-            });
-
-            // Attach iti instance to the input element for later use
-            $(input).data('itiInstance', iti);
-
-            // Set the user's country based on predefined or IP-based location
-            let CountryISOselected = CONFIG_FORM.phone_number[0];
-            if (typeof CountryISOselected !== 'undefined' && CountryISOselected) {
-                iti.setCountry(CountryISOselected);
-            } else {
-                $.get("https://ipinfo.io", function (response) {
-                    var countryCode = response.country;
-                    iti.setCountry(countryCode);
-
-                    // Update the saved ISO and dial code if changed by IP-based detection
-                    var ipBasedCountryData = iti.getSelectedCountryData();
-                    countryISO = ipBasedCountryData.iso2;
-                    dialCode = ipBasedCountryData.dialCode;
-
-                    console.log("IP-Based Country ISO:", countryISO);
-                    console.log("IP-Based Dial Code:", dialCode);
-
-                    // Update the hidden fields or variables
-                    $('input[name="country_iso"]').val(countryISO);
-                    $('input[name="dial_code"]').val(dialCode);
-                }, "jsonp");
-            }
-
-
-            // Retrieve the predefined country ISO and dial code
-            var selectedCountryData = iti.getSelectedCountryData();
-            var countryISO = selectedCountryData.iso2;   // Get the ISO2 code (e.g., "US")
-            var dialCode = selectedCountryData.dialCode; // Get the dial code (e.g., "1" for US)
-            $('#phone-dial-iso').val(countryISO); // Assuming you have hidden inputs for this
-            $('#phone-dial-code').val(dialCode);
-
-            // Retrieve just the country ISO and dial code on input change
-            input.addEventListener('countrychange', function () {
+                // Retrieve the predefined country ISO and dial code
                 var selectedCountryData = iti.getSelectedCountryData();
                 var countryISO = selectedCountryData.iso2;   // Get the ISO2 code (e.g., "US")
                 var dialCode = selectedCountryData.dialCode; // Get the dial code (e.g., "1" for US)
                 $('#phone-dial-iso').val(countryISO); // Assuming you have hidden inputs for this
                 $('#phone-dial-code').val(dialCode);
+
+                // Retrieve just the country ISO and dial code on input change
+                input.addEventListener('countrychange', function () {
+                    var selectedCountryData = iti.getSelectedCountryData();
+                    var countryISO = selectedCountryData.iso2;   // Get the ISO2 code (e.g., "US")
+                    var dialCode = selectedCountryData.dialCode; // Get the dial code (e.g., "1" for US)
+                    $('#phone-dial-iso').val(countryISO); // Assuming you have hidden inputs for this
+                    $('#phone-dial-code').val(dialCode);
+                });
+
             });
-
-        });
-
-    }
-
-
-
-
-    //SECTION: 5 - Specific search itmes. Nacionalidad, R Nacionalidad y caducidad tarjeta
-
-
-    // Inject country list
-    // Function to fetch country data and populate the dropdown
-    function InjectCountryList() {
-        // Determine the list of countries to use
-        let country_array_final;
-        if (CONFIG_FORM.nacionalidad && CONFIG_FORM.nacionalidad.length > 0) {
-            country_array_final = CONFIG_FORM.nacionalidad;
-
-        } else {
-            // Use default iso31661 array from the window object
-            const isoCountries = window.iso3166.iso31661;
-            country_array_final = isoCountries.map(country => country.alpha2);
 
         }
 
-        // Fetch the country data from the provided URL
-        fetch(`https://cdn.jsdelivr.net/npm/i18n-iso-countries/langs/${subdomain}.json`)
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error(`Network response was not ok: ${response.statusText}`);
-                }
-                return response.json();
-            })
-            .then(data => {
-                // Get the countries object from the response
-                const countries = data.countries;
-
-                // Create an array to hold country options
-                let countryOptions = [];
-
-                // Loop through the country_array_final and check if the country code exists in the fetched data
-                country_array_final.forEach(code => {
-                    if (countries[code]) {
-                        const countryName = Array.isArray(countries[code]) ? countries[code][0] : countries[code];
-                        // Push the code and country name to the array
-                        countryOptions.push({ code: code, name: countryName });
-                    }
-                });
-
-                // Sort the country options array alphabetically by country name
-                countryOptions.sort((a, b) => a.name.localeCompare(b.name));
-
-                // Get the dropdown element by its ID
-                const dropdown = document.getElementById('input-lista-paises');
-
-                // Create and add the default option
-                const defaultOption = document.createElement('option');
-                defaultOption.value = '';
-                defaultOption.text = TEXTOS_API['js-form-text-11']; // "País de nacionalidad"
-                defaultOption.disabled = true; // Prevents selection
-                defaultOption.selected = true; // Sets as the default selected option
-                dropdown.appendChild(defaultOption);
-
-
-                // Append each country option to the dropdown
-                countryOptions.forEach(optionData => {
-                    const option = document.createElement('option');
-                    option.value = optionData.code;
-                    option.textContent = optionData.name;
-                    dropdown.appendChild(option);
-                });
-            })
-
-            .catch(error => {
-                // Send an error to the webhook in case of failure
-                const inputData = JSON.stringify({ error: error.message });
-
-                $.ajax({
-                    url: "https://n8n.sacacitas.com/webhook/didnt-create-country-list-correctly",
-                    type: "POST",
-                    contentType: "application/json",
-                    dataType: 'json',
-                    data: inputData,
-                    success: function (response) {
-                        console.log("Error reported successfully:", response);
-                    },
-                    error: function (jqXHR, textStatus, errorThrown) {
-                        console.error("Error reporting failed:", errorThrown);
-                    }
-                });
-            });
-    }
 
 
 
-    const PickerCadTarjeta = new easepick.create({
-        element: "#input-caducidad-tarjeta",
-        css: ["https://cdn.jsdelivr.net/npm/@easepick/bundle@1.2.1/dist/index.css", 'https://documentos.sacacitas.com/formulario-inicio.css',],
-        zIndex: 999999999,
-        lang: "es-ES",
-        format: "DD MMMM YYYY",
-        readonly: false,
-        AmpPlugin: {
-            dropdown: {
-                months: true,
-                years: true,
-                minYear: 2000,
-                maxYear: 2050
-            },
-            resetButton: false,
-            darkMode: false
-        },
-        plugins: ["AmpPlugin", "LockPlugin"]
-    })
+        //SECTION: 5 - Specific search itmes. Nacionalidad, R Nacionalidad y caducidad tarjeta
 
-    // SECTION: 6. Finalizar y enviar a backend los datos
-    $('#formulario_ID').submit(function (event) {
-        // Prevent the default form submission behavior
-        event.preventDefault();
 
-        // Disable the submit button to prevent multiple submissions
-        $('#submit-button-id').prop('disabled', true);
+        // Inject country list
+        // Function to fetch country data and populate the dropdown
+        function InjectCountryList() {
+            // Determine the list of countries to use
+            let country_array_final;
+            if (CONFIG_FORM.nacionalidad && CONFIG_FORM.nacionalidad.length > 0) {
+                country_array_final = CONFIG_FORM.nacionalidad;
 
-        //No coge el var de fuera entonces lo vuelvo a obtener para enviarlo en el formulario
-        var selected_document = $('.div-documentos-formulario').find('.boton-documento-selected').attr('id');
+            } else {
+                // Use default iso31661 array from the window object
+                const isoCountries = window.iso3166.iso31661;
+                country_array_final = isoCountries.map(country => country.alpha2);
 
-        // Dejar bonito el document type
-        var NiceSelected_document = '';
-        if (selected_document === 'select-PASAPORTE-form') {
-            NiceSelected_document = 'PASAPORTE';
-        } else if (selected_document === 'select-DNI-form') {
-            NiceSelected_document = 'DNI';
-        } else if (selected_document === 'select-NIE-form') {
-            NiceSelected_document = 'NIE';
-        }
-
-        // Show loading gif
-        $('#gif-cargando-boton-finalizar').show();
-
-        // Generate random number
-        var RandomNumber = Math.floor(Math.random() * 10000).toString(36);
-        var DateNow = Date.now().toString(36);
-        var RandomStringID = (DateNow + '-' + RandomNumber);
-
-        // Browser language
-        var LangBrowser = navigator.language || navigator.userLanguage;
-
-        // Gather form data
-        var formData = {
-            idbuscadores: INPUT_JSON.idbuscadores,
-            Fmin: $('#start-date').val(),
-            Fmax: $('#end-date').val(),
-            dias_excluidos: PickerExcluidosDias.multipleDatesToString() === '' ? [] : PickerExcluidosDias.multipleDatesToString().split(','),
-            Nombre: $('#input-nombre').val(),
-            Apellido1: $('#input-apellido1').val(),
-            Apellido2: $('#input-apellido2').val(),
-            Fnacimiento: $('#input-fecha-nacimiento').val(),
-            SelectedDocument: NiceSelected_document,
-            NDocumento: $('#input-documento').val(),
-            Correo: $('#input-correo').val(),
-            Telefono: $('#input-telefono').val(),
-            TelefonoDialISO: $('#phone-dial-iso').val(),
-            TelefonoDiaCode: $('#phone-dial-code').val(),
-            Pais: $('#input-lista-paises option:selected').text(),
-            Pais_iso: $('#input-lista-paises').val(),
-            RNacionalidad: $('#input-resolucion-nacionalidad').val(),
-            csv_doc: $('#input-csv-doc').val(),
-            CaducidadTarjeta: $('#input-caducidad-tarjeta').val(),
-            RandomStringID: RandomStringID,
-            LangBrowser: LangBrowser,
-            gclid: INPUT_JSON.cookieGclid,
-            retargetingSource: null,
-            fbclid: INPUT_JSON.cookieFbclid,
-            fbpid: INPUT_JSON.cookieFbp,
-            ISO_language: subdomain
-        };
-
-        // Send POST request
-        $.ajax({
-            type: 'POST',
-            url: 'https://n8n.sacacitas.com/webhook/d34bf08d-32d8-4956-8dc4-9e1d676bb5fa434-formulario-recibido-new-form',
-            data: JSON.stringify(formData),
-            dataType: 'json',
-            contentType: 'application/json',
-            success: function (response) {
-                $('#div-error-enviar-datos').hide();
-                if (response.ID_publico !== null) {
-                    var publicItemId = response.ID_publico;
-                    window.location.href = 'https://www.sacacitas.com/link?r=' + publicItemId;
-                }
-                if (response.empty_dates === true) {
-                    $('#div-error-enviar-datos').show();
-                    $('#texto_error_form').text(`${TEXTOS_API['js-form-text-2']}`);
-                }
-            },
-            error: function (xhr, status, error) {
-                console.error('Form submission failed');
-                //if error call to webhook
-                $.ajax({
-                    url: "https://n8n.sacacitas.com/webhook/error-alerts",
-                    type: "POST",
-                    contentType: "application/json", // Specify content type as JSON
-                    dataType: 'json',
-                    data: JSON.stringify({
-                        inputData: inputData, // Assuming inputData is an object or data you want to send
-                        LocalisationError: "formulario_inicio-send-final-form",
-                        Extrainfo: "Ha fallado completar el formulario final", // Add extra text or data
-                        errorCode: 500 // Example of sending an additional error code
-                    }),
-                    success: function (response) {
-                        console.log("Success:", response);
-                    },
-                    error: function (jqXHR, textStatus, errorThrown) {
-                        console.error("Error:", errorThrown);
-                    }
-                });
-                $('#div-error-enviar-datos').show();
-            },
-            complete: function () {
-                // Enable the submit button after request completion
-                $('#submit-button-id').prop('disabled', false);
-                // Hide the loading gif
-                $('#gif-cargando-boton-finalizar').hide();
             }
+
+            // Fetch the country data from the provided URL
+            fetch(`https://cdn.jsdelivr.net/npm/i18n-iso-countries/langs/${subdomain}.json`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`Network response was not ok: ${response.statusText}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    // Get the countries object from the response
+                    const countries = data.countries;
+
+                    // Create an array to hold country options
+                    let countryOptions = [];
+
+                    // Loop through the country_array_final and check if the country code exists in the fetched data
+                    country_array_final.forEach(code => {
+                        if (countries[code]) {
+                            const countryName = Array.isArray(countries[code]) ? countries[code][0] : countries[code];
+                            // Push the code and country name to the array
+                            countryOptions.push({ code: code, name: countryName });
+                        }
+                    });
+
+                    // Sort the country options array alphabetically by country name
+                    countryOptions.sort((a, b) => a.name.localeCompare(b.name));
+
+                    // Get the dropdown element by its ID
+                    const dropdown = document.getElementById('input-lista-paises');
+
+                    // Create and add the default option
+                    const defaultOption = document.createElement('option');
+                    defaultOption.value = '';
+                    defaultOption.text = TEXTOS_API['js-form-text-11']; // "País de nacionalidad"
+                    defaultOption.disabled = true; // Prevents selection
+                    defaultOption.selected = true; // Sets as the default selected option
+                    dropdown.appendChild(defaultOption);
+
+
+                    // Append each country option to the dropdown
+                    countryOptions.forEach(optionData => {
+                        const option = document.createElement('option');
+                        option.value = optionData.code;
+                        option.textContent = optionData.name;
+                        dropdown.appendChild(option);
+                    });
+                })
+
+                .catch(error => {
+                    // Send an error to the webhook in case of failure
+                    const inputData = JSON.stringify({ error: error.message });
+
+                    $.ajax({
+                        url: "https://n8n.sacacitas.com/webhook/didnt-create-country-list-correctly",
+                        type: "POST",
+                        contentType: "application/json",
+                        dataType: 'json',
+                        data: inputData,
+                        success: function (response) {
+                            console.log("Error reported successfully:", response);
+                        },
+                        error: function (jqXHR, textStatus, errorThrown) {
+                            console.error("Error reporting failed:", errorThrown);
+                        }
+                    });
+                });
+        }
+
+
+
+        const PickerCadTarjeta = new easepick.create({
+            element: "#input-caducidad-tarjeta",
+            css: ["https://cdn.jsdelivr.net/npm/@easepick/bundle@1.2.1/dist/index.css", 'https://documentos.sacacitas.com/formulario-inicio.css',],
+            zIndex: 999999999,
+            lang: "es-ES",
+            format: "DD MMMM YYYY",
+            readonly: false,
+            AmpPlugin: {
+                dropdown: {
+                    months: true,
+                    years: true,
+                    minYear: 2000,
+                    maxYear: 2050
+                },
+                resetButton: false,
+                darkMode: false
+            },
+            plugins: ["AmpPlugin", "LockPlugin"]
+        })
+
+        // SECTION: 6. Finalizar y enviar a backend los datos
+        $('#formulario_ID').submit(function (event) {
+            // Prevent the default form submission behavior
+            event.preventDefault();
+
+            // Disable the submit button to prevent multiple submissions
+            $('#submit-button-id').prop('disabled', true);
+
+            //No coge el var de fuera entonces lo vuelvo a obtener para enviarlo en el formulario
+            var selected_document = $('.div-documentos-formulario').find('.boton-documento-selected').attr('id');
+
+            // Dejar bonito el document type
+            var NiceSelected_document = '';
+            if (selected_document === 'select-PASAPORTE-form') {
+                NiceSelected_document = 'PASAPORTE';
+            } else if (selected_document === 'select-DNI-form') {
+                NiceSelected_document = 'DNI';
+            } else if (selected_document === 'select-NIE-form') {
+                NiceSelected_document = 'NIE';
+            }
+
+            // Show loading gif
+            $('#gif-cargando-boton-finalizar').show();
+
+            // Generate random number
+            var RandomNumber = Math.floor(Math.random() * 10000).toString(36);
+            var DateNow = Date.now().toString(36);
+            var RandomStringID = (DateNow + '-' + RandomNumber);
+
+            // Browser language
+            var LangBrowser = navigator.language || navigator.userLanguage;
+
+            // Gather form data
+            var formData = {
+                idbuscadores: INPUT_JSON.idbuscadores,
+                Fmin: $('#start-date').val(),
+                Fmax: $('#end-date').val(),
+                dias_excluidos: PickerExcluidosDias.multipleDatesToString() === '' ? [] : PickerExcluidosDias.multipleDatesToString().split(','),
+                Nombre: $('#input-nombre').val(),
+                Apellido1: $('#input-apellido1').val(),
+                Apellido2: $('#input-apellido2').val(),
+                Fnacimiento: $('#input-fecha-nacimiento').val(),
+                SelectedDocument: NiceSelected_document,
+                NDocumento: $('#input-documento').val(),
+                Correo: $('#input-correo').val(),
+                Telefono: $('#input-telefono').val(),
+                TelefonoDialISO: $('#phone-dial-iso').val(),
+                TelefonoDiaCode: $('#phone-dial-code').val(),
+                Pais: $('#input-lista-paises option:selected').text(),
+                Pais_iso: $('#input-lista-paises').val(),
+                RNacionalidad: $('#input-resolucion-nacionalidad').val(),
+                csv_doc: $('#input-csv-doc').val(),
+                CaducidadTarjeta: $('#input-caducidad-tarjeta').val(),
+                RandomStringID: RandomStringID,
+                LangBrowser: LangBrowser,
+                gclid: INPUT_JSON.cookieGclid,
+                retargetingSource: null,
+                fbclid: INPUT_JSON.cookieFbclid,
+                fbpid: INPUT_JSON.cookieFbp,
+                ISO_language: subdomain
+            };
+
+            // Send POST request
+            $.ajax({
+                type: 'POST',
+                url: 'https://n8n.sacacitas.com/webhook/d34bf08d-32d8-4956-8dc4-9e1d676bb5fa434-formulario-recibido-new-form',
+                data: JSON.stringify(formData),
+                dataType: 'json',
+                contentType: 'application/json',
+                success: function (response) {
+                    $('#div-error-enviar-datos').hide();
+                    if (response.ID_publico !== null) {
+                        var publicItemId = response.ID_publico;
+                        window.location.href = 'https://www.sacacitas.com/link?r=' + publicItemId;
+                    }
+                    if (response.empty_dates === true) {
+                        $('#div-error-enviar-datos').show();
+                        $('#texto_error_form').text(`${TEXTOS_API['js-form-text-2']}`);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error('Form submission failed');
+                    //if error call to webhook
+                    $.ajax({
+                        url: "https://n8n.sacacitas.com/webhook/error-alerts",
+                        type: "POST",
+                        contentType: "application/json", // Specify content type as JSON
+                        dataType: 'json',
+                        data: JSON.stringify({
+                            inputData: inputData, // Assuming inputData is an object or data you want to send
+                            LocalisationError: "formulario_inicio-send-final-form",
+                            Extrainfo: "Ha fallado completar el formulario final", // Add extra text or data
+                            errorCode: 500 // Example of sending an additional error code
+                        }),
+                        success: function (response) {
+                            console.log("Success:", response);
+                        },
+                        error: function (jqXHR, textStatus, errorThrown) {
+                            console.error("Error:", errorThrown);
+                        }
+                    });
+                    $('#div-error-enviar-datos').show();
+                },
+                complete: function () {
+                    // Enable the submit button after request completion
+                    $('#submit-button-id').prop('disabled', false);
+                    // Hide the loading gif
+                    $('#gif-cargando-boton-finalizar').hide();
+                }
+            });
+
+            return false;
         });
 
-        return false;
-    });
 
 
 
+        // --> Logic buttons back and next
+        //Button 1: Verificar F Min y F Max
+        $(NextButon1).click(function () {
+            let inputsToCheck = [InputFMin, InputFMax];
+            // Array de inputs que verificar
+            let allInputsValid = true;
+            // Si todo OK pasa a la siguiente
 
-    // --> Logic buttons back and next
-    //Button 1: Verificar F Min y F Max
-    $(NextButon1).click(function () {
-        let inputsToCheck = [InputFMin, InputFMax];
-        // Array de inputs que verificar
-        let allInputsValid = true;
-        // Si todo OK pasa a la siguiente
+            // Check each input
+            inputsToCheck.some(function (input) {
+                if (input.val().trim() === '') {
+                    displayErrorMessage(InputDivFMinMax, `${TEXTOS_API['js-form-text-3']}`);
+                    // Muestra mensaje de error en la funcion displayErrorMessage donde inputElement = input
+                    allInputsValid = false;
+                } else {
+                    // If input is not empty, remove the error message
+                    $(InputDivFMinMax).next('.error-message-form').remove();
+                }
+            });
 
-        // Check each input
-        inputsToCheck.some(function (input) {
-            if (input.val().trim() === '') {
-                displayErrorMessage(InputDivFMinMax, `${TEXTOS_API['js-form-text-3']}`);
+
+
+            if (calculateDateDifference() < MIN_DIAS) {
+                displayErrorMessage(InputDivFMinMax, `${TEXTOS_API['js-form-text-4']}`);
                 // Muestra mensaje de error en la funcion displayErrorMessage donde inputElement = input
                 allInputsValid = false;
             } else {
                 // If input is not empty, remove the error message
                 $(InputDivFMinMax).next('.error-message-form').remove();
             }
-        });
 
-
-
-        if (calculateDateDifference() < MIN_DIAS) {
-            displayErrorMessage(InputDivFMinMax, `${TEXTOS_API['js-form-text-4']}`);
-            // Muestra mensaje de error en la funcion displayErrorMessage donde inputElement = input
-            allInputsValid = false;
-        } else {
-            // If input is not empty, remove the error message
-            $(InputDivFMinMax).next('.error-message-form').remove();
-        }
-
-        // Si todo OK pasa a la siguiente
-        if (allInputsValid) {
-            seccion1.hide();
-            seccion2.show();
-        }
-    });
-
-    //Button 2: Comprobar nombre, apellido1 e input-fecha-nacimiento
-    $(NextButon2).click(function () {
-        let inputsToCheck = inputsToCheckButton2
-        // Array de inputs que verificar
-        let allInputsValid = true;
-        // Si todo OK pasa a la siguiente
-
-        // Check each input
-        inputsToCheck.forEach(function (input) {
-            if (input.val().trim() === '') {
-                displayErrorMessage(input, `${TEXTOS_API['js-form-text-5']}`); // "Este campo es obligatorio"
-                // Muestra mensaje de error en la funcion displayErrorMessage donde inputElement = input
-                allInputsValid = false;
-            } else {
-                // If input is not empty, remove the error message
-                $(input).next('.error-message-form').remove();
-            }
-        });
-
-
-
-
-
-        // Function to check if config is completed
-        function isConfigCompleted() {
-            return new Promise((resolve) => {
-                // Polling function to check the status
-                const interval = setInterval(() => {
-                    if (config_completed === true) {
-                        clearInterval(interval);
-                        resolve(true);
-
-                        //if error call to webhook
-                        $.ajax({
-                            url: "https://n8n.sacacitas.com/webhook/too-much-time-loading-config-form",
-                            type: "POST",
-                            contentType: "application/json",
-                            // Specify content type as JSON
-                            dataType: 'json',
-                            data: inputData,
-                            // Send the JSON data
-                            success: function (response) {
-                                console.log("Error:", response);
-                            },
-                            error: function (jqXHR, textStatus, errorThrown) {
-                                console.error("Error:", errorThrown);
-                            }
-                        });
-
-
-                    }
-                }, 1000); // Check every 1 second
-            });
-        }
-        // Function to handle the transition --> From isConfigCompleted
-        async function handleTransition() {
-            // If all inputs are valid
+            // Si todo OK pasa a la siguiente
             if (allInputsValid) {
-                // Show the loading GIF
-                $('#gif-cargando-boton-config-form').show();
+                seccion1.hide();
+                seccion2.show();
+            }
+        });
 
-                // Wait for the config to be completed
-                if (config_completed === false) {
-                    await isConfigCompleted();
+        //Button 2: Comprobar nombre, apellido1 e input-fecha-nacimiento
+        $(NextButon2).click(function () {
+            let inputsToCheck = inputsToCheckButton2
+            // Array de inputs que verificar
+            let allInputsValid = true;
+            // Si todo OK pasa a la siguiente
+
+            // Check each input
+            inputsToCheck.forEach(function (input) {
+                if (input.val().trim() === '') {
+                    displayErrorMessage(input, `${TEXTOS_API['js-form-text-5']}`); // "Este campo es obligatorio"
+                    // Muestra mensaje de error en la funcion displayErrorMessage donde inputElement = input
+                    allInputsValid = false;
+                } else {
+                    // If input is not empty, remove the error message
+                    $(input).next('.error-message-form').remove();
                 }
-                // Once completed, hide the loading GIF and move to the next section
-                seccion2.hide();
-                seccion3.show();
-                $('#gif-cargando-boton-config-form').hide();
+            });
+
+
+
+
+
+            // Function to check if config is completed
+            function isConfigCompleted() {
+                return new Promise((resolve) => {
+                    // Polling function to check the status
+                    const interval = setInterval(() => {
+                        if (config_completed === true) {
+                            clearInterval(interval);
+                            resolve(true);
+
+                            //if error call to webhook
+                            $.ajax({
+                                url: "https://n8n.sacacitas.com/webhook/too-much-time-loading-config-form",
+                                type: "POST",
+                                contentType: "application/json",
+                                // Specify content type as JSON
+                                dataType: 'json',
+                                data: inputData,
+                                // Send the JSON data
+                                success: function (response) {
+                                    console.log("Error:", response);
+                                },
+                                error: function (jqXHR, textStatus, errorThrown) {
+                                    console.error("Error:", errorThrown);
+                                }
+                            });
+
+
+                        }
+                    }, 1000); // Check every 1 second
+                });
             }
-        }
+            // Function to handle the transition --> From isConfigCompleted
+            async function handleTransition() {
+                // If all inputs are valid
+                if (allInputsValid) {
+                    // Show the loading GIF
+                    $('#gif-cargando-boton-config-form').show();
 
-        // Call the transition handler --> From isConfigCompleted
-        handleTransition();
-
-    });
-
-    //Button 3: Comprobar numero de documento
-    $(NextButon3).click(function () {
-        let inputsToCheck = [InputNumeroDocumento];
-        // Array de inputs que verificar
-        let allInputsValid = true;
-        // Si todo OK pasa a la siguiente
-
-        // Check each input
-        inputsToCheck.forEach(function (input) {
-            var selected_document = $('.div-documentos-formulario').find('.boton-documento-selected').attr('id')
-
-            var func_validate = function (text_input) {
-                return true
-            };
-            // PASAPORTE will be always True because we cant validate it
-
-            if (selected_document === 'select-NIE-form') {
-                func_validate = validateNIE
-
-            } else if (selected_document === 'select-DNI-form') {
-                func_validate = validateDNI
-
+                    // Wait for the config to be completed
+                    if (config_completed === false) {
+                        await isConfigCompleted();
+                    }
+                    // Once completed, hide the loading GIF and move to the next section
+                    seccion2.hide();
+                    seccion3.show();
+                    $('#gif-cargando-boton-config-form').hide();
+                }
             }
 
-            if (input.val().trim() === '') {
-                displayErrorMessage(input, `${TEXTOS_API['js-form-text-5']}`); // "Este campo es obligatorio"
-                // Muestra mensaje de error en la funcion displayErrorMessage donde inputElement = input
-                allInputsValid = false;
-            } else if (!func_validate(input.val())) {
-                displayErrorMessage(input, `${TEXTOS_API['js-form-text-6']}`);
-                // Muestra mensaje de error en la funcion displayErrorMessage donde inputElement = input
-                allInputsValid = false;
-
-            } else {
-                // Make sure is uppercase
-                input.val(input.val().toUpperCase());
-
-                // If input is not empty, remove the error message
-                $(input).next('.error-message-form').remove();
-            }
+            // Call the transition handler --> From isConfigCompleted
+            handleTransition();
 
         });
 
-        // Si todo OK pasa a la siguiente
-        if (allInputsValid) {
-            seccion3.hide();
-            seccion4.show();
-        }
-    });
+        //Button 3: Comprobar numero de documento
+        $(NextButon3).click(function () {
+            let inputsToCheck = [InputNumeroDocumento];
+            // Array de inputs que verificar
+            let allInputsValid = true;
+            // Si todo OK pasa a la siguiente
 
-    //Button 4: Comprobar correo y telefono
-    $(NextButon4).click(function () {
-        let inputsToCheck = [InputCorreo, InputCorreoVerf, InputTelef, InputTelefVerf];
-        // Array de inputs que verificar
-        let allInputsValid = true;
-        // Si todo OK pasa a la siguiente
+            // Check each input
+            inputsToCheck.forEach(function (input) {
+                var selected_document = $('.div-documentos-formulario').find('.boton-documento-selected').attr('id')
 
-        // Check each input
-        inputsToCheck.forEach(function (input) {
-            if (input.val().trim() === '' || !input[0].checkValidity()) {
-                input[0].reportValidity();
-                displayErrorMessage(input, `${TEXTOS_API['js-form-text-5']}`); // "Este campo es obligatorio"
-                // Muestra mensaje de error en la funcion displayErrorMessage donde inputElement = input
-                allInputsValid = false;
-            } else {
-                // If input is not empty, remove the error message
-                $(input).next('.error-message-form').remove();
+                var func_validate = function (text_input) {
+                    return true
+                };
+                // PASAPORTE will be always True because we cant validate it
+
+                if (selected_document === 'select-NIE-form') {
+                    func_validate = validateNIE
+
+                } else if (selected_document === 'select-DNI-form') {
+                    func_validate = validateDNI
+
+                }
+
+                if (input.val().trim() === '') {
+                    displayErrorMessage(input, `${TEXTOS_API['js-form-text-5']}`); // "Este campo es obligatorio"
+                    // Muestra mensaje de error en la funcion displayErrorMessage donde inputElement = input
+                    allInputsValid = false;
+                } else if (!func_validate(input.val())) {
+                    displayErrorMessage(input, `${TEXTOS_API['js-form-text-6']}`);
+                    // Muestra mensaje de error en la funcion displayErrorMessage donde inputElement = input
+                    allInputsValid = false;
+
+                } else {
+                    // Make sure is uppercase
+                    input.val(input.val().toUpperCase());
+
+                    // If input is not empty, remove the error message
+                    $(input).next('.error-message-form').remove();
+                }
+
+            });
+
+            // Si todo OK pasa a la siguiente
+            if (allInputsValid) {
+                seccion3.hide();
+                seccion4.show();
             }
         });
 
-        //Check both emails match
-        if (InputCorreo.val() !== InputCorreoVerf.val()) {
-            displayErrorMessage(InputCorreo, `${TEXTOS_API['js-form-text-7']}`);
-            displayErrorMessage(InputCorreoVerf, `${TEXTOS_API['js-form-text-7']}`);
-            allInputsValid = false;
-        }
-        //Check both phone numbers match
-        if (InputTelef.val() !== InputTelefVerf.val()) {
-            displayErrorMessage(DivPhone, `${TEXTOS_API['js-form-text-8']}`);
-            displayErrorMessage(DivVerifyPhone, `${TEXTOS_API['js-form-text-8']}`);
-            allInputsValid = false;
-        }
+        //Button 4: Comprobar correo y telefono
+        $(NextButon4).click(function () {
+            let inputsToCheck = [InputCorreo, InputCorreoVerf, InputTelef, InputTelefVerf];
+            // Array de inputs que verificar
+            let allInputsValid = true;
+            // Si todo OK pasa a la siguiente
 
-        // Check if the first phone number is valid by country code with library
-        let itiInstanceTelef = $(InputTelef).data('itiInstance');
-        if (itiInstanceTelef && itiInstanceTelef.isValidNumber()) {
-            // First phone number is valid
-        } else {
-            displayErrorMessage(DivPhone, `${TEXTOS_API['js-form-text-9']}`);
-            allInputsValid = false;
-        }
+            // Check each input
+            inputsToCheck.forEach(function (input) {
+                if (input.val().trim() === '' || !input[0].checkValidity()) {
+                    input[0].reportValidity();
+                    displayErrorMessage(input, `${TEXTOS_API['js-form-text-5']}`); // "Este campo es obligatorio"
+                    // Muestra mensaje de error en la funcion displayErrorMessage donde inputElement = input
+                    allInputsValid = false;
+                } else {
+                    // If input is not empty, remove the error message
+                    $(input).next('.error-message-form').remove();
+                }
+            });
 
-        // Check if the second phone number is valid by country code with library
-        let itiInstanceTelefVerf = $(InputTelefVerf).data('itiInstance');
-        if (itiInstanceTelefVerf && itiInstanceTelefVerf.isValidNumber()) {
-            // Second phone number is valid
-        } else {
-            displayErrorMessage(DivVerifyPhone, `${TEXTOS_API['js-form-text-9']}`);
-            allInputsValid = false;
-        }
+            //Check both emails match
+            if (InputCorreo.val() !== InputCorreoVerf.val()) {
+                displayErrorMessage(InputCorreo, `${TEXTOS_API['js-form-text-7']}`);
+                displayErrorMessage(InputCorreoVerf, `${TEXTOS_API['js-form-text-7']}`);
+                allInputsValid = false;
+            }
+            //Check both phone numbers match
+            if (InputTelef.val() !== InputTelefVerf.val()) {
+                displayErrorMessage(DivPhone, `${TEXTOS_API['js-form-text-8']}`);
+                displayErrorMessage(DivVerifyPhone, `${TEXTOS_API['js-form-text-8']}`);
+                allInputsValid = false;
+            }
 
-        // Si todo OK pasa a la siguiente
-        if (allInputsValid) {
-            //Jump page if all hidden
-            if (ENABLED_PAGES.seccion5 === true) {
-                seccion4.hide();
-                seccion5.show();
-            } else if (ENABLED_PAGES.seccion5 === false) {
-                seccion4.hide();
+            // Check if the first phone number is valid by country code with library
+            let itiInstanceTelef = $(InputTelef).data('itiInstance');
+            if (itiInstanceTelef && itiInstanceTelef.isValidNumber()) {
+                // First phone number is valid
+            } else {
+                displayErrorMessage(DivPhone, `${TEXTOS_API['js-form-text-9']}`);
+                allInputsValid = false;
+            }
+
+            // Check if the second phone number is valid by country code with library
+            let itiInstanceTelefVerf = $(InputTelefVerf).data('itiInstance');
+            if (itiInstanceTelefVerf && itiInstanceTelefVerf.isValidNumber()) {
+                // Second phone number is valid
+            } else {
+                displayErrorMessage(DivVerifyPhone, `${TEXTOS_API['js-form-text-9']}`);
+                allInputsValid = false;
+            }
+
+            // Si todo OK pasa a la siguiente
+            if (allInputsValid) {
+                //Jump page if all hidden
+                if (ENABLED_PAGES.seccion5 === true) {
+                    seccion4.hide();
+                    seccion5.show();
+                } else if (ENABLED_PAGES.seccion5 === false) {
+                    seccion4.hide();
+                    seccion6.show();
+                    ResumenPage();
+                }
+            }
+        });
+
+        //Button 5: Comprobar nacionalidad. R Nacionalidad y caducidad tarjeta
+        $(NextButon5).click(function () {
+
+            let inputsToCheck = inputsToCheckButton5// Start with InputNacionalidad already included
+
+
+            // Array de inputs que verificar
+            let allInputsValid = true;
+            // Si todo OK pasa a la siguiente
+
+            // Check each input
+            inputsToCheck.forEach(function (input) {
+
+                //Validar regex campos individuales
+                var func_validate = function (text_input) {
+                    return true
+                };
+                //Comprobar si RNacionalidad se ha seleccionado
+                if (input === InputRNacionalidad) {
+                    func_validate = validateRNacionalidad
+                }
+
+                //Comprobar si CSV doc se ha seleccionado
+                if (input === InputCSVdoc) {
+                    func_validate = ValidateCSVdoc
+                }
+
+                //Hacer validación de los campos
+                if (input.val().trim() === '') {
+                    displayErrorMessage(input, `${TEXTOS_API['js-form-text-5']}`); // "Este campo es obligatorio"
+                    // Muestra mensaje de error en la funcion displayErrorMessage donde inputElement = input
+                    allInputsValid = false;
+                } else if (!func_validate(input.val())) {
+                    displayErrorMessage(input, `${TEXTOS_API['js-form-text-10']}`); // "El formato es incorrecto"
+                    // Muestra mensaje de error en la funcion displayErrorMessage donde inputElement = input
+                    allInputsValid = false;
+
+                } else {
+                    // If input is not empty, remove the error message
+                    $(input).next('.error-message-form').remove();
+                }
+            });
+
+            // Si todo OK pasa a la siguiente y crea el texto del resumen
+            if (allInputsValid) {
+                seccion5.hide();
                 seccion6.show();
                 ResumenPage();
             }
-        }
-    });
-
-    //Button 5: Comprobar nacionalidad. R Nacionalidad y caducidad tarjeta
-    $(NextButon5).click(function () {
-
-        let inputsToCheck = inputsToCheckButton5// Start with InputNacionalidad already included
-
-
-        // Array de inputs que verificar
-        let allInputsValid = true;
-        // Si todo OK pasa a la siguiente
-
-        // Check each input
-        inputsToCheck.forEach(function (input) {
-
-            //Validar regex campos individuales
-            var func_validate = function (text_input) {
-                return true
-            };
-            //Comprobar si RNacionalidad se ha seleccionado
-            if (input === InputRNacionalidad) {
-                func_validate = validateRNacionalidad
-            }
-
-            //Comprobar si CSV doc se ha seleccionado
-            if (input === InputCSVdoc) {
-                func_validate = ValidateCSVdoc
-            }
-
-            //Hacer validación de los campos
-            if (input.val().trim() === '') {
-                displayErrorMessage(input, `${TEXTOS_API['js-form-text-5']}`); // "Este campo es obligatorio"
-                // Muestra mensaje de error en la funcion displayErrorMessage donde inputElement = input
-                allInputsValid = false;
-            } else if (!func_validate(input.val())) {
-                displayErrorMessage(input, `${TEXTOS_API['js-form-text-10']}`); // "El formato es incorrecto"
-                // Muestra mensaje de error en la funcion displayErrorMessage donde inputElement = input
-                allInputsValid = false;
-
-            } else {
-                // If input is not empty, remove the error message
-                $(input).next('.error-message-form').remove();
-            }
         });
 
-        // Si todo OK pasa a la siguiente y crea el texto del resumen
-        if (allInputsValid) {
-            seccion5.hide();
-            seccion6.show();
-            ResumenPage();
-        }
-    });
 
 
+        // --> Logic when going back on the form
+        //Botones hacia atrás. Ocultra y muestra secciones
+        $(BackButon1).click(function () {
+            seccion1.show();
+            seccion2.hide();
+        });
 
-    // --> Logic when going back on the form
-    //Botones hacia atrás. Ocultra y muestra secciones
-    $(BackButon1).click(function () {
-        seccion1.show();
-        seccion2.hide();
-    });
+        $(BackButon2).click(function () {
+            seccion2.show();
+            seccion3.hide();
+        });
 
-    $(BackButon2).click(function () {
-        seccion2.show();
-        seccion3.hide();
-    });
+        $(BackButon3).click(function () {
+            seccion3.show();
+            seccion4.hide();
+        });
 
-    $(BackButon3).click(function () {
-        seccion3.show();
-        seccion4.hide();
-    });
-
-    $(BackButon4).click(function () {
-        seccion4.show();
-        seccion5.hide();
-    });
-
-    $(BackButon5).click(function () {
-        //Jump page if all hidden
-        if (ENABLED_PAGES.seccion5 === true) {
-            seccion5.show();
-            seccion6.hide();
-        } else if (ENABLED_PAGES.seccion5 === false) {
+        $(BackButon4).click(function () {
             seccion4.show();
-            seccion6.hide();
-        }
-    });
-
-
-
-
-
-
-    // --> Various other functionalities
-    //Poner read only a los inputs con desplegable fechas para que no salga el teclado en el movil
-    $(document).ready(function () {
-        // Select the input field by its ID and make it readonly
-        $('#start-date').prop('readonly', true);
-        $('#end-date').prop('readonly', true);
-        $('#exclude-days').prop('readonly', true);
-        $('#input-fecha-nacimiento').prop('readonly', true);
-    });
-
-    //Bloquear zoom al darle doble click en los moviles
-    const input = document.getElementById('myInput');
-    if (input) {
-        // Event listener para el doble click
-        input.addEventListener('dblclick', function (event) {
-            // Prevent default behavior
-            event.preventDefault();
-
-            // Remove focus from the input element
-            input.blur();
+            seccion5.hide();
         });
-    }
+
+        $(BackButon5).click(function () {
+            //Jump page if all hidden
+            if (ENABLED_PAGES.seccion5 === true) {
+                seccion5.show();
+                seccion6.hide();
+            } else if (ENABLED_PAGES.seccion5 === false) {
+                seccion4.show();
+                seccion6.hide();
+            }
+        });
 
 
 
+
+
+
+        // --> Various other functionalities
+        //Poner read only a los inputs con desplegable fechas para que no salga el teclado en el movil
+        $(document).ready(function () {
+            // Select the input field by its ID and make it readonly
+            $('#start-date').prop('readonly', true);
+            $('#end-date').prop('readonly', true);
+            $('#exclude-days').prop('readonly', true);
+            $('#input-fecha-nacimiento').prop('readonly', true);
+        });
+
+        //Bloquear zoom al darle doble click en los moviles
+        const input = document.getElementById('myInput');
+        if (input) {
+            // Event listener para el doble click
+            input.addEventListener('dblclick', function (event) {
+                // Prevent default behavior
+                event.preventDefault();
+
+                // Remove focus from the input element
+                input.blur();
+            });
+        }
+
+
+
+
+
+    });
 });
-
 
 
 
