@@ -94,6 +94,7 @@ $(document).ready(function () {
                     problem_value: $('#contact-select-problem').val(),
                     contact_reason: $('#contact-select-problem option:selected').text(), // Get the selected option's text
                     contact_message: $('#contact-message').val(),
+                    ISO_language: subdomain
                 };
 
 
