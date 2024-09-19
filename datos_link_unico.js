@@ -138,6 +138,9 @@ var { Tolgee, BackendFetch } = window['@tolgee/web'];
 
 var host = window.location.host //es.sacacitas.com
 var subdomain = host.split('.')[0] //es
+if (subdomain === "sacacitas") {
+    subdomain = "es";
+}
 var tolgee_instance = Tolgee()
     .use(BackendFetch({ prefix: "https://documentos.sacacitas.com/lang" }))
     .init({
@@ -181,8 +184,6 @@ $(document).ready(function () {
 
 
 
-
-
         // IDs del JSON
         var id_oficina_front = null;
         var date_added_front = null;
@@ -209,9 +210,7 @@ $(document).ready(function () {
         var clienteNombre = null;
         var clienteApellido1 = null;
         var clienteApellido2 = null;
-        var clientphone = null;
-        var clientphoneISO = null;
-        var clientphoneCode = null;
+        var clientePhoneNumber = null;
         var clienteEmail = null;
         var clienteNacionalidad = null;
         var clienteNacionalidadISO = null;
@@ -337,9 +336,7 @@ $(document).ready(function () {
                     clienteNombre = data.cliente_nombre;
                     clienteApellido1 = data.cliente_apellido1;
                     clienteApellido2 = data.cliente_apellido2;
-                    clientphone = data.cliente_telefono.phone_number;
-                    clientphoneISO = data.cliente_telefono.phone_iso;
-                    clientphoneCode = data.cliente_telefono.phone_code;
+                    clientePhoneNumber = data.cliente_telefono;
                     clienteEmail = data.cliente_email;
                     clienteNacionalidad = data.cliente_nacionalidad;
                     clienteNacionalidadISO = data.cliente_nacionalidad_iso;
@@ -424,6 +421,12 @@ $(document).ready(function () {
         }
 
         function ExecuteitiPhoneLibrary() {
+
+
+            //Call library e164 to get country code
+            const phoneNumber = window.parsePhoneNumberFromString(clientePhoneNumber);
+            console.log(phoneNumber.country); // Outputs: 'ES' (ISO country code)
+
             // Add country code to phone number input
             $('input[ms-code-phone-number]').each(function () {
                 var input = this;
@@ -441,7 +444,7 @@ $(document).ready(function () {
 
 
                 // Set the user's country based on predefined or IP-based location
-                let CountryISOselected = CONFIG_FORM.phone_number[0];
+                let CountryISOselected = phoneNumber.country; // Outputs: 'ES' (ISO country code) --> Use (phoneNumber.countryCallingCode);  // Outputs: '34' (country code)
                 if (typeof CountryISOselected !== 'undefined' && CountryISOselected) {
                     iti.setCountry(CountryISOselected);
                 } else {
@@ -650,11 +653,10 @@ $(document).ready(function () {
             }
 
 
-
             //Sección datos personales del cliente
             document.getElementById('link-cliente-documento-identidad').textContent = clienteIdType + ': ' + clienteIdDocumento;
             document.getElementById('link-cliente-fecha-nacimiento').textContent = formatted_date_clienteFechaNacimiento;
-            document.getElementById('link-cliente-telefono').textContent = "+" + clientphoneCode + " " + clientphone;
+            document.getElementById('link-cliente-telefono').textContent = clientePhoneNumber;
             document.getElementById('link-cliente-correo').textContent = clienteEmail;
 
             //Comprobar si está null o no el apellido 2
@@ -2067,7 +2069,7 @@ $(document).ready(function () {
             $('#input-apellido2').val(clienteApellido2);
             $('#input-fecha-nacimiento').val(formatted_date_clienteFechaNacimiento);
             $('#input-ndocumento').val(clienteIdDocumento);
-            $('#input-telefono').val("+" + clientphoneCode + clientphone);
+            $('#input-telefono').val(clientePhoneNumber);
             $('#input-lista-paises').val(clienteNacionalidad);
             //Value fechas de búsuqueda
             $('#start-date').val(formattedDate1);
