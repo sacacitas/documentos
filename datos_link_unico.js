@@ -45,6 +45,9 @@ var TEXTOS_API = {
     'js-linkunico-text-37': 'Indica tu nacionalidad',
     'js-linkunico-text-38': 'Indica la razón por la que cancelas tu cita previa reservada*',
     'js-linkunico-text-39': 'Indica la razón por la que cancelas tu búsqueda',
+    'js-linkunico-text-40': 'Se encuentra el siguiente problema:',
+    'js-linkunico-text-41': '¿Deseas volver a buscar tu cita?',
+    'js-linkunico-text-42': 'Renueva la búsqueda en el botón de abajo',
     'linkunico-button-confirm': 'Confirmar',
     'linkunico-button-8': 'Pagar',
 
@@ -921,7 +924,6 @@ $(document).ready(function () {
                             // Use the ID_publico property
                             $('#PromoCode-text-below').show();
                             $('#PromoCode-text-below').text(TEXTOS_API['js-linkunico-text-31']); // "No se ha indicado ningún código"
-                            $('#texto-sub-estado2').hide();
                             saldo_promo = 0;
 
                             ReplacePrice();
@@ -930,7 +932,6 @@ $(document).ready(function () {
                             // Use the ID_publico property
                             $('#PromoCode-text-below').show();
                             $('#PromoCode-text-below').text(TEXTOS_API['js-linkunico-text-32']); // "Este código no es válido"
-                            $('#texto-sub-estado2').hide();
                             saldo_promo = 0;
 
                             ReplacePrice();
@@ -1190,7 +1191,7 @@ $(document).ready(function () {
                 $('#texto-dinamico-debajoestado').hide();
                 $('#div-sub-estado').hide();
                 $('#texto-sub-estado').text(`${TEXTOS_API['js-linkunico-text-9']}`); //"Cargando..."
-                $('#texto-sub-estado2').hide();
+                $('#titulo-sub-estado').text(`${TEXTOS_API['js-linkunico-text-40']}`); //"Se encuentra el siguiente problema:"
                 //Cosas de sección ajustes
                 $('#form_block_modificar_datos_personales').hide();
                 $('#form_block_modificar_datos_busqueda').hide();
@@ -1219,6 +1220,9 @@ $(document).ready(function () {
                 $('#select-pasaporte-form-ajustes').show();
                 $('#select-nie-form-ajustes').show();
                 $('#select-dni-form-ajustes').show();
+                //Secciones dentro del popup de ajustes
+                $('#pop-up-datos-personales-form').hide();
+                $('#pop-up-renew-search-form').hide();
 
 
 
@@ -1280,6 +1284,13 @@ $(document).ready(function () {
                 if (state_front == 'CANCELADO') {
                     $('#boton_estado_busqueda').text(TEXTOS_API['js-linkunico-text-18']); // "Búsqueda cancelada"
                     $('#boton_estado_busqueda').addClass('boton_busqueda_rojo');
+                    //Enable renew search button
+                    $('#boton-renovar-busqueda-cita').show();
+                    $('#pop-up-renew-search-form').show();
+                    $('#div-sub-estado').show();
+                    $('#titulo-sub-estado').text(`${TEXTOS_API['js-linkunico-text-41']}`); //"¿Deseas seguir buscando tu cita?"
+                    $('#texto-sub-estado').text(TEXTOS_API['js-linkunico-text-42']); // "Renueva tu búsqueda indicando nuevas fechas de búsqueda"
+
                 }
 
                 if (state_front == 'ANULADO') {
@@ -1292,14 +1303,21 @@ $(document).ready(function () {
                     $('#texto-pago-cita-aun-buscando').text(TEXTOS_API['js-linkunico-text-20']); // "Anulando cita..."
                     $('#boton_estado_busqueda').addClass('boton_busqueda_rojo');
                 }
-                if (state_front == 'EXPIRADO') {
-                    $('#boton_estado_busqueda').text(TEXTOS_API['js-linkunico-text-21']); // "Búsqueda caducada"
-                    $('#texto-pago-cita-aun-buscando').text(TEXTOS_API['js-linkunico-text-22']); // "Su cita no se está buscando debido a que ha caducado"
-                    $('#boton_estado_busqueda').addClass('boton_busqueda_rojo');
-                }
 
 
                 // Estados pendientes
+                // ***Expired. User needs to renew the search
+                if (state_front == 'EXPIRADO') {
+                    $('#boton_estado_busqueda').text(TEXTOS_API['js-linkunico-text-21']); // "Búsqueda caducada"
+                    $('#texto-pago-cita-aun-buscando').text(TEXTOS_API['js-linkunico-text-22']); // "Su cita no se está buscando debido a que ha caducado"
+                    $('#boton_estado_busqueda').addClass('boton_busqueda_naranja');
+                    $('#boton-renovar-busqueda-cita').show();
+                    $('#pop-up-renew-search-form').show();
+                    $('#div-sub-estado').show();
+                    $('#titulo-sub-estado').text(`${TEXTOS_API['js-linkunico-text-41']}`); //"¿Deseas seguir buscando tu cita?"
+                    $('#texto-sub-estado').text(TEXTOS_API['js-linkunico-text-42']); // "Renueva tu búsqueda indicando nuevas fechas de búsqueda"
+
+                }
                 // ***Debido límite de búsquedas diarias
                 if (state_front == 'PENDIENTE') {
                     $('#boton_estado_busqueda').text(TEXTOS_API['js-linkunico-text-23']); // "Pendiente de validación"
@@ -1315,6 +1333,7 @@ $(document).ready(function () {
                     //Cosas fuera del popup
                     $('#div-contenido-inside-bloque-busqueda').hide();
                     $('#boton-renovar-busqueda-cita').show();
+                    $('#pop-up-datos-personales-form').show();
                     $('#div-sub-estado').show();
                 }
                 // ***Cita ya está resercada con DocID
@@ -1334,6 +1353,7 @@ $(document).ready(function () {
                     //Mostrar solo NIE
                     $('#select-nie-form-ajustes').addClass('boton-documento-selected');
                 }
+
 
                 // Estados de errores
                 if (state_front == 'NO_VALIDADO') {
@@ -1952,7 +1972,7 @@ $(document).ready(function () {
                 var dateFormat = "dd/mm/yy";
 
                 // Define Spanish localization directly in JavaScript
-                $.datepicker.setDefaults($.datepicker.regional['es'] = {
+                $.datepicker.setDefaults($.datepicker.regional[subdomain] = {
                     closeText: TEXTOS_API['js-datepicker-lang-1'], // "Cerrar"
                     prevText: TEXTOS_API['js-datepicker-lang-2'],  // "Anterior"
                     nextText: TEXTOS_API['js-datepicker-lang-3'],  // "Siguiente"
@@ -2020,26 +2040,37 @@ $(document).ready(function () {
                     yearSuffix: ""
                 });
 
-                $("#start-date").datepicker({
+                $("#start-date, #start-date-ajustes-popup").datepicker({
                     dateFormat: dateFormat,
                     minDate: 0,
                     onSelect: function (selectedDate) {
-                        $("#end-date").datepicker("option", "minDate", selectedDate);
+                        // Set minDate for end-date fields when start-date is selected
+                        $("#end-date, #end-date-ajustes-popup").datepicker("option", "minDate", selectedDate);
                     }
                 });
 
-                $("#end-date").datepicker({
+                $("#end-date, #end-date-ajustes-popup").datepicker({
                     dateFormat: dateFormat,
                     minDate: 0,
                     onSelect: function (selectedDate) {
-                        var startDate = $("#start-date").datepicker("getDate");
+                        // Get the date from both start-date fields, either one could be selected
+                        var startDate1 = $("#start-date").datepicker("getDate");
+                        var startDate2 = $("#start-date-ajustes-popup").datepicker("getDate");
+
+                        // Check both start-date fields and choose the latest one for comparison
+                        var startDate = startDate1 && startDate2 ?
+                            (startDate1.getTime() > startDate2.getTime() ? startDate1 : startDate2) :
+                            (startDate1 || startDate2);
+
                         var endDate = $.datepicker.parseDate(dateFormat, selectedDate);
-                        // Check if start date is greater than end date
+
+                        // If the selected end-date is earlier than the start-date, adjust start-date
                         if (startDate && startDate.getTime() > endDate.getTime()) {
-                            $("#start-date").datepicker("setDate", selectedDate);
+                            $("#start-date, #start-date-ajustes-popup").datepicker("setDate", selectedDate);
                         }
                     }
                 });
+
             });
 
 
@@ -2050,16 +2081,26 @@ $(document).ready(function () {
             //Poner read only al input de fecha max para que no salga el teclado en el movil
             $(document).ready(function () {
                 // Select the input field by its ID and make it readonly
-                $('#start-date').prop('readonly', true);
-                $('#end-date').prop('readonly', true);
+                $('#start-date, #start-date-ajustes-popup').prop('readonly', true);
+                $('#end-date, #end-date-ajustes-popup').prop('readonly', true);
                 $('#exclude-days').prop('readonly', true);
                 $('#input-fecha-nacimiento').prop('readonly', true);
             });
 
 
 
-            // Formatear fechas
-            var formattedDate1 = formatDateFromISOToDMY(date_min_front);
+            // Formate dates to replace in form settings
+
+            const today = new Date();
+            const year = today.getFullYear();
+            const month = String(today.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+            const day = String(today.getDate()).padStart(2, '0');
+
+            const TodayDate = `${year}-${month}-${day}`;
+            console.log(TodayDate);
+
+
+            var formattedDate1 = formatDateFromISOToDMY(TodayDate);
             var formattedDate2 = formatDateFromISOToDMY(limit_max_front);
 
 
@@ -2072,8 +2113,8 @@ $(document).ready(function () {
             $('#input-telefono').val(clientePhoneNumber);
             $('#input-lista-paises').val(clienteNacionalidad);
             //Value fechas de búsuqueda
-            $('#start-date').val(formattedDate1);
-            $('#end-date').val(formattedDate2);
+            $('#start-date, #start-date-ajustes-popup').val(formattedDate1);
+            $('#end-date, #end-date-ajustes-popup').val(formattedDate2);
             $('#exclude-days').val(cola_dias_excluidos);
 
         }
@@ -2303,7 +2344,7 @@ $(document).ready(function () {
                     // Redirect to a new page after a delay
                     setTimeout(function () {
                         // Redirect to a new page
-                        window.location.href = 'https://sacacitas.com/link?r=' + publicItemId;
+                        window.location.href = `https://${subdomain}.sacacitas.com/link?r=` + publicItemId;
                     }, 1000);
                 },
                 error: function (xhr, status, error) {
@@ -2326,7 +2367,74 @@ $(document).ready(function () {
         });
 
 
+        //Estado búsqueda pausada. Formularios modificar datos personales (re-validar)
+        $('#pop-up-renew-search-form').submit(function (event) {
+            // Prevent the default form submission behavior
+            event.preventDefault();
+            //Desactivar boton enviar peticion
+            $('#finalizar-form-popup-renew-search').prop('disabled', true);
 
+            // Show loading spinner
+            $('#gif-cargando-boton-finalizar4').show();
+            $('#gif-error-boton-finalizar4').hide();
+
+
+
+
+
+
+
+            // Gather form data
+            var formData = {
+                FMax: $('#end-date-ajustes-popup').val(),
+                FMin: $('#start-date-ajustes-popup').val(),
+                referencia: referencia
+            };
+
+            // Send POST request
+            $.ajax({
+                type: 'POST',
+                url: 'https://n8n.sacacitas.com/webhook/renew-search',
+                data: JSON.stringify(formData),
+                // Send form data using the 'data' property
+                dataType: 'json',
+                contentType: 'application/json',
+                success: function (response) {
+                    // Show your loading GIF
+                    $('#gif-success-boton-finalizar4').show();
+                    //$('#gif-cargando-boton-finalizar').hide();
+
+                    // Check if ID_publico exists in the response
+                    if (response.ID_publico) {
+                        // Use the ID_publico property
+                        var publicItemId = response.ID_publico;
+                    }
+
+
+                    // Redirect to a new page after a delay
+                    setTimeout(function () {
+                        // Redirect to a new page
+                        window.location.href = `https://${subdomain}.sacacitas.com/link?r=` + publicItemId;
+                    }, 1000);
+                },
+                error: function (xhr, status, error) {
+                    // Handle error response
+                    console.error('Form submission failed');
+
+                    $('#div-error-enviar-datos').show();
+                    // Show loading spinner
+                    $('#gif-cargando-boton-finalizar4').hide();
+                    $('#gif-error-boton-finalizar4').show();
+                    // Enable submit button
+                    $('#finalizar-form-popup-datos-personales').prop('disabled', false);
+                }
+            });
+
+
+            // Prevent default form submission in Webflow
+            return false;
+
+        });
 
 
 
