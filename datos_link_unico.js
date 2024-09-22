@@ -1056,72 +1056,18 @@ $(document).ready(function () {
 
 
 
-            //Cancelar búsqueda
-            // Function to make the first HTTP request
-            const makeFirstRequest = () => {
-                const apiUrlFirst = 'https://panelaws.sacacitas.com/public/cola/resumen?public_id_front=${public_id_front}';
-                const requestOptionsFirst = {
-                    method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                };
 
-                fetch(apiUrlFirst, requestOptionsFirst)
-                    .then(response => {
-                        if (!response.ok) {
-                            throw new Error(`HTTP error! Status: ${response.status}`);
-                        }
-                        return response.json();
-                    })
-                    .then(data => {
-                        console.log('First response data:', data);
-                    })
-                    .catch(error => {
-                        console.error('Error:', error);
-                    });
-            };
 
-            // Function to make the second HTTP request
-            const makeSecondRequest = (public_id_front, msgBusquedaCancelada) => {
-                const apiUrlSecond = 'https://n8n.sacacitas.com/webhook/32a8b1d9-05dd-4ee0-a1c7-323fec2e26d1';
 
-                const requestOptionsSecond = {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        public_id_front: public_id_front,
-                        msgBusquedaCancelada: msgBusquedaCancelada,
-                        // Add other data properties as needed
-                    }),
-                };
 
-                fetch(apiUrlSecond, requestOptionsSecond)
-                    .then(response => {
-                        if (!response.ok) {
-                            throw new Error(`HTTP error! Status: ${response.status}`);
-                        }
-                        return response.json();
-                    })
-                    .then(data => {
-                        console.log('Second response data:', data);
-                    })
-                    .catch(error => {
-                        console.error('Error:', error);
-                    });
-            };
 
-            // Trigger both requests separately on button click
-            document.getElementById('boton_confirmar_cancelar_busqueda').addEventListener('click', function () {
-                const msgBusquedaCanceladaInput = document.getElementById('input-cancelar-busqueda-link-unico').value;
 
-                // Make both requests separately
-                makeFirstRequest();
-                makeSecondRequest(public_id_front, msgBusquedaCanceladaInput);
-            });
 
+
+
+
+
+            //--> Cancelar reserva
             // Petición cancelar cita reservada
             document.getElementById('boton-cancelar-cita-reservada').addEventListener('click', function () {
                 const apiUrl = 'https://n8n.sacacitas.com/webhook/0ab8f72e-48fa-4b5a-9f33-2dcb5d9a81d7';
@@ -1557,7 +1503,7 @@ $(document).ready(function () {
                             // Check if the response contains "cliente_correo_validated" set to true
                             if (data[0].cliente_correo_validated === true) {
                                 // Redirect to a new URL
-                                window.location.href = "https://sacacitas.com/link?r=" + public_id_front;
+                                window.location.href = `https://${subdomain}.sacacitas.com/link?r=` + public_id_front;
                             } else {
                                 console.log("Client email not validated.");
                                 // Show error message
@@ -2120,6 +2066,107 @@ $(document).ready(function () {
         }
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        //Cancel search
+        $('#pop-up-cancelar-busqueda-form').submit(function (event) {
+            // Prevent the default form submission behavior
+            event.preventDefault();
+            //Desactivar boton enviar peticion
+            $('#boton_confirmar_cancelar_busqueda').prop('disabled', true);
+
+            console.log('Form submitted');
+
+            // Gather form data
+            var formData = {
+                msgBusquedaCancelada: $('#input-cancelar-busqueda-link-unico').val(),
+                referencia: referencia
+            };
+
+            // Send POST request
+            $.ajax({
+                type: 'POST',
+                url: 'https://n8n.sacacitas.com/webhook/user-cancels-search',
+                data: JSON.stringify(formData),
+                // Send form data using the 'data' property
+                dataType: 'json',
+                contentType: 'application/json',
+                success: function (response) {
+                    // Show text
+                    $('#boton_confirmar_cancelar_busqueda').hide();
+                    $('#success_boton_cancelar_busqueda').show();
+                    //$('#gif-cargando-boton-finalizar').hide();
+
+                    // Check if ID_publico exists in the response
+                    if (response.ID_publico) {
+                        // Use the ID_publico property
+                        var publicItemId = response.ID_publico;
+                    }
+
+
+                    // Redirect to a new page after a delay
+                    setTimeout(function () {
+                        // Redirect to a new page
+                        window.location.href = `https://${subdomain}.sacacitas.com/link?r=` + publicItemId;
+                    }, 1000);
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    //if error call to webhook
+                    $.ajax({
+                        url: "https://n8n.sacacitas.com/webhook/error-alerts",
+                        type: "POST",
+                        contentType: "application/json", // Specify content type as JSON
+                        dataType: 'json',
+                        data: JSON.stringify({
+                            inputData: inputData, // Assuming inputData is an object or data you want to send
+                            LocalisationError: "datos_link_unico-function-callconfigform",
+                            Extrainfo: "Llamada config form para obtener cosas admitidas para cambiar los datos personales", // Add extra text or data
+                            errorCode: 500 // Example of sending an additional error code
+                        }),
+                        success: function (response) {
+                            console.log("Success:", response);
+                        },
+                        error: function (jqXHR, textStatus, errorThrown) {
+                            console.error("Error:", errorThrown);
+                        }
+                    });
+
+                    // Enable submit again
+                    $('#boton_confirmar_cancelar_busqueda').prop('disabled', false);
+
+                }
+            });
+
+
+            // Prevent default form submission in Webflow
+            return false;
+
+        });
+
+
+
+
+
         //Formularios modificar datos personales
         $('#form_block_modificar_datos_personales').submit(function (event) {
             // Prevent the default form submission behavior
@@ -2186,7 +2233,7 @@ $(document).ready(function () {
                     // Redirect to a new page after a delay
                     setTimeout(function () {
                         // Redirect to a new page
-                        window.location.href = 'https://sacacitas.com/link?r=' + publicItemId;
+                        window.location.href = `https://${subdomain}.sacacitas.com/link?r=` + publicItemId;
                     }, 1000);
                 },
                 error: function (xhr, status, error) {
@@ -2255,7 +2302,7 @@ $(document).ready(function () {
                     // Redirect to a new page after a delay
                     setTimeout(function () {
                         // Redirect to a new page
-                        window.location.href = 'https://sacacitas.com/link?r=' + publicItemId;
+                        window.location.href = `https://${subdomain}.sacacitas.com/link?r=` + publicItemId;
                     }, 1000);
                 },
                 error: function (xhr, status, error) {
