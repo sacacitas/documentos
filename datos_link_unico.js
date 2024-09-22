@@ -220,6 +220,7 @@ $(document).ready(function () {
         var clienteFechaNacimiento = null;
         var clienteResolucionNacionalidad = null;
         var clienteCSVdoc = null;
+        var userISOlang = null;
 
         //Verify email
         var EmailVerified = null;
@@ -343,6 +344,7 @@ $(document).ready(function () {
                     clienteEmail = data.cliente_email;
                     clienteNacionalidad = data.cliente_nacionalidad;
                     clienteNacionalidadISO = data.cliente_nacionalidad_iso;
+                    userISOlang = data.user_ISO_language;
 
                     if (data.cliente_fecha_nacimiento === null || data.cliente_fecha_nacimiento === undefined) {
                         clienteFechaNacimiento = "1970-01-01";
@@ -2063,6 +2065,19 @@ $(document).ready(function () {
             $('#end-date, #end-date-ajustes-popup').val(formattedDate2);
             $('#exclude-days').val(cola_dias_excluidos);
 
+
+
+
+
+
+
+
+            //--> Tercer formulario
+            $('#input-language-notification').val(userISOlang);
+
+
+
+
         }
 
 
@@ -2087,7 +2102,7 @@ $(document).ready(function () {
 
 
 
-
+        //--> Operations
         //Cancel search
         $('#pop-up-cancelar-busqueda-form').submit(function (event) {
             // Prevent the default form submission behavior
@@ -2166,8 +2181,8 @@ $(document).ready(function () {
 
 
 
-
-        //Formularios modificar datos personales
+        //-- Settings page
+        //Settings. Formularios modificar datos personales
         $('#form_block_modificar_datos_personales').submit(function (event) {
             // Prevent the default form submission behavior
             event.preventDefault();
@@ -2256,7 +2271,7 @@ $(document).ready(function () {
         });
 
 
-        //Formularios modificar fechas de búsqueda
+        //Settings. Formularios modificar fechas de búsqueda
         $('#form_block_modificar_datos_busqueda').submit(function (event) {
             // Prevent the default form submission behavior
             event.preventDefault();
@@ -2325,7 +2340,77 @@ $(document).ready(function () {
         });
 
 
-        //Estado búsqueda pausada. Formularios modificar datos personales (re-validar)
+
+        //Settings. Change notification language
+        $('#form_block_user_notification_language').submit(function (event) {
+            // Prevent the default form submission behavior
+            event.preventDefault();
+            //Desactivar boton enviar peticion
+            $('#finish-button-change-language').prop('disabled', true);
+
+            // Show loading spinner
+            $('#gif-cargando-boton-finalizar5').show();
+            $('#gif-error-boton-finalizar5').hide();
+
+
+
+
+
+            // Gather form data
+            var formData = {
+                NotificationUserLang: $('#input-language-notification').val(),
+                referencia: referencia
+            };
+
+            // Send POST request
+            $.ajax({
+                type: 'POST',
+                url: 'https://n8n.sacacitas.com/webhook/user-modify-system-lang',
+                data: JSON.stringify(formData),
+                // Send form data using the 'data' property
+                dataType: 'json',
+                contentType: 'application/json',
+                success: function (response) {
+                    // Show your loading GIF
+                    $('#gif-success-boton-finalizar5').show();
+                    //$('#gif-cargando-boton-finalizar').hide();
+
+                    // Check if ID_publico exists in the response
+                    if (response.ID_publico) {
+                        // Use the ID_publico property
+                        var publicItemId = response.ID_publico;
+                    }
+
+
+                    // Redirect to a new page after a delay
+                    setTimeout(function () {
+                        // Redirect to a new page
+                        window.location.href = `https://${subdomain}.sacacitas.com/link?r=` + publicItemId;
+                    }, 1000);
+                },
+                error: function (xhr, status, error) {
+                    // Handle error response
+                    console.error('Form submission failed');
+
+                    $('#div-error-enviar-datos').show();
+                    // Show loading spinner
+                    $('#gif-cargando-boton-finalizar5').hide();
+                    $('#gif-error-boton-finalizar5').show();
+                    // Enable submit button
+                    $('#finish-button-change-language').prop('disabled', false);
+                }
+            });
+
+
+            // Prevent default form submission in Webflow
+            return false;
+
+        });
+
+
+
+        //--> Popup
+        //Popup. Estado búsqueda pausada. Formularios modificar datos personales (re-validar)
         $('#pop-up-datos-personales-form').submit(function (event) {
             // Prevent the default form submission behavior
             event.preventDefault();
@@ -2414,7 +2499,7 @@ $(document).ready(function () {
         });
 
 
-        //Estado búsqueda pausada. Formularios modificar datos personales (re-validar)
+        //Popup. Renew search. New search date
         $('#pop-up-renew-search-form').submit(function (event) {
             // Prevent the default form submission behavior
             event.preventDefault();
