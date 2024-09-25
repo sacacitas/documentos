@@ -1,5 +1,5 @@
 $(document).ready(function () {
-    // Function to set a cookie
+    // Function to set a cookie for the parent domain (accessible from all subdomains)
     function setCookie(name, value, days) {
         var expires = "";
         if (days) {
@@ -7,11 +7,11 @@ $(document).ready(function () {
             date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
             expires = "; expires=" + date.toUTCString();
         }
-        document.cookie = name + "=" + (value || "") + expires + "; path=/";
+        // Set cookie for the parent domain to ensure it's shared across all subdomains
+        document.cookie = name + "=" + (value || "") + expires + "; path=/; domain=.sacacitas.com";
     }
 
-    console.log(getCookie('SC_lang'));
-    // Function to get a cookie value (optional if needed)
+    // Function to get a cookie value
     function getCookie(name) {
         var nameEQ = name + "=";
         var ca = document.cookie.split(';');
@@ -23,15 +23,30 @@ $(document).ready(function () {
         return null;
     }
 
+    // Check if a language cookie already exists and matches the current subdomain
+    var currentLanguage = getCookie('SC_lang');
+    var currentSubdomain = window.location.hostname.split('.')[0];  // Get the subdomain
+    console.log("Current SC_lang cookie:", currentLanguage);
+
+    if (currentLanguage === currentSubdomain) {
+        // If the cookie exists and matches the current subdomain, do nothing
+        console.log("Cookie matches the current subdomain, no action needed.");
+    } else {
+        // If the cookie doesn't match, set the cookie to the current subdomain
+        console.log("Setting cookie to current subdomain:", currentSubdomain);
+        setCookie('SC_lang', currentSubdomain, 365);
+    }
+
     // Attach click event to all anchor tags with the attribute 'listenerlanguageitems'
-    $('a[listenerlanguageitems]').on('click', function (event) {
+    $('a[ListenerLanguageItems]').on('click', function (event) {
         // Prevent the default link behavior
         event.preventDefault();
 
         // Get the value of the listenerlanguageitems attribute
-        var SC_lang = $(this).attr('listenerlanguageitems');
+        var SC_lang = $(this).attr('ListenerLanguageItems');
+        console.log("Selected language (SC_lang):", SC_lang);
 
-        // Set the selected language in a cookie
+        // Update the language cookie with the new selected language
         setCookie('SC_lang', SC_lang, 365);
 
         // Get the current path and query string
@@ -44,9 +59,4 @@ $(document).ready(function () {
         window.location.href = url;
     });
 
-    // SWITCHER-4 logic to hide the current language link
-    const currentLinksSwitcher4 = $('a[listenerlanguageitems].w--current');
-    currentLinksSwitcher4.each(function () {
-        $(this).hide();
-    });
 });
