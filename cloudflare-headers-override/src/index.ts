@@ -16,6 +16,9 @@ import * as localePt from '../../lang/pt.json';
 import * as localeRo from '../../lang/ro.json';
 import * as localeRu from '../../lang/ru.json';
 import * as localeZh from '../../lang/zh.json';
+import * as localeZh from '../../lang/hi.json';
+import * as localeZh from '../../lang/de.json';
+
 
 import { Tolgee, DevTools, FormatSimple, TolgeeInstance } from "@tolgee/web";
 
