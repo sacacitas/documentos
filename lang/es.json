@@ -588,6 +588,7 @@
   "linkunico-error-text-3" : "‼️ Error servidor: ",
   "linkunico-error-text-4" : "Estamos encontrado un error procesando su solicitud",
   "linkunico-error-text-5" : "⚠️ Lamentamos las molestias, nuestros servicios se encuentra temporalmente no disponible debido a una actualización del sistema. Vuelva a intentarlo en unas horas. Si este mensaje persiste,",
+  "linkunico-errorcontact-text-1" : "Si está seguro de que no se trata de un error,",
   "linkunico-errorcontact-text-2" : "contacte",
   "linkunico-errorcontact-text-3" : "con nosotros. ",
   "linkunico-header-1" : "Cargando datos...",
