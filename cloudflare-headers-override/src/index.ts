@@ -117,6 +117,9 @@ async function ParseRequest(req) {
 			ro: localeRo,
 			ru: localeRu,
 			zh: localeZh,
+			hi: localeHi,
+			de: localeDe,
+			
 		}
 	})
 
