@@ -11,33 +11,7 @@ $(document).ready(function () {
         document.cookie = name + "=" + (value || "") + expires + "; path=/; domain=.sacacitas.com";
     }
 
-    // Function to get a cookie value
-    function getCookie(name) {
-        var nameEQ = name + "=";
-        var ca = document.cookie.split(';');
-        for (var i = 0; i < ca.length; i++) {
-            var c = ca[i];
-            while (c.charAt(0) === ' ') c = c.substring(1, c.length);
-            if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
-        }
-        return null;
-    }
-
-    // Check if a language cookie already exists and matches the current subdomain
-    var currentLanguage = getCookie('SC_lang');
-    var currentSubdomain = window.location.hostname.split('.')[0];  // Get the subdomain
-    console.log("Current SC_lang cookie:", currentLanguage);
-
-    if (currentLanguage === currentSubdomain) {
-        // If the cookie exists and matches the current subdomain, do nothing
-        console.log("Cookie matches the current subdomain, no action needed.");
-    } else {
-        // If the cookie doesn't match, set the cookie to the current subdomain
-        console.log("Setting cookie to current subdomain:", currentSubdomain);
-        setCookie('SC_lang', currentSubdomain, 365);
-    }
-
-    // Attach click event to all anchor tags with the attribute 'listenerlanguageitems'
+    // Attach click event to all anchor tags with the attribute 'ListenerLanguageItems'
     $('a[ListenerLanguageItems]').on('click', function (event) {
         // Prevent the default link behavior
         event.preventDefault();
@@ -58,5 +32,4 @@ $(document).ready(function () {
         // Redirect to the constructed URL
         window.location.href = url;
     });
-
 });
