@@ -11,6 +11,26 @@ $(document).ready(function () {
         document.cookie = name + "=" + (value || "") + expires + "; path=/; domain=.sacacitas.com";
     }
 
+    // Function to get a cookie value
+    function getCookie(name) {
+        var nameEQ = name + "=";
+        var ca = document.cookie.split(';');
+        for (var i = 0; i < ca.length; i++) {
+            var c = ca[i];
+            while (c.charAt(0) === ' ') c = c.substring(1, c.length);
+            if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
+        }
+        return null;
+    }
+
+    // Check if a language cookie already exists
+    var currentLanguage = getCookie('SC_lang');
+    var currentSubdomain = window.location.hostname.split('.')[0];  // Get the subdomain
+    // Only set the cookie to the current subdomain if no language cookie exists
+    if (!currentLanguage) {
+        setCookie('SC_lang', currentSubdomain, 365);
+    } 
+
     // Attach click event to all anchor tags with the attribute 'ListenerLanguageItems'
     $('a[ListenerLanguageItems]').on('click', function (event) {
         // Prevent the default link behavior
