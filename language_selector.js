@@ -9,8 +9,6 @@ $(document).ready(function () {
         }
         // Set cookie for the parent domain to ensure it's shared across all subdomains
         document.cookie = name + "=" + (value || "") + expires + "; path=/; domain=.sacacitas.com; SameSite=None; Secure";
-        // Also store in localStorage as backup
-        localStorage.setItem(name, value);
     }
 
     // Function to get a cookie value
@@ -25,16 +23,10 @@ $(document).ready(function () {
         return null;
     }
 
-    // Retrieve cookie or fallback to localStorage
-    function getLanguage() {
-        return getCookie('SC_lang') || localStorage.getItem('SC_lang');
-    }
-
     // Check if a language cookie already exists
-    var currentLanguage = getLanguage();
+    var currentLanguage = getCookie('SC_lang');
     var currentSubdomain = window.location.hostname.split('.')[0];  // Get the subdomain
-
-    // Only set the cookie and localStorage if no language cookie exists
+    // Only set the cookie to the current subdomain if no language cookie exists
     if (!currentLanguage) {
         setCookie('SC_lang', currentSubdomain, 365);
     }
@@ -48,7 +40,7 @@ $(document).ready(function () {
         var SC_lang = $(this).attr('ListenerLanguageItems');
         console.log("Selected language (SC_lang):", SC_lang);
 
-        // Update the language cookie and localStorage with the new selected language
+        // Update the language cookie with the new selected language
         setCookie('SC_lang', SC_lang, 365);
 
         // Get the current path and query string
