@@ -24,11 +24,14 @@ var TEXTOS_API = {
     'Inicio-Boton-1-placeholder': 'Continuar',
 
 };
-
+//--> Set functionality for language translation
 var { Tolgee, BackendFetch } = window['@tolgee/web'];
 
 var host = window.location.host //es.sacacitas.com
 var subdomain = host.split('.')[0] //es
+if (subdomain === "sacacitas") {
+    subdomain = "es";
+}
 var tolgee_instance = Tolgee()
     .use(BackendFetch({ prefix: "https://documentos.sacacitas.com/lang" }))
     .init({
@@ -883,7 +886,6 @@ $(document).ready(function () {
         fetchJsonAndPopulateProvincia();
     });
 });
-
 
 
 
