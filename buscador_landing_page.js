@@ -350,31 +350,32 @@ $(document).ready(function () {
 
 
 
-        //Function to populate select Administration
+        // Function to populate select Administration
         function fetchJsonAndPopulateAdministracion() {
             var selectedCountry = select_country.val();
-            // Create values select administración depending on country
+
+            // Clear any existing options before adding new ones
+            select_administracion.empty();
+
+            // Create values for the select administración depending on the country
             if (selectedCountry === 'ES') {
                 var values_select_administracion = [
                     //{ value: 'EX1', text: 'Extranjería' },
-                    { value: 'RC1', text: 'Registro Civil', selected: true } //Set default selected RC -> Temporal, change line 184
+                    { value: 'RC1', text: 'Registro Civil', selected: true } // Set default selected RC
                 ];
 
             } else {
                 var values_select_administracion = [
-                    {}
+                    // Add default or empty options if necessary
                 ];
             }
 
-            // Populate select administración
+            // Populate select administración using the new Option() constructor
             values_select_administracion.forEach(option => {
-                var optionElement_administracion = $('<option></option>').prop('value', option.value).text(option.text);
+                var optionElement_administracion = new Option(option.text, option.value, option.selected || false, option.selected || false);
                 select_administracion.append(optionElement_administracion);
             });
-
-
         }
-
 
 
 
