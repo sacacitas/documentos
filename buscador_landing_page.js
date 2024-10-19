@@ -23,6 +23,20 @@ var TEXTOS_API = {
 
     'Inicio-Boton-1-placeholder': 'Continuar',
 
+
+    'Inicio-subtext-1': 'Automatizamos la búsqueda de tu cita previa en el',
+    'Inicio-subtext-2': 'Registro Civil',
+    'Inicio-subtext-3-1': ', para la',
+    'Inicio-subtext-3-2': ', para el',
+    'Inicio-subtext-3-3': ', para',
+    'Inicio-subtext-3-4': ', para la inscripción y expediente de',
+    'Inicio-subtext-4': 'Nacionalidad',
+    'Inicio-subtext-5': 'Jura de Nacionalidad',
+    'Inicio-subtext-6': 'Matrimonio',
+    'Inicio-subtext-7': 'Inscripción de Nacimiento',
+
+
+
 };
 //--> Set functionality for language translation
 var { Tolgee, BackendFetch } = window['@tolgee/web'];
@@ -32,11 +46,74 @@ var subdomain = host.split('.')[0] //es
 if (subdomain === "sacacitas") {
     subdomain = "es";
 }
+
+
 var tolgee_instance = Tolgee()
     .use(BackendFetch({ prefix: "https://documentos.sacacitas.com/lang" }))
     .init({
         language: subdomain
     })
+
+
+
+
+//--> Dynamic page content
+//Function get URL parameters
+function getUrlParameter(name) {
+    name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+    var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+    var results = regex.exec(location.search);
+    return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+}
+
+//Change based on service
+var DynamycServiceID = getUrlParameter('srvid');
+
+if (DynamycServiceID) {
+    $('#subtext-main-page-1').hide();
+    $('#subtext-main-page-2').show();
+
+}
+
+
+if (DynamycServiceID === "ESRCNA1") {
+    $("#subtext-main-page-2")
+        .append(`<span>${TEXTOS_API['Inicio-subtext-1']}</span>`) //Automatizamos la búsqueda de tu cita previa en el
+        .append("<span> </span>")
+        .append(`<span class="paragraph---v1-bold">${TEXTOS_API['Inicio-subtext-2']}</span>`) //Registro Civil
+        .append(`<span>${TEXTOS_API['Inicio-subtext-3-1']}</span>`) //, para la
+        .append("<span> </span>")
+        .append(`<span class="paragraph---v1-bold">${TEXTOS_API['Inicio-subtext-4']}</span>`); //Nacionalidad
+
+} else if (DynamycServiceID === "ESRCJU1") {
+    $("#subtext-main-page-2")
+        .append(`<span>${TEXTOS_API['Inicio-subtext-1']}</span>`) //Automatizamos la búsqueda de tu cita previa en el
+        .append("<span> </span>")
+        .append(`<span class="paragraph---v1-bold">${TEXTOS_API['Inicio-subtext-2']}</span>`) //Registro Civil
+        .append(`<span>${TEXTOS_API['Inicio-subtext-3-1']}</span>`) //, para la
+        .append("<span> </span>")
+        .append(`<span class="paragraph---v1-bold">${TEXTOS_API['Inicio-subtext-5']}</span>`); //Jura de Nacionalidad
+} else if (DynamycServiceID === "ESRCMA1") {
+    $("#subtext-main-page-2")
+        .append(`<span>${TEXTOS_API['Inicio-subtext-1']}</span>`) //Automatizamos la búsqueda de tu cita previa en el
+        .append("<span> </span>")
+        .append(`<span class="paragraph---v1-bold">${TEXTOS_API['Inicio-subtext-2']}</span>`) //Registro Civil
+        .append(`<span>${TEXTOS_API['Inicio-subtext-3-4']}</span>`) //, para la Inscripción y Expediente de
+        .append("<span> </span>")
+        .append(`<span class="paragraph---v1-bold">${TEXTOS_API['Inicio-subtext-6']}</span>`); //Matrimonio
+} else if (DynamycServiceID === "ESRCIN1") {
+    $("#subtext-main-page-2")
+        .append(`<span>${TEXTOS_API['Inicio-subtext-1']}</span>`) //Automatizamos la búsqueda de tu cita previa en el
+        .append("<span> </span>")
+        .append(`<span class="paragraph---v1-bold">${TEXTOS_API['Inicio-subtext-2']}</span>`) //Registro Civil
+        .append(`<span>${TEXTOS_API['Inicio-subtext-3-1']}</span>`) //, para la
+        .append("<span> </span>")
+        .append(`<span class="paragraph---v1-bold">${TEXTOS_API['Inicio-subtext-7']}</span>`); //Inscripción de Nacimiento
+} else {
+    $('#subtext-main-page-1').show();
+    $('#subtext-main-page-2').hide();
+
+}
 
 
 $(document).ready(function () {
@@ -184,14 +261,6 @@ $(document).ready(function () {
 
 
         //Tratamiento GCLID en la URL   
-        // Obtener todos los parámetros de la URL
-        function getUrlParameter(name) {
-            name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
-            var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
-            var results = regex.exec(location.search);
-            return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
-        }
-
         // Función para establecer cookies con atributos adicionales y log para debugging
         function setCookie(name, value, days) {
             var expires = "";
