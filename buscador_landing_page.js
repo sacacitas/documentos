@@ -68,7 +68,6 @@ function getUrlParameter(name) {
 
 //Change based on service
 var DynamycServiceID = getUrlParameter('srvid');
-
 if (DynamycServiceID) {
     $('#subtext-main-page-1').hide();
     $('#subtext-main-page-2').show();
@@ -181,7 +180,7 @@ $(document).ready(function () {
             value: '',
             text: TEXTOS_API['js-buscador-text-2'], // "Selecciona una Administración"
             disabled: true,
-            selected: true
+            selected: false // Temporal, change later 
         });
         select_administracion.append(default_select_administracion);
 
@@ -279,6 +278,7 @@ $(document).ready(function () {
         var scgclid = getUrlParameter('gclid');
         var scfbclid = getUrlParameter('fbclid');
 
+
         // Si existe gclid o fbclid en la URL, crear cookie
         if (scgclid !== '') {
             setCookie("scgclid", scgclid, 45); // Expira en 45 días
@@ -314,12 +314,10 @@ $(document).ready(function () {
             { value: 'ES', text: '🇪🇸' + TEXTOS_API['js-buscador-text-1'] }, // "España"
         ];
 
-        console.log(values_select_country);
         // Filter out the default option from the list
         var filteredOptions = values_select_country.filter(function (option) {
             return option.value !== SELECTED_PAIS.value;
         });
-        console.log(filteredOptions);
 
         // Populate the select element with the remaining options
         filteredOptions.forEach(function (option) {
@@ -349,7 +347,7 @@ $(document).ready(function () {
             if (selectedCountry === 'ES') {
                 var values_select_administracion = [
                     //{ value: 'EX1', text: 'Extranjería' },
-                    { value: 'RC1', text: 'Registro Civil' }
+                    { value: 'RC1', text: 'Registro Civil', selected: true } //Set default selected RC -> Temporal, change line 184
                 ];
 
             } else {
@@ -587,7 +585,6 @@ $(document).ready(function () {
                 select_servicio.trigger('change');
 
             } else {
-                console.log('One of the conditions is not met.');
             }
 
 
@@ -906,7 +903,6 @@ $(document).ready(function () {
                 id_ser = $(elem).attr('id_servicio')
                 //Texto de la provincia
                 var selectedProvinciaText = select_provincia.find(':selected').text();
-                console.log(selectedProvinciaText)
 
                 // frontend_administracion = $(elem).attr('frontend_administracion')
 
@@ -921,9 +917,7 @@ $(document).ready(function () {
 
                 //ISO ID de la provincia y pais
                 var iso3166_2_value = select_provincia.val();
-                console.log(iso3166_2_value)
 
-                console.log(select_administracion.text())
                 //Crear var con los objetos 
                 idbuscadores.push({
                     'id_oficina': id_ofi,
