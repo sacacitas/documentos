@@ -68,51 +68,7 @@ function getUrlParameter(name) {
 
 //Change based on service
 var DynamycServiceID = getUrlParameter('srvid');
-if (DynamycServiceID) {
-    $('#subtext-main-page-1').hide();
-    $('#subtext-main-page-2').show();
 
-}
-
-
-if (DynamycServiceID === "ESRCNA1") {
-    $("#subtext-main-page-2")
-        .append(`<span>${TEXTOS_API['Inicio-subtext-1']}</span>`) //Automatizamos la búsqueda de tu cita previa en el
-        .append("<span> </span>")
-        .append(`<span class="paragraph---v1-bold">${TEXTOS_API['Inicio-subtext-2']}</span>`) //Registro Civil
-        .append(`<span>${TEXTOS_API['Inicio-subtext-3-1']}</span>`) //, para la
-        .append("<span> </span>")
-        .append(`<span class="paragraph---v1-bold">${TEXTOS_API['Inicio-subtext-4']}</span>`); //Nacionalidad
-
-} else if (DynamycServiceID === "ESRCJU1") {
-    $("#subtext-main-page-2")
-        .append(`<span>${TEXTOS_API['Inicio-subtext-1']}</span>`) //Automatizamos la búsqueda de tu cita previa en el
-        .append("<span> </span>")
-        .append(`<span class="paragraph---v1-bold">${TEXTOS_API['Inicio-subtext-2']}</span>`) //Registro Civil
-        .append(`<span>${TEXTOS_API['Inicio-subtext-3-1']}</span>`) //, para la
-        .append("<span> </span>")
-        .append(`<span class="paragraph---v1-bold">${TEXTOS_API['Inicio-subtext-5']}</span>`); //Jura de Nacionalidad
-} else if (DynamycServiceID === "ESRCMA1") {
-    $("#subtext-main-page-2")
-        .append(`<span>${TEXTOS_API['Inicio-subtext-1']}</span>`) //Automatizamos la búsqueda de tu cita previa en el
-        .append("<span> </span>")
-        .append(`<span class="paragraph---v1-bold">${TEXTOS_API['Inicio-subtext-2']}</span>`) //Registro Civil
-        .append(`<span>${TEXTOS_API['Inicio-subtext-3-4']}</span>`) //, para la Inscripción y Expediente de
-        .append("<span> </span>")
-        .append(`<span class="paragraph---v1-bold">${TEXTOS_API['Inicio-subtext-6']}</span>`); //Matrimonio
-} else if (DynamycServiceID === "ESRCIN1") {
-    $("#subtext-main-page-2")
-        .append(`<span>${TEXTOS_API['Inicio-subtext-1']}</span>`) //Automatizamos la búsqueda de tu cita previa en el
-        .append("<span> </span>")
-        .append(`<span class="paragraph---v1-bold">${TEXTOS_API['Inicio-subtext-2']}</span>`) //Registro Civil
-        .append(`<span>${TEXTOS_API['Inicio-subtext-3-1']}</span>`) //, para la
-        .append("<span> </span>")
-        .append(`<span class="paragraph---v1-bold">${TEXTOS_API['Inicio-subtext-7']}</span>`); //Inscripción de Nacimiento
-} else {
-    $('#subtext-main-page-1').show();
-    $('#subtext-main-page-2').hide();
-
-}
 
 
 $(document).ready(function () {
@@ -126,6 +82,60 @@ $(document).ready(function () {
                 TEXTOS_API[key] = translation;
             }
         }
+
+
+        //Dynamic content based on service
+        if (DynamycServiceID) {
+            $('#subtext-main-page-1').hide();
+            $('#subtext-main-page-2').show();
+
+        }
+        if (DynamycServiceID === "ESRCNA1") {
+            $("#subtext-main-page-2")
+                .append(`<span>${TEXTOS_API['Inicio-subtext-1']}</span>`) //Automatizamos la búsqueda de tu cita previa en el
+                .append("<span> </span>")
+                .append(`<span class="paragraph---v1-bold">${TEXTOS_API['Inicio-subtext-2']}</span>`) //Registro Civil
+                .append(`<span>${TEXTOS_API['Inicio-subtext-3-1']}</span>`) //, para la
+                .append("<span> </span>")
+                .append(`<span class="paragraph---v1-bold">${TEXTOS_API['Inicio-subtext-4']}</span>`); //Nacionalidad
+
+        } else if (DynamycServiceID === "ESRCJU1") {
+            $("#subtext-main-page-2")
+                .append(`<span>${TEXTOS_API['Inicio-subtext-1']}</span>`) //Automatizamos la búsqueda de tu cita previa en el
+                .append("<span> </span>")
+                .append(`<span class="paragraph---v1-bold">${TEXTOS_API['Inicio-subtext-2']}</span>`) //Registro Civil
+                .append(`<span>${TEXTOS_API['Inicio-subtext-3-1']}</span>`) //, para la
+                .append("<span> </span>")
+                .append(`<span class="paragraph---v1-bold">${TEXTOS_API['Inicio-subtext-5']}</span>`); //Jura de Nacionalidad
+        } else if (DynamycServiceID === "ESRCMA1") {
+            $("#subtext-main-page-2")
+                .append(`<span>${TEXTOS_API['Inicio-subtext-1']}</span>`) //Automatizamos la búsqueda de tu cita previa en el
+                .append("<span> </span>")
+                .append(`<span class="paragraph---v1-bold">${TEXTOS_API['Inicio-subtext-2']}</span>`) //Registro Civil
+                .append(`<span>${TEXTOS_API['Inicio-subtext-3-4']}</span>`) //, para la Inscripción y Expediente de
+                .append("<span> </span>")
+                .append(`<span class="paragraph---v1-bold">${TEXTOS_API['Inicio-subtext-6']}</span>`); //Matrimonio
+        } else if (DynamycServiceID === "ESRCIN1") {
+            $("#subtext-main-page-2")
+                .append(`<span>${TEXTOS_API['Inicio-subtext-1']}</span>`) //Automatizamos la búsqueda de tu cita previa en el
+                .append("<span> </span>")
+                .append(`<span class="paragraph---v1-bold">${TEXTOS_API['Inicio-subtext-2']}</span>`) //Registro Civil
+                .append(`<span>${TEXTOS_API['Inicio-subtext-3-1']}</span>`) //, para la
+                .append("<span> </span>")
+                .append(`<span class="paragraph---v1-bold">${TEXTOS_API['Inicio-subtext-7']}</span>`); //Inscripción de Nacimiento
+        } else {
+            $('#subtext-main-page-1').show();
+            $('#subtext-main-page-2').hide();
+
+        }
+
+
+
+
+
+
+
+
 
         //Set placeholder text for butotn
         $('#inicio-search-button-end').val(TEXTOS_API['Inicio-Boton-1-placeholder']);
