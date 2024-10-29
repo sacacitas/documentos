@@ -110,16 +110,15 @@ var TEXTOS_API = {
     'js-datepicker-ultrashortdayweek-7': 'D',
 
 };
-
-
-
-
+//--> Set functionality for language translation
 var { Tolgee, BackendFetch } = window['@tolgee/web'];
 
 //Current subdomain
 var host = window.location.hostname;  // Get the full hostname (e.g., subdomain.example.com)
 var subdomain = host.split('.')[0];   // Get the first part of the hostname
-
+if (subdomain === "sacacitas") {
+    subdomain = "es";
+}
 
 var tolgee_instance = Tolgee()
     .use(BackendFetch({ prefix: "https://documentos.sacacitas.com/lang" }))
@@ -711,8 +710,20 @@ $(document).ready(function () {
 
         // SECTION: 6. Finalizar y enviar a backend los datos
         $('#formulario_ID').submit(function (event) {
+
+
+            // Show loading gif
+            $('#gif-cargando-boton-finalizar').show();
+            //Hide error div                  
+            $('#div-error-enviar-datos').hide();
+            //Hide error gif
+            $('#gif-error-boton-finalizar').hide();
+            //Hide success button gif
+            $('#gif-success-boton-finalizar').hide();
             // Prevent the default form submission behavior
             event.preventDefault();
+
+
 
             // Disable the submit button to prevent multiple submissions
             $('#submit-button-id').prop('disabled', true);
@@ -730,8 +741,6 @@ $(document).ready(function () {
                 NiceSelected_document = 'NIE';
             }
 
-            // Show loading gif
-            $('#gif-cargando-boton-finalizar').show();
 
             // Generate random number
             var RandomNumber = Math.floor(Math.random() * 10000).toString(36);
@@ -779,17 +788,29 @@ $(document).ready(function () {
                 dataType: 'json',
                 contentType: 'application/json',
                 success: function (response) {
-                    $('#div-error-enviar-datos').hide();
                     if (response.ID_publico !== null) {
+                        $('#gif-cargando-boton-finalizar').hide();
+                        $('#formulario-boton-finalizar').hide();
+                        $('#gif-success-boton-finalizar').show();
+
                         var publicItemId = response.ID_publico;
-                        window.location.href = 'https://www.sacacitas.com/link?r=' + publicItemId;
+                        window.location.href = `https://${subdomain}.sacacitas.com/link?r=` + publicItemId;
                     }
                     if (response.empty_dates === true) {
+                        $('#gif-cargando-boton-finalizar').hide();
                         $('#div-error-enviar-datos').show();
+                        $('#gif-error-boton-finalizar').show();
                         $('#texto_error_form').text(`${TEXTOS_API['js-form-text-2']}`);
                     }
+
                 },
                 error: function (xhr, status, error) {
+
+                    $('#gif-cargando-boton-finalizar').hide();
+                    $('#div-error-enviar-datos').show();
+                    $('#gif-error-boton-finalizar').show();
+                    $('#submit-button-id').prop('disabled', false);
+
                     console.error('Form submission failed');
                     //if error call to webhook
                     $.ajax({
@@ -810,13 +831,9 @@ $(document).ready(function () {
                             console.error("Error:", errorThrown);
                         }
                     });
-                    $('#div-error-enviar-datos').show();
-                },
-                complete: function () {
-                    // Enable the submit button after request completion
-                    $('#submit-button-id').prop('disabled', false);
-                    // Hide the loading gif
-                    $('#gif-cargando-boton-finalizar').hide();
+
+
+
                 }
             });
 
