@@ -43,7 +43,7 @@ var TEXTOS_API = {
     'js-linkunico-text-35': 'Sin datos',
     'js-linkunico-text-36': 'h.',
     'js-linkunico-text-37': 'Indica tu nacionalidad',
-    'js-linkunico-text-38': 'Indica la razón por la que cancelas tu cita previa reservada*',
+    'js-linkunico-text-38': 'Indica la razón por la que cancelas tu cita previa reservada (Min. 25 caracteres)*',
     'js-linkunico-text-39': 'Indica la razón por la que cancelas tu búsqueda',
     'js-linkunico-text-40': 'Se encuentra el siguiente problema:',
     'js-linkunico-text-41': '¿Deseas volver a buscar tu cita?',
