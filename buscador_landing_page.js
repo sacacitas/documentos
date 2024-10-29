@@ -9,6 +9,7 @@ var MAX_CHECKOUT_ITEMS = 1; //Items máximos que se pueden añadir
 var INPUT_JSON = {}
 
 
+let INPUT_JSON_COMPLETE
 
 // Set text i18n
 var TEXTOS_API = {
@@ -771,7 +772,7 @@ $(document).ready(function () {
             //$('#INPUT_PRECIO').val(set_price_cents)
 
 
-            updateHiddentInputForms()
+            updateStringtosendtoForm()
         }
 
 
@@ -899,8 +900,11 @@ $(document).ready(function () {
 
 
 
+        //Variable input json
+        function updateStringtosendtoForm() {
 
-        function updateHiddentInputForms() {
+            INPUT_JSON_COMPLETE = null
+
             // reset?
             INPUT_JSON = {
                 'cookieGclid': cookieGclid,
@@ -943,10 +947,11 @@ $(document).ready(function () {
 
             INPUT_JSON['idbuscadores'] = idbuscadores
 
+            //Update variable to send to the form
             if (idbuscadores.length === 0) {
-                $('#INPUT_JSON').val('')
+                INPUT_JSON_COMPLETE = ''
             } else {
-                $('#INPUT_JSON').val(btoa(encodeURIComponent(JSON.stringify(INPUT_JSON)))) //base64
+                INPUT_JSON_COMPLETE = btoa(encodeURIComponent(JSON.stringify(INPUT_JSON)));
             }
 
 
@@ -954,6 +959,39 @@ $(document).ready(function () {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+        // Complete search and redirect to form page
+        $('#LandingSearchForm').submit(function (event) {
+
+            // Prevent the default form submission behavior
+            event.preventDefault();
+            // Disable the submit button to prevent multiple submissions
+            $('#submit-button-id').prop('disabled', true);
+
+            //Redirects to the form page
+            window.location.href = `https://${subdomain}.sacacitas.com/opera/form?INPUT_JSON=` + INPUT_JSON_COMPLETE;
+
+
+            return false;
+        });
+
+
+
+
+
+        
 
         // Set country first task when loading page
         fetchJsonAndPopulateAdministracion();
