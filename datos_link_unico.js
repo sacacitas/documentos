@@ -50,6 +50,7 @@ var TEXTOS_API = {
     'js-linkunico-text-42': 'Renueva la búsqueda en el botón de abajo',
     'linkunico-button-confirm': 'Confirmar',
     'linkunico-button-8': 'Pagar',
+    'js-linkunico-text-43': 'El mensaje debe tener al menos 25 caracteres',
 
 
 
@@ -1073,49 +1074,40 @@ $(document).ready(function () {
             // Petición cancelar cita reservada
             document.getElementById('boton-cancelar-cita-reservada').addEventListener('click', function () {
                 const apiUrl = 'https://n8n.sacacitas.com/webhook/0ab8f72e-48fa-4b5a-9f33-2dcb5d9a81d7';
+                const msgBusquedaAnulada = document.getElementById('input-razon-cancelar-cita-reservada').value;
+                const errorMessageId = 'error-message';
 
-                // Obtener datos del mensaje al cancelar la cita reservada
-                var msgBusquedaAnulada = document.getElementById('input-razon-cancelar-cita-reservada').value;
+                // Remove existing error message if it exists
+                document.getElementById(errorMessageId)?.remove();
 
-                // Check if msgBusquedaAnulada has more than 25 characters
+                // Show error if msgBusquedaAnulada is less than 25 characters
                 if (msgBusquedaAnulada.length < 25) {
-                    console.error("The message must be exactly 25 characters long.");
-                    return; // Exit the function if the length condition is not met
+                    const errorMessage = document.createElement('p');
+                    errorMessage.id = errorMessageId;
+                    errorMessage.style.color = 'red';
+                    errorMessage.textContent = TEXTOS_API['js-linkunico-text-43'],
+                        document.getElementById('div-input-razon-cancelar-cita-reservada').after(errorMessage);
+                    return;
+                } else {
+                    document.getElementById('boton-cancelar-cita-reservada').style.display = 'none';
+                    document.getElementById('success_boton_cancelar_busqueda2').style.display = 'block';
+
+
+                    // Send the request if length condition is met
+                    fetch(apiUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ public_id_front, msgBusquedaAnulada })
+                    })
+                        .then(response => response.ok ? response.json() : Promise.reject(`HTTP error! Status: ${response.status}`))
+                        .then(data => console.log('Response data:', data))
+                        .catch(error => console.error('Error:', error));
+
                 }
 
-                // Include data in the request body
-                const requestBody = {
-                    public_id_front: public_id_front,
-                    msgBusquedaAnulada: msgBusquedaAnulada,
-                    // Add any other data properties as needed
-                };
 
-                const requestOptions = {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        // Add any other headers as needed
-                    },
-                    body: JSON.stringify(requestBody),
-                };
-
-                // Using the fetch API to send the HTTP request
-                fetch(apiUrl, requestOptions)
-                    .then(response => {
-                        if (!response.ok) {
-                            throw new Error(`HTTP error! Status: ${response.status}`);
-                        }
-                        return response.json();
-                    })
-                    .then(data => {
-                        // Handle the successful response data here
-                        console.log('Response data:', data);
-                    })
-                    .catch(error => {
-                        // Handle errors here
-                        console.error('Error:', error);
-                    });
             });
+
 
 
             ReplaceAjustesDatosLinkUnico();
