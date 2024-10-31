@@ -1074,9 +1074,14 @@ $(document).ready(function () {
             document.getElementById('boton-cancelar-cita-reservada').addEventListener('click', function () {
                 const apiUrl = 'https://n8n.sacacitas.com/webhook/0ab8f72e-48fa-4b5a-9f33-2dcb5d9a81d7';
 
-                //Obtener datos del mensaje al cancelar la cita reservada
+                // Obtener datos del mensaje al cancelar la cita reservada
                 var msgBusquedaAnulada = document.getElementById('input-razon-cancelar-cita-reservada').value;
 
+                // Check if msgBusquedaAnulada has more than 25 characters
+                if (msgBusquedaAnulada.length < 25) {
+                    console.error("The message must be exactly 25 characters long.");
+                    return; // Exit the function if the length condition is not met
+                }
 
                 // Include data in the request body
                 const requestBody = {
@@ -1086,7 +1091,7 @@ $(document).ready(function () {
                 };
 
                 const requestOptions = {
-                    method: 'POST', // or 'PUT', 'GET', etc.
+                    method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                         // Add any other headers as needed
