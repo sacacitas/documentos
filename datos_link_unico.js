@@ -1090,6 +1090,7 @@ $(document).ready(function () {
                     return;
                 } else {
                     document.getElementById('boton-cancelar-cita-reservada').style.display = 'none';
+                    document.getElementById('div-input-razon-cancelar-cita-reservada').style.display = 'none';
                     document.getElementById('success_boton_cancelar_busqueda2').style.display = 'block';
 
 
