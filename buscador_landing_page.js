@@ -765,6 +765,13 @@ $(document).ready(function () {
                 maximumFractionDigits: 2
             });
 
+
+
+
+            // TEMPORAL --> Set price 0€ por Valencia
+            if (select_provincia.val() === "ES-V") {
+                formatted_price = "0,00";
+            }
             // Display the formatted price in your text element
             string_precio_buscador.text(formatted_price);
 
@@ -991,7 +998,7 @@ $(document).ready(function () {
 
 
 
-        
+
 
         // Set country first task when loading page
         fetchJsonAndPopulateAdministracion();
