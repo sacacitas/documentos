@@ -376,9 +376,6 @@ $(document).ready(function () {
 
                 });
 
-
-
-            console.log(state_front);
         }
 
 
@@ -394,7 +391,6 @@ $(document).ready(function () {
                 type: "GET",
                 dataType: 'json',
                 success: function (response) {
-                    console.log("Success:", response);
                     // merge two dict
                     CONFIG_FORM = Object.assign(CONFIG_FORM, response);
                     //load items
@@ -431,7 +427,6 @@ $(document).ready(function () {
 
             //Call library e164 to get country code
             const phoneNumber = window.parsePhoneNumberFromString(clientePhoneNumber);
-            console.log(phoneNumber.country); // Outputs: 'ES' (ISO country code)
 
             // Add country code to phone number input
             $('input[ms-code-phone-number]').each(function () {
@@ -463,8 +458,6 @@ $(document).ready(function () {
                         countryISO = ipBasedCountryData.iso2;
                         dialCode = ipBasedCountryData.dialCode;
 
-                        console.log("IP-Based Country ISO:", countryISO);
-                        console.log("IP-Based Dial Code:", dialCode);
 
                         // Update the hidden fields or variables
                         $('input[name="country_iso"]').val(countryISO);
@@ -1130,6 +1123,7 @@ $(document).ready(function () {
             //Función para actualizar mostrar/ocultar items si cambia el estado de la búsqueda
             function MostrarOcultarItemsSegunEstado() {
 
+
                 //--> Reestablecer config original
                 //Cosas de verificar email
                 $('#block-email-verify').hide();
@@ -1174,6 +1168,78 @@ $(document).ready(function () {
 
 
 
+
+                //--> Things regarding email
+                // Email aún no verificado
+
+
+                // ***FACEBOOK / META OAUTH
+                let fbInitialized = false; // Flag to track if SDK is initialized
+
+                // Show email verification block if email is not verified
+                if (!EmailVerified && state_front !== 'EMAIL-NO-VERIFICADO') {
+                    $('#block-email-verify').show();
+                    $('#boton_estado_busqueda').text(TEXTOS_API['js-linkunico-text-10']); // "Email pendiente verificar"
+
+                    // Load Facebook SDK asynchronously
+                    (function (d, s, id) {
+                        var js, fjs = d.getElementsByTagName(s)[0];
+                        if (d.getElementById(id)) return;
+                        js = d.createElement(s); js.id = id;
+                        js.src = "https://connect.facebook.net/en_US/sdk.js";
+                        fjs.parentNode.insertBefore(js, fjs);
+                    }(document, 'script', 'facebook-jssdk'));
+
+                    // Initialize Facebook SDK
+                    window.fbAsyncInit = function () {
+                        FB.init({
+                            appId: '935513958629170', // Replace with your Facebook App ID
+                            cookie: true,
+                            xfbml: true,
+                            version: 'v21.0'
+                        });
+                        fbInitialized = true;
+                    };
+
+                    // Attach click event to custom Facebook login button
+                    document.getElementById('custom-fb-login').addEventListener('click', function () {
+                        if (fbInitialized) {
+                            FB.login(function (response) {
+                                if (response.authResponse) {
+                                    fetchUserData(response.authResponse.accessToken);
+                                }
+                            }, { scope: 'public_profile,email' });
+                        }
+                    });
+
+
+                    // Function to fetch user data after successful Facebook login
+                    function fetchUserData(accessToken) {
+                        FB.api('/me', { fields: 'email' }, function (response) {
+                            fetch('https://n8n.sacacitas.com/webhook/facebook-oauth-login-success', {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({
+                                    email: response.email,
+                                    public_id_front: public_id_front,
+                                    access_token: accessToken,
+                                    userid: response.id
+                                })
+                            })
+                                .then(res => res.json())
+                                .then(data => {
+                                    // Access the EmailSocialVerified value within the array
+                                    if (data[0] && data[0].EmailSocialVerified) {
+                                        window.location.href = `https://${subdomain}.sacacitas.com/link?r=${public_id_front}`;
+                                    }
+                                })
+                                .catch(error => console.error('Error fetching verification data:', error));
+                        });
+                    }
+                }
+
+
+
                 // --> Mostrar cosas según estado
                 // Bloques de la página de Ajustes. Datos personales y búsqueda
                 if (state_front == 'BUSCANDO' || state_front == 'COLA-CREADA' || state_front == 'VALIDANDO-COLA') {
@@ -1183,11 +1249,6 @@ $(document).ready(function () {
                     $('#texto-info-modificar-datos-personales-2').hide();
                 }
 
-                // Email aún no verificado
-                if (!EmailVerified && !(state_front == 'EMAIL-NO-VERIFICADO')) {
-                    $('#block-email-verify').show();
-                    $('#boton_estado_busqueda').text(TEXTOS_API['js-linkunico-text-10']); //"Email pendiente verificar"
-                }
 
                 // Estados de inicialización
                 if (state_front == 'CLIENTE-CREADO') {
@@ -2043,7 +2104,6 @@ $(document).ready(function () {
             const day = String(today.getDate()).padStart(2, '0');
 
             const TodayDate = `${year}-${month}-${day}`;
-            console.log(TodayDate);
 
 
             var formattedDate1 = formatDateFromISOToDMY(TodayDate);
@@ -2436,8 +2496,6 @@ $(document).ready(function () {
             }
 
 
-            console.log(selected_document3);
-            console.log(NiceSelected_document3);
             //Checkbox si está marcado o no
             if ($('#checkbox_popup-ajustes-datos-personales').is(':checked')) {
                 var checkboxpersonales = true;
