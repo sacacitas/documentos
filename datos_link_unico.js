@@ -2661,6 +2661,77 @@ $(document).ready(function () {
 
 
 
+        //Popup. Change email when verifying email
+        $('#pop-up-changeemail').submit(function (event) {
+            // Prevent the default form submission behavior
+            event.preventDefault();
+            //Desactivar boton enviar peticion
+            $('#finalizar-form-popup-change-email').prop('disabled', true);
+
+            // Show loading spinner
+            $('#gif-cargando-boton-finalizar6').show();
+            $('#gif-error-boton-finalizar6').hide();
+
+
+
+
+
+            // Gather form data
+            var formData = {
+                email: $('#InputEmail-Changemeail').val(),
+                referencia: referencia
+            };
+
+            // Send POST request
+            $.ajax({
+                type: 'POST',
+                url: 'https://n8n.sacacitas.com/webhook/change-email',
+                data: JSON.stringify(formData),
+                // Send form data using the 'data' property
+                dataType: 'json',
+                contentType: 'application/json',
+                success: function (response) {
+                    // Show your loading GIF
+                    $('#gif-success-boton-finalizar6').show();
+                    //$('#gif-cargando-boton-finalizar').hide();
+
+                    // Check if ID_publico exists in the response
+                    if (response.ID_publico) {
+                        // Use the ID_publico property
+                        var publicItemId = response.ID_publico;
+                    }
+
+
+                    // Redirect to a new page after a delay
+                    setTimeout(function () {
+                        // Redirect to a new page
+                        window.location.href = `https://${subdomain}.sacacitas.com/link?r=` + publicItemId;
+                    }, 1000);
+                },
+                error: function (xhr, status, error) {
+                    // Handle error response
+                    console.error('Form submission failed');
+
+                    // Show loading spinner
+                    $('#gif-cargando-boton-finalizar6').hide();
+                    $('#gif-error-boton-finalizar6').show();
+                    // Enable submit button
+                    $('#finalizar-form-popup-change-email').prop('disabled', false);
+                }
+            });
+
+
+            // Prevent default form submission in Webflow
+            return false;
+
+        });
+
+
+
+
+
+
+
 
         //Otros / varios
         //Funcionalidad varias de ajustes y modificar datos
