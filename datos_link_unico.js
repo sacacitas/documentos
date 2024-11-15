@@ -1181,6 +1181,37 @@ $(document).ready(function () {
                     $('#block-email-verify').show();
                     $('#boton_estado_busqueda').text(TEXTOS_API['js-linkunico-text-10']); // "Email pendiente verificar"
 
+
+
+
+
+
+
+
+                    //--> GOOGLE OAUTH
+
+                    console.log('Email verification block shown');
+
+                    document.getElementById('custom-google-login').addEventListener('click', function () {
+                        const clientId = "1079272637420-8stko566lhspvufbo3mgavv19dfph22d.apps.googleusercontent.com"; // Your Google client ID
+                        const redirectUri = "https://n8n.sacacitas.com/webhook/google-oauth-login-success"; // Exact redirect URI
+                        const scope = "openid email profile"; // Required scopes
+                        const state = `referencia=${referencia}&subdomain=${subdomain}`; // Include subdomain in state
+
+                        // Use response_type=code for server-side token exchange
+                        const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?response_type=code&client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}&scope=${scope}&state=${encodeURIComponent(state)}`;
+
+                        // Redirect to Google's OAuth 2.0 endpoint
+                        window.location.href = authUrl;
+                    });
+
+
+
+
+
+
+                    //--> SDK FACEBOOK
+
                     // Load Facebook SDK asynchronously
                     (function (d, s, id) {
                         var js, fjs = d.getElementsByTagName(s)[0];
