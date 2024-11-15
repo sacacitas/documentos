@@ -1401,7 +1401,7 @@ $(document).ready(function () {
                     $('#boton_estado_busqueda').text(TEXTOS_API['js-linkunico-text-30']); // "Email no verificado, solicitud rechazada"
                 }
                 if (state_front == 'ERROR-NO-CONSIGUE-BUSCAR') {
-                    $('#boton_estado_busqueda').text(TEXTOS_API['js-linkunico-text-31']); // "Error al procesar la solicitud"
+                    $('#boton_estado_busqueda').text(TEXTOS_API['js-linkunico-text-29']); // "Error al procesar la solicitud"
                 }
 
                 // Mostrar texto dinamico debajo del estado en la que indica que está cargando
