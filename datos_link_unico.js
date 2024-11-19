@@ -733,10 +733,6 @@ $(document).ready(function () {
 
             $(document).ready(function () {
 
-                //Mostrar diferentes elementos de la web según el estado de la búsqueda
-                document.getElementById('id_unico_webhook').style.display = 'none';
-                document.getElementById('id_unico_webhook').setAttribute('value', referencia);
-
                 // Si todo está OK mostar link unico e info exrra
                 document.getElementById('main-content1').style.display = 'block';
                 document.getElementById('main-content-info-extra').style.display = 'block';
