@@ -1,4 +1,4 @@
-function PingError(customMessage = "", section = "", referencia = null) {
+function PingError({ referencia = "", message = "", section = "", defcon = "" } = {}) {
     // Collecting browser and system info
     const browserInfo = {
         userAgent: navigator.userAgent,
@@ -10,13 +10,13 @@ function PingError(customMessage = "", section = "", referencia = null) {
         viewportSize: `${window.innerWidth}x${window.innerHeight}`,
     };
 
-    // Collecting current timestamp
+    // Current timestamp
     const timestamp = new Date().toISOString();
 
-    // Capture any error stack trace or message (if available)
-    const errorStack = (custom1 instanceof Error) ? custom1.stack : null;
+    // Capturing any error stack trace if available
+    const errorStack = new Error().stack;
 
-    // Placeholder for console errors or messages
+    // Placeholder for console messages
     const consoleMessages = [];
     const originalConsoleError = console.error;
     console.error = function (...args) {
@@ -27,13 +27,13 @@ function PingError(customMessage = "", section = "", referencia = null) {
     // Data to send in the POST request
     const data = {
         timestamp,
-        browserInfo,        // Browser and system information
-        consoleMessages,    // Console errors/messages captured
-        customMessage,      // Custom message provided manually
-        section,            // Section of code where the error occurred
-        referencia,
-        custom2,
-        errorStack,         // Stack trace if custom1 is an Error object
+        browserInfo,
+        consoleMessages,  // Any captured console errors
+        message,          // Custom error message
+        section,          // Section of the code
+        defcon,           // Defcon level (1-5)
+        referencia,       // Reference string (7 characters)
+        errorStack,       // Stack trace for debugging
     };
 
     // POST request to the error webhook
@@ -49,9 +49,11 @@ function PingError(customMessage = "", section = "", referencia = null) {
     });
 }
 
+// Example usage in another function
+PingError({
+    referencia: "ab12345", // 7-character string
+    message: "When completing the form to pay, something went wrong.",
+    section: "CompleteFormToPayLinkUnico",
+    defcon: "1",
+});
 
-PingError(
-    "Unexpected input format",        // Custom error message
-    "UserFormValidation",             // Section name
-    { referencia: referencia }        // Custom input 1 (e.g., problematic input data)
-);
