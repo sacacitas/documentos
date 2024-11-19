@@ -853,9 +853,21 @@ $(document).ready(function () {
 
 
 
-            //--> Apply promo code
 
-            //Find attribute. Show and hide div
+
+
+
+
+
+
+
+
+
+
+            //--> PAY SECTION ------------------------->
+
+            //**Apply promo code
+
             $("[ms-promo-checkbox-input]").click(function () {
                 // Get the value of the 'ms-code-checkbox-input' attribute
                 var checkboxVal = $(this).attr('ms-promo-checkbox-input');
@@ -958,7 +970,10 @@ $(document).ready(function () {
 
 
 
-            //Datos para empresa factura
+
+
+            //**Things regarding pay as a business
+
             var razon_social = document.getElementById('nombre_razon_social_link_unico-2').value;
             var datosEmpresaField = document.querySelector('[data-form-datos-empresa]');
 
@@ -999,17 +1014,62 @@ $(document).ready(function () {
             });
 
 
-            // Al hacer clic en el botón 'boton_pagar_link_unico', se completará el formulario
-            $('#boton_pagar_link_unico_form').click(function () {
-                // Comprueba si el checkbox está marcado
-                if ($("[ms-code-checkbox-input]").is(":checked")) {
-                    // Comprueba si los campos obligatorios están rellenos
-                    if (datosEmpresaField.value == "") {
-                        alert(`${TEXTOS_API['js-linkunico-text-7']}`);  //"Por favor, rellena los campos obligatorios"
-                        return false;
-                    }
+
+            //**Complete form and create checkout
+
+            $('#Form-CreateCheckout').submit(function (event) {
+                // Prevent the default form submission behavior
+                event.preventDefault();
+
+                //Try and check errors if any
+                try {
+                    // Create the query string parameters for the GET request
+                    var queryParams = new URLSearchParams({
+                        checkboxsoyempresa: $('#checkbox_imaBusiness_whenpaying').is(':checked'),
+                        tipoempresa: $('#tipo_empresa_link_unico').val(),
+                        razonsocial: $('#nombre_razon_social_link_unico-2').val(),
+                        nombrecomercial: $('#nombre_comercial_link_unico-2').val(),
+                        nifcid: $('#nif_cif_link_unico-2').val(),
+                        calleempresa: $('#calle_link_unico-2').val(),
+                        codigopostal: $('#codigo_postal__link_unico-2').val(),
+                        poblacion: $('#poblacion_link_unico').val(),
+                        provincia: $('#provincia_link_unico-2').val(),
+                        infoextra: $('#informacion-adicional_link_unico-2').val(),
+
+                        subdomain: subdomain,
+                        promo_code_input: $('#PromoCode-Link-Unico-input').val(),
+                        id_unico_webhook: referencia
+                    }).toString();
+
+                    // Redirect the user to the constructed URL
+                    var redirectUrl = `https://n8n.sacacitas.com/webhook/76e0e152-29de-4706-ba85-fe21fbae0928-checkout-stripe?${queryParams}`;
+                    window.location.href = redirectUrl;
+                } catch (error) {
+                    alert("An unexpected error occurred. Please try again.");
+                    // Handle and log the error
+                    PingError({
+                        referencia: referencia,
+                        message: "When completing the form to pay, something went wrong.",
+                        section: "CompleteFormToPayLinkUnico",
+                        defcon: "1",
+                    });
+
                 }
+
+                return false; // Prevent default form submission
             });
+
+
+
+
+
+
+
+
+
+
+
+
 
 
             //URL administracion dinamico
