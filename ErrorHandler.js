@@ -48,12 +48,3 @@ function PingError({ referencia = "", message = "", section = "", defcon = "" } 
         originalConsoleError("Error pinging error webhook:", err);
     });
 }
-
-// Example usage in another function
-PingError({
-    referencia: "ab12345", // 7-character string
-    message: "When completing the form to pay, something went wrong.",
-    section: "CompleteFormToPayLinkUnico",
-    defcon: "1",
-});
-
