@@ -390,6 +390,9 @@ $(document).ready(function () {
                 paisObj.provinces.push({ name: "Baleares", short: "PM", alias: null })
             }
 
+            // Fix Orense
+            paisObj.provinces.find((p) => p.short == "OU").short = "OR"
+
             paisObj.provinces
                 .sort((a, b) => a.name.localeCompare(b.name))
                 .forEach(prov => {
