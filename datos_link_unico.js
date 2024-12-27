@@ -380,47 +380,47 @@ $(document).ready(function () {
 
 
         function callconfigform() {
-            //Cargar config form
+            // Prepare the data to send
             var inputData = JSON.stringify(idbuscadores);
-            var encodedData = btoa(inputData); // Encode inputData to Base64
-
-
-            // Send as a query parameter, but now compressed
+        
+            // Send the data using a POST request
             $.ajax({
-                url: `https://n8n.sacacitas.com/webhook/config-form?data=${encodedData}`,
-                type: "GET",
+                url: "https://n8n.sacacitas.com/webhook/config-form",
+                type: "POST",
+                contentType: "application/json", // Specify JSON content type
                 dataType: 'json',
+                data: JSON.stringify({ data: inputData }), // Send the data in the request body
                 success: function (response) {
-                    // merge two dict
+                    // Merge two dictionaries
                     CONFIG_FORM = Object.assign(CONFIG_FORM, response);
-                    //load items
+        
+                    // Load items
                     ExecuteitiPhoneLibrary();
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
-                    //if error call to webhook
+                    // If an error occurs, call the error webhook
                     $.ajax({
                         url: "https://n8n.sacacitas.com/webhook/error-alerts",
                         type: "POST",
                         contentType: "application/json", // Specify content type as JSON
                         dataType: 'json',
                         data: JSON.stringify({
-                            inputData: inputData, // Assuming inputData is an object or data you want to send
+                            inputData: inputData, // Include the original input data
                             LocalisationError: "datos_link_unico-function-callconfigform",
-                            Extrainfo: "Llamada config form para obtener cosas admitidas para cambiar los datos personales", // Add extra text or data
-                            errorCode: 500 // Example of sending an additional error code
+                            Extrainfo: "Llamada config form para obtener cosas admitidas para cambiar los datos personales", // Additional information
+                            errorCode: 500 // Example error code
                         }),
                         success: function (response) {
-                            console.log("Success:", response);
+                            console.log("Error alert sent successfully:", response);
                         },
                         error: function (jqXHR, textStatus, errorThrown) {
-                            console.error("Error:", errorThrown);
+                            console.error("Error sending error alert:", errorThrown);
                         }
                     });
-
                 }
             });
-
         }
+        
 
         function ExecuteitiPhoneLibrary() {
 
