@@ -256,60 +256,66 @@ $(document).ready(function () {
         //--> Load config FORM
         var urlParams = new URLSearchParams(window.location.search);
         if (urlParams.has('INPUT_JSON')) {
-            INPUT_JSON = JSON.parse(decodeURIComponent(atob(urlParams.get('INPUT_JSON'))));
-            // Stringify and compress the data using Base64 encoding
-            var inputData = JSON.stringify(INPUT_JSON.idbuscadores);
-            var encodedData = btoa(inputData); // Encode inputData to Base64
+            try {
+                // Decode and parse the INPUT_JSON parameter
+                const decodedInput = decodeURIComponent(atob(urlParams.get('INPUT_JSON')));
+                INPUT_JSON = JSON.parse(decodedInput);
 
-            // Send as a query parameter, but now compressed
-            $.ajax({
-                url: `https://n8n.sacacitas.com/webhook/config-form?data=${encodedData}`,
-                type: "GET",
-                dataType: 'json',
-                success: function (response) {
-                    // merge two dict
-                    CONFIG_FORM = Object.assign(CONFIG_FORM, response);
-                    //load items
-                    DetermineInputsToCheck();
-                    InputsToShow();
-                    ExecuteitiPhoneLibrary();
-                    InjectCountryList();
+                // Prepare the data to send
+                var inputData = JSON.stringify(INPUT_JSON.idbuscadores);
 
-                    config_completed = true;
+                // Send the data as a POST request
+                $.ajax({
+                    url: "https://n8n.sacacitas.com/webhook/config-form",
+                    type: "POST",
+                    contentType: "application/json", // Specify JSON content type
+                    dataType: 'json',
+                    data: JSON.stringify({ data: inputData }), // Send the data in the request body
+                    success: function (response) {
+                        // Merge two dictionaries
+                        CONFIG_FORM = Object.assign(CONFIG_FORM, response);
 
-                },
-                error: function (jqXHR, textStatus, errorThrown) {
-                    //Load default items
-                    DetermineInputsToCheck();
-                    InputsToShow();
-                    ExecuteitiPhoneLibrary();
-                    InjectCountryList();
+                        // Load items
+                        DetermineInputsToCheck();
+                        InputsToShow();
+                        ExecuteitiPhoneLibrary();
+                        InjectCountryList();
 
-                    config_completed = true;
+                        config_completed = true;
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        // Load default items in case of error
+                        DetermineInputsToCheck();
+                        InputsToShow();
+                        ExecuteitiPhoneLibrary();
+                        InjectCountryList();
 
+                        config_completed = true;
 
-                    //if error call to webhook
-                    $.ajax({
-                        url: "https://n8n.sacacitas.com/webhook/error-alerts",
-                        type: "POST",
-                        contentType: "application/json", // Specify content type as JSON
-                        dataType: 'json',
-                        data: JSON.stringify({
-                            inputData: inputData, // Assuming inputData is an object or data you want to send
-                            LocalisationError: "formulario_inicio-load-config-form",
-                            Extrainfo: "Llamada al config form desde el formulario", // Add extra text or data
-                            errorCode: 500 // Example of sending an additional error code
-                        }),
-                        success: function (response) {
-                            console.log("Success:", response);
-                        },
-                        error: function (jqXHR, textStatus, errorThrown) {
-                            console.error("Error:", errorThrown);
-                        }
-                    });
-
-                }
-            });
+                        // If error, call the error webhook
+                        $.ajax({
+                            url: "https://n8n.sacacitas.com/webhook/error-alerts",
+                            type: "POST",
+                            contentType: "application/json",
+                            dataType: 'json',
+                            data: JSON.stringify({
+                                inputData: inputData,
+                                LocalisationError: "formulario_inicio-load-config-form",
+                                Extrainfo: "Llamada al config form desde el formulario",
+                                errorCode: 500
+                            }),
+                            success: function (response) {
+                                console.log("Error alert sent successfully:", response);
+                            },
+                            error: function (jqXHR, textStatus, errorThrown) {
+                                console.error("Error sending error alert:", errorThrown);
+                            }
+                        });
+                    }
+                });
+            } catch (error) {
+                console.error("Error decoding or processing INPUT_JSON:", error);
+            }
         } else {
             alert(`${TEXTOS_API['js-form-text-1']}`);
         }
