@@ -329,6 +329,8 @@ $(document).ready(function () {
                     resumen_reserva = data.reserva
                     fecha_cita_reservada_front = data.fecha_cita_reservada;
                     fecha_limite_pago_front = data.fecha_limite_pago;
+                    site_url = data.site_url;
+
                     //Estados
                     state_front = data.state_backend;
                     StatePendienteReason = data.cola_pendiente_reason;
@@ -1073,7 +1075,9 @@ $(document).ready(function () {
 
             var siteURL = null
 
-            if (id_oficina_front.startsWith("gobrc")) {
+            if (site_url && site_url !== "") {
+                siteURL = site_url
+            } else if (id_oficina_front.startsWith("gobrc")) {
                 siteURL = "https://sede.administracionespublicas.gob.es/icpplustiej/"
             } else if (id_oficina_front.startsWith("gvarc")) {
                 siteURL = "https://registrocivil.gva.es/es/cita-previa"
