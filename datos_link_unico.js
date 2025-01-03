@@ -382,7 +382,7 @@ $(document).ready(function () {
         function callconfigform() {
             // Prepare the data to send
             var inputData = JSON.stringify(idbuscadores);
-        
+
             // Send the data using a POST request
             $.ajax({
                 url: "https://n8n.sacacitas.com/webhook/config-form",
@@ -393,7 +393,7 @@ $(document).ready(function () {
                 success: function (response) {
                     // Merge two dictionaries
                     CONFIG_FORM = Object.assign(CONFIG_FORM, response);
-        
+
                     // Load items
                     ExecuteitiPhoneLibrary();
                 },
@@ -420,7 +420,7 @@ $(document).ready(function () {
                 }
             });
         }
-        
+
 
         function ExecuteitiPhoneLibrary() {
 
