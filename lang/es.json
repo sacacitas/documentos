@@ -792,5 +792,22 @@
   "text-dot": ".",
   "text-id-DNI": "DNI",
   "text-id-NIE": "NIE",
-  "text-id-PASAPORTE": "Pasaporte"
+  "text-id-PASAPORTE": "Pasaporte",
+  "tramites-1": "Otros trámites",
+  "tramites-10": "Información trámites",
+  "tramites-11": "Debido a que aún se está integrando esta nueva sección de gestión de trámites en la página web, no se dispone de un apartado con información específica para cada trámite",
+  "tramites-12": "También se ofrece un descuento de más del 70% a los usuarios que realicen las primeras gestiones",
+  "tramites-13": "+ tasas gubernamentales",
+  "tramites-14": "Tras completar el formulario realizaremos una primera toma de contacto mediante el correo electrónico proporcionado para comprobar tu caso particular de manera gratuita. Una vez iniciada la gestión del trámite se realizará el pago",
+  "tramites-15": "Nombre",
+  "tramites-16": "Email",
+  "tramites-17": "Enviar",
+  "tramites-2": "Nueva sección de trámites ",
+  "tramites-3": "Ahora con SacaCitas puedes simplificar tus trámites con la Administración Pública desde el mismo lugar",
+  "tramites-4": "Cambio nombre coche",
+  "tramites-5": "Nacionalidad por residencia",
+  "tramites-6": "Certificados físicos Registro Civil",
+  "tramites-7": "Alta autónomo",
+  "tramites-8": "Tramitación visado",
+  "tramites-9": "Otros trámites"
 }
