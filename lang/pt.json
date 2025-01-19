@@ -791,5 +791,22 @@
   "text-dot": ".",
   "text-id-DNI": "DNI",
   "text-id-NIE": "BOM",
-  "text-id-PASAPORTE": "Passaporte"
+  "text-id-PASAPORTE": "Passaporte",
+  "tramites-1": "Outros procedimentos",
+  "tramites-10": "Informações e procedimentos",
+  "tramites-11": "Como essa nova seção de gerenciamento de procedimentos ainda está sendo integrada ao site, não há nenhuma seção com informações específicas para cada procedimento",
+  "tramites-12": "Um desconto de mais de 70% também é oferecido aos usuários que realizam as primeiras etapas",
+  "tramites-13": "+ taxas governamentais",
+  "tramites-14": "Depois de preencher o formulário, faremos um primeiro contato usando o e-mail fornecido para verificar seu caso específico gratuitamente. Uma vez iniciado o gerenciamento do procedimento, o pagamento será feito",
+  "tramites-15": "Nome",
+  "tramites-16": "E-mail",
+  "tramites-17": "Enviar",
+  "tramites-2": "Seção de Novos Procedimentos ",
+  "tramites-3": "Agora, com a SacaCitas, você pode simplificar seus procedimentos com a Administração Pública no mesmo local.",
+  "tramites-4": "Alterar nome do carro",
+  "tramites-5": "Nacionalidade por residência",
+  "tramites-6": "Certificados físicos e registro civil",
+  "tramites-7": "Registro autônomo",
+  "tramites-8": "Processamento de vistos",
+  "tramites-9": "Outros procedimentos"
 }
