@@ -791,5 +791,22 @@
   "text-dot": "。",
   "text-id-DNI": "DNI",
   "text-id-NIE": "没有",
-  "text-id-PASAPORTE": "护照"
+  "text-id-PASAPORTE": "护照",
+  "tramites-1": "其他程序",
+  "tramites-10": "信息和程序",
+  "tramites-11": "由于这个新的程序管理部分仍在网站中，因此没有提供每种程序的具体信息的部分",
+  "tramites-12": "还向执行第一步的用户提供70％以上的折扣",
+  "tramites-13": "+ 政府费用",
+  "tramites-14": "填写表格后，我们将使用提供的电子邮件进行首次联系，免费检查您的特定案例。程序管理开始后，将付款",
+  "tramites-15": "姓名",
+  "tramites-16": "电子邮件",
+  "tramites-17": "提交",
+  "tramites-2": "新程序部分 ",
+  "tramites-3": "现在，有了 SacaciTas，你可以在同一个地方与公共管理部门一起简化程序",
+  "tramites-4": "更改汽车名称",
+  "tramites-5": "居住地国籍",
+  "tramites-6": "物理证书民事登记",
+  "tramites-7": "自主注册",
+  "tramites-8": "签证处理",
+  "tramites-9": "其他程序"
 }
