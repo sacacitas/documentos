@@ -319,6 +319,101 @@ $(document).ready(function () {
         var cookieFbclid = getCookie("_fbc");
 
 
+
+
+        // 0. TEMP. SERVICE SEARCH CHANGER -> Change from appointment to general procedures
+        // Button logic -> appointments
+        $('#service-appointment-select').click(function () {
+            //background color
+            $('.div-block-services-selected').css('background-color', '#2c64e3');
+            $('.div-block-services-nodefault').css('background-color', 'white');
+
+            //text color
+            $('.text-service-selected').css('color', 'white');
+            $('.text-service-nodefault').css('color', '#071536');
+
+            //div elements
+            $('.appointments-elements-buscador').show();
+            $('.general-procedures-buscador').hide();
+
+        });
+
+        // Button logic -> general appointments
+        $('#general-procedures-select').click(function () {
+            //background color
+            $('.div-block-services-selected').css('background-color', 'white');
+            $('.div-block-services-nodefault').css('background-color', '#2c64e3');
+
+            //text color
+            $('.text-service-selected').css('color', '#071536');
+            $('.text-service-nodefault').css('color', 'white');
+
+
+            //div elements
+            $('.appointments-elements-buscador').hide();
+            $('.general-procedures-buscador').show();
+
+        });
+
+        //Procedure buttons logic 
+        $('[procedurebutton]').on('click', function (event) {
+            // Remove the 'proccedure-item-selected' class from all elements
+            $('[procedurebutton]').removeClass('proccedure-item-selected');
+
+            // Add the 'proccedure-item-selected' class to the clicked element
+            $(this).addClass('proccedure-item-selected');
+
+            // Get the value of the 'procedurebutton' attribute
+            let attributeValue = $(this).attr('procedurebutton');
+
+            // Conditional logic based on the attribute value
+            if (attributeValue === 'car') {
+                $('#landing-secondprice').text('19,99');
+            } else if (attributeValue === 'nationality') {
+                $('#landing-secondprice').text('99,99');
+            } else if (attributeValue === 'certificate') {
+                $('#landing-secondprice').text('8,99');
+            } else if (attributeValue === 'freelancer') {
+                $('#landing-secondprice').text('29,99');
+            } else if (attributeValue === 'visado') {
+                $('#landing-secondprice').text('149,99');
+            } else if (attributeValue === 'other') {
+                $('#landing-secondprice').text('0,00');
+            } else {
+                console.log('Value does not match - Default action.');
+
+            }
+        });
+
+        $('#second-buttonform-landing').on('click', function (event) {
+            // Prevent the default form submission behavior
+            event.preventDefault();
+
+            // Get the values of the input fields
+            let name = $('#input-name').val();
+            let email = $('#input-email').val();
+
+            // Ensure you have the selected attributeValue stored in a variable
+            let attributeValue = $('[procedurebutton].proccedure-item-selected').attr('procedurebutton');
+
+            // Prepare the data to send in the POST request
+            let data = {
+                name: name,
+                email: email,
+                attributeValue: attributeValue
+            };
+
+            // Send a POST request
+            $.post('https://n8n.sacacitas.com/webhook/general-procedures-landing-form', data, function (response) {
+                console.log('Response:', response);
+                alert('Se ha enviado correctamente el mensaje. Nos pondremos en contacto en breve.');
+            }).fail(function (error) {
+                console.error('Error:', error);
+                alert('Failed to submit the form. Please try again.');
+            });
+        });
+
+
         // 1. PRIMERA PARTE BUSCADOR -> Lista estática de países
         //Create values select country
         var values_select_country = [
@@ -1005,6 +1100,5 @@ $(document).ready(function () {
         fetchJsonAndPopulateProvincia();
     });
 });
-
 
 
