@@ -14,7 +14,6 @@ $(document).ready(function () {
     }
 
 
-
     // Send data form
     $('#formulario_ID').submit(function (event) {
 
@@ -60,7 +59,8 @@ $(document).ready(function () {
                 $('#gif-cargando-boton-finalizar').hide();
                 $('#formulario-boton-finalizar').hide();
                 $('#gif-success-boton-finalizar').show();
-
+                $('#section-completed-form').show();
+                $('#Secciones-Form-2').hide();
 
             },
             error: function (xhr, status, error) {
@@ -98,4 +98,3 @@ $(document).ready(function () {
     });
 
 });
-
