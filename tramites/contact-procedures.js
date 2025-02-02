@@ -23,7 +23,6 @@ $(document).ready(function () {
         if ($('#contact-name').val() &&
             email &&
             emailRegex.test(email) &&
-            message.length > 24 &&
             message &&
             message.length <= 1000) {
 
