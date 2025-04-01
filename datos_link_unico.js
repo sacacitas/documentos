@@ -2144,6 +2144,11 @@ $(document).ready(function () {
                     onSelect: function (selectedDate) {
                         // Set minDate for end-date fields when start-date is selected
                         $("#end-date, #end-date-ajustes-popup").datepicker("option", "minDate", selectedDate);
+
+                        var dateObj = $(this).datepicker('getDate')
+                        PickerExcluidosDias.setOptions({ minDate: dateObj })
+                        PickerExcluidosDias.gotoDate(dateObj)
+                        PickerExcluidosDias.clearSelection()
                     }
                 });
 
@@ -2166,6 +2171,11 @@ $(document).ready(function () {
                         if (startDate && startDate.getTime() > endDate.getTime()) {
                             $("#start-date, #start-date-ajustes-popup").datepicker("setDate", selectedDate);
                         }
+
+                        var dateObj = $(this).datepicker('getDate')
+                        PickerExcluidosDias.setOptions({ maxDate: dateObj })
+                        PickerExcluidosDias.clearSelection()
+
                     }
                 });
 
@@ -2212,7 +2222,7 @@ $(document).ready(function () {
             //Value fechas de búsuqueda
             $('#start-date, #start-date-ajustes-popup').val(formattedDate1);
             $('#end-date, #end-date-ajustes-popup').val(formattedDate2);
-            $('#exclude-days').val(cola_dias_excluidos);
+            $('#exclude-days').val(cola_dias_excluidos.toString());
 
 
 
