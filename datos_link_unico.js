@@ -2222,7 +2222,7 @@ $(document).ready(function () {
             //Value fechas de búsuqueda
             $('#start-date, #start-date-ajustes-popup').val(formattedDate1);
             $('#end-date, #end-date-ajustes-popup').val(formattedDate2);
-            $('#exclude-days').val(cola_dias_excluidos.toString());
+            $('#exclude-days').val((cola_dias_excluidos || []).toString());
 
 
 
