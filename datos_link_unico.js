@@ -51,6 +51,7 @@ var TEXTOS_API = {
     'linkunico-button-confirm': 'Confirmar',
     'linkunico-button-8': 'Pagar',
     'js-linkunico-text-43': 'El mensaje debe tener al menos 25 caracteres',
+    'js-linkunico-text-44': 'No hay ningún día excluido',
 
 
 
@@ -641,6 +642,8 @@ $(document).ready(function () {
             document.getElementById('fecha-cita-reservada').textContent = formattedDate_cita_reservada;
             document.getElementById('boton-fecha-limite-pago').textContent = formattedDate_fecha_limite_pago;
             document.getElementById('correo_usuario_verify').textContent = clienteEmail;
+
+
 
             var bloque_reserva = document.getElementById('codigo-reserva-cita-reservada')
             if (resumen_reserva && resumen_reserva.pdf) {
@@ -2223,7 +2226,51 @@ $(document).ready(function () {
             $('#start-date, #start-date-ajustes-popup').val(formattedDate1);
             $('#end-date, #end-date-ajustes-popup').val(formattedDate2);
             $('#exclude-days').val((cola_dias_excluidos || []).toString());
+            console.log(cola_dias_excluidos)
 
+            //**-> Change static text of excluded days after datepicker is initialized 
+            const cola_dias_excluidos_list = cola_dias_excluidos; // Example dates
+
+            if (cola_dias_excluidos === null || cola_dias_excluidos.length === 0) {
+                $('#front-text-excluded-days').text(TEXTOS_API['js-linkunico-text-44']);
+                $('#div-list-text-excluded-days').hide();
+            } else {
+                $('#front-text-excluded-days').hide();
+                $('#div-list-text-excluded-days').show();
+
+                function generateExcludedDaysList() {
+                    const container = document.getElementById("excluded-days-container");
+
+                    if (!container) {
+                        console.error("Error: Element #excluded-days-container not found.");
+                        return;
+                    }
+
+                    container.innerHTML = ""; // Clear previous content
+
+                    // Sort dates in ascending order
+                    const sortedDates = cola_dias_excluidos_list.sort((a, b) => new Date(a) - new Date(b));
+
+                    sortedDates.forEach(date => {
+                        const formattedDate = formatDate(date); // Convert to DD/MM/YYYY
+
+                        const newItem = document.createElement("div");
+                        newItem.id = "front-itemlist-excludedday";
+                        newItem.setAttribute("excludedayslistitem", date);
+                        newItem.textContent = formattedDate;
+
+                        container.appendChild(newItem);
+                    });
+                }
+
+                // Function to convert YYYY-MM-DD to DD/MM/YYYY
+                function formatDate(dateString) {
+                    const [year, month, day] = dateString.split("-");
+                    return `${day}/${month}/${year}`;
+                }
+
+                generateExcludedDaysList(); // Call the function
+            }
 
 
 
