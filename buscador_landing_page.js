@@ -537,11 +537,13 @@ $(document).ready(function () {
                         select_oficina.html('').append(default_select_oficina);
 
                         // Mostrar en el select oficinas dependiendo de la administración seleccionada
-                        var filteredData = data.filter(item => {
-                            // El atributo de administracion debe coincidir con el prefijo. De lo contrario, no se listara la oficina
-                            return item.administracion == selectedAdministracion || false
+                        var filteredData = data
+                            .filter(item => {
+                                // El atributo de administracion debe coincidir con el prefijo. De lo contrario, no se listara la oficina
+                                return item.administracion == selectedAdministracion || false
 
-                        });
+                            })
+                            .sort((a, b) => a.nombre.localeCompare(b.nombre));
 
                         // Check if there are no oficinas
                         if (filteredData.length === 0) {
