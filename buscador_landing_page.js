@@ -457,7 +457,8 @@ $(document).ready(function () {
             if (selectedCountry === 'ES') {
                 var values_select_administracion = [
                     //{ value: 'EX1', text: 'Extranjería' },
-                    { value: 'RC1', text: 'Registro Civil', selected: true } // Set default selected RC
+                    { value: 'SEPE', text: 'SEPE' },
+                    { value: 'RC', text: 'Registro Civil', selected: true } // Set default selected RC
                 ];
 
             } else {
@@ -537,17 +538,9 @@ $(document).ready(function () {
 
                         // Mostrar en el select oficinas dependiendo de la administración seleccionada
                         var filteredData = data.filter(item => {
-                            if (selectedAdministracion === 'EX1') {
-                                // Show names where id_oficina starts with "gobext"
-                                return item.id_oficina.toLowerCase().includes('gobext');
-                            } else if (selectedAdministracion === 'DGT1') {
-                                // All for DGT
-                                return item.id_oficina.toLowerCase().includes('dgt');
-                            } else if (selectedAdministracion === 'RC1') {
-                                // Show names where id_oficina does not start with "gobext"
-                                return !(item.id_oficina.toLowerCase().includes('gobext') || item.id_oficina.toLowerCase().includes('dgt'));
-                            }
-                            return false;
+                            // El atributo de administracion debe coincidir con el prefijo. De lo contrario, no se listara la oficina
+                            return item.administracion == selectedAdministracion || false
+
                         });
 
                         // Check if there are no oficinas
@@ -642,7 +635,7 @@ $(document).ready(function () {
 
                             if (
                                 (selectedAdministracion === 'EX1' && idOficinaLowerCase.includes('gobext')) ||
-                                (selectedAdministracion === 'RC1' && !idOficinaLowerCase.includes('gobext'))
+                                (selectedAdministracion === 'RC' && !idOficinaLowerCase.includes('gobext'))
                             ) {
                                 // Add all servicios for this oficina to the array
                                 allServicios.push(...oficina.servicios);
