@@ -779,43 +779,51 @@ $(document).ready(function () {
         })
 
         // SECTION: 6. Finalizar y enviar a backend los datos
-        $('#formulario_ID').submit(function (event) {
+        $('#formulario_ID').submit(async function (event) {
             event.preventDefault();
 
-            // UI: Start loading
+            // UI: Show loading and disable button
             $('#gif-cargando-boton-finalizar').show();
             $('#div-error-enviar-datos, #gif-error-boton-finalizar, #gif-success-boton-finalizar').hide();
             $('#submit-button-id').prop('disabled', true);
 
-            const formData = new FormData();
-
-            // Random ID
-            const RandomStringID = `${Date.now().toString(36)}-${Math.floor(Math.random() * 10000).toString(36)}`;
-
-            // Document type
+            // Get selected document type and prettify
+            const selected_document = $('.div-documentos-formulario .boton-documento-selected').attr('id');
             const docTypeMap = {
                 'select-PASAPORTE-form': 'PASAPORTE',
                 'select-DNI-form': 'DNI',
                 'select-NIE-form': 'NIE'
             };
-            const selectedDocumentId = $('.div-documentos-formulario .boton-documento-selected').attr('id');
-            const NiceSelected_document = docTypeMap[selectedDocumentId] || '';
+            const NiceSelected_document = docTypeMap[selected_document] || '';
 
-            // Attach file (if any)
+            // Generate unique ID
+            const RandomStringID = `${Date.now().toString(36)}-${Math.floor(Math.random() * 10000).toString(36)}`;
+            const LangBrowser = navigator.language || navigator.userLanguage;
+
+            // Handle excluded days
+            const excludedDaysRaw = PickerExcluidosDias.multipleDatesToString();
+            const dias_excluidos = excludedDaysRaw === '' ? [] : excludedDaysRaw.split(',');
+
+            // Handle base64 PDF file
+            let pdfBase64resnac = null;
             if (CONFIG_FORM.adjunto_resolucion_nacionalidad === true) {
                 const files = FilePond.find(document.querySelector('#input-upload-pdf-nacionalidad')).getFiles();
                 if (files.length > 0) {
-                    formData.append('nacionalidad_pdf', files[0].file);
+                    pdfBase64resnac = await new Promise((resolve, reject) => {
+                        const reader = new FileReader();
+                        reader.onload = () => resolve(reader.result.split(',')[1]); // remove "data:application/pdf;base64,"
+                        reader.onerror = reject;
+                        reader.readAsDataURL(files[0].file);
+                    });
                 }
             }
 
-
-            // Append form fields
-            const fields = {
-                idbuscadores: JSON.stringify(INPUT_JSON.idbuscadores),
+            // Construct JSON payload
+            const formData = {
+                idbuscadores: INPUT_JSON.idbuscadores,
                 Fmin: $('#start-date').val(),
                 Fmax: $('#end-date').val(),
-                dias_excluidos: PickerExcluidosDias.multipleDatesToString() === '' ? [] : PickerExcluidosDias.multipleDatesToString().split(','),
+                dias_excluidos: dias_excluidos,
                 Nombre: $('#input-nombre').val(),
                 Apellido1: $('#input-apellido1').val(),
                 Apellido2: $('#input-apellido2').val(),
@@ -832,28 +840,24 @@ $(document).ready(function () {
                 csv_doc: $('#input-csv-doc').val(),
                 CaducidadTarjeta: $('#input-caducidad-tarjeta').val(),
                 RandomStringID,
-                LangBrowser: navigator.language || navigator.userLanguage,
+                LangBrowser,
                 gclid: INPUT_JSON.cookieGclid,
                 retargetingSource: null,
                 fbclid: INPUT_JSON.cookieFbclid,
                 fbpid: INPUT_JSON.cookieFbp,
-                ISO_language: subdomain
+                ISO_language: subdomain,
+                nacionalidad_pdf_base64: pdfBase64resnac // base64 string or null
             };
 
-            for (const [key, value] of Object.entries(fields)) {
-                formData.append(key, value);
-            }
-
-            // Send POST request with FormData
+            // Send JSON request
             $.ajax({
                 type: 'POST',
                 url: 'https://n8n.sacacitas.com/webhook/d34bf08d-32d8-4956-8dc4-9e1d676bb5fa434-formulario-recibido-new-form',
-                data: formData,
-                processData: false,
-                contentType: false,
+                data: JSON.stringify(formData),
+                contentType: 'application/json',
+                dataType: 'json',
                 success: function (response) {
                     $('#gif-cargando-boton-finalizar').hide();
-
                     if (response?.ID_publico) {
                         $('#formulario-boton-finalizar').hide();
                         $('#gif-success-boton-finalizar').show();
@@ -868,17 +872,16 @@ $(document).ready(function () {
                     $('#gif-cargando-boton-finalizar').hide();
                     $('#div-error-enviar-datos, #gif-error-boton-finalizar').show();
                     $('#submit-button-id').prop('disabled', false);
+                    console.error('Form submission failed:', error);
 
-                    console.error('Form submission failed', error);
-
-                    // Optional: send alert webhook
+                    // Send error alert
                     $.ajax({
                         type: 'POST',
                         url: 'https://n8n.sacacitas.com/webhook/error-alerts',
                         contentType: 'application/json',
                         dataType: 'json',
                         data: JSON.stringify({
-                            inputData: fields,
+                            inputData: formData,
                             LocalisationError: 'formulario_inicio-send-final-form',
                             Extrainfo: 'Ha fallado completar el formulario final',
                             errorCode: 500
