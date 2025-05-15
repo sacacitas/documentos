@@ -174,6 +174,9 @@ var InputRNacionalidad = $('#input-resolucion-nacionalidad');
 var InputCSVdoc = $('#input-csv-doc');
 var InputListaPaises = $('#input-lista-paises');
 
+// Init FilePond and keep reference to files
+let uploadedFiles = [];
+
 //Buttons documents
 var selectFormDocPasaporte = $('#select-PASAPORTE-form');
 var selectFormDocNIE = $('#select-NIE-form');
@@ -184,6 +187,7 @@ var selectFormDocDNI = $('#select-DNI-form');
 var DivListaPaises = $('#div-lista-paises');
 var DivJuraNacionalidad = $('#div-resolucion-nacionalidad');
 var DivCSVdoc = $('#div-csv-doc');
+var DocResNacionalidadPDF = $('#div-res-nacionalidad-pdf');
 var DivCaducidadTarjeta = $('#clientes-caducidad-tarjeta');
 var DivPhone = $('#div-telefono');
 var DivVerifyPhone = $('#div-confirmar-telefono');
@@ -235,7 +239,6 @@ $(document).ready(function () {
 
 
         if (subdomain === "es" || subdomain === "sacacitas") {
-            console.log("default lang ES no auto localised")
         } else {
             for (const [key, value] of Object.entries(TEXTOS_API)) {
                 const translation = tolgee_instance.t(key, `${TEXTOS_API[key]} {{${key}}}`);
@@ -280,6 +283,7 @@ $(document).ready(function () {
                         InputsToShow();
                         ExecuteitiPhoneLibrary();
                         InjectCountryList();
+                        DefineUploadPDF();
 
                         config_completed = true;
                     },
@@ -289,6 +293,7 @@ $(document).ready(function () {
                         InputsToShow();
                         ExecuteitiPhoneLibrary();
                         InjectCountryList();
+                        DefineUploadPDF();
 
                         config_completed = true;
 
@@ -573,8 +578,6 @@ $(document).ready(function () {
                         countryISO = ipBasedCountryData.iso2;
                         dialCode = ipBasedCountryData.dialCode;
 
-                        console.log("IP-Based Country ISO:", countryISO);
-                        console.log("IP-Based Dial Code:", dialCode);
 
                         // Update the hidden fields or variables
                         $('input[name="country_iso"]').val(countryISO);
@@ -692,6 +695,67 @@ $(document).ready(function () {
                 });
         }
 
+        // Function to fetch country data and populate the dropdown
+        function DefineUploadPDF() {
+            if (CONFIG_FORM.adjunto_resolucion_nacionalidad == true) {
+                // Register the size validation plugin and type of file
+                FilePond.registerPlugin(
+                    FilePondPluginFileValidateSize,
+                    FilePondPluginFileValidateType
+                );
+
+                // Set FilePond locale and file type
+                FilePond.setOptions({
+
+                    // Locale translation
+                    labelIdle: 'Arrastra un archivo PDF o <span class="filepond--label-action"> haz clic aquí </span>',
+                    labelInvalidField: 'El campo contiene archivos inválidos',
+                    labelFileWaitingForSize: 'Esperando tamaño...',
+                    labelFileSizeNotAvailable: 'Tamaño no disponible',
+                    labelFileLoading: 'Cargando...',
+                    labelFileLoadError: 'Error al cargar',
+                    labelFileProcessing: 'Subiendo...',
+                    labelFileProcessingComplete: 'Subida completa',
+                    labelFileProcessingAborted: 'Subida cancelada',
+                    labelFileProcessingError: 'Error al subir',
+                    labelFileProcessingRevertError: 'Error al revertir',
+                    labelFileRemoveError: 'Error al eliminar',
+                    labelTapToCancel: 'Toca para cancelar',
+                    labelTapToRetry: 'Toca para reintentar',
+                    labelTapToUndo: 'Toca para deshacer',
+                    labelButtonRemoveItem: 'Eliminar',
+                    labelButtonAbortItemLoad: 'Abortar',
+                    labelButtonRetryItemLoad: 'Reintentar',
+                    labelButtonAbortItemProcessing: 'Cancelar',
+                    labelButtonUndoItemProcessing: 'Deshacer',
+                    labelButtonRetryItemProcessing: 'Reintentar',
+                    labelButtonProcessItem: 'Subir',
+
+                    // File Type & Size Validation
+                    acceptedFileTypes: ['application/pdf'],
+                    labelMaxFileSizeExceeded: 'El archivo es demasiado grande',
+                    fileValidateTypeLabelExpectedTypes: 'Solo se permiten archivos PDF',
+                    fileValidateTypeLabelExpectedTypesMap: { 'application/pdf': '.pdf' },
+                    fileValidateSizeMaxFileSize: '5MB',
+                    labelMaxFileSize: 'El archivo supera el tamaño máximo de 5MB'
+                });
+
+                const pond = FilePond.create(document.querySelector('.filepond'), {
+                allowMultiple: false,
+                maxFileSize: '5MB',
+                onupdatefiles: (fileItems) => {
+                    uploadedFiles = fileItems.map(fileItem => fileItem.file);
+                }
+                });
+            }
+        }
+
+
+
+
+
+
+
 
 
         const PickerCadTarjeta = new easepick.create({
@@ -716,49 +780,39 @@ $(document).ready(function () {
 
         // SECTION: 6. Finalizar y enviar a backend los datos
         $('#formulario_ID').submit(function (event) {
-
-
-            // Show loading gif
-            $('#gif-cargando-boton-finalizar').show();
-            //Hide error div                  
-            $('#div-error-enviar-datos').hide();
-            //Hide error gif
-            $('#gif-error-boton-finalizar').hide();
-            //Hide success button gif
-            $('#gif-success-boton-finalizar').hide();
-            // Prevent the default form submission behavior
             event.preventDefault();
 
-
-
-            // Disable the submit button to prevent multiple submissions
+            // UI: Start loading
+            $('#gif-cargando-boton-finalizar').show();
+            $('#div-error-enviar-datos, #gif-error-boton-finalizar, #gif-success-boton-finalizar').hide();
             $('#submit-button-id').prop('disabled', true);
 
-            //No coge el var de fuera entonces lo vuelvo a obtener para enviarlo en el formulario
-            var selected_document = $('.div-documentos-formulario').find('.boton-documento-selected').attr('id');
+            const formData = new FormData();
 
-            // Dejar bonito el document type
-            var NiceSelected_document = '';
-            if (selected_document === 'select-PASAPORTE-form') {
-                NiceSelected_document = 'PASAPORTE';
-            } else if (selected_document === 'select-DNI-form') {
-                NiceSelected_document = 'DNI';
-            } else if (selected_document === 'select-NIE-form') {
-                NiceSelected_document = 'NIE';
+            // Random ID
+            const RandomStringID = `${Date.now().toString(36)}-${Math.floor(Math.random() * 10000).toString(36)}`;
+
+            // Document type
+            const docTypeMap = {
+                'select-PASAPORTE-form': 'PASAPORTE',
+                'select-DNI-form': 'DNI',
+                'select-NIE-form': 'NIE'
+            };
+            const selectedDocumentId = $('.div-documentos-formulario .boton-documento-selected').attr('id');
+            const NiceSelected_document = docTypeMap[selectedDocumentId] || '';
+
+            // Attach file (if any)
+            if (CONFIG_FORM.adjunto_resolucion_nacionalidad === true) {
+                const files = FilePond.find(document.querySelector('#input-upload-pdf-nacionalidad')).getFiles();
+                if (files.length > 0) {
+                    formData.append('nacionalidad_pdf', files[0].file);
+                }
             }
 
 
-            // Generate random number
-            var RandomNumber = Math.floor(Math.random() * 10000).toString(36);
-            var DateNow = Date.now().toString(36);
-            var RandomStringID = (DateNow + '-' + RandomNumber);
-
-            // Browser language
-            var LangBrowser = navigator.language || navigator.userLanguage;
-
-            // Gather form data
-            var formData = {
-                idbuscadores: INPUT_JSON.idbuscadores,
+            // Append form fields
+            const fields = {
+                idbuscadores: JSON.stringify(INPUT_JSON.idbuscadores),
                 Fmin: $('#start-date').val(),
                 Fmax: $('#end-date').val(),
                 dias_excluidos: PickerExcluidosDias.multipleDatesToString() === '' ? [] : PickerExcluidosDias.multipleDatesToString().split(','),
@@ -777,8 +831,8 @@ $(document).ready(function () {
                 RNacionalidad: $('#input-resolucion-nacionalidad').val(),
                 csv_doc: $('#input-csv-doc').val(),
                 CaducidadTarjeta: $('#input-caducidad-tarjeta').val(),
-                RandomStringID: RandomStringID,
-                LangBrowser: LangBrowser,
+                RandomStringID,
+                LangBrowser: navigator.language || navigator.userLanguage,
                 gclid: INPUT_JSON.cookieGclid,
                 retargetingSource: null,
                 fbclid: INPUT_JSON.cookieFbclid,
@@ -786,60 +840,52 @@ $(document).ready(function () {
                 ISO_language: subdomain
             };
 
-            // Send POST request
+            for (const [key, value] of Object.entries(fields)) {
+                formData.append(key, value);
+            }
+
+            // Send POST request with FormData
             $.ajax({
                 type: 'POST',
                 url: 'https://n8n.sacacitas.com/webhook/d34bf08d-32d8-4956-8dc4-9e1d676bb5fa434-formulario-recibido-new-form',
-                data: JSON.stringify(formData),
-                dataType: 'json',
-                contentType: 'application/json',
+                data: formData,
+                processData: false,
+                contentType: false,
                 success: function (response) {
-                    if (response.ID_publico !== null) {
-                        $('#gif-cargando-boton-finalizar').hide();
+                    $('#gif-cargando-boton-finalizar').hide();
+
+                    if (response?.ID_publico) {
                         $('#formulario-boton-finalizar').hide();
                         $('#gif-success-boton-finalizar').show();
-
-                        var publicItemId = response.ID_publico;
-                        window.location.href = `https://${subdomain}.sacacitas.com/link?r=` + publicItemId;
-                    }
-                    if (response.empty_dates === true) {
-                        $('#gif-cargando-boton-finalizar').hide();
+                        window.location.href = `https://${subdomain}.sacacitas.com/link?r=${response.ID_publico}`;
+                    } else if (response?.empty_dates === true) {
                         $('#div-error-enviar-datos').show();
                         $('#gif-error-boton-finalizar').show();
-                        $('#texto_error_form').text(`${TEXTOS_API['js-form-text-2']}`);
+                        $('#texto_error_form').text(TEXTOS_API['js-form-text-2']);
                     }
-
                 },
                 error: function (xhr, status, error) {
-
                     $('#gif-cargando-boton-finalizar').hide();
-                    $('#div-error-enviar-datos').show();
-                    $('#gif-error-boton-finalizar').show();
+                    $('#div-error-enviar-datos, #gif-error-boton-finalizar').show();
                     $('#submit-button-id').prop('disabled', false);
 
-                    console.error('Form submission failed');
-                    //if error call to webhook
+                    console.error('Form submission failed', error);
+
+                    // Optional: send alert webhook
                     $.ajax({
-                        url: "https://n8n.sacacitas.com/webhook/error-alerts",
-                        type: "POST",
-                        contentType: "application/json", // Specify content type as JSON
+                        type: 'POST',
+                        url: 'https://n8n.sacacitas.com/webhook/error-alerts',
+                        contentType: 'application/json',
                         dataType: 'json',
                         data: JSON.stringify({
-                            inputData: inputData, // Assuming inputData is an object or data you want to send
-                            LocalisationError: "formulario_inicio-send-final-form",
-                            Extrainfo: "Ha fallado completar el formulario final", // Add extra text or data
-                            errorCode: 500 // Example of sending an additional error code
+                            inputData: fields,
+                            LocalisationError: 'formulario_inicio-send-final-form',
+                            Extrainfo: 'Ha fallado completar el formulario final',
+                            errorCode: 500
                         }),
-                        success: function (response) {
-                            console.log("Success:", response);
-                        },
-                        error: function (jqXHR, textStatus, errorThrown) {
-                            console.error("Error:", errorThrown);
-                        }
+                        success: res => console.log('Error alert sent'),
+                        error: err => console.error('Failed to send error alert', err)
                     });
-
-
-
                 }
             });
 
@@ -1306,6 +1352,7 @@ function InputsToShow() {
     // -> SECTION: 5 - Specific search itmes
     DivJuraNacionalidad.toggle(CONFIG_FORM.resolucion_nacionalidad || false);
     DivCSVdoc.toggle(CONFIG_FORM.csv_nacionalidad || false);
+    DocResNacionalidadPDF.toggle(CONFIG_FORM.adjunto_resolucion_nacionalidad || false);
     DivCaducidadTarjeta.toggle(CONFIG_FORM.caducidad_documento || false);
 
 
@@ -1313,12 +1360,12 @@ function InputsToShow() {
 
 }
 // --> Not in use at the moment
-//Decide which pages to show depending on config form 
+//Decide which pages to show depending on config form
 function ShowPagesCalculate() {
 
 
     //Check Section 5
-    if (DivListaPaises.is(':hidden') && DivJuraNacionalidad.is(':hidden') && DivCSVdoc.is(':hidden') && DivCaducidadTarjeta.is(':hidden')) {
+    if (DivListaPaises.is(':hidden') && DivJuraNacionalidad.is(':hidden') && DivCSVdoc.is(':hidden') && DivCaducidadTarjeta.is(':hidden') && DocResNacionalidadPDF.is(':hidden')) {
         $('#Secciones-Form-5').hide();
         PageCountingTotal = 4
         ENABLED_PAGES.seccion5 = false
