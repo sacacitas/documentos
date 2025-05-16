@@ -695,7 +695,7 @@ $(document).ready(function () {
                 });
         }
 
-        // Function to fetch country data and populate the dropdown
+        //File upload settings
         function DefineUploadPDF() {
             if (CONFIG_FORM.adjunto_resolucion_nacionalidad == true) {
                 // Register the size validation plugin and type of file
