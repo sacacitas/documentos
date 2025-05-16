@@ -2873,8 +2873,8 @@ $(document).ready(function () {
             $('#finalizar-form-popup-datos-personales').prop('disabled', true);
 
             // Show loading spinner
-            $('#gif-cargando-boton-finalizar3').show();
-            $('#gif-error-boton-finalizar3').hide();
+            $('#gif-cargando-boton-finalizar7').show();
+            $('#gif-error-boton-finalizar7').hide();
 
 
 
@@ -2924,7 +2924,7 @@ $(document).ready(function () {
                 success: function (response) {
                     console.log("successform")
                     // Show your loading GIF
-                    $('#gif-success-boton-finalizar3').show();
+                    $('#gif-success-boton-finalizar7').show();
                     //$('#gif-cargando-boton-finalizar').hide();
 
                     // Check if ID_publico exists in the response
@@ -2947,8 +2947,8 @@ $(document).ready(function () {
 
                     $('#div-error-enviar-datos').show();
                     // Show loading spinner
-                    $('#gif-cargando-boton-finalizar3').hide();
-                    $('#gif-error-boton-finalizar3').show();
+                    $('#gif-cargando-boton-finalizar7').hide();
+                    $('#gif-error-boton-finalizar7').show();
                     // Enable submit button
                     $('#finalizar-form-popup-datos-personales').prop('disabled', false);
                 }
