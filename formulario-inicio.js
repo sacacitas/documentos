@@ -781,6 +781,7 @@ $(document).ready(function () {
         // SECTION: 6. Finalizar y enviar a backend los datos
         $('#formulario_ID').submit(async function (event) {
             event.preventDefault();
+            $('#submit-button-id').prop('disabled', true);
 
             // UI: Show loading and disable button
             $('#gif-cargando-boton-finalizar').show();
