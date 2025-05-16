@@ -52,6 +52,7 @@ var TEXTOS_API = {
     'linkunico-button-8': 'Pagar',
     'js-linkunico-text-43': 'El mensaje debe tener al menos 25 caracteres',
     'js-linkunico-text-44': 'No hay ningún día excluido',
+    'js-linkunico-text-45': 'El documento PDF de la resolución de la nacionalidad es incorrecto. Es necesario que sea el documento original firmado por la administración',
 
 
 
@@ -1226,6 +1227,7 @@ $(document).ready(function () {
                 //Secciones dentro del popup de ajustes
                 $('#pop-up-datos-personales-form').hide();
                 $('#pop-up-renew-search-form').hide();
+                $('#pop-up-uploaddocs').hide();
 
 
 
@@ -1455,6 +1457,94 @@ $(document).ready(function () {
                     $('#select-nie-form-ajustes').addClass('boton-documento-selected');
                 }
 
+                // ***Need to upload a document
+                if (StatePausadoReason == 'UPLOAD-PDF-RES-NACIONALIDAD' && state_front == 'PAUSADO-REQUIERE-ACCION') {
+                    $('#texto-sub-estado').text(TEXTOS_API['js-linkunico-text-45']); // "El documento PDF de la resolución de la nacionalidad es incorrecto. Es necesario que sea el documento original firmado de la administración"
+                    $('#pop-up-uploaddocs').show();
+                    //Ocultar otros divs dentro popup ajustes
+                    $('#pop-up-datos-personales-form').hide();
+
+
+
+
+                    //File upload settings
+                    // Register the size validation plugin and type of file
+                    FilePond.registerPlugin(
+                        FilePondPluginFileValidateSize,
+                        FilePondPluginFileValidateType
+                    );
+
+                    // Set FilePond locale and file type
+                    FilePond.setOptions({
+
+                        // Locale translation
+                        labelIdle: 'Arrastra un archivo PDF o <span class="filepond--label-action"> haz clic aquí </span>',
+                        labelInvalidField: 'El campo contiene archivos inválidos',
+                        labelFileWaitingForSize: 'Esperando tamaño...',
+                        labelFileSizeNotAvailable: 'Tamaño no disponible',
+                        labelFileLoading: 'Cargando...',
+                        labelFileLoadError: 'Error al cargar',
+                        labelFileProcessing: 'Subiendo...',
+                        labelFileProcessingComplete: 'Subida completa',
+                        labelFileProcessingAborted: 'Subida cancelada',
+                        labelFileProcessingError: 'Error al subir',
+                        labelFileProcessingRevertError: 'Error al revertir',
+                        labelFileRemoveError: 'Error al eliminar',
+                        labelTapToCancel: 'Toca para cancelar',
+                        labelTapToRetry: 'Toca para reintentar',
+                        labelTapToUndo: 'Toca para deshacer',
+                        labelButtonRemoveItem: 'Eliminar',
+                        labelButtonAbortItemLoad: 'Abortar',
+                        labelButtonRetryItemLoad: 'Reintentar',
+                        labelButtonAbortItemProcessing: 'Cancelar',
+                        labelButtonUndoItemProcessing: 'Deshacer',
+                        labelButtonRetryItemProcessing: 'Reintentar',
+                        labelButtonProcessItem: 'Subir',
+
+                        // File Type & Size Validation
+                        acceptedFileTypes: ['application/pdf'],
+                        labelMaxFileSizeExceeded: 'El archivo es demasiado grande',
+                        fileValidateTypeLabelExpectedTypes: 'Solo se permiten archivos PDF',
+                        fileValidateTypeLabelExpectedTypesMap: { 'application/pdf': '.pdf' },
+                        fileValidateSizeMaxFileSize: '5MB',
+                        labelMaxFileSize: 'El archivo supera el tamaño máximo de 5MB'
+                    });
+
+                    const pond = FilePond.create(document.querySelector('.filepond'), {
+                    allowMultiple: false,
+                    maxFileSize: '5MB',
+                    onupdatefiles: (fileItems) => {
+                        uploadedFiles = fileItems.map(fileItem => fileItem.file);
+                    }
+                    });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                }
 
                 // Estados de errores
                 if (state_front == 'NO_VALIDADO') {
@@ -2228,7 +2318,7 @@ $(document).ready(function () {
             $('#exclude-days').val((cola_dias_excluidos || []).toString());
             console.log(cola_dias_excluidos)
 
-            //**-> Change static text of excluded days after datepicker is initialized 
+            //**-> Change static text of excluded days after datepicker is initialized
             const cola_dias_excluidos_list = cola_dias_excluidos; // Example dates
 
             if (cola_dias_excluidos === null || cola_dias_excluidos.length === 0) {
@@ -2773,6 +2863,102 @@ $(document).ready(function () {
         });
 
 
+        //Popup. Volver a subir documentos PDF
+        $('#pop-up-uploaddocs').submit(async function (event) {
+
+            console.log("1")
+            // Prevent the default form submission behavior
+            event.preventDefault();
+            //Desactivar boton enviar peticion
+            $('#finalizar-form-popup-datos-personales').prop('disabled', true);
+
+            // Show loading spinner
+            $('#gif-cargando-boton-finalizar3').show();
+            $('#gif-error-boton-finalizar3').hide();
+
+
+
+
+            console.log("2")
+            // Handle base64 PDF file
+            let pdfBase64resnac = null;
+            console.log("3")
+            if (StatePausadoReason == 'UPLOAD-PDF-RES-NACIONALIDAD' && state_front == 'PAUSADO-REQUIERE-ACCION') {
+                const files = FilePond.find(document.querySelector('#input-upload-pdf')).getFiles();
+                console.log("4")
+                if (files.length > 0) {
+                    console.log("5")
+                    pdfBase64resnac = await new Promise((resolve, reject) => {
+                        const reader = new FileReader();
+                        reader.onload = () => resolve(reader.result.split(',')[1]); // remove "data:application/pdf;base64,"
+                        reader.onerror = reject;
+                        reader.readAsDataURL(files[0].file);
+                    });
+                }
+            }
+
+
+
+            //Checkbox si está marcado o no
+            if (StatePausadoReason == 'UPLOAD-PDF-RES-NACIONALIDAD') {
+                var typedocument = "pdf-res-nacionalidad-esp";
+                console.log("6")
+            }
+
+            // Gather form data
+            var formData = {
+                typedocument: typedocument,
+                referencia: referencia,
+                nacionalidad_pdf_base64: pdfBase64resnac // base64 string or null
+
+            };
+
+            // Send POST request
+            $.ajax({
+                type: 'POST',
+                url: 'https://n8n.sacacitas.com/webhook/69aba9e4-c06c-450e-9b50-69ec9b0782a5-estado-pausado-actualizar-datos-personales',
+                data: JSON.stringify(formData),
+                // Send form data using the 'data' property
+                dataType: 'json',
+                contentType: 'application/json',
+                success: function (response) {
+                    console.log("successform")
+                    // Show your loading GIF
+                    $('#gif-success-boton-finalizar3').show();
+                    //$('#gif-cargando-boton-finalizar').hide();
+
+                    // Check if ID_publico exists in the response
+                    if (response.ID_publico) {
+                        // Use the ID_publico property
+                        var publicItemId = response.ID_publico;
+                    }
+
+
+                    // Redirect to a new page after a delay
+                    setTimeout(function () {
+                        // Redirect to a new page
+                        window.location.href = `https://${subdomain}.sacacitas.com/link?r=` + publicItemId;
+                    }, 1000);
+                },
+                error: function (xhr, status, error) {
+                    console.log("errorform")
+                    // Handle error response
+                    console.error('Form submission failed');
+
+                    $('#div-error-enviar-datos').show();
+                    // Show loading spinner
+                    $('#gif-cargando-boton-finalizar3').hide();
+                    $('#gif-error-boton-finalizar3').show();
+                    // Enable submit button
+                    $('#finalizar-form-popup-datos-personales').prop('disabled', false);
+                }
+            });
+            console.log("7")
+
+            // Prevent default form submission in Webflow
+            return false;
+
+        });
 
 
 
