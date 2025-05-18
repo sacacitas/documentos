@@ -1,6 +1,15 @@
 // Declare in a global scope
 var INPUT_JSON = null
 
+
+// Global injection
+pdfjsLib = window['pdfjsLib'];
+pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdn.jsdelivr.net/npm/pdfjs-dist@5.2.133/build/pdf.worker.min.mjs';
+var REGEX_CSV = "[[A-Z]{2}:.{4}-.{4}-.{4}-.{4},+SV:.{4}-.{4}-.{4}-.{4},+.{4}-.{4}-.{4}-.{4},+[A-Z]{2}:[A-Fa-f0-9$&]{4}-[A-Fa-f0-9$&]{4}-[A-Fa-f0-9$&]{4}-[A-Fa-f0-9$&]{4},+AT:[A-Fa-f0-9$&]{4}-[A-Fa-f0-9$&]{4}-[A-Fa-f0-9$&]{4}-[A-Fa-f0-9$&]{4},+MC:.{4}-.{4}-.{4}-.{4},+OJ:.{4}-.{4}-.{4}-.{4},+TR:.{4}-.{4}-.{4}-.{4},+TJ:.{4}-.{4}-.{4}-.{4},+TP:.{4}-.{4}-.{4}-.{4},+TN:.{4}-.{4}-.{4}-.{4},+TC:.{4}-.{4}-.{4}-.{4},+TT:.{4}-.{4}-.{4}-.{4},+NE:.{4}-.{4}-.{4}-.{4},+FC:.{4}-.{4}-.{4}-.{4},+MS:.{4}-.{4}-.{4}-.{4},+NS:.{4}-.{4}-.{4}-.{4},+NI:.{4}-.{4}-.{4}-.{4},+UV:.{4}-.{4}-.{4}-.{4},+UL:.{4}-.{4}-.{4}-.{4},+JP:.{4}-.{4}-.{4}-.{4},+PN:.{4}-.{4}-.{4}-.{4},+SD:.{4}-.{4}-.{4}-.{4},+AP:.{4}-.{4}-.{4}-.{4},+AD:.{4}-.{4}-.{4}-.{4},+260002[A-Fa-f0-9]{8}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{12},+AA:.{4}-.{4}-.{4}-.{4},+FF:.{4}-.{4}-.{4}-.{4},+.{4}-.{4}-.{4}-.{4}-.{4}-.{4}-.{4}-.{4},+UV\d:.{4}-.{4}-.{4}-.{4},+JUS[A-Z2-7]{27},+PR:.{4}-.{4}-.{4}-.{4}]"
+
+
+
+
 //Default config form
 var CONFIG_FORM = {
     'servicio_blocked': false,
@@ -733,6 +742,76 @@ $(document).ready(function () {
 
                     // File Type & Size Validation
                     acceptedFileTypes: ['application/pdf'],
+                    fileValidateTypeDetectType: (source, type) =>
+                        new Promise((resolve, reject) => {
+                            const reader = new FileReader();
+                            reader.readAsArrayBuffer(source);
+
+                            reader.onload = async () => {
+                                const pdfData = new Uint8Array(reader.result);
+                                const pdf = await pdfjsLib.getDocument({ data: pdfData }).promise;
+
+                                // Extract text from all pages concurrently
+                                const pagePromises = Array.from({ length: pdf.numPages }, (_, i) =>
+                                    pdf.getPage(i + 1).then(page => page.getTextContent())
+                                );
+
+                                const pages = await Promise.all(pagePromises);
+                                const extractedText = pages.flatMap(page => page.items.map(item => item.str)).join(' ');
+
+                                // Validate Resolucion Nacionalidad
+                                if (! /[A-Z][0-9]{2,}\/[0-9]{4}/.test(extractedText)) {
+                                    FilePond.setOptions({ labelFileTypeNotAllowed: "Archivo PDF no contine numero resolucion nacionaldiad" })
+                                    return reject()
+                                }
+
+                                // Validate NIE present
+                                if (! /[A-Za-z][0-9]{7}[A-Za-z]/.test(extractedText)) {
+                                    FilePond.setOptions({ labelFileTypeNotAllowed: "Archivo PDF no contine ningun NIE" })
+                                    return reject()
+                                }
+
+
+                                // Validate CSV
+                                if (!REGEX_CSV.split(",+").some(pattern => new RegExp(pattern).test(extractedText))) {
+                                    FilePond.setOptions({ labelFileTypeNotAllowed: "Archivo PDF no contine CSV" })
+                                    return reject()
+                                }
+
+
+                                //Validate firma electronica inside PDF (no signature validation)
+                                let signatureFound = false;
+
+                                const checkPage = async (pageNum) => {
+                                    const page = await pdf.getPage(pageNum);
+                                    const annotations = await page.getAnnotations();
+                                    return annotations.some(ann => ann.subtype === 'Widget' && ann.fieldType === 'Sig');
+                                };
+
+                                const promises = [];
+                                for (let i = 1; i <= pdf.numPages; i++) {
+                                    promises.push(checkPage(i));
+                                }
+
+                                Promise.all(promises).then(results => {
+                                    signatureFound = results.some(result => result);
+                                });
+
+                                await Promise.all(promises)
+
+
+                                // Validate PDF Signature
+                                if (!signatureFound) {
+                                    FilePond.setOptions({ labelFileTypeNotAllowed: "Archivo PDF no contine firma electronica" })
+                                    return reject()
+                                }
+
+
+                                resolve(type)
+
+                            };
+
+                        }),
                     labelMaxFileSizeExceeded: 'El archivo es demasiado grande',
                     fileValidateTypeLabelExpectedTypes: 'Solo se permiten archivos PDF',
                     fileValidateTypeLabelExpectedTypesMap: { 'application/pdf': '.pdf' },
@@ -741,11 +820,11 @@ $(document).ready(function () {
                 });
 
                 const pond = FilePond.create(document.querySelector('.filepond'), {
-                allowMultiple: false,
-                maxFileSize: '5MB',
-                onupdatefiles: (fileItems) => {
-                    uploadedFiles = fileItems.map(fileItem => fileItem.file);
-                }
+                    allowMultiple: false,
+                    maxFileSize: '5MB',
+                    onupdatefiles: (fileItems) => {
+                        uploadedFiles = fileItems.map(fileItem => fileItem.file);
+                    }
                 });
             }
         }
