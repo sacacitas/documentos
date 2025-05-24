@@ -560,7 +560,7 @@
   "js-linkunico-text-42": "通过指定新的搜索日期来续订您的搜索",
   "js-linkunico-text-43": "消息长度必须至少为 25 个字符",
   "js-linkunico-text-44": "没有排除日期",
-  "js-linkunico-text-45": "国籍决议的PDF文件不正确。它必须是政府签署的原始文件",
+  "js-linkunico-text-45": "国籍决议的PDF文件不正确。它必须是政府签署的原始文件。你可以通过在谷歌上搜索 “下载CSV国籍” 或使用这个网址 “https://sede.mjusticia.gob.es/sedecsvbroker/FormularioVerificacion”，从该部的网站上下载签署的文件。 \n\n您可以在国籍决议文件页码旁边的页脚中找到您的 CSV 代码和直接下载已签名的 PDF 的链接。CSV 代码的格式如下 “PF:: v0AG-1BAP-2CXC-3d5Z”",
   "js-linkunico-text-5": "天",
   "js-linkunico-text-6": "此预约不需要预订号码",
   "js-linkunico-text-7": "请填写必填字段",
