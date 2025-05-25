@@ -1483,7 +1483,7 @@ $(document).ready(function () {
                     <span class="text-block-27">
                         ${TEXTOS_API['js-linkunico-text-46']}
 
-                        <a class="letra-link-azul" href="https://sede.mjusticia.gob.es/sedecsvbroker/FormularioVerificacion" target="_blank" rel="noopener noreferrer">
+                        <a class="letra-link-azul" href="https://youtu.be/7hT9XIQTeUw" target="_blank" rel="noopener noreferrer">
                         ${TEXTOS_API['js-linkunico-text-48']}
                         </a>
                         ${TEXTOS_API['js-linkunico-text-49']}
