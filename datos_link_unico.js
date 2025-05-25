@@ -52,7 +52,11 @@ var TEXTOS_API = {
     'linkunico-button-8': 'Pagar',
     'js-linkunico-text-43': 'El mensaje debe tener al menos 25 caracteres',
     'js-linkunico-text-44': 'No hay ningún día excluido',
-    'js-linkunico-text-45': 'El documento PDF de la resolución de la nacionalidad es incorrecto. Es necesario que sea el documento original firmado por la administración',
+    'js-linkunico-text-45': 'El Registro Civil obliga subir el PDF de la resolución de la nacionalidad para este trámite, y también que esté firmado electrónicamente. Puedes descargar el documento firmado usando el código CSV de la resolución desde la web del ministerio buscando en google "descargar CSV nacionalidad" o',
+    'js-linkunico-text-46': 'Recomendamos ver',
+    'js-linkunico-text-47': 'usando este enlace directamente',
+    'js-linkunico-text-48': 'este tutorial paso a paso',
+    'js-linkunico-text-49': 'donde se explica como descargar el documento en el formato necesario que pide el Registro Civil',
 
 
 
@@ -1196,6 +1200,7 @@ $(document).ready(function () {
                 $('#div-sub-estado').hide();
                 $('#texto-sub-estado').text(`${TEXTOS_API['js-linkunico-text-9']}`); //"Cargando..."
                 $('#titulo-sub-estado').text(`${TEXTOS_API['js-linkunico-text-40']}`); //"Se encuentra el siguiente problema:"
+                //$('#texto-sub-estado-2').hide(); //Extra info text subestado
                 //Cosas de sección ajustes
                 $('#form_block_modificar_datos_personales').hide();
                 $('#form_block_modificar_datos_busqueda').hide();
@@ -1459,13 +1464,32 @@ $(document).ready(function () {
 
                 // ***Need to upload a document
                 if (StatePausadoReason == 'UPLOAD-PDF-RES-NACIONALIDAD' && state_front == 'PAUSADO-REQUIERE-ACCION') {
-                    $('#texto-sub-estado').text(TEXTOS_API['js-linkunico-text-45']); // "El documento PDF de la resolución de la nacionalidad es incorrecto. Es necesario que sea el documento original firmado de la administración"
+                    $('#texto-sub-estado').hide();
+                    $('#div-subestado-resnacionalidadPDF').show();
+                    //$('#texto-sub-estado-2').text(TEXTOS_API['js-linkunico-text-46']);
                     $('#pop-up-uploaddocs').show();
+                    $('#div-subestado-errorgeneral').hide(); //Ocultar div error general
                     //Ocultar otros divs dentro popup ajustes
                     $('#pop-up-datos-personales-form').hide();
 
+                    //Add custom text regarding nacionalidad PDF
+                    $('#div-subestado-errortext').html(`
+                    <span class="text-block-27">
+                        ${TEXTOS_API['js-linkunico-text-45']}
+                        <a class="letra-link-azul" href="https://sede.mjusticia.gob.es/sedecsvbroker/FormularioVerificacion" target="_blank" rel="noopener noreferrer">
+                        ${TEXTOS_API['js-linkunico-text-47']}
+                        </a>
+                    </span>
+                    <span class="text-block-27">
+                        ${TEXTOS_API['js-linkunico-text-46']}
 
+                        <a class="letra-link-azul" href="https://sede.mjusticia.gob.es/sedecsvbroker/FormularioVerificacion" target="_blank" rel="noopener noreferrer">
+                        ${TEXTOS_API['js-linkunico-text-48']}
+                        </a>
+                        ${TEXTOS_API['js-linkunico-text-49']}
 
+                    </span>
+                    `);
 
                     //File upload settings
                     // Register the size validation plugin and type of file
