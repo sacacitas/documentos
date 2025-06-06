@@ -333,19 +333,35 @@ $(document).ready(function () {
         //SECTION: 1 - Escoger fechas máx min
         //Datepicker things
         //Difference between days in datepicker, first page
-        function calculateDateDifference() {
-            var startDate = $("#start-date").datepicker("getDate");
-            var endDate = $("#end-date").datepicker("getDate");
-            var daysDiff = 0;
-            if (startDate && endDate) {
-                var timeDiff = endDate - startDate;
-                daysDiff = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
-                $("#texto-dias-de-busqueda").text(' ' + daysDiff);
-            } else {
-                $("#texto-dias-de-busqueda").text(' ' + "-");
-            }
-            return daysDiff;
+        function calculateTotalUniqueDaysAcrossRanges() {
+            const uniqueDays = new Set();
+
+            $(".date-range").each(function () {
+                const startDate = $(this).find(".start-date").datepicker("getDate");
+                const endDate = $(this).find(".end-date").datepicker("getDate");
+
+                if (startDate && endDate) {
+                    // Normalize to start of day
+                    const current = new Date(startDate);
+                    current.setHours(0, 0, 0, 0);
+
+                    const end = new Date(endDate);
+                    end.setHours(0, 0, 0, 0);
+
+                    // Add each date in range to the Set
+                    while (current <= end) {
+                        uniqueDays.add(current.toISOString().slice(0, 10)); // YYYY-MM-DD format
+                        current.setDate(current.getDate() + 1);
+                    }
+                }
+            });
+
+            const totalUnique = uniqueDays.size;
+            $("#texto-dias-de-busqueda").text(' ' + (totalUnique > 0 ? totalUnique : "-"));
+            return totalUnique;
         }
+
+
         //Días de exclusión
         PickerExcluidosDias = new Litepicker({
             element: document.getElementById('exclude-days'),
@@ -368,118 +384,161 @@ $(document).ready(function () {
                 });
             }
         });
-        //Datepicker localisation
+        // Datepicker localisation
         $(function () {
             var dateFormat = "dd/mm/yy";
 
-            // Define Spanish localization directly in JavaScript
+            // Set Spanish localization using TEXTOS_API
             $.datepicker.setDefaults($.datepicker.regional['es'] = {
-                closeText: TEXTOS_API['js-datepicker-lang-1'], // "Cerrar"
-                prevText: TEXTOS_API['js-datepicker-lang-2'],  // "Anterior"
-                nextText: TEXTOS_API['js-datepicker-lang-3'],  // "Siguiente"
-                currentText: TEXTOS_API['js-datepicker-lang-4'], // "Hoy"
+                closeText: TEXTOS_API['js-datepicker-lang-1'],
+                prevText: TEXTOS_API['js-datepicker-lang-2'],
+                nextText: TEXTOS_API['js-datepicker-lang-3'],
+                currentText: TEXTOS_API['js-datepicker-lang-4'],
                 monthNames: [
-                    TEXTOS_API['js-datepicker-month-1'],  // "enero"
-                    TEXTOS_API['js-datepicker-month-2'],  // "febrero"
-                    TEXTOS_API['js-datepicker-month-3'],  // "marzo"
-                    TEXTOS_API['js-datepicker-month-4'],  // "abril"
-                    TEXTOS_API['js-datepicker-month-5'],  // "mayo"
-                    TEXTOS_API['js-datepicker-month-6'],  // "junio"
-                    TEXTOS_API['js-datepicker-month-7'],  // "julio"
-                    TEXTOS_API['js-datepicker-month-8'],  // "agosto"
-                    TEXTOS_API['js-datepicker-month-9'],  // "septiembre"
-                    TEXTOS_API['js-datepicker-month-10'], // "octubre"
-                    TEXTOS_API['js-datepicker-month-11'], // "noviembre"
-                    TEXTOS_API['js-datepicker-month-12']  // "diciembre"
+                    TEXTOS_API['js-datepicker-month-1'],
+                    TEXTOS_API['js-datepicker-month-2'],
+                    TEXTOS_API['js-datepicker-month-3'],
+                    TEXTOS_API['js-datepicker-month-4'],
+                    TEXTOS_API['js-datepicker-month-5'],
+                    TEXTOS_API['js-datepicker-month-6'],
+                    TEXTOS_API['js-datepicker-month-7'],
+                    TEXTOS_API['js-datepicker-month-8'],
+                    TEXTOS_API['js-datepicker-month-9'],
+                    TEXTOS_API['js-datepicker-month-10'],
+                    TEXTOS_API['js-datepicker-month-11'],
+                    TEXTOS_API['js-datepicker-month-12']
                 ],
                 monthNamesShort: [
-                    TEXTOS_API['js-datepicker-shortmonth-1'],  // "ene"
-                    TEXTOS_API['js-datepicker-shortmonth-2'],  // "feb"
-                    TEXTOS_API['js-datepicker-shortmonth-3'],  // "mar"
-                    TEXTOS_API['js-datepicker-shortmonth-4'],  // "abr"
-                    TEXTOS_API['js-datepicker-shortmonth-5'],  // "may"
-                    TEXTOS_API['js-datepicker-shortmonth-6'],  // "jun"
-                    TEXTOS_API['js-datepicker-shortmonth-7'],  // "jul"
-                    TEXTOS_API['js-datepicker-shortmonth-8'],  // "ago"
-                    TEXTOS_API['js-datepicker-shortmonth-9'],  // "sep"
-                    TEXTOS_API['js-datepicker-shortmonth-10'], // "oct"
-                    TEXTOS_API['js-datepicker-shortmonth-11'], // "nov"
-                    TEXTOS_API['js-datepicker-shortmonth-12']  // "dic"
+                    TEXTOS_API['js-datepicker-shortmonth-1'],
+                    TEXTOS_API['js-datepicker-shortmonth-2'],
+                    TEXTOS_API['js-datepicker-shortmonth-3'],
+                    TEXTOS_API['js-datepicker-shortmonth-4'],
+                    TEXTOS_API['js-datepicker-shortmonth-5'],
+                    TEXTOS_API['js-datepicker-shortmonth-6'],
+                    TEXTOS_API['js-datepicker-shortmonth-7'],
+                    TEXTOS_API['js-datepicker-shortmonth-8'],
+                    TEXTOS_API['js-datepicker-shortmonth-9'],
+                    TEXTOS_API['js-datepicker-shortmonth-10'],
+                    TEXTOS_API['js-datepicker-shortmonth-11'],
+                    TEXTOS_API['js-datepicker-shortmonth-12']
                 ],
                 dayNames: [
-                    TEXTOS_API['js-datepicker-dayweek-7'],  // "domingo"
-                    TEXTOS_API['js-datepicker-dayweek-1'],  // "lunes"
-                    TEXTOS_API['js-datepicker-dayweek-2'],  // "martes"
-                    TEXTOS_API['js-datepicker-dayweek-3'],  // "miércoles"
-                    TEXTOS_API['js-datepicker-dayweek-4'],  // "jueves"
-                    TEXTOS_API['js-datepicker-dayweek-5'],  // "viernes"
-                    TEXTOS_API['js-datepicker-dayweek-6']   // "sábado"
+                    TEXTOS_API['js-datepicker-dayweek-7'],
+                    TEXTOS_API['js-datepicker-dayweek-1'],
+                    TEXTOS_API['js-datepicker-dayweek-2'],
+                    TEXTOS_API['js-datepicker-dayweek-3'],
+                    TEXTOS_API['js-datepicker-dayweek-4'],
+                    TEXTOS_API['js-datepicker-dayweek-5'],
+                    TEXTOS_API['js-datepicker-dayweek-6']
                 ],
                 dayNamesShort: [
-                    TEXTOS_API['js-datepicker-shortdayweek-7'], // "dom"
-                    TEXTOS_API['js-datepicker-shortdayweek-1'], // "lun"
-                    TEXTOS_API['js-datepicker-shortdayweek-2'], // "mar"
-                    TEXTOS_API['js-datepicker-shortdayweek-3'], // "mié"
-                    TEXTOS_API['js-datepicker-shortdayweek-4'], // "jue"
-                    TEXTOS_API['js-datepicker-shortdayweek-5'], // "vie"
-                    TEXTOS_API['js-datepicker-shortdayweek-6']  // "sáb"
+                    TEXTOS_API['js-datepicker-shortdayweek-7'],
+                    TEXTOS_API['js-datepicker-shortdayweek-1'],
+                    TEXTOS_API['js-datepicker-shortdayweek-2'],
+                    TEXTOS_API['js-datepicker-shortdayweek-3'],
+                    TEXTOS_API['js-datepicker-shortdayweek-4'],
+                    TEXTOS_API['js-datepicker-shortdayweek-5'],
+                    TEXTOS_API['js-datepicker-shortdayweek-6']
                 ],
                 dayNamesMin: [
-                    TEXTOS_API['js-datepicker-ultrashortdayweek-7'], // "D"
-                    TEXTOS_API['js-datepicker-ultrashortdayweek-1'], // "L"
-                    TEXTOS_API['js-datepicker-ultrashortdayweek-2'], // "M"
-                    TEXTOS_API['js-datepicker-ultrashortdayweek-3'], // "X"
-                    TEXTOS_API['js-datepicker-ultrashortdayweek-4'], // "J"
-                    TEXTOS_API['js-datepicker-ultrashortdayweek-5'], // "V"
-                    TEXTOS_API['js-datepicker-ultrashortdayweek-6']  // "S"
+                    TEXTOS_API['js-datepicker-ultrashortdayweek-7'],
+                    TEXTOS_API['js-datepicker-ultrashortdayweek-1'],
+                    TEXTOS_API['js-datepicker-ultrashortdayweek-2'],
+                    TEXTOS_API['js-datepicker-ultrashortdayweek-3'],
+                    TEXTOS_API['js-datepicker-ultrashortdayweek-4'],
+                    TEXTOS_API['js-datepicker-ultrashortdayweek-5'],
+                    TEXTOS_API['js-datepicker-ultrashortdayweek-6']
                 ],
                 weekHeader: "Sm",
-                dateFormat: "dd/mm/yy",
+                dateFormat: dateFormat,
                 firstDay: 1,
                 isRTL: false,
                 showMonthAfterYear: false,
                 yearSuffix: ""
             });
 
-
-            //Datepcicker First date
-            $("#start-date").datepicker({
-                dateFormat: dateFormat,
-                minDate: 0,
-                onSelect: function (selectedDate) {
-                    var dateObj = $(this).datepicker('getDate')
-                    $("#end-date").datepicker("option", "minDate", selectedDate);
-                    var newMargin = calculateDateDifference();
-
-                    PickerExcluidosDias.setOptions({ minDate: dateObj })
-                    PickerExcluidosDias.gotoDate(dateObj)
-                    PickerExcluidosDias.clearSelection()
-
-
-                }
-            });
-            //Datepcicker Last date
-            $("#end-date").datepicker({
-                dateFormat: dateFormat,
-                minDate: 0,
-                onSelect: function (selectedDate) {
-                    var dateObj = $(this).datepicker('getDate')
-
-                    var startDate = $("#start-date").datepicker("getDate");
-                    var endDate = $.datepicker.parseDate(dateFormat, selectedDate);
-                    // Check if start date is greater than end date
-                    if (startDate && startDate.getTime() > endDate.getTime()) {
-                        $("#start-date").datepicker("setDate", selectedDate);
+            function initDatepickerPair($start, $end) {
+                $start.datepicker({
+                    dateFormat: dateFormat,
+                    minDate: 0,
+                    onSelect: function () {
+                        const startDate = $start.datepicker("getDate");
+                        $end.datepicker("option", "minDate", startDate);
+                        calculateTotalUniqueDaysAcrossRanges();
                     }
-                    var newMargin = calculateDateDifference();
-                    PickerExcluidosDias.setOptions({ maxDate: dateObj })
-                    PickerExcluidosDias.clearSelection()
+                });
 
+                $end.datepicker({
+                    dateFormat: dateFormat,
+                    minDate: 0,
+                    onSelect: function () {
+                        const endDate = $end.datepicker("getDate");
+                        const startDate = $start.datepicker("getDate");
+                        if (startDate && startDate > endDate) {
+                            $start.datepicker("setDate", endDate);
+                        }
+                        calculateTotalUniqueDaysAcrossRanges();
+                    }
+                });
+            }
+
+            // Init existing one (if needed)
+            const $initialStart = $("#start-date");
+            const $initialEnd = $("#end-date");
+            if ($initialStart.length && $initialEnd.length) {
+                initDatepickerPair($initialStart, $initialEnd);
+            }
+
+            // Add new range
+            $("#add-range").on("click", function () {
+                const $template = $("#date-range-template").clone().removeAttr("id").show();
+                $("#date-ranges-container").append($template);
+
+                const $newStart = $template.find(".start-date");
+                const $newEnd = $template.find(".end-date");
+
+                initDatepickerPair($newStart, $newEnd);
+            });
+        });
+
+
+
+        function formatDateToYMD(date) {
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-indexed
+            const day = String(date.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
+        }
+
+        function getAllDateRanges() {
+            const allRanges = [];
+
+            $(".date-range").each(function () {
+                const $start = $(this).find(".start-date");
+                const $end = $(this).find(".end-date");
+
+                const startDate = $start.datepicker("getDate");
+                const endDate = $end.datepicker("getDate");
+
+                if (startDate && endDate) {
+                    allRanges.push([
+                        formatDateToYMD(startDate),
+                        formatDateToYMD(endDate)
+                    ]);
                 }
             });
 
+            return allRanges;
+        }
 
+        //Delete one date range
+        $(document).on('click', '.deleterange', function () {
+            $(this).closest('.date-range').remove();
+            calculateTotalUniqueDaysAcrossRanges(); // Recalculate days
         });
+
+
+
         //Poner read only al input de fecha max para que no salga el teclado en el movil
         function makeReadonly() {
             document.getElementById('readonly-field').setAttribute("readonly", "");
@@ -819,6 +878,7 @@ $(document).ready(function () {
                 }
             }
 
+            const selectedRanges = getAllDateRanges();
             // Construct JSON payload
             const formData = {
                 idbuscadores: INPUT_JSON.idbuscadores,
@@ -840,6 +900,7 @@ $(document).ready(function () {
                 RNacionalidad: $('#input-resolucion-nacionalidad').val(),
                 csv_doc: $('#input-csv-doc').val(),
                 CaducidadTarjeta: $('#input-caducidad-tarjeta').val(),
+                selectedRanges,
                 RandomStringID,
                 LangBrowser,
                 gclid: INPUT_JSON.cookieGclid,
@@ -921,7 +982,7 @@ $(document).ready(function () {
 
 
 
-            if (calculateDateDifference() < MIN_DIAS) {
+            if (calculateTotalUniqueDaysAcrossRanges() < MIN_DIAS) {
                 displayErrorMessage(InputDivFMinMax, `${TEXTOS_API['js-form-text-4']}`);
                 // Muestra mensaje de error en la funcion displayErrorMessage donde inputElement = input
                 allInputsValid = false;
@@ -934,6 +995,9 @@ $(document).ready(function () {
             if (allInputsValid) {
                 seccion1.hide();
                 seccion2.show();
+                const selectedRanges = getAllDateRanges();
+                console.log(selectedRanges);
+
             }
         });
 

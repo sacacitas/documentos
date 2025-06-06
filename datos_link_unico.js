@@ -601,8 +601,17 @@ $(document).ready(function () {
             var formattedDate_fecha_limite_pago = fecha_limite_pago.toLocaleString('es-ES', options).replace(/,/g, ' -');
 
             //Fecha max y min formateada
-            var formattedLimitMax = formatDateFromISOToDMY(limit_max_front);
-            var formattedLimitMin = formatDateFromISOToDMY(date_min_front);
+            if (limit_max_front != null) {
+                var formattedLimitMax = formatDateFromISOToDMY(limit_max_front);
+            } else [
+                formattedLimitMax = null
+            ]
+
+            if (date_min_front != null) {
+                var formattedLimitMin = formatDateFromISOToDMY(date_min_front);
+            } else [
+                formattedLimitMin = null
+            ]
 
 
             var hoursAndMinutesOptions = {
@@ -2325,9 +2334,11 @@ $(document).ready(function () {
 
 
             var formattedDate1 = formatDateFromISOToDMY(TodayDate);
-            var formattedDate2 = formatDateFromISOToDMY(limit_max_front);
-
-
+            if (limit_max_front != null) {
+                var formattedDate2 = formatDateFromISOToDMY(limit_max_front);
+            } else [
+                formattedDate2 = null
+            ]
             //Reemplazar values existentes del cliente a los inputs
             $('#input-nombre').val(clienteNombre);
             $('#input-apellido1').val(clienteApellido1);
