@@ -2264,50 +2264,62 @@ $(document).ready(function () {
                     yearSuffix: ""
                 });
 
-                $("#start-date, #start-date-ajustes-popup").datepicker({
-                    dateFormat: dateFormat,
-                    minDate: 0,
-                    onSelect: function (selectedDate) {
-                        // Set minDate for end-date fields when start-date is selected
-                        $("#end-date, #end-date-ajustes-popup").datepicker("option", "minDate", selectedDate);
-
-                        var dateObj = $(this).datepicker('getDate')
-                        PickerExcluidosDias.setOptions({ minDate: dateObj })
-                        PickerExcluidosDias.gotoDate(dateObj)
-                        PickerExcluidosDias.clearSelection()
-                    }
-                });
-
-                $("#end-date, #end-date-ajustes-popup").datepicker({
-                    dateFormat: dateFormat,
-                    minDate: 0,
-                    onSelect: function (selectedDate) {
-                        // Get the date from both start-date fields, either one could be selected
-                        var startDate1 = $("#start-date").datepicker("getDate");
-                        var startDate2 = $("#start-date-ajustes-popup").datepicker("getDate");
-
-                        // Check both start-date fields and choose the latest one for comparison
-                        var startDate = startDate1 && startDate2 ?
-                            (startDate1.getTime() > startDate2.getTime() ? startDate1 : startDate2) :
-                            (startDate1 || startDate2);
-
-                        var endDate = $.datepicker.parseDate(dateFormat, selectedDate);
-
-                        // If the selected end-date is earlier than the start-date, adjust start-date
-                        if (startDate && startDate.getTime() > endDate.getTime()) {
-                            $("#start-date, #start-date-ajustes-popup").datepicker("setDate", selectedDate);
+                function initDatepickerPair($start, $end) {
+                    $start.datepicker({
+                        dateFormat: dateFormat,
+                        minDate: 0,
+                        onSelect: function () {
+                            const startDate = $start.datepicker("getDate");
+                            $end.datepicker("option", "minDate", startDate);
                         }
+                    });
 
-                        var dateObj = $(this).datepicker('getDate')
-                        PickerExcluidosDias.setOptions({ maxDate: dateObj })
-                        PickerExcluidosDias.clearSelection()
+                    $end.datepicker({
+                        dateFormat: dateFormat,
+                        minDate: 0,
+                        onSelect: function () {
+                            const endDate = $end.datepicker("getDate");
+                            const startDate = $start.datepicker("getDate");
+                            if (startDate && startDate > endDate) {
+                                $start.datepicker("setDate", endDate);
+                            }
+                        }
+                    });
+                }
 
-                    }
+                // Init existing one (if needed)
+                const $initialStart = $("#start-date, #start-date-ajustes-popup");
+                const $initialEnd = $("#end-date, #end-date-ajustes-popup");
+                if ($initialStart.length && $initialEnd.length) {
+                    initDatepickerPair($initialStart, $initialEnd);
+                }
+
+                // Add new range
+                $("#add-range").on("click", function () {
+                    const $template = $("#date-range-template").clone().removeAttr("id").show();
+                    $("#date-ranges-container").append($template);
+
+                    const $newStart = $template.find(".start-date");
+                    const $newEnd = $template.find(".end-date");
+
+                    initDatepickerPair($newStart, $newEnd);
                 });
-
             });
 
 
+
+            function formatDateToYMD(date) {
+                const year = date.getFullYear();
+                const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-indexed
+                const day = String(date.getDate()).padStart(2, '0');
+                return `${year}-${month}-${day}`;
+            }
+
+
+            //Delete one date range
+            $(document).on('click', '.deleterange', function () {
+                $(this).closest('.date-range2').remove();
+            });
 
 
 
@@ -2347,11 +2359,7 @@ $(document).ready(function () {
             $('#input-ndocumento').val(clienteIdDocumento);
             $('#input-telefono').val(clientePhoneNumber);
             $('#input-lista-paises').val(clienteNacionalidad);
-            //Value fechas de búsuqueda
-            $('#start-date, #start-date-ajustes-popup').val(formattedDate1);
-            $('#end-date, #end-date-ajustes-popup').val(formattedDate2);
-            $('#exclude-days').val((cola_dias_excluidos || []).toString());
-            console.log(cola_dias_excluidos)
+
 
             //**-> Change static text of excluded days after datepicker is initialized
             const cola_dias_excluidos_list = cola_dias_excluidos; // Example dates
@@ -2614,13 +2622,12 @@ $(document).ready(function () {
             $('#gif-error-boton-finalizar-2').hide();
 
 
-
-
+            // Date range
+            const selectedRanges = getAllDateRanges();
 
             // Gather form data
             var formData = {
-                FMax: $('#end-date').val(),
-                FMin: $('#start-date').val(),
+                selectedRanges,
                 DiasExclusion: PickerExcluidosDias.multipleDatesToString() === '' ? [] : PickerExcluidosDias.multipleDatesToString().split(','),
                 referencia: referencia
             };
@@ -2844,11 +2851,12 @@ $(document).ready(function () {
 
 
 
+            // Date range
+            const selectedRanges = getAllDateRanges();
 
             // Gather form data
             var formData = {
-                FMax: $('#end-date-ajustes-popup').val(),
-                FMin: $('#start-date-ajustes-popup').val(),
+                selectedRanges,
                 referencia: referencia
             };
 
@@ -3124,6 +3132,35 @@ $(document).ready(function () {
             return formattedDate;
         }
 
+        // Date transform
+        function formatDateToYMD(date) {
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-indexed
+            const day = String(date.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
+        }
+
+        // Get array of dates
+        function getAllDateRanges() {
+            const allRanges = [];
+
+            $(".date-range2").each(function () {
+                const $start = $(this).find(".start-date");
+                const $end = $(this).find(".end-date");
+
+                const startDate = $start.datepicker("getDate");
+                const endDate = $end.datepicker("getDate");
+
+                if (startDate && endDate) {
+                    allRanges.push([
+                        formatDateToYMD(startDate),
+                        formatDateToYMD(endDate)
+                    ]);
+                }
+            });
+
+            return allRanges;
+        }
 
 
     });

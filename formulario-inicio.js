@@ -882,8 +882,6 @@ $(document).ready(function () {
             // Construct JSON payload
             const formData = {
                 idbuscadores: INPUT_JSON.idbuscadores,
-                Fmin: $('#start-date').val(),
-                Fmax: $('#end-date').val(),
                 dias_excluidos: dias_excluidos,
                 Nombre: $('#input-nombre').val(),
                 Apellido1: $('#input-apellido1').val(),
@@ -995,9 +993,6 @@ $(document).ready(function () {
             if (allInputsValid) {
                 seccion1.hide();
                 seccion2.show();
-                const selectedRanges = getAllDateRanges();
-                console.log(selectedRanges);
-
             }
         });
 
