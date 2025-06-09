@@ -486,6 +486,12 @@ $(document).ready(function () {
                 paisObj.provinces.push({ name: "Baleares", short: "PM", alias: null })
             }
 
+            // Fix Asturias
+            if (!paisObj.provinces.find((p) => p.short == "O")) {
+                paisObj.provinces.push({ name: "Asturias", short: "O", alias: null })
+            }
+
+
             // Fix Orense
             paisObj.provinces.find((p) => p.short == "OU").short = "OR"
 
