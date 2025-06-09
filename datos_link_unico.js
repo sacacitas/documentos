@@ -57,6 +57,8 @@ var TEXTOS_API = {
     'js-linkunico-text-47': 'usando este enlace directamente',
     'js-linkunico-text-48': 'este tutorial paso a paso',
     'js-linkunico-text-49': 'donde se explica como descargar el documento en el formato necesario que pide el Registro Civil',
+    'js-linkunico-text-50': 'Ya existe busqueda activa',
+    'js-linkunico-text-51': 'Hay una búsqueda activa para el mismo trámite, en la misma oficina y con el mismo documento de identidad. Para buscar en varias fechas diferentes modifique en su búsqueda original la preferencia de rangos de búsqueda de reserva y los días de exclusión, disponibles en ajustes.',
 
 
 
@@ -364,9 +366,8 @@ $(document).ready(function () {
                     clienteCSVdoc = data.csv_nacionalidad;
                     //Verify email
                     EmailVerified = data.cliente_correo_validated;
-
-
-
+                    //Already exists same search
+                    AlreadyExistSameSearch = data.AlreadyExistSameSearch;
 
 
                 })
@@ -1256,7 +1257,7 @@ $(document).ready(function () {
                 let fbInitialized = false; // Flag to track if SDK is initialized
 
                 // Show email verification block if email is not verified
-                if (!EmailVerified && state_front !== 'EMAIL-NO-VERIFICADO') {
+                if (!EmailVerified && state_front !== 'EMAIL-NO-VERIFICADO' && AlreadyExistSameSearch != true) {
                     $('#block-email-verify').show();
                     $('#boton_estado_busqueda').text(TEXTOS_API['js-linkunico-text-10']); // "Email pendiente verificar"
 
@@ -1351,6 +1352,19 @@ $(document).ready(function () {
 
 
                 // --> Mostrar cosas según estado
+                // Ya se está buscando una cita en la misma oficina, servicio con mismo ID
+                if (AlreadyExistSameSearch == true) {
+                    $('#boton_estado_busqueda').text(TEXTOS_API['js-linkunico-text-50']); // "Ya existe busqueda activa"
+                    //Cosas fuera del popup
+                    $('#div-contenido-inside-bloque-busqueda').hide();
+                    $('#pop-up-datos-personales-form').show();
+                    $('#div-sub-estado').show();
+                    $('#texto-sub-estado').text(TEXTOS_API['js-linkunico-text-51']);
+
+                }
+
+
+
                 // Bloques de la página de Ajustes. Datos personales y búsqueda
                 if (state_front == 'BUSCANDO' || state_front == 'COLA-CREADA' || state_front == 'VALIDANDO-COLA') {
                     $('#form_block_modificar_datos_personales').show();
