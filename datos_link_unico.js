@@ -59,6 +59,7 @@ var TEXTOS_API = {
     'js-linkunico-text-49': 'donde se explica como descargar el documento en el formato necesario que pide el Registro Civil',
     'js-linkunico-text-50': 'Ya existe busqueda activa',
     'js-linkunico-text-51': 'Hay una búsqueda activa para el mismo trámite, en la misma oficina y con el mismo documento de identidad. Para buscar en varias fechas diferentes modifique en su búsqueda original la preferencia de rangos de búsqueda de reserva y los días de exclusión, disponibles en ajustes.',
+    'js-linkunico-text-52': 'Actualice las fechas de búsqueda en "Ajustes"',
 
 
 
@@ -326,6 +327,7 @@ $(document).ready(function () {
                     retries_front = data.retries;
                     limit_max_front = data.fecha_maxima_cola;
                     date_min_front = data.fecha_minima_cola;
+                    selectedRangesDates = data.selectedRangesDates;
                     cola_dias_excluidos = data.cola_dias_excluidos;
                     fecha_caducidad_front = data.fecha_caducidad_cola;
                     precio_eur_cent_front = data.precio_centimos;
@@ -644,8 +646,64 @@ $(document).ready(function () {
 
 
 
-            //Cambiar textos del link único
-            document.getElementById('link-busqueda-fechas-min-max').textContent = `${TEXTOS_API['js-linkunico-text-1']}` + " " + formattedLimitMin + " " + `${TEXTOS_API['js-linkunico-text-2']}` + " " + formattedLimitMax; //"Desde" + "Hasta"
+            //--> Cambiar textos del link único
+
+            //Rango de fechas
+
+            console.log(selectedRangesDates)
+
+            const ArraySearchDates = selectedRangesDates;
+
+            function formatDate(isoDate) {
+                const [year, month, day] = isoDate.split('-');
+                return `${day}/${month}/${year}`;
+            }
+
+            if (ArraySearchDates == null) {
+
+                $('#link-busqueda-fechas-min-max').text(`${TEXTOS_API['js-linkunico-text-52']}`);
+
+                $('#link-busqueda-fechas-min-max').show();
+                $('#div-list-array-dates').hide();
+
+            } else if (ArraySearchDates.length === 1) {
+                const [limitMin, limitMax] = ArraySearchDates[0];
+                const formattedLimitMin = formatDate(limitMin);
+                const formattedLimitMax = formatDate(limitMax);
+
+                $('#link-busqueda-fechas-min-max').text(
+                    `${TEXTOS_API['js-linkunico-text-1']} ${formattedLimitMin} ${TEXTOS_API['js-linkunico-text-2']} ${formattedLimitMax}`
+                );
+
+                $('#link-busqueda-fechas-min-max').show();
+                $('#div-list-array-dates').hide();
+
+            } else if (ArraySearchDates.length > 1) {
+                $('#link-busqueda-fechas-min-max').hide();
+                $('#div-list-array-dates').show();
+
+                const container = document.getElementById("link-array-list-fechas-min-max");
+
+                if (!container) {
+                    console.error("Error: Element #link-array-list-fechas-min-max not found.");
+                    return;
+                }
+
+                container.innerHTML = ""; // Clear previous content
+
+                ArraySearchDates.forEach(([limitMin, limitMax]) => {
+                    const formattedLimitMin = formatDate(limitMin);
+                    const formattedLimitMax = formatDate(limitMax);
+
+                    const newItem = document.createElement("div");
+                    newItem.textContent = `${formattedLimitMin} - ${formattedLimitMax}`;
+                    container.appendChild(newItem);
+                });
+            }
+
+
+
+
 
             //Si no es una fecha válida mostrar otro texto para la fecha de la búsqueda de inicio
             if (formattedDateAdded === 'Invalid Date') {
@@ -2309,6 +2367,16 @@ $(document).ready(function () {
                 }
 
                 // Add new range
+                $("#add-range2").on("click", function () {
+                    const $template = $("#date-range-template2").clone().removeAttr("id").show();
+                    $("#date-ranges-container2").append($template);
+
+                    const $newStart = $template.find(".start-date");
+                    const $newEnd = $template.find(".end-date");
+
+                    initDatepickerPair($newStart, $newEnd);
+                });
+
                 $("#add-range").on("click", function () {
                     const $template = $("#date-range-template").clone().removeAttr("id").show();
                     $("#date-ranges-container").append($template);
@@ -2332,7 +2400,8 @@ $(document).ready(function () {
 
             //Delete one date range
             $(document).on('click', '.deleterange', function () {
-                $(this).closest('.date-range2').remove();
+                //e.preventDefault(); // Prevent form submission
+                $(this).closest('.date-range, .date-range2').remove();
             });
 
 
@@ -2377,7 +2446,7 @@ $(document).ready(function () {
 
             //**-> Change static text of excluded days after datepicker is initialized
             const cola_dias_excluidos_list = cola_dias_excluidos; // Example dates
-
+            console.log(cola_dias_excluidos_list)
             if (cola_dias_excluidos === null || cola_dias_excluidos.length === 0) {
                 $('#front-text-excluded-days').text(TEXTOS_API['js-linkunico-text-44']);
                 $('#div-list-text-excluded-days').hide();
@@ -2394,9 +2463,9 @@ $(document).ready(function () {
                     }
 
                     container.innerHTML = ""; // Clear previous content
-
                     // Sort dates in ascending order
                     const sortedDates = cola_dias_excluidos_list.sort((a, b) => new Date(a) - new Date(b));
+                    console.log(sortedDates)
 
                     sortedDates.forEach(date => {
                         const formattedDate = formatDate(date); // Convert to DD/MM/YYYY
@@ -2864,9 +2933,9 @@ $(document).ready(function () {
 
 
 
-
             // Date range
             const selectedRanges = getAllDateRanges();
+            console.log(selectedRanges)
 
             // Gather form data
             var formData = {
@@ -3158,7 +3227,7 @@ $(document).ready(function () {
         function getAllDateRanges() {
             const allRanges = [];
 
-            $(".date-range2").each(function () {
+            $(".date-range2, .date-range").each(function () {
                 const $start = $(this).find(".start-date");
                 const $end = $(this).find(".end-date");
 
