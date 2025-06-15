@@ -1090,47 +1090,55 @@ $(document).ready(function () {
 
 
             //**Complete form and create checkout
+            $('Form-CreateCheckout').submit(function (event) {
+                event.preventDefault();
+                return false;
+            });
 
-            $('#Form-CreateCheckout').submit(function (event) {
+            $('#form-confirm-and-pay').submit(function (event) {
                 // Prevent the default form submission behavior
                 event.preventDefault();
 
-                //Try and check errors if any
-                try {
-                    // Create the query string parameters for the GET request
-                    var queryParams = new URLSearchParams({
-                        checkboxsoyempresa: $('#checkbox_imaBusiness_whenpaying').is(':checked'),
-                        tipoempresa: $('#tipo_empresa_link_unico').val(),
-                        razonsocial: $('#nombre_razon_social_link_unico-2').val(),
-                        nombrecomercial: $('#nombre_comercial_link_unico-2').val(),
-                        nifcid: $('#nif_cif_link_unico-2').val(),
-                        calleempresa: $('#calle_link_unico-2').val(),
-                        codigopostal: $('#codigo_postal__link_unico-2').val(),
-                        poblacion: $('#poblacion_link_unico').val(),
-                        provincia: $('#provincia_link_unico-2').val(),
-                        infoextra: $('#informacion-adicional_link_unico-2').val(),
+                // Required checkboxes
+                if ($('#checkbox_popup-pay-1').is(':checked') && $('#checkbox_popup-pay-2').is(':checked')) {
 
-                        subdomain: subdomain,
-                        promo_code_input: $('#PromoCode-Link-Unico-input').val(),
-                        id_unico_webhook: referencia
-                    }).toString();
+                    //Try and check errors if any
+                    try {
+                        // Create the query string parameters for the GET request
+                        var queryParams = new URLSearchParams({
+                            checkboxsoyempresa: $('#checkbox_imaBusiness_whenpaying').is(':checked'),
+                            tipoempresa: $('#tipo_empresa_link_unico').val(),
+                            razonsocial: $('#nombre_razon_social_link_unico-2').val(),
+                            nombrecomercial: $('#nombre_comercial_link_unico-2').val(),
+                            nifcid: $('#nif_cif_link_unico-2').val(),
+                            calleempresa: $('#calle_link_unico-2').val(),
+                            codigopostal: $('#codigo_postal__link_unico-2').val(),
+                            poblacion: $('#poblacion_link_unico').val(),
+                            provincia: $('#provincia_link_unico-2').val(),
+                            infoextra: $('#informacion-adicional_link_unico-2').val(),
 
-                    // Redirect the user to the constructed URL
-                    var redirectUrl = `https://n8n.sacacitas.com/webhook/76e0e152-29de-4706-ba85-fe21fbae0928-checkout-stripe?${queryParams}`;
-                    window.location.href = redirectUrl;
-                } catch (error) {
-                    alert("An unexpected error occurred. Please try again.");
-                    // Handle and log the error
-                    PingError({
-                        referencia: referencia,
-                        message: "When completing the form to pay, something went wrong.",
-                        section: "CompleteFormToPayLinkUnico",
-                        defcon: "1",
-                    });
+                            subdomain: subdomain,
+                            promo_code_input: $('#PromoCode-Link-Unico-input').val(),
+                            id_unico_webhook: referencia
+                        }).toString();
 
+                        // Redirect the user to the constructed URL
+                        var redirectUrl = `https://n8n.sacacitas.com/webhook/76e0e152-29de-4706-ba85-fe21fbae0928-checkout-stripe?${queryParams}`;
+                        window.location.href = redirectUrl;
+                    } catch (error) {
+                        alert("An unexpected error occurred. Please try again.");
+                        // Handle and log the error
+                        PingError({
+                            referencia: referencia,
+                            message: "When completing the form to pay, something went wrong.",
+                            section: "CompleteFormToPayLinkUnico",
+                            defcon: "1",
+                        });
+                    }
                 }
 
                 return false; // Prevent default form submission
+
             });
 
 
