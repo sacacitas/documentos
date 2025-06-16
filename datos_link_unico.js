@@ -1476,6 +1476,9 @@ $(document).ready(function () {
                     $('#boton_estado_busqueda').addClass('boton_busqueda_azul');
                     $('#div-datos-cita-reservada').show();
                     $('#estado-pago-cita-reservada').text(TEXTOS_API['js-linkunico-text-17']); // "Pagado"
+                    $('#sub-headertext-citainfo').show();
+                    $('#div-infocita-date').hide();
+                    $('#div-infocita-ifpaid').hide();
                 }
 
                 if (state_front == 'CANCELADO') {
