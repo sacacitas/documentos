@@ -1290,6 +1290,7 @@ $(document).ready(function () {
                 $('#boton_estado_busqueda').text(`${TEXTOS_API['js-linkunico-text-9']}`); //"Cargando..."
                 $('#boton-cancelar-link-unico').hide();
                 $('#boton-renovar-busqueda-cita').hide();
+                $('#boton-ir-a-busqueda-original').hide();
                 //CSS botones del estado
                 $('#boton_estado_busqueda').removeClass('boton_busqueda_verde');
                 $('#boton_estado_busqueda').removeClass('boton_busqueda_naranja');
