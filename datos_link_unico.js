@@ -340,6 +340,7 @@ $(document).ready(function () {
                     fecha_cita_reservada_front = data.fecha_cita_reservada;
                     fecha_limite_pago_front = data.fecha_limite_pago;
                     site_url = data.site_url;
+                    original_public_id = data.original_public_id;
 
                     //Estados
                     state_front = data.state_backend;
@@ -1426,6 +1427,7 @@ $(document).ready(function () {
                     $('#pop-up-datos-personales-form').show();
                     $('#div-sub-estado').show();
                     $('#texto-sub-estado').text(TEXTOS_API['js-linkunico-text-51']);
+                    $('#boton-ir-a-busqueda-original').show();
 
                 }
 
@@ -3174,6 +3176,12 @@ $(document).ready(function () {
 
 
         //Otros / varios
+        //Botones
+        $('#btn-golinkunico').on('click', function() {
+            window.location.href = `https://${subdomain}.sacacitas.com/link?r=` + original_public_id;
+            return false;
+        });
+
         //Funcionalidad varias de ajustes y modificar datos
         //Bloquear zoom al darle doble click en los moviles
         const input = document.getElementById('myInput');
