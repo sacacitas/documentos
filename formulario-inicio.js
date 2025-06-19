@@ -838,8 +838,15 @@ $(document).ready(function () {
         })
 
         // SECTION: 6. Finalizar y enviar a backend los datos
+        let formSubmitting = false;
+
         $('#formulario_ID').submit(async function (event) {
             event.preventDefault();
+
+            // Prevent multiple submissions
+            if (formSubmitting) return;
+            formSubmitting = true;
+
             $('#submit-button-id').prop('disabled', true);
 
             // UI: Show loading and disable button
@@ -871,7 +878,7 @@ $(document).ready(function () {
                 if (files.length > 0) {
                     pdfBase64resnac = await new Promise((resolve, reject) => {
                         const reader = new FileReader();
-                        reader.onload = () => resolve(reader.result.split(',')[1]); // remove "data:application/pdf;base64,"
+                        reader.onload = () => resolve(reader.result.split(',')[1]); // remove prefix
                         reader.onerror = reject;
                         reader.readAsDataURL(files[0].file);
                     });
@@ -879,6 +886,7 @@ $(document).ready(function () {
             }
 
             const selectedRanges = getAllDateRanges();
+
             // Construct JSON payload
             const formData = {
                 idbuscadores: INPUT_JSON.idbuscadores,
@@ -906,7 +914,7 @@ $(document).ready(function () {
                 fbclid: INPUT_JSON.cookieFbclid,
                 fbpid: INPUT_JSON.cookieFbp,
                 ISO_language: subdomain,
-                nacionalidad_pdf_base64: pdfBase64resnac // base64 string or null
+                nacionalidad_pdf_base64: pdfBase64resnac
             };
 
             // Send JSON request
@@ -926,12 +934,16 @@ $(document).ready(function () {
                         $('#div-error-enviar-datos').show();
                         $('#gif-error-boton-finalizar').show();
                         $('#texto_error_form').text(TEXTOS_API['js-form-text-2']);
+                        $('#submit-button-id').prop('disabled', false);
+                        formSubmitting = false;
                     }
                 },
                 error: function (xhr, status, error) {
                     $('#gif-cargando-boton-finalizar').hide();
                     $('#div-error-enviar-datos, #gif-error-boton-finalizar').show();
                     $('#submit-button-id').prop('disabled', false);
+                    formSubmitting = false;
+
                     console.error('Form submission failed:', error);
 
                     // Send error alert
