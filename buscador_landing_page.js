@@ -539,8 +539,6 @@ $(document).ready(function () {
                             .forEach(oficina => SERVICIOS[oficina.id_oficina] = oficina);
 
                         data = responseData; // Set the data variable with the response
-                        // Populate oficina select con los textos importados del json
-                        select_oficina.html('').append(default_select_oficina);
 
                         // Mostrar en el select oficinas dependiendo de la administración seleccionada
                         var filteredData = data
