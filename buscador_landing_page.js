@@ -457,6 +457,7 @@ $(document).ready(function () {
             if (selectedCountry === 'ES') {
                 var values_select_administracion = [
                     //{ value: 'EX1', text: 'Extranjería' },
+                    // { value: 'POLICIA', text: 'Policia' },
                     { value: 'SEPE', text: 'SEPE' },
                     { value: 'RC', text: 'Registro Civil', selected: true }, // Set default selected RC
                     { value: 'POLICIA', text: 'DNI Policia' },
@@ -589,14 +590,15 @@ $(document).ready(function () {
 
         //Crear valores y populate select servicio
         function updateCitaPrevia() {
-            var selectedOficinaID = select_oficina.find(':selected').attr("id_oficina");            var selectedAdministracion = select_administracion.val();
+            var selectedOficina = select_oficina.val();
+            var selectedAdministracion = select_administracion.val();
             var selectedProvincia = select_provincia.val();
 
             // Clear existing options in select_servicio
             select_servicio.empty().append(default_select_servicio);
 
             // Check if oficina is selected
-             if (selectedOficinaID && selectedAdministracion && selectedProvincia && radio_buscador_con_oficina.prop('checked')) {
+            if (selectedOficina && selectedAdministracion && selectedProvincia && radio_buscador_con_oficina.prop('checked')) {
                 // Find the selected oficina in the external data
                 var selectedOficinaData = data.find(item => item.id_oficina === selectedOficinaID);
 
