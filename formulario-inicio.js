@@ -173,6 +173,20 @@ var InputTelefVerf = $('#input-confirmar-telefono');
 var InputRNacionalidad = $('#input-resolucion-nacionalidad');
 var InputCSVdoc = $('#input-csv-doc');
 var InputListaPaises = $('#input-lista-paises');
+// cita DNI policia
+let citapolicia = false;
+var InputCaducidadTarjeta = $('#input-caducidad_documento');
+var InputSoporteDocumento = $('#input-n-soporte-doc');
+var InputEquipoExpedicionDoc = $('#input-equipo-expedicion-doc');
+
+//Get live reference to the document type selected
+const docTypeMap = {
+    'select-PASAPORTE-form': 'PASAPORTE',
+    'select-DNI-form': 'DNI',
+    'select-NIE-form': 'NIE'
+};
+let selected_document;
+let NiceSelected_document;
 
 // Init FilePond and keep reference to files
 let uploadedFiles = [];
@@ -188,13 +202,17 @@ var DivListaPaises = $('#div-lista-paises');
 var DivJuraNacionalidad = $('#div-resolucion-nacionalidad');
 var DivCSVdoc = $('#div-csv-doc');
 var DocResNacionalidadPDF = $('#div-res-nacionalidad-pdf');
-var DivCaducidadTarjeta = $('#clientes-caducidad-tarjeta');
 var DivPhone = $('#div-telefono');
 var DivVerifyPhone = $('#div-confirmar-telefono');
 
+//Hide divs by default
+$('#div-fechacad-doc').hide();
+$('#div-numsop-doc').hide();
+$('#div-numexp-doc').hide();
 
 //Let Inputs to check defaults
 var inputsToCheckButton2 = [];
+var inputsToCheckButton3 = [];
 var inputsToCheckButton5 = [];
 
 //Fecha exclusion
@@ -264,6 +282,13 @@ $(document).ready(function () {
                 const decodedInput = decodeURIComponent(atob(urlParams.get('INPUT_JSON')));
                 INPUT_JSON = JSON.parse(decodedInput);
 
+                //Determine if ADM is policia to check specific fields
+                if (INPUT_JSON.idbuscadores[0].id_oficina.startsWith("citadni")) {
+                    citapolicia = true;
+                    console.log("Cita policia detected:", citapolicia);
+                }
+                console.log("Cita policia detected:", citapolicia);
+
                 // Prepare the data to send
                 var inputData = JSON.stringify(INPUT_JSON.idbuscadores);
 
@@ -325,7 +350,7 @@ $(document).ready(function () {
             alert(`${TEXTOS_API['js-form-text-1']}`);
         }
 
-
+        console.log(CONFIG_FORM);
 
 
         //--> Add html elements dinamically and import libraries
@@ -598,6 +623,11 @@ $(document).ready(function () {
         options_documento.click(function () {
             options_documento.removeClass('boton-documento-selected')
             $(this).addClass('boton-documento-selected');
+            if (citapolicia == true) {
+                removePoliciaItemsFromArray();
+            }
+
+
         });
 
         //Mostrar y ocultar input fechas exclusión
@@ -605,6 +635,47 @@ $(document).ready(function () {
             // Toggle the visibility of InputFechaExclusion
             $('#texto-more-info-variosdocs').toggle();
         });
+
+        if (citapolicia == true) {
+            //Mostrar secciones
+            $('#div-fechacad-doc').show();
+            $('#div-numsop-doc').show();
+            getSelectedDocumentType(); //$('#div-numexp-doc').show();
+
+            $(function () {
+                var dateFormat = "dd/mm/yy";
+
+                $("#input-caducidad_documento").datepicker({
+                    dateFormat: dateFormat,
+                    changeMonth: true, // Show month dropdown
+                    changeYear: true, // Show year dropdown
+                    yearRange: "c-10:c+20", // Display 100 years before and after the current year
+                    dayNamesMin: [
+                        TEXTOS_API['js-datepicker-ultrashortdayweek-7'], // Sunday (D)
+                        TEXTOS_API['js-datepicker-ultrashortdayweek-1'], // Monday (L)
+                        TEXTOS_API['js-datepicker-ultrashortdayweek-2'], // Tuesday (M)
+                        TEXTOS_API['js-datepicker-ultrashortdayweek-3'], // Wednesday (X)
+                        TEXTOS_API['js-datepicker-ultrashortdayweek-4'], // Thursday (J)
+                        TEXTOS_API['js-datepicker-ultrashortdayweek-5'], // Friday (V)
+                        TEXTOS_API['js-datepicker-ultrashortdayweek-6']  // Saturday (S)
+                    ],
+                    monthNames: [
+                        TEXTOS_API['js-datepicker-month-1'], // January
+                        TEXTOS_API['js-datepicker-month-2'], // February
+                        TEXTOS_API['js-datepicker-month-3'], // March
+                        TEXTOS_API['js-datepicker-month-4'], // April
+                        TEXTOS_API['js-datepicker-month-5'], // May
+                        TEXTOS_API['js-datepicker-month-6'], // June
+                        TEXTOS_API['js-datepicker-month-7'], // July
+                        TEXTOS_API['js-datepicker-month-8'], // August
+                        TEXTOS_API['js-datepicker-month-9'], // September
+                        TEXTOS_API['js-datepicker-month-10'], // October
+                        TEXTOS_API['js-datepicker-month-11'], // November
+                        TEXTOS_API['js-datepicker-month-12']  // December
+                    ]
+                });
+            });
+        }
 
         //SECTION: 4 - Contact items. Email and Phone number
         function ExecuteitiPhoneLibrary() {
@@ -817,25 +888,7 @@ $(document).ready(function () {
 
 
 
-        const PickerCadTarjeta = new easepick.create({
-            element: "#input-caducidad-tarjeta",
-            css: ["https://cdn.jsdelivr.net/npm/@easepick/bundle@1.2.1/dist/index.css", 'https://documentos.sacacitas.com/formulario-inicio.css',],
-            zIndex: 999999999,
-            lang: "es-ES",
-            format: "DD MMMM YYYY",
-            readonly: false,
-            AmpPlugin: {
-                dropdown: {
-                    months: true,
-                    years: true,
-                    minYear: 2000,
-                    maxYear: 2050
-                },
-                resetButton: false,
-                darkMode: false
-            },
-            plugins: ["AmpPlugin", "LockPlugin"]
-        })
+
 
         // SECTION: 6. Finalizar y enviar a backend los datos
         let formSubmitting = false;
@@ -855,13 +908,7 @@ $(document).ready(function () {
             $('#submit-button-id').prop('disabled', true);
 
             // Get selected document type and prettify
-            const selected_document = $('.div-documentos-formulario .boton-documento-selected').attr('id');
-            const docTypeMap = {
-                'select-PASAPORTE-form': 'PASAPORTE',
-                'select-DNI-form': 'DNI',
-                'select-NIE-form': 'NIE'
-            };
-            const NiceSelected_document = docTypeMap[selected_document] || '';
+            getSelectedDocumentType ();
 
             // Generate unique ID
             const RandomStringID = `${Date.now().toString(36)}-${Math.floor(Math.random() * 10000).toString(36)}`;
@@ -905,7 +952,6 @@ $(document).ready(function () {
                 Pais_iso: $('#input-lista-paises').val(),
                 RNacionalidad: $('#input-resolucion-nacionalidad').val(),
                 csv_doc: $('#input-csv-doc').val(),
-                CaducidadTarjeta: $('#input-caducidad-tarjeta').val(),
                 selectedRanges,
                 RandomStringID,
                 LangBrowser,
@@ -914,7 +960,10 @@ $(document).ready(function () {
                 fbclid: INPUT_JSON.cookieFbclid,
                 fbpid: INPUT_JSON.cookieFbp,
                 ISO_language: subdomain,
-                nacionalidad_pdf_base64: pdfBase64resnac
+                nacionalidad_pdf_base64: pdfBase64resnac,
+                CaducidadTarjetaDoc: $('#input-caducidad_documento').val(),
+                SoporteDocumento: $('#input-n-soporte-doc').val(),
+                EquipoExpedicionDoc: $('#input-equipo-expedicion-doc').val()
             };
 
             // Send JSON request
@@ -1087,53 +1136,83 @@ $(document).ready(function () {
 
         //Button 3: Comprobar numero de documento
         $(NextButon3).click(function () {
-            let inputsToCheck = [InputNumeroDocumento];
-            // Array de inputs que verificar
+            const inputsToCheck = inputsToCheckButton3;
             let allInputsValid = true;
-            // Si todo OK pasa a la siguiente
 
-            // Check each input
+            const selected_document = $('.div-documentos-formulario')
+                .find('.boton-documento-selected')
+                .attr('id');
+
+            let func_validate = null;
+
+            if (selected_document === 'select-NIE-form') {
+                func_validate = validateNIE;
+            } else if (selected_document === 'select-DNI-form') {
+                func_validate = validateDNI;
+            }
+
+            const inputDoc = $('#input-documento');
+            const numsop = $('#input-n-soporte-doc');
+            const numexp = $('#input-equipo-expedicion-doc');
+
+            // Check empty fields
             inputsToCheck.forEach(function (input) {
-                var selected_document = $('.div-documentos-formulario').find('.boton-documento-selected').attr('id')
-
-                var func_validate = function (text_input) {
-                    return true
-                };
-                // PASAPORTE will be always True because we cant validate it
-
-                if (selected_document === 'select-NIE-form') {
-                    func_validate = validateNIE
-
-                } else if (selected_document === 'select-DNI-form') {
-                    func_validate = validateDNI
-
-                }
-
                 if (input.val().trim() === '') {
-                    displayErrorMessage(input, `${TEXTOS_API['js-form-text-5']}`); // "Este campo es obligatorio"
-                    // Muestra mensaje de error en la funcion displayErrorMessage donde inputElement = input
+                    displayErrorMessage(input, TEXTOS_API['js-form-text-5']);
                     allInputsValid = false;
-                } else if (!func_validate(input.val())) {
-                    displayErrorMessage(input, `${TEXTOS_API['js-form-text-6']}`);
-                    // Muestra mensaje de error en la funcion displayErrorMessage donde inputElement = input
-                    allInputsValid = false;
-
                 } else {
-                    // Make sure is uppercase
-                    input.val(input.val().toUpperCase());
-
-                    // If input is not empty, remove the error message
-                    $(input).next('.error-message-form').remove();
+                    input.next('.error-message-form').remove();
                 }
-
             });
 
-            // Si todo OK pasa a la siguiente
+            // Validate Documento
+            if (inputDoc.val().trim() !== '' && func_validate) {
+                const value = inputDoc.val().trim().toUpperCase();
+                const result = func_validate(value);
+                if (!result) {
+                    displayErrorMessage(inputDoc, TEXTOS_API['js-form-text-6']);
+                    allInputsValid = false;
+                } else {
+                    inputDoc.val(value);
+                    inputDoc.next('.error-message-form').remove();
+                }
+            }
+
+            // Validate Número de Soporte
+            if (numsop.val().trim() !== '') {
+                const value = numsop.val().trim().toUpperCase();
+                const result = validateNumSoporte(value);
+                if (!result) {
+                    displayErrorMessage(numsop, TEXTOS_API['js-form-text-6']);
+                    allInputsValid = false;
+                } else {
+                    numsop.val(value);
+                    numsop.next('.error-message-form').remove();
+                }
+            }
+
+            // Validate Número de Expediente
+            if (numexp.val().trim() !== '') {
+                const value = numexp.val().trim().toUpperCase();
+                const result = validateNumExp(value);
+                if (!result) {
+                    displayErrorMessage(numexp, TEXTOS_API['js-form-text-6']);
+                    allInputsValid = false;
+                } else {
+                    numexp.val(value);
+                    numexp.next('.error-message-form').remove();
+                }
+            }
+
             if (allInputsValid) {
                 seccion3.hide();
                 seccion4.show();
             }
         });
+
+
+
+
 
         //Button 4: Comprobar correo y telefono
         $(NextButon4).click(function () {
@@ -1335,17 +1414,10 @@ function DetermineInputsToCheck() {
     $('#asterisk-csv-doc').hide();
     $('#asterisk-caducidad-tarjeta').hide();
 
-    // Function to remove specific items from the array
-    function removeItemsFromArray(array, itemsToRemove) {
-        itemsToRemove.forEach(item => {
-            const index = array.indexOf(item);
-            if (index !== -1) {
-                array.splice(index, 1);
-            }
-        });
-    }
+
     // Remove specific items
     removeItemsFromArray(inputsToCheckButton2, [InputApellido2, InputFNacimiento]);
+
 
 
     // -> Button 2
@@ -1363,6 +1435,10 @@ function DetermineInputsToCheck() {
 
     }
 
+    // -> Button 3
+    inputsToCheckButton3.push(InputNumeroDocumento);
+    additemsToArrayBtn3();
+
 
     // -> Button 5
     if (CONFIG_FORM.nacionalidad.length > 0) {
@@ -1379,12 +1455,6 @@ function DetermineInputsToCheck() {
     if (CONFIG_FORM.csv_nacionalidad === true) {
         inputsToCheckButton5.push(InputCSVdoc);
         $('#asterisk-csv-doc').show();
-
-    }
-
-    if (CONFIG_FORM.caducidad_documento === true) {
-        inputsToCheckButton5.push(CaducidadTarjeta);
-        $('#asterisk-caducidad-tarjeta').show();
 
     }
 
@@ -1428,7 +1498,6 @@ function InputsToShow() {
     DivJuraNacionalidad.toggle(CONFIG_FORM.resolucion_nacionalidad || false);
     DivCSVdoc.toggle(CONFIG_FORM.csv_nacionalidad || false);
     DocResNacionalidadPDF.toggle(CONFIG_FORM.adjunto_resolucion_nacionalidad || false);
-    DivCaducidadTarjeta.toggle(CONFIG_FORM.caducidad_documento || false);
 
 
 
@@ -1440,7 +1509,7 @@ function ShowPagesCalculate() {
 
 
     //Check Section 5
-    if (DivListaPaises.is(':hidden') && DivJuraNacionalidad.is(':hidden') && DivCSVdoc.is(':hidden') && DivCaducidadTarjeta.is(':hidden') && DocResNacionalidadPDF.is(':hidden')) {
+    if (DivListaPaises.is(':hidden') && DivJuraNacionalidad.is(':hidden') && DivCSVdoc.is(':hidden') && DocResNacionalidadPDF.is(':hidden')) {
         $('#Secciones-Form-5').hide();
         PageCountingTotal = 4
         ENABLED_PAGES.seccion5 = false
@@ -1594,3 +1663,80 @@ function ValidateCSVdoc(CSVd) {
 
     return true; // PF format is valid
 }
+
+// Function to remove specific items from the array
+function removeItemsFromArray(array, itemsToRemove) {
+    itemsToRemove.forEach(item => {
+        const index = array.indexOf(item);
+        if (index !== -1) {
+            array.splice(index, 1);
+        }
+    });
+}
+
+// All related to citapolicia
+// reference to function DetermineInputsToCheck()
+function additemsToArrayBtn3() {
+    if (CONFIG_FORM.caducidad_documento === true) {
+        inputsToCheckButton3.push(InputCaducidadTarjeta);
+    }
+    if (CONFIG_FORM.id_es_numero_soporte === true) {
+        inputsToCheckButton3.push(InputSoporteDocumento);
+    }
+    if (citapolicia === true && NiceSelected_document === 'DNI') {
+        inputsToCheckButton3.push(InputEquipoExpedicionDoc);
+    }
+    console.log('Executed');
+    console.log('Inputs to check button 3:', inputsToCheckButton3);
+}
+
+function removePoliciaItemsFromArray() {
+    removeItemsFromArray(inputsToCheckButton3, [ InputCaducidadTarjeta, InputSoporteDocumento, InputEquipoExpedicionDoc]);
+    getSelectedDocumentType();
+    additemsToArrayBtn3();
+}
+
+function getSelectedDocumentType() {
+    selected_document = $('.div-documentos-formulario .boton-documento-selected').attr('id');
+    NiceSelected_document = docTypeMap[selected_document] || '';
+
+    if (citapolicia === true) {
+        if (NiceSelected_document === 'NIE') {
+            $('#div-numexp-doc').hide();
+            console.log('NIE selected, hiding numexp-doc');
+        }
+
+        if (NiceSelected_document === 'DNI') {
+            $('#div-numexp-doc').show();
+            console.log('DNI selected, showing numsop-doc');
+        }
+    }
+
+    console.log('Selected document type:', NiceSelected_document);
+
+}
+
+function validateNumSoporte(rawValue) {
+    rawValue = rawValue.trim().toUpperCase();
+
+    const regex1 = /^[EC]\d{8}$/;
+    const regex2 = /^[A-Z]{3}\d{6}$/;
+
+    const match1 = regex1.test(rawValue);
+    const match2 = regex2.test(rawValue);
+
+    console.log('Testing NumSoporte:', rawValue, 'Match1:', match1, 'Match2:', match2);
+
+    return match1 || match2;
+}
+
+
+
+
+
+function validateNumExp(rawValue) {
+    rawValue = rawValue.trim().toUpperCase();
+    const regex = /^\d{8}[A-Z]$/;
+    return regex.test(rawValue);
+}
+
