@@ -1737,7 +1737,7 @@ function validateNumSoporte(rawValue) {
 
 function validateNumExp(rawValue) {
     rawValue = rawValue.trim().toUpperCase();
-    const regex = /^\d{8}[A-Z]$/;
+    const regex = /^[a-zA-Z0-9]{7,}$/;
     return regex.test(rawValue);
 }
 
