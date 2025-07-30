@@ -1692,6 +1692,7 @@ function additemsToArrayBtn3() {
 
 function removePoliciaItemsFromArray() {
     removeItemsFromArray(inputsToCheckButton3, [ InputCaducidadTarjeta, InputSoporteDocumento, InputEquipoExpedicionDoc]);
+    $('#input-equipo-expedicion-doc').val('').text('');
     getSelectedDocumentType();
     additemsToArrayBtn3();
 }
