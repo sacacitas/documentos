@@ -461,6 +461,7 @@ $(document).ready(function () {
                     { value: 'SEPE', text: 'SEPE' },
                     { value: 'RC', text: 'Registro Civil', selected: true }, // Set default selected RC
                     { value: 'POLICIA', text: 'DNI Policia' },
+                    { value: 'MINISTERIO', text: 'Ministerio' },
                 ];
 
             } else {
