@@ -607,13 +607,13 @@ $(document).ready(function () {
             //Fecha max y min formateada
             if (limit_max_front != null) {
                 var formattedLimitMax = formatDateFromISOToDMY(limit_max_front);
-            } else [
+            } else[
                 formattedLimitMax = null
             ]
 
             if (date_min_front != null) {
                 var formattedLimitMin = formatDateFromISOToDMY(date_min_front);
-            } else [
+            } else[
                 formattedLimitMin = null
             ]
 
@@ -1630,11 +1630,11 @@ $(document).ready(function () {
                     });
 
                     const pond = FilePond.create(document.querySelector('.filepond'), {
-                    allowMultiple: false,
-                    maxFileSize: '5MB',
-                    onupdatefiles: (fileItems) => {
-                        uploadedFiles = fileItems.map(fileItem => fileItem.file);
-                    }
+                        allowMultiple: false,
+                        maxFileSize: '5MB',
+                        onupdatefiles: (fileItems) => {
+                            uploadedFiles = fileItems.map(fileItem => fileItem.file);
+                        }
                     });
 
 
@@ -2445,7 +2445,7 @@ $(document).ready(function () {
             var formattedDate1 = formatDateFromISOToDMY(TodayDate);
             if (limit_max_front != null) {
                 var formattedDate2 = formatDateFromISOToDMY(limit_max_front);
-            } else [
+            } else[
                 formattedDate2 = null
             ]
             //Reemplazar values existentes del cliente a los inputs
@@ -3178,7 +3178,7 @@ $(document).ready(function () {
 
         //Otros / varios
         //Botones
-        $('#btn-golinkunico').on('click', function() {
+        $('#btn-golinkunico').on('click', function () {
             window.location.href = `https://${subdomain}.sacacitas.com/link?r=` + original_public_id;
             return false;
         });
