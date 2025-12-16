@@ -1160,6 +1160,20 @@ $(document).ready(function () {
 
             var siteURL = null
 
+            // FIXME: A dict with a get and default value instead of a long if-else chain
+            var map_urls = {
+                "gobrc": "https://sede.administracionespublicas.gob.es/icpplustiej/",
+                "gvarc": "https://registrocivil.gva.es/es/cita-previa",
+                "gobext": "https://sede.administracionespublicas.gob.es/pagina/index/directorio/icpplus",
+                "g7mad": "https://gestiona7.madrid.org/CTAC_CITA/registro",
+                "gencat": "https://ovt.gencat.cat/carpetaciutadana360/mfe-main-app/#/consulta",
+                "andrc": "https://www.juntadeandalucia.es/justicia/citaprevia/?idCliente=4",
+                "eusrc": "https://www.euskadi.eus/web01-citaregc/es/aa14aUIWar/justizia/aa14aRegistroCivilInit.jsp?lang=es",
+                "euscityrc": "https://www.justizia.eus/qmaticwebbooking/#/search",
+                "canrc": "https://sede.gobiernodecanarias.org/aplicaciones/citapreviaregistrocivil",
+                "sigegva": "https://sige.gva.es/qsige/citaprevia.justicia/#/es/query?uuid=01E4-33B69-2883-5B9B8"
+            }
+
             if (site_url && site_url !== "") {
                 siteURL = site_url
             } else if (id_oficina_front.startsWith("gobrc")) {
@@ -1180,6 +1194,8 @@ $(document).ready(function () {
                 siteURL = "https://www.justizia.eus/qmaticwebbooking/#/search"
             } else if (id_oficina_front.startsWith("canrc")) {
                 siteURL = "https://sede.gobiernodecanarias.org/aplicaciones/citapreviaregistrocivil"
+            } else if (id_oficina_front.startsWith("sigegva")) {
+                siteURL = "https://sige.gva.es/qsige/citaprevia.justicia/#/es/query?uuid=01E4-33B69-2883-5B9B8"
             }
 
             if (siteURL) {
