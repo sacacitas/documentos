@@ -721,7 +721,7 @@ $(document).ready(function () {
 
             var bloque_reserva = document.getElementById('codigo-reserva-cita-reservada')
             if (resumen_reserva && resumen_reserva.pdf) {
-                bloque_reserva.innerHTML = `<a download="Justificante" style="color: rgb(44, 100, 227);" href="data:application/pdf;base64,${resumen_reserva.pdf}">DESCARGAR</a>`
+                bloque_reserva.innerHTML = `<a download="Justificante" style="color: rgb(44, 100, 227);" href="https://panelaws.sacacitas.com/public/cola/pdf?id_publico=${referencia}">DESCARGAR</a>`
             } else if (codigo_reserva_cita_front === 'referencia N/A') {
                 // Comprobar si nº referencia es= 'referencia N/A'
                 document.getElementById('codigo-reserva-cita-reservada').textContent = TEXTOS_API['js-linkunico-text-6']; // "Esta cita no requiere número de reserva"
