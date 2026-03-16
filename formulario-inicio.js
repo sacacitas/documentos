@@ -934,6 +934,10 @@ $(document).ready(function () {
 
             const selectedRanges = getAllDateRanges();
 
+            // --- EXTRACT NEW COOKIE STRUCTURE SAFELY ---
+            // Fallback to an empty object just in case it wasn't passed
+            const cookiesObj = INPUT_JSON.cookies || {};
+
             // Construct JSON payload
             const formData = {
                 idbuscadores: INPUT_JSON.idbuscadores,
@@ -955,10 +959,16 @@ $(document).ready(function () {
                 selectedRanges,
                 RandomStringID,
                 LangBrowser,
-                gclid: INPUT_JSON.cookieGclid,
+
+                // --- UPDATED TRACKING PARAMETERS ---
+                gclid: cookiesObj['gclid'] || null,
+                fbclid: cookiesObj['fbclid'] || null,
+                fbpid: cookiesObj['_fbp'] || null,
+                fbcid: cookiesObj['_fbc'] || null, // Included the new _fbc Meta click ID
+                cookies_raw: cookiesObj, // Sending the whole object just in case your n8n webhook wants it later
+                // -----------------------------------
+
                 retargetingSource: null,
-                fbclid: INPUT_JSON.cookieFbclid,
-                fbpid: INPUT_JSON.cookieFbp,
                 ISO_language: subdomain,
                 nacionalidad_pdf_base64: pdfBase64resnac,
                 CaducidadTarjetaDoc: $('#input-caducidad_documento').val(),
