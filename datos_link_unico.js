@@ -1177,7 +1177,11 @@ $(document).ready(function () {
             if (site_url && site_url !== "") {
                 siteURL = site_url
             } else if (id_oficina_front.startsWith("gobrc")) {
-                siteURL = "https://sede.administracionespublicas.gob.es/icpplustiej/"
+                if (codigo_reserva_cita_front != "") {
+                    siteURL = `https://sede.administracionespublicas.gob.es/icpplustiej/acVerAnularCitaLink?org=AGE&txtIdLoca=${codigo_reserva_cita_front}&txtIdCitado=${clienteIdDocumento}`
+                } else {
+                    siteURL = "https://sede.administracionespublicas.gob.es/icpplustiej/"
+                }
             } else if (id_oficina_front.startsWith("gvarc")) {
                 siteURL = "https://registrocivil.gva.es/es/cita-previa"
             } else if (id_oficina_front.startsWith("gobext")) {
